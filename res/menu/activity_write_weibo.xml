@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/insert_topic"
+        android:title="@string/insert_topic"
+        android:icon="@drawable/ic_topic_dark"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/add_location"
+        android:title="@string/add_location"
+        android:icon="@drawable/ic_gps_dark"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/comment_when_repost"
+        android:title="@string/comment_when_repost"
+        android:checkable="true"
+        android:checked="false" />
+    
+    <item
+        android:id="@+id/comment_ori_when_repost"
+        android:title="@string/comment_ori_when_repost"
+        android:checkable="true"
+        android:checked="false" />
+    
+</menu>

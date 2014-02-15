@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/write_weibo" 
+        android:title="@string/write_weibo" 
+        android:icon="@drawable/ic_edit"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/refresh" 
+        android:title="@string/refresh" 
+        android:icon="@drawable/ic_refresh_dark"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/orientation"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+</menu>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/save"
+        android:title="@string/save_picture"
+        android:icon="@drawable/ic_menu_save_dark"
+        androidweibo:showAsAction="ifRoom" />
+    
+</menu>

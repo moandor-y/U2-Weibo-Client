@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/follow"
+        android:title="@string/follow"
+        androidweibo:showAsAction="ifRoom|withText"
+        android:visible="false" />
+    
+    <item
+        android:id="@+id/unfollow"
+        android:title="@string/unfollow"
+        androidweibo:showAsAction="ifRoom|withText"
+        android:visible="false" />
+    
+</menu>

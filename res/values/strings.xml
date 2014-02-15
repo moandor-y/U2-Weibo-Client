@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="weibo_list_spinner">
+        <item>全部</item>
+        <item>互相关注</item>
+    </string-array>
+    
+    <string-array name="atme_list_spinner">
+        <item>全部</item>
+        <item>我关注的人</item>
+    </string-array>
+    
+    <string-array name="comment_list_spinner">
+        <item>全部</item>
+        <item>我关注的人</item>
+        <item>\@我的评论</item>
+        <item>发出的评论</item>
+    </string-array>
+    
+    <string-array name="main_tabs">
+        <item>首页</item>
+        <item>\@我</item>
+        <item>评论</item>
+        <item>个人</item>
+    </string-array>
+    
+    <string-array name="weibo_tabs">
+        <item>微博</item>
+        <item>评论</item>
+        <item>转发</item>
+    </string-array>
+    
+    <string-array name="themes">
+        <item>白色</item>
+        <item>黑色</item>
+    </string-array>
+    
+    <string-array name="avatar_modes">
+        <item>自动</item>
+        <item>小</item>
+        <item>大</item>
+    </string-array>
+    
+    <string-array name="picture_modes">
+        <item>小</item>
+        <item>中</item>
+        <item>大</item>
+    </string-array>
+    
+    <string-array name="font_sizes">
+        <item>小</item>
+        <item>中</item>
+        <item>大</item>
+    </string-array>
+    
+    <string-array name="comment_repost_list_avatar_modes">
+        <item>自动</item>
+        <item>开启</item>
+        <item>关闭</item>
+    </string-array>
+    
+    <string-array name="load_weibo_counts">
+        <item>自动</item>
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </string-array>
+    
+    <string-array name="notification_intervals">
+        <item>三分钟</item>
+        <item>十五分钟</item>
+        <item>半小时</item>
+    </string-array>
+    
+    <string-array name="add_picture_dialog_items">
+        <item>拍照</item>
+        <item>图库</item>
+    </string-array>
+    
+    <string-array name="span_long_click">
+        <item>打开</item>
+    </string-array>
+    
+    <string name="app_name">UⅡ</string>
+    <string name="weibo">微博</string>
+    <string name="loading">载入中…</string>
+    <string name="avatar">头像</string>
+    <string name="weibo_pic">微博配图</string>
+    <string name="comment">评论</string>
+    <string name="repost">转发</string>
+    <string name="replied_to_my_comment">回复我的评论：</string>
+    <string name="commented_on_my_weibo">评论我的微博：</string>
+    <string name="replied_to_comment_by">回复@%s的评论：</string>
+    <string name="commented_on_weibo_by">评论@%s的微博：</string>
+    <string name="settings">设置</string>
+    <string name="gps">GPS</string>
+    <string name="summary">简介</string>
+    <string name="address">地址</string>
+    <string name="statistics">统计</string>
+    <string name="weibo_count">微博数</string>
+    <string name="following_count">关注数</string>
+    <string name="follower_count">粉丝数</string>
+    <string name="retry">重试</string>
+    <string name="no_earlier_message">没有更早的消息了</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="delete">删除</string>
+    <string name="favorites">收藏夹</string>
+    <string name="favorited_successfully">收藏成功</string>
+    <string name="unfavorited_successfully">取消收藏成功</string>
+    <string name="favorite_failed_reason">收藏失败：%s</string>
+    <string name="unfavorite_failed_reason">取消收藏失败：%s</string>
+    <string name="favorite">收藏</string>
+    <string name="unfavorite">取消收藏</string>
+    <string name="delete_failed_reason">删除失败：%s</string>
+    <string name="confirm_delete">确定要删除吗？</string>
+    <string name="reply_to_comment">回复评论</string>
+    <string name="notifications">通知</string>
+    <string name="write_weibo">写微博</string>
+    <string name="save_picture">保存图片</string>
+    <string name="saved_successfully">保存成功</string>
+    <string name="save_failed">保存失败</string>
+    <string name="share">分享</string>
+    <string name="copy">复制</string>
+    <string name="copied_successfully">复制成功</string>
+    <string name="view_weibo">查看微博</string>
+    <string name="view_pictures">查看图片</string>
+    <string name="follow_failed_reason">关注失败：%s</string>
+    <string name="unfollow_failed_reason">取消关注失败：%s</string>
+    
+    <!-- Time -->
+    <string name="just_now">刚刚</string>
+    <string name="min_ago">%d分钟前</string>
+    <string name="today">今天</string>
+    <string name="yesterday">昨天</string>
+    
+    <!-- AuthorizeActivity -->
+    <string name="you_cancelled_auth">你取消了授权</string>
+    <string name="auth_success">授权成功</string>
+    <string name="login">登录</string>
+    
+    <!-- MainActivity -->
+    <string name="refresh">刷新</string>
+    <string name="current_account">当前帐号</string>
+    <string name="accounts">帐号</string>
+    <string name="add_account">添加帐号</string>
+    <string name="logout">注销</string>
+    <string name="new_posts_updated">已更新%d条新信息</string>
+    <string name="no_new_posts">没有新信息</string>
+    <string name="draft_box">草稿箱</string>
+    <string name="open_drawer">打开侧边栏</string>
+    <string name="close_drawer">关闭侧边栏</string>
+    <string name="lock_orientation">锁定屏幕方向</string>
+    <string name="unlock_orientation">解锁屏幕方向</string>
+    
+    <!-- WeiboActivity -->
+    <string name="quick_comment">快速评论</string>
+    <string name="quick_repost">快速转发</string>
+    
+    <!-- SettingsActivity -->
+    <string name="general">常规</string>
+    <string name="theme">主题</string>
+    <string name="data_control">流量控制</string>
+    <string name="picture">图片</string>
+    <string name="picture_wifi">图片 (Wi-Fi)</string>
+    <string name="fast_scroll">快速滚动</string>
+    <string name="cancel">取消</string>
+    <string name="no_picture_mode">无图模式</string>
+    <string name="font_size">字体大小</string>
+    <string name="comment_repost_list_avatar">评论/转发列表头像</string>
+    <string name="auto">自动</string>
+    <string name="load_weibo_count">载入微博数</string>
+    <string name="unread_messages">未读消息</string>
+    <string name="interval">间隔</string>
+    <string name="notification_mention_weibo">\@我的微博</string>
+    <string name="notification_comment">收到的评论</string>
+    <string name="notification_mention_comment">\@我的评论</string>
+    <string name="notification_method">提醒方式</string>
+    <string name="vibrate">振动</string>
+    <string name="notification_led">呼吸灯</string>
+    <string name="ringtone">铃声</string>
+    <string name="mute">静音</string>
+    <string name="wifi_auto_download_pic">Wi-Fi下自动下载图片</string>
+    <string name="advanced">高级</string>
+    <string name="list_hw_accel">列表硬件加速 (Android 3.0+)</string>
+    <string name="pic_hw_accel">图片硬件加速 (Android 3.0+)</string>
+    
+    <!-- WriteActivity -->
+    <string name="send">发送</string>
+    <string name="sending">正在发送</string>
+    <string name="sent_successfully">发送成功</string>
+    <string name="send_failed">发送失败</string>
+    <string name="mention">提及</string>
+    <string name="insert_emotion">插入表情</string>
+    <string name="insert_topic">插入话题</string>
+    <string name="add_picture">添加图片</string>
+    <string name="no_camera_app">没有相机应用</string>
+    <string name="cannot_add_picture">无法添加照片</string>
+    <string name="share_picture">分享图片</string>
+    <string name="save_draft">保存草稿？</string>
+    <string name="search">搜索</string>
+    <string name="search_friends">搜索好友</string>
+    <string name="write_comment">评论微博</string>
+    <string name="repost_weibo">转发微博</string>
+    <string name="open_gps">请打开GPS</string>
+    <string name="updatind_location">正在获取位置…</string>
+    <string name="location_updated">位置获取成功</string>
+    <string name="add_location">添加位置</string>
+    <string name="comment_when_repost">同时评论微博</string>
+    <string name="comment_ori_when_repost">同时评论原微博</string>
+    <string name="comment_ori">同时评论原微博</string>
+    <string name="emotion">表情</string>
+    <string name="too_many_words">字数太多</string>
+    <string name="cannot_be_empty">内容不能为空</string>
+    <string name="upload_failed">上传失败</string>
+    
+    <!-- Notification -->
+    <string name="new_comments">%d条评论</string>
+    <string name="new_mention_weibos">%d条@微博</string>
+    <string name="new_mention_comments">%d条@评论</string>
+    <string name="upload_picture">上传图片</string>
+    <string name="waiting_response">等待服务器响应</string>
+    <string name="uploading">正在上传</string>
+    
+    <!-- User -->
+    <string name="user">用户</string>
+    <string name="posts_of">%s的微博</string>
+    <string name="following_of">%s的关注</string>
+    <string name="followers_of">%s的粉丝</string>
+    <string name="follow">关注</string>
+    <string name="unfollow">取消关注</string>
+    
+    <!-- Error -->
+    <string name="unknown_error">未知错误</string>
+    <string name="network_error">网络错误</string>
+    <string name="json_error">JSON解析错误</string>
+    
+    <string name="error_code_10001">系统错误</string>
+    <string name="error_code_10002">服务端资源不可用</string>
+    <string name="error_code_10003">远程服务出错</string>
+    <string name="error_code_10005">该资源需要更高级的授权</string>
+    <string name="error_code_10006">缺少source参数(appkey)</string>
+    <string name="error_code_10007">不支持的MediaType</string>
+    <string name="error_code_10008">参数错误</string>
+    <string name="error_code_10009">任务过多，系统繁忙</string>
+    <string name="error_code_10010">任务超时</string>
+    <string name="error_code_10011">RPC错误</string>
+    <string name="error_code_10012">非法请求</string>
+    <string name="error_code_10013">不合法的微博用户</string>
+    <string name="error_code_10014">访问接口权限受限制</string>
+    <string name="error_code_10016">缺失参数</string>
+    <string name="error_code_10017">参数值非法</string>
+    <string name="error_code_10018">请求长度超过限制</string>
+    <string name="error_code_10020">接口不存在</string>
+    <string name="error_code_10021">请求的HttpMethod不支持</string>
+    <string name="error_code_10022">IP请求超过上限</string>
+    <string name="error_code_10023">用户请求超过上限</string>
+    <string name="error_code_10024">用户请求接口超过上限</string>
+    <string name="error_code_10025">内部接口参数错误</string>
+    <string name="error_code_10026">该接口已经废弃</string>
+    <string name="error_code_20001">IDS参数为空</string>
+    <string name="error_code_20002">uid参数为空</string>
+    <string name="error_code_20003">用户不存在</string>
+    <string name="error_code_20005">不支持的图片类型</string>
+    <string name="error_code_20006">图片太大</string>
+    <string name="error_code_20007">请确保使用multpart上传了图片</string>
+    <string name="error_code_20008">内容为空</string>
+    <string name="error_code_20009">id列表太长了</string>
+    <string name="error_code_20012">输入文字太长，请确认不超过140个字符</string>
+    <string name="error_code_20013">输入文字太长，请确认不超过300个字符</string>
+    <string name="error_code_20014">传入参数有误，请再调用一次</string>
+    <string name="error_code_20016">发微博太多啦，休息一会儿吧</string>
+    <string name="error_code_20017">你刚刚已经发送过相似内容了哦，先休息一会吧</string>
+    <string name="error_code_20019">不要太贪心哦，发一次就够啦</string>
+    <string name="error_code_20023">此功能暂时无法使用</string>
+    <string name="error_code_20031">需要弹出验证码</string>
+    <string name="error_code_20032">微博发布成功</string>
+    <string name="error_code_20033">登陆状态异常</string>
+    <string name="error_code_20038">您刚才已经发过相似的内容啦，建议您第二天再尝试！</string>
+    <string name="error_code_20044">可发表，但是需要弹出蒙层</string>
+    <string name="error_code_20045">不可发表，需要弹出蒙层</string>
+    <string name="error_code_20101">不存在的微博</string>
+    <string name="error_code_20102">不是你发布的微博</string>
+    <string name="error_code_20103">不能转发自己的微博</string>
+    <string name="error_code_20109">微博id为空</string>
+    <string name="error_code_20111">不能发布相同的微博</string>
+    <string name="error_code_20112">由于作者隐私设置，你没有权限查看此微博</string>
+    <string name="error_code_20114">标签名太长</string>
+    <string name="error_code_20115">标签不存在</string>
+    <string name="error_code_20116">标签已存在</string>
+    <string name="error_code_20117">最多200个标签</string>
+    <string name="error_code_20118">最多5个标签</string>
+    <string name="error_code_20119">标签搜索失败</string>
+    <string name="error_code_20120">由于作者设置了可见性，你没有权限转发此微博</string>
+    <string name="error_code_20121">visible参数非法</string>
+    <string name="error_code_20122">应用不存在</string>
+    <string name="error_code_20123">最多屏蔽200个应用</string>
+    <string name="error_code_20124">最多屏蔽500条微博</string>
+    <string name="error_code_20125">没有屏蔽过此应用</string>
+    <string name="error_code_20126">不能屏蔽新浪应用</string>
+    <string name="error_code_20127">已添加了此屏蔽</string>
+    <string name="error_code_20128">删除屏蔽失败</string>
+    <string name="error_code_20129">没有屏蔽任何应用</string>
+    <string name="error_code_20130">由于作者隐私设置，你没有权限评论此微博</string>
+    <string name="error_code_20132">抱歉，该内容暂时无法查看。如需帮助，请联系客服</string>
+    <string name="error_code_20133">您不是会员，或者已过期，只有会员才能屏蔽应用</string>
+    <string name="error_code_20134">分组不存在</string>
+    <string name="error_code_20135">源微博已被删除</string>
+    <string name="error_code_20136">非会员发表定向微博，分组成员数最多200</string>
+    <string name="error_code_20201">不存在的微博评论</string>
+    <string name="error_code_20203">不是你发布的评论</string>
+    <string name="error_code_20204">评论ID为空</string>
+    <string name="error_code_20206">作者只允许关注用户评论</string>
+    <string name="error_code_20207">作者只允许可信用户评论</string>
+    <string name="error_code_20401">域名不存在</string>
+    <string name="error_code_20402">verifier错误</string>
+    <string name="error_code_20403">屏蔽用户列表中存在此uid</string>
+    <string name="error_code_20404">屏蔽用户列表中不存在此uid</string>
+    <string name="error_code_20405">uid对应用户不是登录用户的好友</string>
+    <string name="error_code_20406">屏蔽用户个数超出上限</string>
+    <string name="error_code_20407">没有合适的uid</string>
+    <string name="error_code_20408">从feed屏蔽列表中，处理用户失败</string>
+    <string name="error_code_20409">当前用户不存在置顶微博</string>
+    <string name="error_code_20410">设置置顶微博失败</string>
+    <string name="error_code_20411">该微博不是你的微博</string>
+    <string name="error_code_20412">当前用户已经试用微博置顶功能，不能再试用</string>
+    <string name="error_code_20413">此微博不是置顶微博</string>
+    <string name="error_code_20414">此微博是当前置顶微博</string>
+    <string name="error_code_20501">source_user或者target_user用户不存在</string>
+    <string name="error_code_20502">必须输入目标用户id或者screen_name</string>
+    <string name="error_code_20503">关系错误，user_id必须是你关注的用户</string>
+    <string name="error_code_20504">你不能关注自己</string>
+    <string name="error_code_20505">加关注请求超过上限</string>
+    <string name="error_code_20506">已经关注此用户</string>
+    <string name="error_code_20507">需要输入验证码</string>
+    <string name="error_code_20508">根据对方的设置，你不能进行此操作</string>
+    <string name="error_code_20509">悄悄关注个数到达上限</string>
+    <string name="error_code_20510">不是悄悄关注人</string>
+    <string name="error_code_20511">已经悄悄关注此用户</string>
+    <string name="error_code_20512">你已经把此用户加入黑名单，加关注前请先解除</string>
+    <string name="error_code_20513">你的关注人数已达上限</string>
+    <string name="error_code_20521">hi超人，你今天已经关注很多喽，接下来的时间想想如何让大家都来关注你吧！</string>
+    <string name="error_code_20522">还未关注此用户</string>
+    <string name="error_code_20523">还不是粉丝</string>
+    <string name="error_code_20524">hi超人，你今天已经取消关注很多喽，接下来的时间想想如何让大家都来关注你吧！</string>
+    <string name="error_code_20525">已经是密友了</string>
+    <string name="error_code_20526">已经发送过密友邀请</string>
+    <string name="error_code_20527">密友数到达上限</string>
+    <string name="error_code_20528">不是密友</string>
+    <string name="error_code_20601">列表名太长，请确保输入的文本不超过10个字符</string>
+    <string name="error_code_20602">列表描叙太长，请确保输入的文本不超过70个字符</string>
+    <string name="error_code_20603">列表不存在</string>
+    <string name="error_code_20604">不是对象所属者</string>
+    <string name="error_code_20606">记录已存在</string>
+    <string name="error_code_20607">数据库错误</string>
+    <string name="error_code_20608">列表名冲突</string>
+    <string name="error_code_20610">目前不支持私有分组</string>
+    <string name="error_code_20611">创建list失败</string>
+    <string name="error_code_20612">目前只支持私有分组</string>
+    <string name="error_code_20613">不能创建更多的列表</string>
+    <string name="error_code_20614">已拥有列表上下</string>
+    <string name="error_code_20615">成员上线</string>
+    <string name="error_code_20616">不支持的分组类型</string>
+    <string name="error_code_20617">最大返回300条</string>
+    <string name="error_code_20618">uid不在列表中</string>
+    <string name="error_code_20701">不能提交相同的标签</string>
+    <string name="error_code_20702">最多两个标签</string>
+    <string name="error_code_20704">您已经收藏了此微博</string>
+    <string name="error_code_20705">此微博不是您的收藏</string>
+    <string name="error_code_20706">操作失败</string>
+    <string name="error_code_20801">trend_name是空值</string>
+    <string name="error_code_20802">trend_id是空值</string>
+    <string name="error_code_21001">标签参数为空</string>
+    <string name="error_code_21002">标签名太长，请确保每个标签名不超过14个字符</string>
+    <string name="error_code_21101">参数domain错误</string>
+    <string name="error_code_21102">该手机号已经被使用</string>
+    <string name="error_code_21103">该用户已经绑定手机</string>
+    <string name="error_code_21104">verifier错误</string>
+    <string name="error_code_21105">你的手机号近期频繁绑定过多个帐号</string>
+    <string name="error_code_21108">原始密码错误</string>
+    <string name="error_code_21109">新密码错误</string>
+    <string name="error_code_21110">此用户暂时没有绑定手机</string>
+    <string name="error_code_21111">教育信息过多</string>
+    <string name="error_code_21112">学校不存在</string>
+    <string name="error_code_21113">教育信息不存在</string>
+    <string name="error_code_21114">没有用户有教育信息</string>
+    <string name="error_code_21115">职业信息不存在</string>
+    <string name="error_code_21116">没有用户有职业信息</string>
+    <string name="error_code_21117">此用户没有qq信息</string>
+    <string name="error_code_21118">学校已存在</string>
+    <string name="error_code_21119">没有合法的uid</string>
+    <string name="error_code_21120">此用户没有微号信息</string>
+    <string name="error_code_21121">此微号已经存在</string>
+    <string name="error_code_21122">用户手机绑定状态为待绑定</string>
+    <string name="error_code_21123">用户未绑定手机</string>
+    <string name="error_code_21124">邮箱错误</string>
+    <string name="error_code_21125">注册邮箱禁止使用新浪邮箱</string>
+    <string name="error_code_21128">昵称已存在或非法</string>
+    <string name="error_code_21129">密码长度应为6到16位</string>
+    <string name="error_code_21130">密码只允许字母，数字，键盘半角字符</string>
+    <string name="error_code_21131">发送激活邮件失败</string>
+    <string name="error_code_21132">注册邮箱已被占用</string>
+    <string name="error_code_21133">注册后激活失败</string>
+    <string name="error_code_21134">更改用户type失败</string>
+    <string name="error_code_21135">昵称长度应为4到30位</string>
+    <string name="error_code_21136">gender参数可选值，m表示男性，f表示女性</string>
+    <string name="error_code_21137">参数ip无效</string>
+    <string name="error_code_21138">参数key不是有效的无线号段</string>
+    <string name="error_code_21140">此用户不是会员用户</string>
+    <string name="error_code_21141">有重复的屏蔽词</string>
+    <string name="error_code_21142">屏蔽词个数达到当前会员类型上限</string>
+    <string name="error_code_21301">认证失败</string>
+    <string name="error_code_21302">用户名或密码不正确</string>
+    <string name="error_code_21303">用户名密码认证超过请求限制</string>
+    <string name="error_code_21304">版本号错误</string>
+    <string name="error_code_21305">缺少必要的参数</string>
+    <string name="error_code_21306">Oauth参数被拒绝</string>
+    <string name="error_code_21307">时间戳不正确</string>
+    <string name="error_code_21308">nonce参数已经被使用</string>
+    <string name="error_code_21309">签名算法不支持</string>
+    <string name="error_code_21310">签名值不合法</string>
+    <string name="error_code_21311">consumer_key不存在</string>
+    <string name="error_code_21312">consumer_key不合法</string>
+    <string name="error_code_21313">consumer_key缺失</string>
+    <string name="error_code_21314">Token已经被使用</string>
+    <string name="error_code_21315">Token已经过期</string>
+    <string name="error_code_21316">Token不合法</string>
+    <string name="error_code_21317">Token不合法</string>
+    <string name="error_code_21318">Pin码认证失败</string>
+    <string name="error_code_21319">授权关系已经被解除</string>
+    <string name="error_code_21320">不支持的协议</string>
+    <string name="error_code_21321">未审核的应用使用人数超过限制</string>
+    <string name="error_code_21322">重定向地址不匹配</string>
+    <string name="error_code_21323">请求不合法</string>
+    <string name="error_code_21324">client_id或client_secret参数无效</string>
+    <string name="error_code_21325">提供的AccessGrant是无效的、过期的或已撤销的</string>
+    <string name="error_code_21326">客户端没有权限</string>
+    <string name="error_code_21327">token过期</string>
+    <string name="error_code_21328">不支持的GrantType</string>
+    <string name="error_code_21329">不支持的ResponseType</string>
+    <string name="error_code_21330">用户或授权服务器拒绝授予数据访问权限</string>
+    <string name="error_code_21331">服务暂时无法访问</string>
+    <string name="error_code_21332">access_token无效</string>
+    <string name="error_code_21333">禁止使用此认证方式</string>
+    <string name="error_code_21334">帐号状态不正常</string>
+    <string name="error_code_21501">access_token无效</string>
+    <string name="error_code_21502">禁止使用此认证方式</string>
+    <string name="error_code_21503">IP是空值</string>
+    <string name="error_code_21504">参数url是空值</string>
+    <string name="error_code_21601">系统繁忙请重试</string>
+    <string name="error_code_21602">找不到模板</string>
+    <string name="error_code_21603">修改数据报错</string>
+    <string name="error_code_21604">已有通知的appkey校验失败</string>
+    <string name="error_code_21605">创建模板超过最大限制</string>
+    <string name="error_code_21610">授权失败</string>
+    <string name="error_code_21611">非法appkey</string>
+    <string name="error_code_21612">无效IP</string>
+    <string name="error_code_21613">参数错误，需要通知id或者标题内容参数</string>
+    <string name="error_code_21620">参数错误，uid参数必须与登录用户一致</string>
+    <string name="error_code_21621">appkey62无效</string>
+    <string name="error_code_21631">添加屏蔽达到上限</string>
+    <string name="error_code_21632">禁止添加未授权的应用</string>
+    <string name="error_code_21633">此应用没有发通知权限，不许屏蔽</string>
+    <string name="error_code_21634">已经屏蔽过了</string>
+    <string name="error_code_21650">未找到通知id</string>
+    <string name="error_code_21651">只有appkey所有人能发通知</string>
+    <string name="error_code_21652">通知模板状态不对，不能发送</string>
+    <string name="error_code_21653">通知模板与发送通知appkey不一致</string>
+    <string name="error_code_21654">通知发送失败，请重试</string>
+    <string name="error_code_21655">通知请求非法</string>
+    <string name="error_code_21656">通知模板与发送通知变量不匹配</string>
+    <string name="error_code_21701">提醒失败，需要权限</string>
+    <string name="error_code_21702">无效分类</string>
+    <string name="error_code_21703">无效状态码</string>
+    <string name="error_code_21901">地理信息接口系统错误</string>
+    <string name="error_code_21902">地理信息接口缺少source(ip)参数</string>
+    <string name="error_code_21903">地理信息接口不返回任何数据</string>
+    <string name="error_code_21904">地理信息接口ip所对应的城市不存在</string>
+    <string name="error_code_21905">地理信息接口ip地址非法</string>
+    <string name="error_code_21906">地理信息接口经纬度坐标非法</string>
+    <string name="error_code_21907">地理信息接口坐标超出范围</string>
+    <string name="error_code_21908">地理信息接口超过最大请求数</string>
+    <string name="error_code_21909">地理信息接口远程服务错误</string>
+    <string name="error_code_21910">地理信息接口需至少提交一个城市或中心坐标参数</string>
+    <string name="error_code_21911">地理信息接口需至少提交一个起点id或起点坐标参数</string>
+    <string name="error_code_21912">地理信息接口需至少提交一个终点id或终点坐标参数</string>
+    <string name="error_code_21913">地理信息接口起点坐标非法</string>
+    <string name="error_code_21914">地理信息接口终点坐标非法</string>
+    <string name="error_code_21915">地理信息接口起点id非法</string>
+    <string name="error_code_21916">地理信息接口终点id非法</string>
+    <string name="error_code_21917">地理信息接口起点和终点在不同的城市</string>
+    <string name="error_code_21918">地理信息接口城市代码非法</string>
+    <string name="error_code_21920">地理信息接口创建日志目录失败</string>
+    <string name="error_code_21921">地理信息接口查询数据不能为空</string>
+    <string name="error_code_21922">地理信息接口提交的数据格式不正确</string>
+    <string name="error_code_21923">地理信息接口返回结果为空，没有查到相关数据</string>
+    <string name="error_code_21940">地理信息接口所有的字段校验不能为空</string>
+    <string name="error_code_21941">地理信息接口表单不是post方式提交</string>
+    <string name="error_code_21942">地理信息接口数据库出错级别</string>
+    <string name="error_code_21943">地理信息接口scrid不存在</string>
+    <string name="error_code_21944">地理信息接口参数超出最大小值</string>
+    <string name="error_code_21945">地理信息接口参数不是指定类型</string>
+    <string name="error_code_21951">地理信息接口图片尺寸超出范围</string>
+    <string name="error_code_21952">地理信息接口图片尺寸非法</string>
+    <string name="error_code_21953">地理信息接口中心坐标非法</string>
+    <string name="error_code_21954">地理信息接口点的名称必须存在</string>
+    <string name="error_code_21955">地理信息接口点的图标必须存在</string>
+    <string name="error_code_21956">地理信息接口点的名称非法</string>
+    <string name="error_code_21957">地理信息接口点的图标非法</string>
+    <string name="error_code_21958">地理信息接口点的坐标非法</string>
+    <string name="error_code_21959">地理信息接口点的图标非法</string>
+    <string name="error_code_21960">地理信息接口需至少提交一个关键字或位置分类参数</string>
+    <string name="error_code_21961">地理信息接口页码超出范围</string>
+    <string name="error_code_21962">地理信息接口每页的结果数超出范围</string>
+    <string name="error_code_21963">地理信息接口需至少提交一个坐标ID或坐标经纬度参数</string>
+    <string name="error_code_21964">地理信息接口查询半径超出范围</string>
+    <string name="error_code_21965">地理信息接口位置ID非法</string>
+    <string name="error_code_21966">地理信息接口缺少参数coordinates</string>
+    <string name="error_code_21971">地理信息接口中心坐标超出范围</string>
+    
+</resources>

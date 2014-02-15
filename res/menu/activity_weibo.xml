@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/comment"
+        android:title="@string/comment"
+        android:icon="@drawable/ic_comment_dark"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/repost"
+        android:title="@string/repost"
+        android:icon="@drawable/ic_repost_dark"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/refresh" 
+        android:title="@string/refresh" 
+        android:icon="@drawable/ic_refresh_dark"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+</menu>

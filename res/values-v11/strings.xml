@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="span_long_click">
+        <item>打开</item>
+        <item>复制</item>
+    </string-array>
+    
+</resources>

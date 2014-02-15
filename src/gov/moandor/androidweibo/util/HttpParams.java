@@ -1,0 +1,29 @@
+package gov.moandor.androidweibo.util;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+public class HttpParams {
+    private Map<String, String> mParams = new HashMap<String, String>();
+    
+    public void addParam(String key, String value) {
+        mParams.put(key, value);
+    }
+    
+    public void clear() {
+        mParams.clear();
+    }
+    
+    Set<String> keySet() {
+        return mParams.keySet();
+    }
+    
+    String getParams() {
+        return Utilities.encodeUrl(mParams);
+    }
+    
+    String getParam(String key) {
+        return mParams.get(key);
+    }
+}

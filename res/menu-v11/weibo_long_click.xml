@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
+    
+    <item
+        android:id="@+id/comment"
+        android:title="@string/comment"
+        android:icon="@drawable/ic_comment_dark" />
+    
+    <item
+        android:id="@+id/repost"
+        android:title="@string/repost"
+        android:icon="@drawable/ic_repost_dark" />
+    
+    <item
+        android:id="@+id/favorite"
+        android:title="@string/favorite"
+        android:icon="@drawable/ic_favorited" />
+    
+    <item
+        android:id="@+id/unfavorite"
+        android:title="@string/unfavorite"
+        android:icon="@drawable/ic_unfavorited" />
+    
+    <item
+        android:id="@+id/delete"
+        android:title="@string/delete"
+        android:icon="@drawable/ic_delete_dark" />
+    
+    <item
+        android:id="@+id/share"
+        android:title="@string/share"
+        android:icon="@drawable/ic_menu_share_dark"
+        androidweibo:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+    
+    <item
+        android:id="@+id/copy"
+        android:title="@string/copy"
+        android:icon="@drawable/ic_menu_copy_dark" />
+    
+</menu>

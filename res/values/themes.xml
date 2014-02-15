@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <style name="Theme.Weibo.Light" parent="style/Theme.AppCompat.Light.DarkActionBar" >
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="icon_comment">@drawable/ic_timeline_comment_light</item>
+        <item name="icon_repost">@drawable/ic_timeline_repost_light</item>
+        <item name="icon_gps">@drawable/ic_gps_light</item>
+        <item name="icon_pic">@drawable/ic_camera_light</item>
+        <item name="icon_send">@drawable/ic_send_light</item>
+        <item name="action_bar_divider_color">#1b1b1b</item>
+        <item name="action_bar_background">#222222</item>
+        <item name="link_color">@color/dark_blue</item>
+        <item name="link_pressed_background_color">@color/holo_blue_light</item>
+        <item name="retweet_background">@color/retweet_background_light</item>
+        <item name="quick_post_divider">@color/quick_post_divider_light</item>
+        <item name="image_place_holder">@color/image_place_holder_light</item>
+        <item name="settings_divider_color">#cdcdcd</item>
+        <item name="settings_divider_wide_color">#b7b7b7</item>
+        <item name="item_background">@drawable/clickable_item_light</item>
+        <item name="action_menu_text_color">?android:attr/textColorPrimaryInverse</item>
+        <item name="icon_refresh">@drawable/ic_refresh_light</item>
+    </style>
+    
+    <style name="Theme.Weibo.Dark" parent="style/Theme.AppCompat" >
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="icon_comment">@drawable/ic_timeline_comment_dark</item>
+        <item name="icon_repost">@drawable/ic_timeline_repost_dark</item>
+        <item name="icon_gps">@drawable/ic_gps_dark</item>
+        <item name="icon_pic">@drawable/ic_camera_dark</item>
+        <item name="icon_send">@drawable/ic_send_dark</item>
+        <item name="action_bar_divider_color">#31afdd</item>
+        <item name="action_bar_background">#000000</item>
+        <item name="link_color">@color/steel_blue</item>
+        <item name="link_pressed_background_color">#002e3e</item>
+        <item name="retweet_background">@color/retweet_background_dark</item>
+        <item name="quick_post_divider">@color/quick_post_divider_dark</item>
+        <item name="image_place_holder">@color/image_place_holder_dark</item>
+        <item name="settings_divider_color">#413f3d</item>
+        <item name="settings_divider_wide_color">#4c4b49</item>
+        <item name="item_background">@drawable/clickable_item_dark</item>
+        <item name="action_menu_text_color">?android:attr/textColorPrimary</item>
+        <item name="icon_refresh">@drawable/ic_refresh_dark</item>
+    </style>
+    
+</resources>

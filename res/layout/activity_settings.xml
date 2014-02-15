@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_horizontal"
+        android:paddingRight="@dimen/margin_horizontal"
+        android:orientation="vertical" >
+        
+        <TextView
+            style="@style/settings_label_text"
+            android:text="@string/general" />
+        
+        <View style="@style/settings_divider_wide"/>
+        
+        <TextView
+            android:id="@+id/notification"
+            style="@style/settings_item"
+            android:gravity="center_vertical"
+            android:text="@string/notifications"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/theme"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/theme"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/theme_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/font_size"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/font_size"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/font_size_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/fast_scroll"
+            style="@style/settings_item"
+            android:text="@string/fast_scroll"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <TextView
+            style="@style/settings_label_text"
+            android:text="@string/data_control" />
+        
+        <View style="@style/settings_divider_wide"/>
+        
+        <LinearLayout
+            android:id="@+id/load_weibo_count"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/load_weibo_count"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/load_weibo_count_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/no_picture_mode"
+            style="@style/settings_item"
+            android:text="@string/no_picture_mode"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/avatar_mode"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:id="@+id/avatar_mode_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/avatar"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/avatar_mode_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/picture_mode"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:id="@+id/picture_mode_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/picture"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/picture_mode_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/picture_wifi_mode"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:id="@+id/picture_wifi_mode_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/picture_wifi"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/picture_wifi_mode_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/comment_repost_list_avatar_mode"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:id="@+id/comment_repost_list_avatar_mode_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/comment_repost_list_avatar"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/comment_repost_list_avatar_mode_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/wifi_auto_download_pic"
+            style="@style/settings_item"
+            android:text="@string/wifi_auto_download_pic"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <TextView
+            style="@style/settings_label_text"
+            android:text="@string/advanced" />
+        
+        <View style="@style/settings_divider_wide"/>
+        
+        <CheckedTextView
+            android:id="@+id/list_hw_accel"
+            style="@style/settings_item"
+            android:text="@string/list_hw_accel"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/pic_hw_accel"
+            style="@style/settings_item"
+            android:text="@string/pic_hw_accel"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+    </LinearLayout>
+    
+</ScrollView>

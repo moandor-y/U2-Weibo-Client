@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/margin_horizontal"
+        android:paddingRight="@dimen/margin_horizontal"
+        android:orientation="vertical" >
+        
+        <TextView
+            style="@style/settings_label_text"
+            android:text="@string/unread_messages" />
+        
+        <View style="@style/settings_divider_wide"/>
+        
+        <LinearLayout
+            android:id="@+id/interval"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:id="@+id/interval_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/interval"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/interval_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/mention_weibo"
+            style="@style/settings_item"
+            android:text="@string/notification_mention_weibo"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/comment"
+            style="@style/settings_item"
+            android:text="@string/notification_comment"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/mention_comment"
+            style="@style/settings_item"
+            android:text="@string/notification_mention_comment"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <TextView
+            style="@style/settings_label_text"
+            android:text="@string/notification_method" />
+        
+        <View style="@style/settings_divider_wide"/>
+        
+        <CheckedTextView
+            android:id="@+id/vibrate"
+            style="@style/settings_item"
+            android:text="@string/vibrate"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <CheckedTextView
+            android:id="@+id/notification_led"
+            style="@style/settings_item"
+            android:text="@string/notification_led"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:gravity="center_vertical" />
+        
+        <View style="@style/settings_divider"/>
+        
+        <LinearLayout
+            android:id="@+id/ringtone"
+            style="@style/settings_item"
+            android:orientation="vertical"
+            android:gravity="center_vertical" >
+            
+            <TextView
+                android:id="@+id/ringtone_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ringtone"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+            <TextView
+                android:id="@+id/ringtone_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            
+        </LinearLayout>
+        
+    </LinearLayout>
+    
+</ScrollView>

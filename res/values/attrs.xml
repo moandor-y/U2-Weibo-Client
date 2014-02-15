@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <attr name="icon_comment" format="reference"/>
+    <attr name="icon_repost" format="reference"/>
+    <attr name="icon_gps" format="reference"/>
+    <attr name="icon_pic" format="reference"/>
+    <attr name="icon_send" format="reference"/>
+    <attr name="action_bar_divider_color" format="color"/>
+    <attr name="action_bar_background" format="color"/>
+    <attr name="link_color" format="color"/>
+    <attr name="link_pressed_background_color" format="color"/>
+    <attr name="retweet_background" format="color"/>
+    <attr name="quick_post_divider" format="color"/>
+    <attr name="image_place_holder" format="color"/>
+    <attr name="settings_divider_color" format="color"/>
+    <attr name="settings_divider_wide_color" format="color"/>
+    <attr name="item_background" format="reference"/>
+    <attr name="action_menu_text_color" format="color"/>
+    <attr name="icon_refresh" format="reference"/>
+    
+</resources>

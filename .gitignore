@@ -1,0 +1,13 @@
+bin/
+gen/
+CompileCount.bat
+CompileCount.py
+CompileCount.txt
+.externalToolBuilders/
+.settings
+proguard/
+.classpath
+.project
+lint.xml
+proguard-project.txt
+project.properties

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="span_long_click">
+        <item>Open</item>
+        <item>Copy</item>
+    </string-array>
+    
+</resources>
