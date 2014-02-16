@@ -98,9 +98,9 @@
     <string name="summary">Summary</string>
     <string name="address">Address</string>
     <string name="statistics">Statistics</string>
-    <string name="weibo_count">Weibo Count</string>
-    <string name="following_count">Following Count</string>
-    <string name="follower_count">Follower Count</string>
+    <string name="weibo_count">Weibo</string>
+    <string name="following_count">Following</string>
+    <string name="follower_count">Followers</string>
     <string name="retry">Retry</string>
     <string name="no_earlier_message">No Earlier Message</string>
     <string name="yes">Yes</string>
