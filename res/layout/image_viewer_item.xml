@@ -4,12 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:adjustViewBounds="false" />
+    
     <WebView
         android:id="@+id/web"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        android:visibility="gone" />
     
     <ProgressBar
         android:id="@+id/progress_bar"

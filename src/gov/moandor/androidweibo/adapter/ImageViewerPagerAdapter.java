@@ -13,6 +13,8 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import uk.co.senab.photoview.PhotoView;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.ImageViewerPictureReadTask;
@@ -32,7 +34,6 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         return mUrls.length;
     }
     
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater = GlobalContext.getActivity().getLayoutInflater();
@@ -43,21 +44,15 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
         settings.setBuiltInZoomControls(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            settings.setDisplayZoomControls(false);
-            if (GlobalContext.isPicHwAccelEnabled()) {
-                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            } else {
-                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            }
-        }
+        setupForNewApi(webView, settings);
         webView.setHorizontalScrollBarEnabled(false);
         webView.setVerticalScrollBarEnabled(false);
         webView.setBackgroundColor(Color.TRANSPARENT);
+        PhotoView photoView = (PhotoView) view.findViewById(R.id.photo);
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         Button retryButton = (Button) view.findViewById(R.id.button_retry);
         ImageViewerPictureReadTask task = new ImageViewerPictureReadTask(url, mImageType, webView, 
-                progressBar, retryButton);
+                photoView, progressBar, retryButton);
         task.execute();
         container.addView(view);
         return view;
@@ -72,6 +67,18 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         if (object instanceof ViewGroup) {
             ((ViewPager) container).removeView((View) object);
+        }
+    }
+    
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static void setupForNewApi(WebView webView, WebSettings settings) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            settings.setDisplayZoomControls(false);
+            if (GlobalContext.isPicHwAccelEnabled()) {
+                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+            } else {
+                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
         }
     }
 }

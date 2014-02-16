@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 public class ImageUtils {
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 2000;
+    public static final int MAX_DISPLAY_SIZE = 2048;
     
     public static boolean getBitmapFromNetwork(String url, String path, HttpUtils.DownloadListener listener) {
         for (int i = 0; i < 3; i++) {
@@ -57,5 +58,12 @@ public class ImageUtils {
     
     public static Drawable bitmapToDrawable(Bitmap bitmap) {
         return new BitmapDrawable(GlobalContext.getInstance().getResources(), bitmap);
+    }
+    
+    public static boolean isTooLargeToDisplay(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        return (options.outWidth > MAX_DISPLAY_SIZE || options.outHeight > MAX_DISPLAY_SIZE);
     }
 }

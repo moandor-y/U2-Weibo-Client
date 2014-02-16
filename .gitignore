@@ -11,3 +11,5 @@ proguard/
 lint.xml
 proguard-project.txt
 project.properties
+build.gradle
+pom.xml

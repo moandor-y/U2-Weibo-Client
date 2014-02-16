@@ -1,12 +1,16 @@
 package gov.moandor.androidweibo.concurrency;
 
+import android.graphics.Bitmap;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import uk.co.senab.photoview.PhotoView;
+
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.ImageUtils;
 
 public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boolean> {
     private static final String HTML =
@@ -27,18 +31,22 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
             "    </body>" +
             "</html>";
     
+    private boolean mUseWebView;
     private String mUrl;
     private String mPath;
     private ImageDownloader.ImageType mType;
-    private WebView mView;
+    private WebView mWebView;
+    private PhotoView mPhotoView;
     private ProgressBar mProgressBar;
     private Button mRetryButton;
+    private Bitmap mBitmap;
     
-    public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type, WebView view, 
-            ProgressBar progressBar, Button retryButton) {
+    public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type, WebView webView, 
+            PhotoView photoView, ProgressBar progressBar, Button retryButton) {
         mUrl = url;
         mType = type;
-        mView = view;
+        mWebView = webView;
+        mPhotoView = photoView;
         mProgressBar = progressBar;
         mRetryButton = retryButton;
     }
@@ -46,14 +54,22 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     @Override
     protected void onPreExecute() {
         mProgressBar.setVisibility(View.VISIBLE);
-        mView.setVisibility(View.GONE);
+        mWebView.setVisibility(View.GONE);
+        mPhotoView.setVisibility(View.GONE);
         mRetryButton.setVisibility(View.GONE);
+        mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
     }
     
     @Override
     protected Boolean doInBackground(Void... params) {
-        mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
-        return ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mPath, mType);
+        boolean result = ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mPath, mType);
+        if (mPath.endsWith(".gif") || ImageUtils.isTooLargeToDisplay(mPath)) {
+            mUseWebView = true;
+        } else {
+            mUseWebView = false;
+            mBitmap = ImageUtils.getBitmapFromFile(mPath, ImageUtils.MAX_DISPLAY_SIZE, ImageUtils.MAX_DISPLAY_SIZE);
+        }
+        return result;
     }
     
     @Override
@@ -66,15 +82,20 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     protected void onPostExecute(Boolean result) {
         mProgressBar.setVisibility(View.GONE);
         if (result) {
-            mView.setVisibility(View.VISIBLE);
-            mView.loadDataWithBaseURL(null, String.format(HTML, mPath), "text/html", "utf-8", null);
+            if (mUseWebView) {
+                mWebView.setVisibility(View.VISIBLE);
+                mWebView.loadDataWithBaseURL(null, String.format(HTML, mPath), "text/html", "utf-8", null);
+            } else {
+                mPhotoView.setVisibility(View.VISIBLE);
+                mPhotoView.setImageBitmap(mBitmap);
+            }
         } else {
             mRetryButton.setVisibility(View.VISIBLE);
             mRetryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     ImageViewerPictureReadTask task = new ImageViewerPictureReadTask(mUrl, 
-                            mType, mView, mProgressBar, mRetryButton);
+                            mType, mWebView, mPhotoView, mProgressBar, mRetryButton);
                     task.execute();
                 }
             });
