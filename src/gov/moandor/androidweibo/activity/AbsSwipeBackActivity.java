@@ -14,7 +14,7 @@ public abstract class AbsSwipeBackActivity extends AbsActivity implements SwipeB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHelper = new SwipeBackActivityHelper(this);
-        mHelper.onActivtyCreate();
+        mHelper.onActivityCreate();
     }
     
     @Override
