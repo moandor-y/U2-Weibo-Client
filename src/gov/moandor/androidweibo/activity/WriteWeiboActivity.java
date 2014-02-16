@@ -70,6 +70,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             mEditText.setHint(mRetweetWeiboStatus.text);
             if (mRetweetWeiboStatus.retweetStatus != null) {
                 mEditText.setText("//@" + mRetweetWeiboStatus.weiboUser.name + ":" + mRetweetWeiboStatus.text);
+                mEditText.setSelection(0);
             }
         }
         if (mRetweetWeiboStatus == null) {
