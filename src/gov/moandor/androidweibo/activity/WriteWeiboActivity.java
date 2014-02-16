@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.GpsLocation;
 import gov.moandor.androidweibo.bean.WeiboDraft;
@@ -70,7 +72,15 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             mEditText.setHint(mRetweetWeiboStatus.text);
             if (mRetweetWeiboStatus.retweetStatus != null) {
                 mEditText.setText("//@" + mRetweetWeiboStatus.weiboUser.name + ":" + mRetweetWeiboStatus.text);
-                mEditText.setSelection(0);
+                mEditText.getViewTreeObserver()
+                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                    @Override
+                    public boolean onPreDraw() {
+                        mEditText.getViewTreeObserver().removeOnPreDrawListener(this);
+                        mEditText.setSelection(0);
+                        return true;
+                    }
+                });
             }
         }
         if (mRetweetWeiboStatus == null) {
