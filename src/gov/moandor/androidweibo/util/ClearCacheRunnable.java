@@ -81,6 +81,7 @@ public class ClearCacheRunnable implements Runnable {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
                 List<WeiboUser> users = Utilities.getWeiboUsersFromJson(json);
+                users.add(account.user);
                 for (WeiboUser user : users) {
                     String path = FileUtils.getImagePathFromUrl(user.avatarLargeUrl, 
                             ImageDownloader.ImageType.AVATAR_LARGE);
