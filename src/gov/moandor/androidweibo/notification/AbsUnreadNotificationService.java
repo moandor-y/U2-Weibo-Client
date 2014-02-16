@@ -4,7 +4,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.IBinder;
@@ -12,8 +15,14 @@ import android.support.v4.app.NotificationCompat;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.WeiboException;
 
 public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extends Service {
     private static final long[] VIBRATE_PATTERN = {0, 200, 300, 200, 300};
@@ -21,13 +30,15 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
     public static final String MESSAGE;
     public static final String CLICK_INTENT;
     public static final String COUNT;
+    private static final String CLEAR_NOTIFICATION;
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
-        ACCOUNT = packageName + ".account";
-        MESSAGE = packageName + ".message";
-        CLICK_INTENT = packageName + ".click.intent";
-        COUNT = packageName + ".count";
+        ACCOUNT = packageName + ".ACCOUNT";
+        MESSAGE = packageName + ".MESSAGE";
+        CLICK_INTENT = packageName + ".CLICK_INTENT";
+        COUNT = packageName + ".COUNT";
+        CLEAR_NOTIFICATION = packageName + ".CLEAR_NOTIFICATION";
     }
     
     private Account mAccount;
@@ -80,6 +91,7 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         if (uri != null) {
             builder.setSound(uri);
         }
+        builder.setDeleteIntent(getDeletePendingIntent());
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.setBigContentTitle(title);
         style.bigText(mMessage.text);
@@ -92,5 +104,38 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         return PendingIntent.getBroadcast(this, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
     
+    private PendingIntent getDeletePendingIntent() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(CLEAR_NOTIFICATION);
+        Utilities.registerReceiver(mClearNotificationReceiver, filter);
+        Intent clearIntent = new Intent();
+        clearIntent.setAction(CLEAR_NOTIFICATION);
+        return PendingIntent.getBroadcast(GlobalContext.getInstance(), 0, clearIntent, 
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+    
+    private BroadcastReceiver mClearNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Utilities.unregisterReceiver(this);
+            MyAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    String url = HttpUtils.UrlHelper.REMIND_SET_COUNT;
+                    HttpParams params = new HttpParams();
+                    params.addParam("access_token", mAccount.token);
+                    params.addParam("type", getCountType());
+                    try {
+                        HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
+                    } catch (WeiboException e) {
+                        Logger.logExcpetion(e);
+                    }
+                }
+            });
+        }
+    };
+    
     abstract String getTextTitle(int count);
+    
+    abstract String getCountType();
 }

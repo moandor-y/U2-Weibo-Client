@@ -2,10 +2,12 @@ package gov.moandor.androidweibo.util;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -573,5 +575,17 @@ public class Utilities {
     public static boolean isScreenLandscape() {
         int orientation = GlobalContext.getInstance().getResources().getConfiguration().orientation;
         return orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+    
+    public static Intent registerReceiver (BroadcastReceiver receiver, IntentFilter filter) {
+        return GlobalContext.getInstance().registerReceiver(receiver, filter);
+    }
+    
+    public static void unregisterReceiver (BroadcastReceiver receiver) {
+        try {
+            GlobalContext.getInstance().unregisterReceiver(receiver);
+        } catch (IllegalArgumentException e) {
+            Logger.logExcpetion(e);
+        }
     }
 }

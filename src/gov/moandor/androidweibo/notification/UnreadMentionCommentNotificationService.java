@@ -8,4 +8,9 @@ public class UnreadMentionCommentNotificationService extends AbsUnreadNotificati
     String getTextTitle(int count) {
         return getString(R.string.new_mention_comments, count);
     }
+    
+    @Override
+    String getCountType() {
+        return "mention_cmt";
+    }
 }

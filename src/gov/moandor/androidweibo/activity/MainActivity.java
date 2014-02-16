@@ -34,7 +34,6 @@ import gov.moandor.androidweibo.fragment.MainDrawerFragment;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 
@@ -180,7 +179,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mTabStrip.setTabPaddingLeftRight(res.getDimensionPixelSize(R.dimen.tab_padding));
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_UNREAD_UPDATED);
-        registerReceiver(mUnreadUpdateReciever, intentFilter);
+        Utilities.registerReceiver(mUnreadUpdateReciever, intentFilter);
     }
     
     @Override
@@ -205,11 +204,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        try {
-            unregisterReceiver(mUnreadUpdateReciever);
-        } catch (IllegalArgumentException e) {
-            Logger.logExcpetion(e);
-        }
+        Utilities.unregisterReceiver(mUnreadUpdateReciever);
     }
     
     @Override

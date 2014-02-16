@@ -8,4 +8,9 @@ public class UnreadMentionWeiboNotificationService extends AbsUnreadNotification
     String getTextTitle(int count) {
         return getString(R.string.new_mention_weibos, count);
     }
+    
+    @Override
+    String getCountType() {
+        return "mention_status";
+    }
 }
