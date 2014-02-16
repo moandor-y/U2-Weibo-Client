@@ -32,7 +32,7 @@ public class MainDrawerListAdapter extends BaseAdapter {
     
     @Override
     public long getItemId(int position) {
-        return GlobalContext.getAccount(position).id;
+        return GlobalContext.getAccount(position).user.id;
     }
     
     @Override
@@ -46,9 +46,9 @@ public class MainDrawerListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Account account = GlobalContext.getAccount(position);
-        DownloadAvatarTask task = new DownloadAvatarTask(account.avatarURL, viewHolder.avatarView);
+        DownloadAvatarTask task = new DownloadAvatarTask(account.user.avatarLargeUrl, viewHolder.avatarView);
         task.execute();
-        viewHolder.nameView.setText(account.name);
+        viewHolder.nameView.setText(account.user.name);
         viewHolder.nameView.getPaint().setFakeBoldText(true);
         if (position != GlobalContext.getCurrentAccountIndex()) {
             viewHolder.tickView.setVisibility(View.INVISIBLE);

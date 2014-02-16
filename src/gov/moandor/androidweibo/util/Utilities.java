@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.bean.WeiboComment;
@@ -208,20 +207,6 @@ public class Utilities {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
         
-    }
-    
-    public static Account getAccountFromJson(String jsonStr) throws WeiboException {
-        JSONObject json;
-        try {
-            json = new JSONObject(jsonStr);
-            Account account = new Account();
-            account.name = json.getString("name");
-            account.avatarURL = json.getString("avatar_large");
-            return account;
-        } catch (JSONException e) {
-            Logger.logExcpetion(e);
-            throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
-        }
     }
     
     public static Map<String, String> parseUrl(String urlAddress) {

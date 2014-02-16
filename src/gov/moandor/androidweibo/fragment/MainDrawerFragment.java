@@ -68,7 +68,8 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
         int position = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
         if (position < GlobalContext.getAccountCount()) {
             getActivity().getMenuInflater().inflate(R.menu.main_drawer_context_menu, menu);
-            menu.setHeaderTitle(GlobalContext.getAccount(((AdapterView.AdapterContextMenuInfo) menuInfo).position).name);
+            menu.setHeaderTitle(GlobalContext.getAccount(((AdapterView.AdapterContextMenuInfo) menuInfo).position)
+                    .user.name);
         }
     }
     

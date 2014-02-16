@@ -52,7 +52,7 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
                     text = comment.repliedComment.text;
                     WeiboUser user = comment.repliedComment.weiboUser;
                     if (user != null && !TextUtils.isEmpty(user.name)) {
-                        if (user.id == GlobalContext.getCurrentAccount().id) {
+                        if (user.id == GlobalContext.getCurrentAccount().user.id) {
                             text = res.getString(R.string.replied_to_my_comment) + " " + text;
                         } else {
                             text = res.getString(R.string.replied_to_comment_by, user.name) + " " + text;
@@ -62,7 +62,7 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
                     text = comment.weiboStatus.text;
                     WeiboUser user = comment.weiboStatus.weiboUser;
                     if (user != null && !TextUtils.isEmpty(user.name)) {
-                        if (user.id == GlobalContext.getCurrentAccount().id) {
+                        if (user.id == GlobalContext.getCurrentAccount().user.id) {
                             text = res.getString(R.string.commented_on_my_weibo) + " " + text;
                         } else {
                             text = res.getString(R.string.commented_on_weibo_by, user.name) + " " + text;

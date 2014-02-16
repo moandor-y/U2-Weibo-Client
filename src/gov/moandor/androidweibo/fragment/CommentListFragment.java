@@ -40,14 +40,14 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     
     @Override
     List<WeiboComment> getBeansFromDatabase() {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int filter = GlobalContext.getCommentFilter();
         return DatabaseUtils.getComments(accountId, filter);
     }
     
     @Override
     void saveRefreshResultToDatabase(List<WeiboComment> comments) {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int filter = GlobalContext.getCommentFilter();
         DatabaseUtils.removeComments(accountId, filter);
         DatabaseUtils.insertComments(comments, accountId, filter);
@@ -55,7 +55,7 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     
     @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments) {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int filter = GlobalContext.getCommentFilter();
         DatabaseUtils.insertComments(comments, accountId, filter);
     }
@@ -93,7 +93,7 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
             final TimelinePosition position = new TimelinePosition();
             position.position = mListView.getFirstVisiblePosition();
             position.top = mListView.getChildAt(0).getTop();
-            final long accountId = GlobalContext.getCurrentAccount().id;
+            final long accountId = GlobalContext.getCurrentAccount().user.id;
             final int filter = GlobalContext.getCommentFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override

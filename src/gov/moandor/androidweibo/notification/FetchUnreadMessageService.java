@@ -72,7 +72,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static List<WeiboComment> fetchComments(Account account) throws WeiboException {
-        List<WeiboComment> oldComments = DatabaseUtils.getComments(account.id, CommentListFragment.ALL);
+        List<WeiboComment> oldComments = DatabaseUtils.getComments(account.user.id, CommentListFragment.ALL);
         WeiboComment oldComment = null;
         if (oldComments.size() > 0) {
             oldComment = oldComments.get(0);
@@ -89,7 +89,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static List<WeiboStatus> fetchMentionStatuses(Account account) throws WeiboException {
-        List<WeiboStatus> oldStatuses = DatabaseUtils.getAtmeStatuses(account.id, 0);
+        List<WeiboStatus> oldStatuses = DatabaseUtils.getAtmeStatuses(account.user.id, 0);
         WeiboStatus oldStatus = null;
         if (oldStatuses.size() > 0) {
             oldStatus = oldStatuses.get(0);
@@ -106,7 +106,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {
-        List<WeiboComment> oldComments = DatabaseUtils.getComments(account.id, CommentListFragment.ATME);
+        List<WeiboComment> oldComments = DatabaseUtils.getComments(account.user.id, CommentListFragment.ATME);
         WeiboComment oldComment = null;
         if (oldComments.size() > 0) {
             oldComment = oldComments.get(0);

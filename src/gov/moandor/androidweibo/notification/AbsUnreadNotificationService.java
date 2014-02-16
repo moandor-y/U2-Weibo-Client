@@ -69,7 +69,7 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         String title = getTextTitle(mCount);
         builder.setTicker(title);
         builder.setContentTitle(title);
-        builder.setContentText(mAccount.name);
+        builder.setContentText(mAccount.user.name);
         builder.setSmallIcon(R.drawable.ic_notification);
         builder.setAutoCancel(true);
         builder.setContentIntent(getClickPendingIntent(mClickIntent));
@@ -95,7 +95,7 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
         style.setBigContentTitle(title);
         style.bigText(mMessage.text);
-        style.setSummaryText(mAccount.name);
+        style.setSummaryText(mAccount.user.name);
         builder.setStyle(style);
         return builder.build();
     }

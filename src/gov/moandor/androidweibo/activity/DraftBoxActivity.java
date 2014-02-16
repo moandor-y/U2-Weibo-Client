@@ -230,7 +230,7 @@ public class DraftBoxActivity extends AbsSwipeBackActivity {
     private class GetDraftsTask extends MyAsyncTask<Void, Void, List<AbsDraftBean>> {
         @Override
         protected List<AbsDraftBean> doInBackground(Void... params) {
-            return DatabaseUtils.getDrafts(GlobalContext.getCurrentAccount().id);
+            return DatabaseUtils.getDrafts(GlobalContext.getCurrentAccount().user.id);
         }
         
         @Override
@@ -255,7 +255,7 @@ public class DraftBoxActivity extends AbsSwipeBackActivity {
         @Override
         protected List<AbsDraftBean> doInBackground(Void... params) {
             DatabaseUtils.removeDrafts(mIds);
-            return DatabaseUtils.getDrafts(GlobalContext.getCurrentAccount().id);
+            return DatabaseUtils.getDrafts(GlobalContext.getCurrentAccount().user.id);
         }
         
         @Override

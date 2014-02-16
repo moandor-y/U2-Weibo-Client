@@ -88,7 +88,7 @@ public class WeiboCommentListFragment extends
         CommentDraft draft = new CommentDraft();
         draft.content = content;
         draft.commentedStatus = mWeiboStatus;
-        draft.accountId = GlobalContext.getCurrentAccount().id;
+        draft.accountId = GlobalContext.getCurrentAccount().user.id;
         intent.putExtra(SendCommentService.COMMENT_DRAFT, draft);
         getActivity().startService(intent);
     }

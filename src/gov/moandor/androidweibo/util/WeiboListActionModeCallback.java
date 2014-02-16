@@ -30,7 +30,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mFragment.setPullToRefreshEnabled(false);
         mode.getMenuInflater().inflate(R.menu.weibo_long_click, menu);
-        if (mAdapter.getSelectedItem().weiboUser.id != GlobalContext.getCurrentAccount().id) {
+        if (mAdapter.getSelectedItem().weiboUser.id != GlobalContext.getCurrentAccount().user.id) {
             menu.removeItem(R.id.delete);
         }
         MenuItem shareItem = menu.findItem(R.id.share);
@@ -156,7 +156,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             mAdapter.updatePosition(mSelection, status);
             mAdapter.notifyDataSetChanged();
             Utilities.notice(R.string.favorited_successfully);
-            long accountId = GlobalContext.getCurrentAccount().id;
+            long accountId = GlobalContext.getCurrentAccount().user.id;
             int group = GlobalContext.getWeiboGroup();
             updateDatabase(status, mSelection, accountId, group);
         }
@@ -179,7 +179,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             mAdapter.updatePosition(mSelection, status);
             mAdapter.notifyDataSetChanged();
             Utilities.notice(R.string.unfavorited_successfully);
-            long accountId = GlobalContext.getCurrentAccount().id;
+            long accountId = GlobalContext.getCurrentAccount().user.id;
             int group = GlobalContext.getWeiboGroup();
             updateDatabase(status, mSelection, accountId, group);
         }
@@ -201,7 +201,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
         public void onDeleteFinished() {
             mAdapter.removeItem(mSelection);
             mAdapter.notifyDataSetChanged();
-            long accountId = GlobalContext.getCurrentAccount().id;
+            long accountId = GlobalContext.getCurrentAccount().user.id;
             int group = GlobalContext.getWeiboGroup();
             removeFromDatabase(mSelection, accountId, group);
         }

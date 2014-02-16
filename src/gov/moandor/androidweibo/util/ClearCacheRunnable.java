@@ -73,7 +73,7 @@ public class ClearCacheRunnable implements Runnable {
         for (Account account : GlobalContext.getAccounts()) {
             HttpParams params = new HttpParams();
             params.addParam("access_token", account.token);
-            params.addParam("uid", String.valueOf(account.id));
+            params.addParam("uid", String.valueOf(account.user.id));
             params.addParam("count", "200");
             int nextCursor = 0;
             do {
@@ -95,7 +95,7 @@ public class ClearCacheRunnable implements Runnable {
                 }
                 nextCursor = json.getInt("next_cursor");
             } while (nextCursor != 0);
-            Logger.debug(TAG, "finished fetching " + account.name + "'s following, " + result.size());
+            Logger.debug(TAG, "finished fetching " + account.user.name + "'s following, " + result.size());
         }
         return result;
     }

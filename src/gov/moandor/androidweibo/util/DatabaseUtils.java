@@ -31,8 +31,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     private static final Gson sGson = new Gson();
     
     private static final String CREATE_ACCOUNT_TABLE = "create table " + Table.Account.TABLE_NAME + "("
-            + Table.Account.ID + " integer primary key, " + Table.Account.NAME + " text, " + Table.Account.TOKEN
-            + " text, " + Table.Account.AVATAR_URL + " text, " + Table.Account.USER_INFO_DATA + " text)";
+            + Table.Account.ID + " integer primary key, " + Table.Account.TOKEN + " text, " 
+            + Table.Account.USER_INFO_DATA + " text)";
     
     private static final String CREATE_WEIBO_GROUP_TABLE = "create table " + Table.WeiboGroup.TABLE_NAME + "("
             + Table.WeiboGroup.ID + " integer primary key, " + Table.WeiboGroup.NAME + " text)";
@@ -83,19 +83,17 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     
     public static synchronized void insertOrUpdateAccount(Account account) {
         ContentValues cv = new ContentValues();
-        cv.put(Table.Account.ID, account.id);
-        cv.put(Table.Account.NAME, account.name);
+        cv.put(Table.Account.ID, account.user.id);
         cv.put(Table.Account.TOKEN, account.token);
-        cv.put(Table.Account.AVATAR_URL, account.avatarURL);
         cv.put(Table.Account.USER_INFO_DATA, sGson.toJson(account.user));
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor =
                 database.query(Table.Account.TABLE_NAME, new String[]{Table.Account.ID}, Table.Account.ID + "="
-                        + account.id, null, null, null, null);
+                        + account.user.id, null, null, null, null);
         if (cursor.getCount() > 0) {
             database.close();
             database = sInstance.getWritableDatabase();
-            database.update(Table.Account.TABLE_NAME, cv, Table.Account.ID + "=" + account.id, null);
+            database.update(Table.Account.TABLE_NAME, cv, Table.Account.ID + "=" + account.user.id, null);
         } else {
             database.close();
             database = sInstance.getWritableDatabase();
@@ -111,10 +109,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         List<Account> result = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account();
-            account.id = cursor.getLong(cursor.getColumnIndex(Table.Account.ID));
-            account.name = cursor.getString(cursor.getColumnIndex(Table.Account.NAME));
             account.token = cursor.getString(cursor.getColumnIndex(Table.Account.TOKEN));
-            account.avatarURL = cursor.getString(cursor.getColumnIndex(Table.Account.AVATAR_URL));
             account.user =
                     sGson.fromJson(cursor.getString(cursor.getColumnIndex(Table.Account.USER_INFO_DATA)),
                             WeiboUser.class);
@@ -401,7 +396,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
                         + " from " + Table.TimelinePosition.TABLE_NAME + " where " + Table.TimelinePosition.ACCOUNT_ID
                         + "=? and " + Table.TimelinePosition.FRAGMENT_INDEX + "=? and "
                         + Table.TimelinePosition.SPINNER_POSITION + "=?", new String[]{
-                        String.valueOf(GlobalContext.getCurrentAccount().id), String.valueOf(fragmentIndex),
+                        String.valueOf(GlobalContext.getCurrentAccount().user.id), String.valueOf(fragmentIndex),
                         String.valueOf(spinnerPosition)});
         TimelinePosition result = new TimelinePosition();
         if (cursor.moveToNext()) {
@@ -523,9 +518,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         public static final class Account {
             public static final String TABLE_NAME = "account_table";
             public static final String ID = "id";
-            public static final String NAME = "name";
             public static final String TOKEN = "token";
-            public static final String AVATAR_URL = "avatar_url";
             public static final String USER_INFO_DATA = "user_info_data";
         }
         

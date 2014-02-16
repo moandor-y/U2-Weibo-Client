@@ -521,7 +521,7 @@ public class GlobalContext extends Application {
     
     public static synchronized void addOrUpdateAccount(Account account) {
         for (Account a : sAccounts) {
-            if (a.id == account.id) {
+            if (a.user.id == account.user.id) {
                 sAccounts.remove(a);
                 break;
             }
@@ -536,7 +536,7 @@ public class GlobalContext extends Application {
         if (sCurrentAccountIndex >= sAccounts.size() && sAccounts.size() > 0) {
             sCurrentAccountIndex = sAccounts.size() - 1;
         }
-        DatabaseUtils.removeAccount(account.id);
+        DatabaseUtils.removeAccount(account.user.id);
     }
     
     public static synchronized int indexOfAccount(Account account) {

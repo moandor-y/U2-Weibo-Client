@@ -47,7 +47,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
             mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
-            final long accountId = GlobalContext.getCurrentAccount().id;
+            final long accountId = GlobalContext.getCurrentAccount().user.id;
             final int group = GlobalContext.getWeiboGroup();
             MyAsyncTask.execute(new Runnable() {
                 @Override
@@ -82,12 +82,12 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     
     @Override
     List<WeiboStatus> getBeansFromDatabase() {
-        return DatabaseUtils.getWeiboStatuses(GlobalContext.getCurrentAccount().id, GlobalContext.getWeiboGroup());
+        return DatabaseUtils.getWeiboStatuses(GlobalContext.getCurrentAccount().user.id, GlobalContext.getWeiboGroup());
     }
     
     @Override
     void saveRefreshResultToDatabase(List<WeiboStatus> statuses) {
-        final long accountId = GlobalContext.getCurrentAccount().id;
+        final long accountId = GlobalContext.getCurrentAccount().user.id;
         final int group = GlobalContext.getWeiboGroup();
         DatabaseUtils.removeWeiboStatuses(accountId, group);
         DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
@@ -95,7 +95,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     
     @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses) {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int group = GlobalContext.getWeiboGroup();
         DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
@@ -125,7 +125,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             final TimelinePosition position = new TimelinePosition();
             position.position = mListView.getFirstVisiblePosition();
             position.top = view.getTop();
-            final long accountId = GlobalContext.getCurrentAccount().id;
+            final long accountId = GlobalContext.getCurrentAccount().user.id;
             final int group = GlobalContext.getWeiboGroup();
             MyAsyncTask.execute(new Runnable() {
                 @Override

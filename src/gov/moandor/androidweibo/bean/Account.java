@@ -4,16 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Account implements Parcelable {
-    public long id;
-    public String name;
     public String token;
-    public String avatarURL;
     public WeiboUser user;
     
     @Override
     public boolean equals(Object o) {
         if (o instanceof Account) {
-            return id == ((Account) o).id;
+            return user.id == ((Account) o).user.id;
         }
         return super.equals(o);
     }
@@ -25,10 +22,7 @@ public class Account implements Parcelable {
     
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
         dest.writeString(token);
-        dest.writeString(avatarURL);
         dest.writeParcelable(user, flags);
     }
     
@@ -36,10 +30,7 @@ public class Account implements Parcelable {
         @Override
         public Account createFromParcel(Parcel source) {
             Account result = new Account();
-            result.id = source.readLong();
-            result.name = source.readString();
             result.token = source.readString();
-            result.avatarURL = source.readString();
             result.user = source.readParcelable(WeiboUser.class.getClassLoader());
             return result;
         }

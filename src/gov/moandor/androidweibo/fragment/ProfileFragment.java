@@ -16,6 +16,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.UserListActivity;
 import gov.moandor.androidweibo.activity.UserWeiboListActivity;
+import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -231,8 +232,10 @@ public class ProfileFragment extends Fragment {
             if (result == null) {
                 return;
             }
-            if (GlobalContext.getCurrentAccount().id == result.id) {
-                GlobalContext.getCurrentAccount().user = result;
+            Account account = GlobalContext.getCurrentAccount();
+            if (account.user.id == result.id) {
+                account.user = result;
+                GlobalContext.addOrUpdateAccount(account);
             }
             mUser = result;
             buildLayout();

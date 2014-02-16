@@ -136,7 +136,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     CommentDraft onCreateDraft(String content) {
         CommentDraft draft = new CommentDraft();
         draft.content = content;
-        draft.accountId = GlobalContext.getCurrentAccount().id;
+        draft.accountId = GlobalContext.getCurrentAccount().user.id;
         draft.commentedStatus = mCommentedStatus;
         draft.repliedComment = mRepliedComment;
         draft.commentOri = mCommentOri;

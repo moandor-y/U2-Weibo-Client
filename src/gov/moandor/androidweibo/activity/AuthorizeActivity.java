@@ -169,9 +169,8 @@ public class AuthorizeActivity extends AbsActivity {
                 params.addParam("access_token", mToken);
                 params.addParam("uid", String.valueOf(id));
                 response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, HttpUtils.UrlHelper.USERS_SHOW, params);
-                Account account = Utilities.getAccountFromJson(response);
+                Account account = new Account();
                 account.token = mToken;
-                account.id = id;
                 account.user = Utilities.getWeiboUserFromJson(response);
                 GlobalContext.addOrUpdateAccount(account);
                 GlobalContext.runOnUiThread(new Runnable() {

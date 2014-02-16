@@ -87,7 +87,7 @@ public class WeiboRepostListFragment extends
         WeiboDraft draft = new WeiboDraft();
         draft.content = content;
         draft.retweetStatus = mWeiboStatus;
-        draft.accountId = GlobalContext.getCurrentAccount().id;
+        draft.accountId = GlobalContext.getCurrentAccount().user.id;
         intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
         intent.putExtra(SendWeiboService.WEIBO_DRAFT, draft);
         getActivity().startService(intent);

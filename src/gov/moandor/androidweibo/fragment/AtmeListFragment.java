@@ -41,7 +41,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
             mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
-            final long accountId = GlobalContext.getCurrentAccount().id;
+            final long accountId = GlobalContext.getCurrentAccount().user.id;
             final int group = GlobalContext.getWeiboGroup();
             MyAsyncTask.execute(new Runnable() {
                 @Override
@@ -64,14 +64,14 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     
     @Override
     List<WeiboStatus> getBeansFromDatabase() {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int filter = GlobalContext.getAtmeFilter();
         return DatabaseUtils.getAtmeStatuses(accountId, filter);
     }
     
     @Override
     void saveRefreshResultToDatabase(List<WeiboStatus> statuses) {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int filter = GlobalContext.getAtmeFilter();
         DatabaseUtils.removeAtmeStatuses(accountId, filter);
         DatabaseUtils.insertAtmeStatuses(statuses, accountId, filter);
@@ -79,7 +79,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     
     @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses) {
-        long accountId = GlobalContext.getCurrentAccount().id;
+        long accountId = GlobalContext.getCurrentAccount().user.id;
         int filter = GlobalContext.getAtmeFilter();
         DatabaseUtils.insertAtmeStatuses(statuses, accountId, filter);
     }
@@ -104,7 +104,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             final TimelinePosition position = new TimelinePosition();
             position.position = mListView.getFirstVisiblePosition();
             position.top = mListView.getChildAt(0).getTop();
-            final long accountId = GlobalContext.getCurrentAccount().id;
+            final long accountId = GlobalContext.getCurrentAccount().user.id;
             final int filter = GlobalContext.getAtmeFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override

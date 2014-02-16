@@ -236,7 +236,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     WeiboDraft onCreateDraft(String content) {
         WeiboDraft draft = new WeiboDraft();
         draft.content = content;
-        draft.accountId = GlobalContext.getCurrentAccount().id;
+        draft.accountId = GlobalContext.getCurrentAccount().user.id;
         draft.picPath = mPicPath;
         draft.retweetStatus = mRetweetWeiboStatus;
         draft.location = mLocation;

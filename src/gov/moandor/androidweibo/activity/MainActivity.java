@@ -320,7 +320,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             break;
         case PROFILE:
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            actionBar.setTitle(GlobalContext.getCurrentAccount().name);
+            actionBar.setTitle(GlobalContext.getCurrentAccount().user.name);
             break;
         }
     }
