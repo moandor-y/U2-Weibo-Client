@@ -48,13 +48,13 @@
         <activity
             android:name=".activity.WeiboActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark"
+            android:theme="@style/Translucent"
             android:windowSoftInputMode="stateHidden" />
         
         <activity
             android:name=".activity.UserActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" >
+            android:theme="@style/Translucent" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
@@ -65,7 +65,7 @@
         <activity
             android:name=".activity.TopicActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" >
+            android:theme="@style/Translucent" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.VIEW" />
@@ -76,43 +76,45 @@
         <activity
             android:name=".activity.WriteWeiboActivity"
             android:screenOrientation="user"
+            android:theme="@style/Translucent"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         
         <activity
             android:name=".activity.WriteCommentActivity"
             android:screenOrientation="user"
+            android:theme="@style/Translucent"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         
         <activity
             android:name=".activity.ImageViewerActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" />
+            android:theme="@style/Translucent" />
         
         <activity
             android:name=".activity.UserListActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" />
+            android:theme="@style/Translucent" />
         
         <activity
             android:name=".activity.UserWeiboListActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" />
+            android:theme="@style/Translucent" />
         
         <activity
             android:name=".activity.DraftBoxActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark"
+            android:theme="@style/Translucent"
             android:uiOptions="splitActionBarWhenNarrow" />
         
         <activity
             android:name=".activity.AtUserActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" />
+            android:theme="@style/Translucent" />
         
         <activity
             android:name=".activity.FavoritesActivity"
             android:screenOrientation="user"
-            android:theme="@style/Theme.Weibo.Dark" />
+            android:theme="@style/Translucent" />
         
         <service android:name=".notification.SendWeiboService"/>
         <service android:name=".notification.SendCommentService"/>
