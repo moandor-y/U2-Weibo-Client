@@ -138,6 +138,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends Base
         holder.time.setTextSize(mTimeFontSize);
         holder.text.setTextSize(mFontSize);
         holder.userName.setTextSize(mFontSize);
+        holder.userName.getPaint().setFakeBoldText(true);
         holder.text.setOnTouchListener(mTextOnTouchListener);
         if (mNoPictureModeEnabled) {
             holder.avatar.setVisibility(View.INVISIBLE);
