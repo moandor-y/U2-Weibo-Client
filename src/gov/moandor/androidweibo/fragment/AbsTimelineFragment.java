@@ -163,9 +163,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupListHwAccel() {
-        if (GlobalContext.isListHwAccelEnabled()) {
-            mListView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        } else {
+        if (!GlobalContext.isListHwAccelEnabled()) {
             mListView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }

@@ -74,9 +74,7 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
     private static void setupForNewApi(WebView webView, WebSettings settings) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             settings.setDisplayZoomControls(false);
-            if (GlobalContext.isPicHwAccelEnabled()) {
-                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-            } else {
+            if (!GlobalContext.isPicHwAccelEnabled()) {
                 webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             }
         }

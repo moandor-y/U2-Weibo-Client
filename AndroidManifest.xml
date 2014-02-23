@@ -76,13 +76,11 @@
         <activity
             android:name=".activity.WriteWeiboActivity"
             android:screenOrientation="user"
-            android:theme="@style/Translucent"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         
         <activity
             android:name=".activity.WriteCommentActivity"
             android:screenOrientation="user"
-            android:theme="@style/Translucent"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         
         <activity
