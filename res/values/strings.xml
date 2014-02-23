@@ -216,6 +216,9 @@
     <string name="cannot_be_empty">内容不能为空</string>
     <string name="upload_failed">上传失败</string>
     
+    <!-- ImageViewerActivity -->
+    <string name="show_ori">显示原图</string>
+    
     <!-- Notification -->
     <string name="new_comments">%d条评论</string>
     <string name="new_mention_weibos">%d条@微博</string>

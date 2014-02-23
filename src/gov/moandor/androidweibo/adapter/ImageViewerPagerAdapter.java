@@ -89,6 +89,16 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         }
     }
     
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+    
+    public void setImageType(ImageDownloader.ImageType type, String[] urls) {
+        mImageType = type;
+        mUrls = urls;
+    }
+    
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static void setupForNewApi(WebView webView, WebSettings settings) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

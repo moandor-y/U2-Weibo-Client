@@ -215,6 +215,9 @@
     <string name="cannot_be_empty">Cannot be Empty</string>
     <string name="upload_failed">Upload Failed</string>
     
+    <!-- ImageViewerActivity -->
+    <string name="show_ori">Show Original Pictures</string>
+    
     <!-- Notification -->
     <string name="new_comments">%d New Comments</string>
     <string name="new_mention_weibos">%d New Posts @Me</string>

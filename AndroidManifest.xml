@@ -85,8 +85,7 @@
         
         <activity
             android:name=".activity.ImageViewerActivity"
-            android:screenOrientation="user"
-            android:theme="@style/Translucent" />
+            android:screenOrientation="user" />
         
         <activity
             android:name=".activity.UserListActivity"

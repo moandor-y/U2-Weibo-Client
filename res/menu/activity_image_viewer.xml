@@ -9,4 +9,10 @@
         android:icon="@drawable/ic_menu_save_dark"
         androidweibo:showAsAction="ifRoom" />
     
+    <item
+        android:id="@+id/show_ori"
+        android:title="@string/show_ori"
+        android:icon="@drawable/ic_menu_picture"
+        androidweibo:showAsAction="ifRoom" />
+    
 </menu>
