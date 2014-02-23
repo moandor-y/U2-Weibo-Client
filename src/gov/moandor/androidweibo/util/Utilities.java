@@ -34,6 +34,7 @@ import gov.moandor.androidweibo.bean.WeiboGeo;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
+
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -539,20 +540,20 @@ public class Utilities {
     
     public static boolean isIntentAvailable(Intent intent) {
         PackageManager packageManager = GlobalContext.getInstance().getPackageManager();
-        List<ResolveInfo> resolveInfos = packageManager.queryIntentActivities(intent, 
-                PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> resolveInfos =
+                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return resolveInfos.size() > 0;
     }
     
     public static PendingIntent newEmptyPendingIntent() {
-        return PendingIntent.getActivity(GlobalContext.getInstance(), 0, new Intent(), 
+        return PendingIntent.getActivity(GlobalContext.getInstance(), 0, new Intent(),
                 PendingIntent.FLAG_CANCEL_CURRENT);
     }
     
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void copyText(String text) {
-        ClipboardManager clipboardManager = (ClipboardManager) 
-                GlobalContext.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboardManager =
+                (ClipboardManager) GlobalContext.getInstance().getSystemService(Context.CLIPBOARD_SERVICE);
         clipboardManager.setPrimaryClip(ClipData.newPlainText("sinaweibo", text));
         Utilities.notice(R.string.copied_successfully);
     }
@@ -562,11 +563,11 @@ public class Utilities {
         return orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
     
-    public static Intent registerReceiver (BroadcastReceiver receiver, IntentFilter filter) {
+    public static Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         return GlobalContext.getInstance().registerReceiver(receiver, filter);
     }
     
-    public static void unregisterReceiver (BroadcastReceiver receiver) {
+    public static void unregisterReceiver(BroadcastReceiver receiver) {
         try {
             GlobalContext.getInstance().unregisterReceiver(receiver);
         } catch (IllegalArgumentException e) {
