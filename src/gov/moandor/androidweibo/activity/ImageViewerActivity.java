@@ -20,7 +20,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.ZoomOutPageTransformer;
 
-public class ImageViewerActivity extends AbsSwipeBackActivity {
+public class ImageViewerActivity extends AbsActivity {
     public static final String URLS;
     public static final String IMAGE_TYPE;
     public static final String POSITION;
@@ -44,7 +44,7 @@ public class ImageViewerActivity extends AbsSwipeBackActivity {
         mUrls = getIntent().getStringArrayExtra(URLS);
         mType = (ImageType) getIntent().getSerializableExtra(IMAGE_TYPE);
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new ImageViewerPagerAdapter(mType, mUrls));
+        mPager.setAdapter(new ImageViewerPagerAdapter(mType, mUrls, this));
         int position = getIntent().getIntExtra(POSITION, 0);
         mPager.setCurrentItem(position);
         mCountView = (TextView) findViewById(R.id.count);

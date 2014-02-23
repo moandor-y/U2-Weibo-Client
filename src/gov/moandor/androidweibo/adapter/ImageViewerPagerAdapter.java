@@ -1,11 +1,14 @@
 package gov.moandor.androidweibo.adapter;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -14,6 +17,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
@@ -23,10 +27,12 @@ import gov.moandor.androidweibo.util.GlobalContext;
 public class ImageViewerPagerAdapter extends PagerAdapter {
     private ImageDownloader.ImageType mImageType;
     private String[] mUrls;
+    private Activity mActivity;
     
-    public ImageViewerPagerAdapter(ImageDownloader.ImageType imageType, String[] urls) {
+    public ImageViewerPagerAdapter(ImageDownloader.ImageType imageType, String[] urls, Activity activity) {
         mImageType = imageType;
         mUrls = urls;
+        mActivity = activity;
     }
     
     @Override
@@ -48,7 +54,20 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         webView.setHorizontalScrollBarEnabled(false);
         webView.setVerticalScrollBarEnabled(false);
         webView.setBackgroundColor(Color.TRANSPARENT);
+        final GestureDetector gestureDetector = new GestureDetector(mActivity, mOnGestureListener);
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
         PhotoView photoView = (PhotoView) view.findViewById(R.id.photo);
+        photoView.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                mActivity.finish();
+            }
+        });
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         Button retryButton = (Button) view.findViewById(R.id.button_retry);
         ImageViewerPictureReadTask task = new ImageViewerPictureReadTask(url, mImageType, webView, 
@@ -79,4 +98,12 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
             }
         }
     }
+    
+    private GestureDetector.OnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            mActivity.finish();
+            return true;
+        }
+    };
 }
