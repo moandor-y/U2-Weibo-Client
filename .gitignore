@@ -13,3 +13,4 @@ proguard-project.txt
 project.properties
 build.gradle
 pom.xml
+git_commit_count.bat
