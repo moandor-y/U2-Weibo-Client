@@ -129,6 +129,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
         mRefreshTask = createLoadMoreTask();
         mRefreshTask.execute();
+        mAdapter.updateState();
+        mAdapter.notifyDataSetChanged();
     }
     
     public void refresh() {
@@ -140,6 +142,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
         mRefreshTask = createRefreshTask();
         mRefreshTask.execute();
+        mAdapter.updateState();
+        mAdapter.notifyDataSetChanged();
     }
     
     private boolean isLastItemVisible() {

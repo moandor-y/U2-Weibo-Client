@@ -150,6 +150,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends Base
     
     public void updateState() {
         mAvatarType = Utilities.getAvatarType();
+        mMaxCount = Utilities.getLoadWeiboCount();
     }
     
     public List<T> getItems() {
