@@ -4,6 +4,8 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboComment;
 
 public class UnreadCommentNotificationService extends AbsUnreadNotificationService<WeiboComment> {
+    static final String COUNT_TYPE = "cmt";
+    
     @Override
     String getTextTitle(int count) {
         return getString(R.string.new_comments, count);
@@ -11,6 +13,6 @@ public class UnreadCommentNotificationService extends AbsUnreadNotificationServi
     
     @Override
     String getCountType() {
-        return "cmt";
+        return COUNT_TYPE;
     }
 }

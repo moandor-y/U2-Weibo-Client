@@ -4,6 +4,8 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 
 public class UnreadMentionWeiboNotificationService extends AbsUnreadNotificationService<WeiboStatus> {
+    static final String COUNT_TYPE = "mention_status";
+    
     @Override
     String getTextTitle(int count) {
         return getString(R.string.new_mention_weibos, count);
@@ -11,6 +13,6 @@ public class UnreadMentionWeiboNotificationService extends AbsUnreadNotification
     
     @Override
     String getCountType() {
-        return "mention_status";
+        return COUNT_TYPE;
     }
 }

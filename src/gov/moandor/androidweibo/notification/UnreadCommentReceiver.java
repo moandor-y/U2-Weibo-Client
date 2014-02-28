@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import gov.moandor.androidweibo.activity.MainActivity;
+import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.util.GlobalContext;
 
 public class UnreadCommentReceiver extends BroadcastReceiver {
     @Override
@@ -12,5 +14,8 @@ public class UnreadCommentReceiver extends BroadcastReceiver {
         intent.setClass(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+        Account account = GlobalContext.getAccount(intent.getIntExtra(MainActivity.ACCOUNT_INDEX, 0));
+        AbsUnreadNotificationService.clearUnreadCount(account.token, 
+                UnreadCommentNotificationService.COUNT_TYPE);
     }
 }

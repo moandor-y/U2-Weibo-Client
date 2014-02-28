@@ -101,7 +101,7 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
     }
     
     private PendingIntent getClickPendingIntent(Intent clickIntent) {
-        return PendingIntent.getBroadcast(this, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(getBaseContext(), 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
     
     private PendingIntent getDeletePendingIntent() {
@@ -110,28 +110,31 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         Utilities.registerReceiver(mClearNotificationReceiver, filter);
         Intent clearIntent = new Intent();
         clearIntent.setAction(CLEAR_NOTIFICATION);
-        return PendingIntent.getBroadcast(GlobalContext.getInstance(), 0, clearIntent, 
-                PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(getBaseContext(), 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+    
+    static void clearUnreadCount(final String token, final String countType) {
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                String url = HttpUtils.UrlHelper.REMIND_SET_COUNT;
+                HttpParams params = new HttpParams();
+                params.addParam("access_token", token);
+                params.addParam("type", countType);
+                try {
+                    HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
+                } catch (WeiboException e) {
+                    Logger.logExcpetion(e);
+                }
+            }
+        });
     }
     
     private BroadcastReceiver mClearNotificationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Utilities.unregisterReceiver(this);
-            MyAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    String url = HttpUtils.UrlHelper.REMIND_SET_COUNT;
-                    HttpParams params = new HttpParams();
-                    params.addParam("access_token", mAccount.token);
-                    params.addParam("type", getCountType());
-                    try {
-                        HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-                    } catch (WeiboException e) {
-                        Logger.logExcpetion(e);
-                    }
-                }
-            });
+            clearUnreadCount(mAccount.token, getCountType());
         }
     };
     
