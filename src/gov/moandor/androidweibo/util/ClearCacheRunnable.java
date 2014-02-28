@@ -13,13 +13,11 @@ import java.util.List;
 
 public class ClearCacheRunnable implements Runnable {
     private static final long LAST_TIME = 1000 * 60 * 60 * 24 * 7;
-    private static final String TAG = ClearCacheRunnable.class.getSimpleName();
     
     private List<String> mSkipPaths;
     
     @Override
     public void run() {
-        Logger.debug(TAG, "started");
         mSkipPaths = getSkipPaths();
         File file = new File(FileUtils.WEIBO_PICTURE_CACHE);
         if (file.exists()) {
@@ -29,7 +27,6 @@ public class ClearCacheRunnable implements Runnable {
         if (file.exists()) {
             clear(file);
         }
-        Logger.debug(TAG, "finished");
     }
     
     private void clear(File dir) {
@@ -67,7 +64,6 @@ public class ClearCacheRunnable implements Runnable {
     }
     
     private static List<String> fetchSkipPaths() throws WeiboException, JSONException {
-        Logger.debug(TAG, "started fetching following");
         String url = HttpUtils.UrlHelper.FRIENDSHIPS_FRIENDS;
         List<String> result = new ArrayList<String>();
         for (Account account : GlobalContext.getAccounts()) {
@@ -96,7 +92,6 @@ public class ClearCacheRunnable implements Runnable {
                 }
                 nextCursor = json.getInt("next_cursor");
             } while (nextCursor != 0);
-            Logger.debug(TAG, "finished fetching " + account.user.name + "'s following, " + result.size());
         }
         return result;
     }
