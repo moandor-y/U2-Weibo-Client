@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/favorites"
+            android:textColor="@android:color/white"
             android:background="@drawable/drawer_button_background" />
         
         <Button
@@ -44,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@string/draft_box"
+            android:textColor="@android:color/white"
             android:background="@drawable/drawer_button_background" />
         
     </LinearLayout>

@@ -92,6 +92,10 @@
             android:name=".activity.FavoritesActivity"
             android:theme="@style/Translucent" />
         
+        <activity
+            android:name=".activity.DirectMessagesActivity"
+            android:theme="@style/Translucent" />
+        
         <service android:name=".notification.SendWeiboService"/>
         <service android:name=".notification.SendCommentService"/>
         <service android:name=".notification.FetchUnreadMessageService"/>
