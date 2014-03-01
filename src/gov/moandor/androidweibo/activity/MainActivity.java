@@ -44,7 +44,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     public static final int WEIBO_LIST = 0;
     public static final int ATME_LIST = 1;
     public static final int COMMENT_LIST = 2;
-    public static final int PROFILE = 3;
+    private static final int PROFILE = 3;
     public static final String UNREAD_PAGE_POSITION;
     public static final String UNREAD_GROUP;
     public static final String ACCOUNT_INDEX;

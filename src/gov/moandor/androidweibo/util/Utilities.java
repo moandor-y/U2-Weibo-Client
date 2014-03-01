@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.UserSuggestion;
