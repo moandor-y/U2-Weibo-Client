@@ -36,13 +36,15 @@
             android:id="@+id/favorite"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/favorites" />
+            android:text="@string/favorites"
+            android:background="@drawable/drawer_button_background" />
         
         <Button
             android:id="@+id/draft_box"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/draft_box" />
+            android:text="@string/draft_box"
+            android:background="@drawable/drawer_button_background" />
         
     </LinearLayout>
     
