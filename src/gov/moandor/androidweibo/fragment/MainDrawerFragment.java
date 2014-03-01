@@ -9,14 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.AuthorizeActivity;
+import gov.moandor.androidweibo.activity.DirectMessagesActivity;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.activity.FavoritesActivity;
 import gov.moandor.androidweibo.adapter.MainDrawerListAdapter;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Utilities;
 
 public class MainDrawerFragment extends Fragment implements AdapterView.OnItemClickListener {
     private MainDrawerListAdapter mAdapter;
@@ -48,6 +51,19 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
                 startActivity(intent);
             }
         });
+        Button directMessages = (Button) view.findViewById(R.id.direct_messages);
+        if (Utilities.isHackEnabled()) {
+            directMessages.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(GlobalContext.getInstance(), DirectMessagesActivity.class);
+                    startActivity(intent);
+                }
+            });
+        } else {
+            directMessages.setVisibility(View.GONE);
+        }
         return view;
     }
     

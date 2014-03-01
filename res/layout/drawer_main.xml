@@ -33,20 +33,19 @@
             android:dividerHeight="0dp" />
         
         <Button
+            android:id="@+id/direct_messages"
+            style="@style/drawer_button"
+            android:text="@string/direct_messages" />
+        
+        <Button
             android:id="@+id/favorite"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="@string/favorites"
-            android:textColor="@android:color/white"
-            android:background="@drawable/drawer_button_background" />
+            style="@style/drawer_button"
+            android:text="@string/favorites" />
         
         <Button
             android:id="@+id/draft_box"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="@string/draft_box"
-            android:textColor="@android:color/white"
-            android:background="@drawable/drawer_button_background" />
+            style="@style/drawer_button"
+            android:text="@string/draft_box" />
         
     </LinearLayout>
     

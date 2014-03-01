@@ -592,4 +592,8 @@ public class Utilities {
         account.user = Utilities.getWeiboUserFromJson(response);
         GlobalContext.addOrUpdateAccount(account);
     }
+    
+    public static boolean isHackEnabled() {
+        return GlobalContext.getInstance().getResources().getBoolean(R.bool.hack_enabled);
+    }
 }

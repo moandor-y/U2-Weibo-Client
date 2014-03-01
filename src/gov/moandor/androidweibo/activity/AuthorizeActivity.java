@@ -39,7 +39,7 @@ public class AuthorizeActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.login);
-        if (isHackLoginEnabled()) {
+        if (Utilities.isHackEnabled()) {
             HackLoginDialogFragment dialog = new HackLoginDialogFragment();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), HACK_LOGIN_DIALOG);
@@ -98,10 +98,6 @@ public class AuthorizeActivity extends AbsActivity {
         intent.setClass(GlobalContext.getInstance(), HackLoginActivity.class);
         startActivity(intent);
         finish();
-    }
-    
-    private boolean isHackLoginEnabled() {
-        return getResources().getBoolean(R.bool.hack_enabled);
     }
     
     @SuppressWarnings("deprecation")

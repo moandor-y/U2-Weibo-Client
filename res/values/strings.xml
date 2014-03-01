@@ -160,6 +160,7 @@
     <string name="close_drawer">关闭侧边栏</string>
     <string name="lock_orientation">锁定屏幕方向</string>
     <string name="unlock_orientation">解锁屏幕方向</string>
+    <string name="direct_messages">私信</string>
     
     <!-- WeiboActivity -->
     <string name="quick_comment">快速评论</string>

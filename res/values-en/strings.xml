@@ -159,6 +159,7 @@
     <string name="close_drawer">Close Drawer</string>
     <string name="lock_orientation">Lock Orientation</string>
     <string name="unlock_orientation">Unlock Orientation</string>
+    <string name="direct_messages">Direct Messages</string>
     
     <!-- WeiboActivity -->
     <string name="quick_comment">Quick Comment</string>
