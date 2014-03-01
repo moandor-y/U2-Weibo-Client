@@ -1,10 +1,14 @@
 package gov.moandor.androidweibo.activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,13 +18,9 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
-
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
@@ -30,28 +30,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AuthorizeActivity extends AbsActivity {
+    private static final String HACK_LOGIN_DIALOG = "hack_login_dialog";
+    
     private WebView mWebView;
     
-    @SuppressWarnings("deprecation")
-    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authorize);
         ActionBar bar = getSupportActionBar();
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setTitle(R.string.login);
-        mWebView = (WebView) findViewById(R.id.web);
-        mWebView.setWebViewClient(new AuthWebViewClient());
-        WebSettings settings = mWebView.getSettings();
-        settings.setJavaScriptEnabled(true);
-        settings.setSaveFormData(false);
-        settings.setSavePassword(false);
-        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        CookieSyncManager.createInstance(GlobalContext.getInstance());
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeAllCookie();
-        mWebView.loadUrl(getWeiboOAuthUrl());
+        if (isHackLoginEnabled()) {
+            HackLoginDialogFragment dialog = new HackLoginDialogFragment();
+            dialog.setCancelable(false);
+            dialog.show(getSupportFragmentManager(), HACK_LOGIN_DIALOG);
+        } else {
+            buildLayout();
+        }
     }
     
     @Override
@@ -78,7 +73,7 @@ public class AuthorizeActivity extends AbsActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (isFinishing()) {
+        if (mWebView!= null && isFinishing()) {
             mWebView.stopLoading();
         }
     }
@@ -86,7 +81,9 @@ public class AuthorizeActivity extends AbsActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mWebView.clearCache(true);
+        if (mWebView!= null) {
+            mWebView.clearCache(true);
+        }
     }
     
     @Override
@@ -94,9 +91,35 @@ public class AuthorizeActivity extends AbsActivity {
         super.onBackPressed();
         if (mWebView.canGoBack()) {
             mWebView.goBack();
-        } else {
-            Toast.makeText(GlobalContext.getInstance(), R.string.you_cancelled_auth, Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    private void onHackLoginConfirmed() {
+        Intent intent = new Intent();
+        intent.setClass(GlobalContext.getInstance(), HackLoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    
+    private boolean isHackLoginEnabled() {
+        return getResources().getBoolean(R.bool.hack_enabled);
+    }
+    
+    @SuppressWarnings("deprecation")
+    @SuppressLint("SetJavaScriptEnabled")
+    private void buildLayout() {
+        setContentView(R.layout.activity_authorize);
+        mWebView = (WebView) findViewById(R.id.web);
+        mWebView.setWebViewClient(new AuthWebViewClient());
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setSaveFormData(false);
+        settings.setSavePassword(false);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        CookieSyncManager.createInstance(GlobalContext.getInstance());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
+        mWebView.loadUrl(getWeiboOAuthUrl());
     }
     
     private String getWeiboOAuthUrl() {
@@ -159,39 +182,39 @@ public class AuthorizeActivity extends AbsActivity {
         
         @Override
         public void run() {
-            HttpParams params = new HttpParams();
-            params.addParam("access_token", mToken);
             try {
-                String response =
-                        HttpUtils.executeNormalTask(HttpUtils.Method.GET, HttpUtils.UrlHelper.ACCOUNT_GET_UID, params);
-                long id = Utilities.getWeiboAccountIdFromJson(response);
-                params.clear();
-                params.addParam("access_token", mToken);
-                params.addParam("uid", String.valueOf(id));
-                response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, HttpUtils.UrlHelper.USERS_SHOW, params);
-                Account account = new Account();
-                account.token = mToken;
-                account.user = Utilities.getWeiboUserFromJson(response);
-                GlobalContext.addOrUpdateAccount(account);
-                GlobalContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(GlobalContext.getInstance(), R.string.auth_success, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                Utilities.fetchAndSaveAccountInfo(mToken);
+                Utilities.notice(R.string.auth_success);
                 Intent intent = new Intent();
                 intent.setClass(GlobalContext.getInstance(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             } catch (final WeiboException e) {
                 Logger.logExcpetion(e);
-                GlobalContext.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Utilities.notice(e.getMessage());
-                    }
-                });
+                Utilities.notice(e.getMessage());
             }
+        }
+    }
+    
+    public static class HackLoginDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(R.string.hack_login);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((AuthorizeActivity) getActivity()).onHackLoginConfirmed();
+                }
+            });
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((AuthorizeActivity) getActivity()).buildLayout();
+                }
+            });
+            return builder.create();
         }
     }
 }

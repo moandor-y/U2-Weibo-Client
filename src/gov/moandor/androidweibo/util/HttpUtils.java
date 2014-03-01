@@ -76,15 +76,11 @@ public class HttpUtils {
     }
     
     public static final class UrlHelper {
-        //u2
         public static final String APPKEY = "1578201915";
         public static final String AUTH_REDIRECT = "https://api.weibo.com/oauth2/default.html";
         
-        //weiciyuan
-        //public static final String APPKEY = "1065511513";
-        //public static final String AUTH_REDIRECT = "https://api.weibo.com/oauth2/default.html";
-        
         public static final String OAUTH2_AUTHORIZE = "https://api.weibo.com/oauth2/authorize";
+        public static final String OAUTH2_ACCESS_TOKEN = "https://api.weibo.com/oauth2/access_token";
         public static final String STATUSES_FRIENDS_TIMELINE = "https://api.weibo.com/2/statuses/friends_timeline.json";
         public static final String STATUSES_BILATERAL_TIMELINE =
                 "https://api.weibo.com/2/statuses/bilateral_timeline.json";

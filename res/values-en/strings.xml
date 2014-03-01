@@ -135,10 +135,16 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     
-    <!-- AuthorizeActivity -->
-    <string name="you_cancelled_auth">You cancelled the authorization</string>
+    <!-- Authorization -->
     <string name="auth_success">Authorized Successfully</string>
     <string name="login">Login</string>
+    <string name="username_label">Username:</string>
+    <string name="password_label">Password:</string>
+    <string name="hack_login">Hack login?</string>
+    <string name="username_empty">Enter username please</string>
+    <string name="password_empty">Enter password please</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     
     <!-- MainActivity -->
     <string name="refresh">Refresh</string>

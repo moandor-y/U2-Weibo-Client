@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.activity.MainActivity;
+import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.bean.WeiboComment;
@@ -573,5 +575,22 @@ public class Utilities {
         } catch (IllegalArgumentException e) {
             Logger.logExcpetion(e);
         }
+    }
+    
+    public static void fetchAndSaveAccountInfo(String token) throws WeiboException {
+        String url = HttpUtils.UrlHelper.ACCOUNT_GET_UID;
+        HttpParams params = new HttpParams();
+        params.addParam("access_token", token);
+        String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
+        long id = Utilities.getWeiboAccountIdFromJson(response);
+        params.clear();
+        url = HttpUtils.UrlHelper.USERS_SHOW;
+        params.addParam("access_token", token);
+        params.addParam("uid", String.valueOf(id));
+        response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
+        Account account = new Account();
+        account.token = token;
+        account.user = Utilities.getWeiboUserFromJson(response);
+        GlobalContext.addOrUpdateAccount(account);
     }
 }

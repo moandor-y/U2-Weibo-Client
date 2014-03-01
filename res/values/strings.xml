@@ -136,10 +136,16 @@
     <string name="today">今天</string>
     <string name="yesterday">昨天</string>
     
-    <!-- AuthorizeActivity -->
-    <string name="you_cancelled_auth">你取消了授权</string>
+    <!-- Authorization -->
     <string name="auth_success">授权成功</string>
     <string name="login">登录</string>
+    <string name="username_label">用户名：</string>
+    <string name="password_label">密码：</string>
+    <string name="hack_login">黑魔法登录？</string>
+    <string name="username_empty">请输入用户名</string>
+    <string name="password_empty">请输入密码</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
     
     <!-- MainActivity -->
     <string name="refresh">刷新</string>
