@@ -1,9 +1,7 @@
 package gov.moandor.androidweibo.adapter;
 
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,12 +15,10 @@ import gov.moandor.androidweibo.util.Utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListAdapter extends BaseAdapter {
+public class FriendsUserListAdapter extends AbsBaseAdapter {
     private List<WeiboUser> mUsers = new ArrayList<WeiboUser>();
-    private LayoutInflater mInflater = GlobalContext.getActivity().getLayoutInflater();
-    private AbsUserListFragment mFragment;
+    private AbsUserListFragment<FriendsUserListAdapter> mFragment;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
-    private float mFontSize = Utilities.getFontSize();
     private float mFontSizeSmall = mFontSize - 3;
     private boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
     private int mSelectedPosition = -1;
@@ -76,7 +72,7 @@ public class UserListAdapter extends BaseAdapter {
         return convertView;
     }
     
-    public void setFragment(AbsUserListFragment fragment) {
+    public void setFragment(AbsUserListFragment<FriendsUserListAdapter> fragment) {
         mFragment = fragment;
     }
     

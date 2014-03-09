@@ -1,10 +1,8 @@
 package gov.moandor.androidweibo.adapter;
 
 import android.graphics.Bitmap;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +15,7 @@ import gov.moandor.androidweibo.util.ImageUtils;
 
 import java.io.File;
 
-public class MainDrawerListAdapter extends BaseAdapter {
-    private LayoutInflater mInflater = GlobalContext.getActivity().getLayoutInflater();
-    
+public class MainDrawerListAdapter extends AbsBaseAdapter {
     @Override
     public int getCount() {
         return GlobalContext.getAccountCount();

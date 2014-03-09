@@ -1,6 +1,5 @@
 package gov.moandor.androidweibo.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +11,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import org.json.JSONException;
@@ -19,8 +19,6 @@ import org.json.JSONObject;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.UserActivity;
-import gov.moandor.androidweibo.adapter.UserListAdapter;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -29,18 +27,18 @@ import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
-import gov.moandor.androidweibo.util.UserListActionModeCallback;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public abstract class AbsUserListFragment extends Fragment {
+public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragment {
     public static final String USER_ID = "user_id";
     
+    T mAdapter;
+    ListView mListView;
+    ActionMode.Callback mActionModeCallback;
     private PullToRefreshAttacher mPullToRefreshAttacher;
-    private ListView mListView;
-    private UserListAdapter mAdapter;
     private View mFooter;
     private View mFooterIcon;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
@@ -48,14 +46,12 @@ public abstract class AbsUserListFragment extends Fragment {
     private ActionMode mActionMode;
     private int mListScrollState;
     private int mNextCursor;
-    private long mUserId;
     private boolean mNoMoreUser;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        mUserId = getArguments().getLong(USER_ID);
     }
     
     @Override
@@ -78,19 +74,13 @@ public abstract class AbsUserListFragment extends Fragment {
         mListView = (ListView) view.findViewById(R.id.list);
         mListView.setFastScrollEnabled(GlobalContext.isFastScrollEnabled());
         mListView.setOnScrollListener(new OnListScrollListener());
+        mListView.setOnItemClickListener(new OnListItemClickListener());
         mListView.setOnItemLongClickListener(new OnListItemLongClickListener());
         mFooter =
                 GlobalContext.getActivity().getLayoutInflater()
                         .inflate(R.layout.timeline_list_footer, mListView, false);
         mFooterIcon = mFooter.findViewById(R.id.image);
         showLoadingFooter();
-        if (mAdapter == null) {
-            mAdapter = new UserListAdapter();
-        }
-        mAdapter.setFragment(this);
-        mListView.setAdapter(mAdapter);
-        mListView.setOnItemClickListener(new OnListItemClickListener());
-        mActionModeCallback = new UserListActionModeCallback(mAdapter, this);
     }
     
     public boolean isListViewFling() {
@@ -117,7 +107,7 @@ public abstract class AbsUserListFragment extends Fragment {
             return;
         }
         mPullToRefreshAttacher.setRefreshing(true);
-        mRefreshTask = new LoadMoreTask();
+        mRefreshTask = onCreateloLoadMoreTask();
         mRefreshTask.execute();
     }
     
@@ -126,7 +116,7 @@ public abstract class AbsUserListFragment extends Fragment {
             return;
         }
         mPullToRefreshAttacher.setRefreshing(true);
-        mRefreshTask = new RefreshTask();
+        mRefreshTask = onCreateRefreshTask();
         mRefreshTask.execute();
     }
     
@@ -137,8 +127,6 @@ public abstract class AbsUserListFragment extends Fragment {
     public void onActionModeFinished() {
         mActionMode = null;
     }
-    
-    private ActionMode.Callback mActionModeCallback;
     
     private class OnListScrollListener implements AbsListView.OnScrollListener {
         @Override
@@ -168,23 +156,17 @@ public abstract class AbsUserListFragment extends Fragment {
             if (position >= mAdapter.getCount()) {
                 return;
             }
-            WeiboUser user = mAdapter.getItem(position);
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), UserActivity.class);
-            intent.putExtra(UserActivity.USER, user);
-            getActivity().startActivity(intent);
+            AbsUserListFragment.this.onItemClick(position);
         }
     }
     
-    private class RefreshTask extends MyAsyncTask<Void, Void, List<WeiboUser>> {
+    abstract class RefreshTask extends MyAsyncTask<Void, Void, List<WeiboUser>> {
         @Override
         protected List<WeiboUser> doInBackground(Void... v) {
             String url = getUrl();
-            HttpParams params = new HttpParams();
+            HttpParams params = getParams();
             params.addParam("access_token", GlobalContext.getCurrentAccount().token);
             params.addParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
-            params.addParam("uid", String.valueOf(mUserId));
-            params.addParam("trim_status", "1");
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
@@ -212,14 +194,10 @@ public abstract class AbsUserListFragment extends Fragment {
             } else {
                 mNoMoreUser = false;
             }
-            if (result != null) {
-                mAdapter.updateDataSet(result);
-                mAdapter.notifyDataSetChanged();
-            }
         }
     }
     
-    private class LoadMoreTask extends MyAsyncTask<Void, Void, List<WeiboUser>> {
+    abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<WeiboUser>> {
         @Override
         protected void onPreExecute() {
             showLoadingFooter();
@@ -228,12 +206,10 @@ public abstract class AbsUserListFragment extends Fragment {
         @Override
         protected List<WeiboUser> doInBackground(Void... v) {
             String url = getUrl();
-            HttpParams params = new HttpParams();
+            HttpParams params = getParams();
             params.addParam("access_token", GlobalContext.getCurrentAccount().token);
             params.addParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
-            params.addParam("uid", String.valueOf(mUserId));
             params.addParam("cursor", String.valueOf(mNextCursor));
-            params.addParam("trim_status", "1");
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
@@ -259,10 +235,6 @@ public abstract class AbsUserListFragment extends Fragment {
             if (mNextCursor == 0) {
                 mNoMoreUser = true;
             }
-            if (result != null) {
-                mAdapter.addAll(result);
-                mAdapter.notifyDataSetChanged();
-            }
         }
     }
     
@@ -272,7 +244,7 @@ public abstract class AbsUserListFragment extends Fragment {
             if (mActionMode != null) {
                 return false;
             }
-            mAdapter.setSelectedPosition(position);
+            onListItemChecked(position);
             mAdapter.notifyDataSetChanged();
             mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             return true;
@@ -287,4 +259,14 @@ public abstract class AbsUserListFragment extends Fragment {
     }
     
     abstract String getUrl();
+    
+    abstract HttpParams getParams();
+    
+    abstract void onItemClick(int position);
+    
+    abstract RefreshTask onCreateRefreshTask();
+    
+    abstract LoadMoreTask onCreateloLoadMoreTask();
+    
+    abstract void onListItemChecked(int position);
 }

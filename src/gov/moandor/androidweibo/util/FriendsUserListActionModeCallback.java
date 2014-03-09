@@ -5,15 +5,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.adapter.UserListAdapter;
+import gov.moandor.androidweibo.adapter.FriendsUserListAdapter;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.AbsUserListFragment;
 
-public class UserListActionModeCallback implements ActionMode.Callback {
-    private UserListAdapter mAdapter;
-    private AbsUserListFragment mFragment;
+public class FriendsUserListActionModeCallback implements ActionMode.Callback {
+    private FriendsUserListAdapter mAdapter;
+    private AbsUserListFragment<FriendsUserListAdapter> mFragment;
     
-    public UserListActionModeCallback(UserListAdapter adapter, AbsUserListFragment fragment) {
+    public FriendsUserListActionModeCallback(FriendsUserListAdapter adapter, 
+            AbsUserListFragment<FriendsUserListAdapter> fragment) {
         mAdapter = adapter;
         mFragment = fragment;
     }

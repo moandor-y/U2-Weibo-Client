@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,12 +26,11 @@ import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends BaseAdapter {
-    float mFontSize = Utilities.getFontSize();
+public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter {
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled;
-    private LayoutInflater mInflater = GlobalContext.getActivity().getLayoutInflater();
+    
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
