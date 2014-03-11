@@ -112,6 +112,7 @@ public class HttpUtils {
         public static final String FAVORITES = "https://api.weibo.com/2/favorites.json";
         public static final String FAVORITES_CREATE = "https://api.weibo.com/2/favorites/create.json";
         public static final String FAVORITES_DESTROY = "https://api.weibo.com/2/favorites/destroy.json";
+        public static final String DIRECT_MESSAGES_USER_LIST = "https://api.weibo.com/2/direct_messages/user_list.json";
     }
     
     private static Proxy getProxy() {

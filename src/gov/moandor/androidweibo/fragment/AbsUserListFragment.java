@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
@@ -32,17 +31,17 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragment {
+public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean> extends Fragment {
     public static final String USER_ID = "user_id";
     
-    T mAdapter;
+    Adapter mAdapter;
     ListView mListView;
     ActionMode.Callback mActionModeCallback;
     private PullToRefreshAttacher mPullToRefreshAttacher;
     private View mFooter;
     private View mFooterIcon;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
-    private MyAsyncTask<Void, Void, List<WeiboUser>> mRefreshTask;
+    private MyAsyncTask<Void, ?, ?> mRefreshTask;
     private ActionMode mActionMode;
     private int mListScrollState;
     private int mNextCursor;
@@ -160,9 +159,9 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
         }
     }
     
-    abstract class RefreshTask extends MyAsyncTask<Void, Void, List<WeiboUser>> {
+    abstract class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         @Override
-        protected List<WeiboUser> doInBackground(Void... v) {
+        protected List<DataBean> doInBackground(Void... v) {
             String url = getUrl();
             HttpParams params = getParams();
             params.addParam("access_token", GlobalContext.getCurrentAccount().token);
@@ -170,9 +169,9 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
-                List<WeiboUser> users = Utilities.getWeiboUsersFromJson(json);
+                List<DataBean> beans = getDataFromJson(json);
                 mNextCursor = json.getInt("next_cursor");
-                return users;
+                return beans;
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
@@ -185,7 +184,7 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
         }
         
         @Override
-        protected void onPostExecute(List<WeiboUser> result) {
+        protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             mPullToRefreshAttacher.setRefreshComplete();
             hideLoadingFooter();
@@ -197,14 +196,14 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
         }
     }
     
-    abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<WeiboUser>> {
+    abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         @Override
         protected void onPreExecute() {
             showLoadingFooter();
         }
         
         @Override
-        protected List<WeiboUser> doInBackground(Void... v) {
+        protected List<DataBean> doInBackground(Void... v) {
             String url = getUrl();
             HttpParams params = getParams();
             params.addParam("access_token", GlobalContext.getCurrentAccount().token);
@@ -213,9 +212,9 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
-                List<WeiboUser> users = Utilities.getWeiboUsersFromJson(json);
+                List<DataBean> beans = getDataFromJson(json);
                 mNextCursor = json.getInt("next_cursor");
-                return users;
+                return beans;
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
@@ -228,7 +227,7 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
         }
         
         @Override
-        protected void onPostExecute(List<WeiboUser> result) {
+        protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             hideLoadingFooter();
             mPullToRefreshAttacher.setRefreshComplete();
@@ -264,9 +263,11 @@ public abstract class AbsUserListFragment<T extends BaseAdapter> extends Fragmen
     
     abstract void onItemClick(int position);
     
-    abstract RefreshTask onCreateRefreshTask();
+    abstract MyAsyncTask<Void, ?, ?> onCreateRefreshTask();
     
-    abstract LoadMoreTask onCreateloLoadMoreTask();
+    abstract MyAsyncTask<Void, ?, ?> onCreateloLoadMoreTask();
     
     abstract void onListItemChecked(int position);
+    
+    abstract List<DataBean> getDataFromJson(JSONObject json) throws WeiboException;
 }

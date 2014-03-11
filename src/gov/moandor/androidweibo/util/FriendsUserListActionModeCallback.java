@@ -11,10 +11,10 @@ import gov.moandor.androidweibo.fragment.AbsUserListFragment;
 
 public class FriendsUserListActionModeCallback implements ActionMode.Callback {
     private FriendsUserListAdapter mAdapter;
-    private AbsUserListFragment<FriendsUserListAdapter> mFragment;
+    private AbsUserListFragment<FriendsUserListAdapter, WeiboUser> mFragment;
     
     public FriendsUserListActionModeCallback(FriendsUserListAdapter adapter, 
-            AbsUserListFragment<FriendsUserListAdapter> fragment) {
+            AbsUserListFragment<FriendsUserListAdapter, WeiboUser> fragment) {
         mAdapter = adapter;
         mFragment = fragment;
     }

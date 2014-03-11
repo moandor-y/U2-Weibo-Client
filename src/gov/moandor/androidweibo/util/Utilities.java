@@ -28,6 +28,8 @@ import org.json.JSONObject;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.bean.DirectMessage;
+import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.bean.WeiboComment;
@@ -209,6 +211,42 @@ public class Utilities {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
         
+    }
+    
+    public static List<DirectMessagesUser> getDmUsersFromJson(JSONObject json) throws WeiboException {
+        List<DirectMessagesUser> result = new ArrayList<DirectMessagesUser>();
+        try {
+            JSONArray userList = json.getJSONArray("user_list");
+            int len = userList.length();
+            for (int i = 0; i < len; i++) {
+                JSONObject user = userList.getJSONObject(i);
+                result.add(getDmUserFromJson(user));
+            }
+            return result;
+        } catch (JSONException e) {
+            Logger.logExcpetion(e);
+            throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
+        }
+    }
+    
+    private static DirectMessagesUser getDmUserFromJson(JSONObject json) throws JSONException {
+        WeiboUser user = getWeiboUserFromJson(json.getJSONObject("user"));
+        DirectMessage dm = getDirectMessageFromJson(json.getJSONObject("direct_message"));
+        DirectMessagesUser result = new DirectMessagesUser();
+        result.message = dm;
+        result.user = user;
+        result.unreadCount = json.getInt("unread_count");
+        return result;
+    }
+    
+    private static DirectMessage getDirectMessageFromJson(JSONObject json) throws JSONException {
+        DirectMessage result = new DirectMessage();
+        result.id = json.getLong("id");
+        result.createdAt = json.getString("created_at");
+        result.text = json.getString("text");
+        result.sender = getWeiboUserFromJson(json.getJSONObject("sender"));
+        result.recipient = getWeiboUserFromJson(json.getJSONObject("recipient"));
+        return result;
     }
     
     public static Map<String, String> parseUrl(String urlAddress) {

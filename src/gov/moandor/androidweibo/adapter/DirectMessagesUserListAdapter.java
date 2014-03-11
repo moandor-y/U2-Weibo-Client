@@ -14,10 +14,11 @@ import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
-    private List<DirectMessagesUser> mDmUsers;
+    private List<DirectMessagesUser> mDmUsers = new ArrayList<DirectMessagesUser>();
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private DirectMessagesUserListFragment mFragment;
     private boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
@@ -77,6 +78,15 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
             convertView.setBackgroundResource(0);
         }
         return convertView;
+    }
+    
+    public void updateDataSet(List<DirectMessagesUser> data) {
+        mDmUsers.clear();
+        mDmUsers.addAll(data);
+    }
+    
+    public void addAll(List<DirectMessagesUser> data) {
+        mDmUsers.addAll(data);
     }
     
     private ViewHolder initViewHolder(View view) {

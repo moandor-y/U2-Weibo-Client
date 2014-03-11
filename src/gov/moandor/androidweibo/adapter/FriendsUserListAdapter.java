@@ -17,7 +17,7 @@ import java.util.List;
 
 public class FriendsUserListAdapter extends AbsBaseAdapter {
     private List<WeiboUser> mUsers = new ArrayList<WeiboUser>();
-    private AbsUserListFragment<FriendsUserListAdapter> mFragment;
+    private AbsUserListFragment<FriendsUserListAdapter, WeiboUser> mFragment;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private float mFontSizeSmall = mFontSize - 3;
     private boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
@@ -73,7 +73,7 @@ public class FriendsUserListAdapter extends AbsBaseAdapter {
         return convertView;
     }
     
-    public void setFragment(AbsUserListFragment<FriendsUserListAdapter> fragment) {
+    public void setFragment(AbsUserListFragment<FriendsUserListAdapter, WeiboUser> fragment) {
         mFragment = fragment;
     }
     

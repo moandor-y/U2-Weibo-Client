@@ -1,7 +1,6 @@
 package gov.moandor.androidweibo.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
@@ -9,6 +8,7 @@ import android.view.MenuItem;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
+import gov.moandor.androidweibo.fragment.AbsFriendsUserListFragment;
 import gov.moandor.androidweibo.fragment.AbsUserListFragment;
 import gov.moandor.androidweibo.fragment.FollowerListFragment;
 import gov.moandor.androidweibo.fragment.FollowingListFragment;
@@ -25,7 +25,7 @@ public class UserListActivity extends AbsSwipeBackActivity implements PullToRefr
         USER = packageName + ".user";
     }
     
-    private Fragment mFragment;
+    private AbsFriendsUserListFragment mFragment;
     private PullToRefreshAttacher mPullToRefreshAttacher;
     
     @Override
@@ -36,7 +36,7 @@ public class UserListActivity extends AbsSwipeBackActivity implements PullToRefr
         Type type = (Type) getIntent().getSerializableExtra(TYPE);
         WeiboUser user = getIntent().getParcelableExtra(USER);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = fragmentManager.findFragmentById(R.id.content);
+        mFragment = (AbsFriendsUserListFragment) fragmentManager.findFragmentById(R.id.content);
         if (mFragment == null) {
             Bundle args = new Bundle();
             args.putLong(AbsUserListFragment.USER_ID, user.id);

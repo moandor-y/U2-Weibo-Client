@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import gov.moandor.androidweibo.activity.UserActivity;
@@ -12,8 +14,10 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
+import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.WeiboException;
 
-public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<FriendsUserListAdapter> {
+public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<FriendsUserListAdapter, WeiboUser> {
     private long mUserId;
     
     @Override
@@ -65,9 +69,15 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
         mAdapter.setSelectedPosition(position);
     }
     
+    @Override
+    List<WeiboUser> getDataFromJson(JSONObject json) throws WeiboException {
+        return Utilities.getWeiboUsersFromJson(json);
+    }
+    
     private class FriendsUserListRefreshTask extends RefreshTask {
         @Override
         protected void onPostExecute(List<WeiboUser> result) {
+            super.onPostExecute(result);
             if (result != null) {
                 mAdapter.updateDataSet(result);
                 mAdapter.notifyDataSetChanged();
@@ -78,6 +88,7 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     private class FriendsUserListLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPostExecute(List<WeiboUser> result) {
+            super.onPostExecute(result);
             if (result != null) {
                 mAdapter.addAll(result);
                 mAdapter.notifyDataSetChanged();
