@@ -35,4 +35,6 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    
 }
