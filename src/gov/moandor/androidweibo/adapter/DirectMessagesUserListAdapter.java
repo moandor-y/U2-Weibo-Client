@@ -6,33 +6,40 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.adapter.FriendsUserListAdapter.ViewHolder;
+import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
+import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
+import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 
 import java.util.List;
 
 public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
-    private List<DirectMessagesUser> mUsers;
+    private List<DirectMessagesUser> mDmUsers;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
+    private DirectMessagesUserListFragment mFragment;
     private boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
     private int mSelectedPosition = -1;
     
+    public DirectMessagesUserListAdapter(DirectMessagesUserListFragment fragment) {
+        mFragment = fragment;
+    }
+    
     @Override
     public int getCount() {
-        return mUsers.size();
+        return mDmUsers.size();
     }
     
     @Override
     public DirectMessagesUser getItem(int position) {
-        return mUsers.get(position);
+        return mDmUsers.get(position);
     }
     
     @Override
     public long getItemId(int position) {
-        return mUsers.get(position).user.id;
+        return mDmUsers.get(position).user.id;
     }
     
     @Override
@@ -55,8 +62,21 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        // TODO Auto-generated method stub
-        return null;
+        DirectMessagesUser dmUser = mDmUsers.get(position);
+        DirectMessage message = dmUser.message;
+        WeiboUser user = dmUser.user;
+        holder.userName.setText(user.name);
+        if (!mNoPictureModeEnabled) {
+            holder.avatar.setVisibility(View.VISIBLE);
+            ImageDownloader.downloadAvatar(holder.avatar, user, mFragment.isListViewFling(), mAvatarType);
+        }
+        holder.message.setText(message.text);
+        if (position == mSelectedPosition) {
+            convertView.setBackgroundResource(R.color.ics_blue_semi);
+        } else {
+            convertView.setBackgroundResource(0);
+        }
+        return convertView;
     }
     
     private ViewHolder initViewHolder(View view) {
