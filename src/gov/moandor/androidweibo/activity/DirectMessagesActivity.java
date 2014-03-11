@@ -3,6 +3,7 @@ package gov.moandor.androidweibo.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
@@ -34,10 +35,19 @@ public class DirectMessagesActivity extends AbsSwipeBackActivity implements Pull
     }
     
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_dm_user_list, menu);
+        return true;
+    }
+    
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             finish();
+            return true;
+        case R.id.refresh:
+            mFragment.refresh();
             return true;
         default:
             return super.onOptionsItemSelected(item);
