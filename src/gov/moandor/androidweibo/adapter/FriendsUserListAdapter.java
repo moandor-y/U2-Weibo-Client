@@ -46,6 +46,7 @@ public class FriendsUserListAdapter extends AbsBaseAdapter {
             holder = initViewHolder(convertView);
             convertView.setTag(holder);
             holder.userName.setTextSize(mFontSize);
+            holder.userName.getPaint().setFakeBoldText(true);
             holder.description.setTextSize(mFontSizeSmall);
             if (mNoPictureModeEnabled) {
                 holder.avatar.setVisibility(View.INVISIBLE);
