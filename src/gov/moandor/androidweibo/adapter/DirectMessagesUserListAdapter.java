@@ -46,7 +46,7 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.direct_messages_user_list_item, parent, false);
+            convertView = mInflater.inflate(R.layout.dm_user_list_item, parent, false);
             holder = initViewHolder(convertView);
             convertView.setTag(holder);
             holder.userName.setTextSize(mFontSize);
