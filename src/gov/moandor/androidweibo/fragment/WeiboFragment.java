@@ -85,6 +85,7 @@ public class WeiboFragment extends Fragment {
         mSource.setTextSize(mSmallFontSize);
         mText.setTextSize(mFontSize);
         mRetweetText.setTextSize(mFontSize);
+        mUserName.getPaint().setFakeBoldText(true);
         mText.setOnTouchListener(mTextOnTouchListener);
         mRetweetText.setOnTouchListener(mTextOnTouchListener);
         mRetweetText.setOnClickListener(mTextOnClickListener);
