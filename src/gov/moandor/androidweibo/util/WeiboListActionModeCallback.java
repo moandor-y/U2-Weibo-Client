@@ -1,21 +1,15 @@
 package gov.moandor.androidweibo.util;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.io.File;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.WriteCommentActivity;
 import gov.moandor.androidweibo.activity.WriteWeiboActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
-import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
 import gov.moandor.androidweibo.fragment.ConfirmDeleteDialogFragment;
 
@@ -33,33 +27,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             menu.removeItem(R.id.delete);
         }
         MenuItem shareItem = menu.findItem(R.id.share);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        WeiboStatus status = mAdapter.getSelectedItem();
-        WeiboUser user = status.weiboUser;
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "@" + user.name + " : " + status.text);
-        if (status.picCount > 0) {
-            File small = new File(status.thumbnailPic[0]);
-            File medium = new File(status.bmiddlePic[0]);
-            File large = new File(status.originalPic[0]);
-            Uri uri = null;
-            if (large.exists()) {
-                uri = Uri.fromFile(large);
-            } else if (medium.exists()) {
-                uri = Uri.fromFile(medium);
-            } else if (small.exists()) {
-                uri = Uri.fromFile(small);
-            }
-            if (uri != null) {
-                intent.putExtra(Intent.EXTRA_STREAM, uri);
-                intent.setType("image/*");
-            }
-        }
-        if (Utilities.isIntentAvailable(intent)) {
-            ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-            provider.setShareIntent(intent);
-        }
+        Utilities.registerShareActionMenu(shareItem, mAdapter.getSelectedItem());
         return true;
     }
     

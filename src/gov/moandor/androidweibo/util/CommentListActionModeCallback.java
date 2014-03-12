@@ -1,9 +1,7 @@
 package gov.moandor.androidweibo.util;
 
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +10,6 @@ import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.activity.WriteCommentActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.WeiboComment;
-import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
 import gov.moandor.androidweibo.fragment.ConfirmDeleteDialogFragment;
 
@@ -30,16 +27,7 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
             menu.removeItem(R.id.delete);
         }
         MenuItem shareItem = menu.findItem(R.id.share);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        WeiboComment comment = mAdapter.getSelectedItem();
-        WeiboUser user = comment.weiboUser;
-        intent.putExtra(Intent.EXTRA_TEXT, "@" + user.name + " : " + comment.text);
-        if (Utilities.isIntentAvailable(intent)) {
-            ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-            provider.setShareIntent(intent);
-        }
+        Utilities.registerShareActionMenu(shareItem, mAdapter.getSelectedItem());
         return true;
     }
     

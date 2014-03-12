@@ -21,4 +21,11 @@
         android:icon="@drawable/ic_refresh_dark"
         androidweibo:showAsAction="ifRoom|withText" />
     
+    <item
+        android:id="@+id/share"
+        android:title="@string/share"
+        android:icon="@drawable/ic_menu_share_dark"
+        androidweibo:showAsAction="ifRoom|withText"
+        androidweibo:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+    
 </menu>

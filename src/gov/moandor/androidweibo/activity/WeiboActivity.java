@@ -81,6 +81,8 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_weibo, menu);
+        MenuItem shareItem = menu.findItem(R.id.share);
+        Utilities.registerShareActionMenu(shareItem, mWeiboStatus);
         return true;
     }
     

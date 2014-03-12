@@ -16,8 +16,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Browser;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.SparseArray;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -27,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
@@ -633,5 +637,17 @@ public class Utilities {
     
     public static boolean isHackEnabled() {
         return GlobalContext.getInstance().getResources().getBoolean(R.bool.hack_enabled);
+    }
+    
+    public static void registerShareActionMenu(MenuItem item, AbsItemBean bean) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        WeiboUser user = bean.weiboUser;
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "@" + user.name + " : " + bean.text);
+        if (Utilities.isIntentAvailable(intent)) {
+            ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+            provider.setShareIntent(intent);
+        }
     }
 }
