@@ -21,7 +21,6 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
     
     private AbsTimelineFragment<WeiboComment, ?> mFragment;
     private AbsTimelineListAdapter<WeiboComment> mAdapter;
-    private ShareActionProvider mShareActionProvider;
     
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -31,7 +30,6 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
             menu.removeItem(R.id.delete);
         }
         MenuItem shareItem = menu.findItem(R.id.share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -39,7 +37,8 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         WeiboUser user = comment.weiboUser;
         intent.putExtra(Intent.EXTRA_TEXT, "@" + user.name + " : " + comment.text);
         if (Utilities.isIntentAvailable(intent)) {
-            mShareActionProvider.setShareIntent(intent);
+            ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+            provider.setShareIntent(intent);
         }
         return true;
     }
@@ -68,6 +67,8 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         case R.id.copy:
             Utilities.copyText(mAdapter.getSelectedItem().text);
             break;
+        default:
+            return true;
         }
         mode.finish();
         return true;

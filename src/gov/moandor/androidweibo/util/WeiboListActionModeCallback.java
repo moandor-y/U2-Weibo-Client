@@ -24,7 +24,6 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
     
     private AbsTimelineFragment<WeiboStatus, ?> mFragment;
     private AbsTimelineListAdapter<WeiboStatus> mAdapter;
-    private ShareActionProvider mShareActionProvider;
     
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -34,7 +33,6 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             menu.removeItem(R.id.delete);
         }
         MenuItem shareItem = menu.findItem(R.id.share);
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         WeiboStatus status = mAdapter.getSelectedItem();
@@ -59,7 +57,8 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             }
         }
         if (Utilities.isIntentAvailable(intent)) {
-            mShareActionProvider.setShareIntent(intent);
+            ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+            provider.setShareIntent(intent);
         }
         return true;
     }
@@ -101,6 +100,8 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
         case R.id.copy:
             Utilities.copyText(mAdapter.getSelectedItem().text);
             break;
+        default:
+            return true;
         }
         mode.finish();
         return true;
