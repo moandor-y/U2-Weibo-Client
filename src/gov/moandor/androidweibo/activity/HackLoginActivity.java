@@ -27,9 +27,9 @@ public class HackLoginActivity extends AbsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hack_login);
         final Spinner spinner = (Spinner) findViewById(R.id.type);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, 
-                android.R.id.text1, getResources().getStringArray(R.array.hack_login_types));
-        adapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
+                R.array.hack_login_types, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         final EditText username = (EditText) findViewById(R.id.username);
         final EditText password = (EditText) findViewById(R.id.password);
