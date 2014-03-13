@@ -221,6 +221,7 @@
     <string name="too_many_words">Too Many Words</string>
     <string name="cannot_be_empty">Cannot be Empty</string>
     <string name="upload_failed">Upload Failed</string>
+    <string name="write_hint">Write something…</string>
     
     <!-- ImageViewerActivity -->
     <string name="show_ori">Show Original Pictures</string>

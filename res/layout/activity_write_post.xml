@@ -11,7 +11,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="left|top"
-        android:inputType="textCapSentences|textMultiLine" />
+        android:inputType="textCapSentences|textMultiLine"
+        android:hint="@string/write_hint" />
     
     <RelativeLayout
         android:id="@+id/action"
