@@ -78,6 +78,11 @@ public class MainDrawerListAdapter extends AbsBaseAdapter {
         }
         
         @Override
+        protected void onPreExecute() {
+            mView.setImageDrawable(null);
+        }
+        
+        @Override
         protected Bitmap doInBackground(Void... v) {
             Bitmap bitmap = GlobalContext.getBitmapCache().get(mUrl);
             if (bitmap != null) {
