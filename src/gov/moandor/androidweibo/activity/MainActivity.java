@@ -339,6 +339,9 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mAtmeListFragment.notifyAccountOrGroupChanged();
         mCommentListFragment.notifyAccountOrGroupChanged();
         mProfileFragment.notifyAccountChanged();
+        if (mViewPager.getCurrentItem() == PROFILE) {
+            getSupportActionBar().setTitle(GlobalContext.getCurrentAccount().user.name);
+        }
     }
     
     @Override
