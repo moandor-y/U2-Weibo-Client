@@ -16,7 +16,6 @@
 package uk.co.senab.photoview;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -200,18 +199,8 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public OnPhotoTapListener getOnPhotoTapListener() {
-        return mAttacher.getOnPhotoTapListener();
-    }
-
-    @Override
     public void setOnViewTapListener(OnViewTapListener listener) {
         mAttacher.setOnViewTapListener(listener);
-    }
-
-    @Override
-    public OnViewTapListener getOnViewTapListener() {
-        return mAttacher.getOnViewTapListener();
     }
 
     @Override
@@ -241,16 +230,6 @@ public class PhotoView extends ImageView implements IPhotoView {
     @Override
     public void setZoomable(boolean zoomable) {
         mAttacher.setZoomable(zoomable);
-    }
-
-    @Override
-    public Bitmap getVisibleRectangleBitmap() {
-        return mAttacher.getVisibleRectangleBitmap();
-    }
-
-    @Override
-    public void setZoomTransitionDuration(int milliseconds) {
-        mAttacher.setZoomTransitionDuration(milliseconds);
     }
 
     @Override

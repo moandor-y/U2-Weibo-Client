@@ -20,7 +20,7 @@ import android.widget.Scroller;
 
 public class PreGingerScroller extends ScrollerProxy {
 
-    private final Scroller mScroller;
+    private Scroller mScroller;
 
     public PreGingerScroller(Context context) {
         mScroller = new Scroller(context);
