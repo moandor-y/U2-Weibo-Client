@@ -37,15 +37,15 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     Adapter mAdapter;
     ListView mListView;
     ActionMode.Callback mActionModeCallback;
+    MyAsyncTask<Void, ?, ?> mRefreshTask;
+    int mNextCursor;
+    boolean mNoMoreUser;
     private PullToRefreshAttacher mPullToRefreshAttacher;
     private View mFooter;
     private View mFooterIcon;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
-    private MyAsyncTask<Void, ?, ?> mRefreshTask;
     private ActionMode mActionMode;
     private int mListScrollState;
-    private int mNextCursor;
-    private boolean mNoMoreUser;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

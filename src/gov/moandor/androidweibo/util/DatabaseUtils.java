@@ -26,7 +26,7 @@ import java.util.Locale;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 12;
+    private static final int VERSION = 13;
     
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -84,6 +84,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         case 10:
             db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
         case 11:
+            db.execSQL(CREATE_DM_USER_TABLE);
+        case 12:
+            db.execSQL("drop table if exists " + Table.DmUser.TABLE_NAME);
             db.execSQL(CREATE_DM_USER_TABLE);
         }
     }
@@ -521,7 +524,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
     }
     
-    public static synchronized void updateDmUsers(DirectMessagesUser[] users, long accountId) {
+    public static synchronized void updateDmUsers(DmUsers users, long accountId) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.DmUser.TABLE_NAME, Table.DmUser.ACCOUNT_ID + "=" + accountId, null);
         ContentValues values = new ContentValues();
@@ -531,16 +534,21 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
     }
     
-    public static synchronized DirectMessagesUser[] getDmUsers(long accountId) {
+    public static synchronized DmUsers getDmUsers(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String sql = "select * from " + Table.DmUser.TABLE_NAME + " where " + Table.DmUser.ACCOUNT_ID + "="
                 + accountId;
         Cursor cursor = database.rawQuery(sql, null);
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.DmUser.CONTENT_DATA));
-            return sGson.fromJson(json, DirectMessagesUser[].class);
+            return sGson.fromJson(json, DmUsers.class);
         }
         return null;
+    }
+    
+    public static class DmUsers {
+        public DirectMessagesUser[] users;
+        public int nextCursor;
     }
     
     private static final class Table {

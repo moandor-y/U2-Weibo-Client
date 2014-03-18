@@ -34,11 +34,14 @@ AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
     public void onDestroy() {
         super.onDestroy();
         final long accountId = GlobalContext.getCurrentAccount().user.id;
-        final DirectMessagesUser[] users = mAdapter.getItems();
+        DirectMessagesUser[] users = mAdapter.getItems();
+        final DatabaseUtils.DmUsers dmUsers = new DatabaseUtils.DmUsers();
+        dmUsers.users = users;
+        dmUsers.nextCursor = mNextCursor;
         MyAsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                DatabaseUtils.updateDmUsers(users, accountId);
+                DatabaseUtils.updateDmUsers(dmUsers, accountId);
             }
         });
     }
@@ -46,16 +49,22 @@ AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
     @Override
     void initContent() {
         final long accountId = GlobalContext.getCurrentAccount().user.id;
-        new MyAsyncTask<Void, Void, DirectMessagesUser[]>() {
+        mRefreshTask = new MyAsyncTask<Void, Void, DatabaseUtils.DmUsers>() {
             @Override
-            protected DirectMessagesUser[] doInBackground(Void... params) {
+            protected DatabaseUtils.DmUsers doInBackground(Void... params) {
                 return DatabaseUtils.getDmUsers(accountId);
             }
             
             @Override
-            protected void onPostExecute(DirectMessagesUser[] result) {
+            protected void onPostExecute(DatabaseUtils.DmUsers result) {
+                mRefreshTask = null;
                 if (result != null) {
-                    mAdapter.updateDataSet(result);
+                    mAdapter.updateDataSet(result.users);
+                    mAdapter.notifyDataSetChanged();
+                    mNextCursor = result.nextCursor;
+                    if (mNextCursor == 0) {
+                        mNoMoreUser = true;
+                    }
                 } else {
                     refresh();
                 }
