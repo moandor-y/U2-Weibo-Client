@@ -31,6 +31,19 @@ AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
     }
     
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        final long accountId = GlobalContext.getCurrentAccount().user.id;
+        final DirectMessagesUser[] users = mAdapter.getItems();
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseUtils.updateDmUsers(users, accountId);
+            }
+        });
+    }
+    
+    @Override
     void initContent() {
         final long accountId = GlobalContext.getCurrentAccount().user.id;
         new MyAsyncTask<Void, Void, DirectMessagesUser[]>() {

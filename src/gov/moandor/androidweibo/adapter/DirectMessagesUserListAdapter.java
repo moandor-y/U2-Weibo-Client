@@ -95,6 +95,10 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
         mDmUsers.addAll(data);
     }
     
+    public DirectMessagesUser[] getItems() {
+        return mDmUsers.toArray(new DirectMessagesUser[mDmUsers.size()]);
+    }
+    
     private ViewHolder initViewHolder(View view) {
         ViewHolder holder = new ViewHolder();
         holder.avatar = (ImageView) view.findViewById(R.id.avatar);
