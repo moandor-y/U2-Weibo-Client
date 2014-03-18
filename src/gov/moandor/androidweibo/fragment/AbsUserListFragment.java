@@ -59,7 +59,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mPullToRefreshAttacher = ((PullToRefreshAttacherOwner) getActivity()).getAttacher();
         mPullToRefreshAttacher.addRefreshableView(mListView, new OnListRefreshListener());
         if (mAdapter.getCount() == 0) {
-            refresh();
+            initContent();
         }
     }
     
@@ -108,6 +108,10 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mPullToRefreshAttacher.setRefreshing(true);
         mRefreshTask = onCreateloLoadMoreTask();
         mRefreshTask.execute();
+    }
+    
+    void initContent() {
+        refresh();
     }
     
     public void refresh() {

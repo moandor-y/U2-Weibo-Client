@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.CommentDraft;
+import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.bean.WeiboDraft;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 11;
+    private static final int VERSION = 12;
     
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -58,6 +59,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String CREATE_FOLLOWING_AVATAR_PATH_TABLE = "create table " + Table.FollowingAvatarPath.TABLE_NAME
             + "(" + Table.FollowingAvatarPath.CONTENT_DATA + " text)";
     
+    private static final String CREATE_DM_USER_TABLE = "create table " + Table.DmUser.TABLE_NAME + "("
+            + Table.DmUser.ACCOUNT_ID + " integer, " + Table.DmUser.CONTENT_DATA + " text)";
+    
     private DatabaseUtils() {
         super(GlobalContext.getInstance(), NAME, null, VERSION);
     }
@@ -69,6 +73,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         db.execSQL(CREATE_TIMELINE_POSITION_TABLE);
         db.execSQL(CREATE_DRAFT_TABLE);
         db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
+        db.execSQL(CREATE_DM_USER_TABLE);
     }
     
     @Override
@@ -78,6 +83,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             db.execSQL(CREATE_DRAFT_TABLE);
         case 10:
             db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
+        case 11:
+            db.execSQL(CREATE_DM_USER_TABLE);
         }
     }
     
@@ -514,6 +521,28 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
     }
     
+    public static synchronized void updateDmUsers(DirectMessagesUser[] users, long accountId) {
+        SQLiteDatabase database = sInstance.getWritableDatabase();
+        database.delete(Table.DmUser.TABLE_NAME, Table.DmUser.ACCOUNT_ID + "=" + accountId, null);
+        ContentValues values = new ContentValues();
+        values.put(Table.DmUser.ACCOUNT_ID, accountId);
+        values.put(Table.DmUser.CONTENT_DATA, sGson.toJson(users));
+        database.insert(Table.DmUser.TABLE_NAME, null, values);
+        database.close();
+    }
+    
+    public static synchronized DirectMessagesUser[] getDmUsers(long accountId) {
+        SQLiteDatabase database = sInstance.getReadableDatabase();
+        String sql = "select * from " + Table.DmUser.TABLE_NAME + " where " + Table.DmUser.ACCOUNT_ID + "="
+                + accountId;
+        Cursor cursor = database.rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            String json = cursor.getString(cursor.getColumnIndex(Table.DmUser.CONTENT_DATA));
+            return sGson.fromJson(json, DirectMessagesUser[].class);
+        }
+        return null;
+    }
+    
     private static final class Table {
         public static final class Account {
             public static final String TABLE_NAME = "account_table";
@@ -567,6 +596,12 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         
         public static final class FollowingAvatarPath {
             public static final String TABLE_NAME = "following_avatar_path";
+            public static final String CONTENT_DATA = "content_data";
+        }
+        
+        public static final class DmUser {
+            public static final String TABLE_NAME = "dm_user";
+            public static final String ACCOUNT_ID = "account_id";
             public static final String CONTENT_DATA = "content_data";
         }
     }

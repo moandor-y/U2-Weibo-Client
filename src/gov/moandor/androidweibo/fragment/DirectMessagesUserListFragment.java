@@ -10,7 +10,9 @@ import java.util.List;
 import gov.moandor.androidweibo.adapter.DirectMessagesUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
+import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -26,6 +28,26 @@ AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
         }
         mListView.setAdapter(mAdapter);
         mActionModeCallback = new DmUserListActionModeCallback();
+    }
+    
+    @Override
+    void initContent() {
+        final long accountId = GlobalContext.getCurrentAccount().user.id;
+        new MyAsyncTask<Void, Void, DirectMessagesUser[]>() {
+            @Override
+            protected DirectMessagesUser[] doInBackground(Void... params) {
+                return DatabaseUtils.getDmUsers(accountId);
+            }
+            
+            @Override
+            protected void onPostExecute(DirectMessagesUser[] result) {
+                if (result != null) {
+                    mAdapter.updateDataSet(result);
+                } else {
+                    refresh();
+                }
+            }
+        }.execute();
     }
     
     @Override

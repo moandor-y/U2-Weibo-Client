@@ -15,6 +15,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
@@ -83,6 +84,11 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
     public void updateDataSet(List<DirectMessagesUser> data) {
         mDmUsers.clear();
         mDmUsers.addAll(data);
+    }
+    
+    public void updateDataSet(DirectMessagesUser[] data) {
+        mDmUsers.clear();
+        mDmUsers.addAll(Arrays.asList(data));
     }
     
     public void addAll(List<DirectMessagesUser> data) {
