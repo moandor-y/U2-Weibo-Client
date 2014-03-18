@@ -640,6 +640,9 @@ public class Utilities {
     }
     
     public static void registerShareActionMenu(MenuItem item, AbsItemBean bean) {
+        if (bean == null) {
+            return;
+        }
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         WeiboUser user = bean.weiboUser;
