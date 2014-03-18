@@ -20,11 +20,12 @@ public class TopicActivity extends AbsSwipeBackActivity implements PullToRefresh
         mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         mFragment = (TopicWeiboListFragment) fragmentManager.findFragmentById(R.id.content);
+        String topicUri = getIntent().getData().toString();
+        getSupportActionBar().setTitle(topicUri.substring(topicUri.indexOf("#")));
+        int start = topicUri.indexOf("#") + 1;
+        int end = topicUri.lastIndexOf("#");
+        String topic = topicUri.substring(start, end);
         if (mFragment == null) {
-            String topic = getIntent().getData().toString();
-            int start = topic.indexOf("#") + 1;
-            int end = topic.lastIndexOf("#");
-            topic = topic.substring(start, end);
             mFragment = new TopicWeiboListFragment();
             Bundle args = new Bundle();
             args.putString(TopicWeiboListFragment.TOPIC, topic);
