@@ -97,7 +97,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         }
     }
     
-    private void hideLoadingFooter() {
+    void hideLoadingFooter() {
         mListView.removeFooterView(mFooter);
     }
     

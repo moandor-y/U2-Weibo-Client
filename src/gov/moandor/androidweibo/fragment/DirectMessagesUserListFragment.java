@@ -64,6 +64,7 @@ AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
                     mNextCursor = result.nextCursor;
                     if (mNextCursor == 0) {
                         mNoMoreUser = true;
+                        hideLoadingFooter();
                     }
                 } else {
                     refresh();
