@@ -30,11 +30,10 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled;
-    
+    float mTimeFontSize = mFontSize - 3;
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
-    private float mTimeFontSize = mFontSize - 3;
     private int mMaxCount = Utilities.getLoadWeiboCount();
     private int mSelectedPosition = -1;
     
@@ -71,7 +70,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         T bean = mBeans.get(position);
         buildUserLayout(holder, bean.weiboUser, position);
         buildContent(holder, bean, position);
-        buildTime(holder, bean);
+        buildTime(holder, bean, position);
         if (position == mSelectedPosition) {
             convertView.setBackgroundResource(R.color.ics_blue_semi);
         } else {
@@ -84,7 +83,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         mFragment = fragment;
     }
     
-    private void buildTime(ViewHolder holder, T bean) {
+    void buildTime(ViewHolder holder, T bean, int position) {
         String time = TimeUtils.getListTime(bean);
         if (!time.equals(holder.time.getText().toString())) {
             holder.time.setText(time);
@@ -98,7 +97,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         holder.text.setText(bean.textSpannable);
     }
     
-    private void buildUserLayout(ViewHolder holder, WeiboUser user, int position) {
+    void buildUserLayout(ViewHolder holder, WeiboUser user, int position) {
         if (!TextUtils.isEmpty(user.remark)) {
             holder.userName.setText(user.name + " (" + user.remark + ")");
         } else {
@@ -110,7 +109,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         }
     }
     
-    private void buildAvatar(ImageView view, WeiboUser user, final int position) {
+    void buildAvatar(ImageView view, WeiboUser user, final int position) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

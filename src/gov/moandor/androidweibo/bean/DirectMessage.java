@@ -1,9 +1,6 @@
 package gov.moandor.androidweibo.bean;
 
-public class DirectMessage {
-    public long id;
-    public String createdAt;
-    public String text;
+public class DirectMessage extends AbsItemBean {
     public WeiboUser sender;
     public WeiboUser recipient;
 }

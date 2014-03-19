@@ -1,9 +1,8 @@
 package gov.moandor.androidweibo.bean;
 
-import android.os.Parcelable;
 import android.text.SpannableString;
 
-public abstract class AbsItemBean implements Parcelable {
+public abstract class AbsItemBean {
     public String createdAt;
     public long id;
     public long mid;

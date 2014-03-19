@@ -22,7 +22,7 @@ public class TimeUtils {
     
     public static String getListTime(AbsItemBean bean) {
         try {
-            long timeMillis = sSinaFormat.parse(bean.createdAt).getTime();
+            long timeMillis = parseSinaTime(bean);
             return getListTime(timeMillis);
         } catch (ParseException e) {
             Logger.logExcpetion(e);
@@ -72,5 +72,9 @@ public class TimeUtils {
         } else {
             return sYearFormat12.format(msg);
         }
+    }
+    
+    public static long parseSinaTime(AbsItemBean bean) throws ParseException {
+        return sSinaFormat.parse(bean.createdAt).getTime();
     }
 }
