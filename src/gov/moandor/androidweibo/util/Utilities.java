@@ -648,7 +648,7 @@ public class Utilities {
         intent.setAction(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, "@" + user.name + " : " + bean.text);
-        if (Utilities.isIntentAvailable(intent)) {
+        if (isIntentAvailable(intent)) {
             ShareActionProvider provider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
             provider.setShareIntent(intent);
         }

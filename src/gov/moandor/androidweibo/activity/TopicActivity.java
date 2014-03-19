@@ -2,6 +2,8 @@ package gov.moandor.androidweibo.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 
@@ -21,6 +23,8 @@ public class TopicActivity extends AbsSwipeBackActivity implements PullToRefresh
         FragmentManager fragmentManager = getSupportFragmentManager();
         mFragment = (TopicWeiboListFragment) fragmentManager.findFragmentById(R.id.content);
         String topicUri = getIntent().getData().toString();
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(topicUri.substring(topicUri.indexOf("#")));
         int start = topicUri.indexOf("#") + 1;
         int end = topicUri.lastIndexOf("#");
@@ -32,6 +36,26 @@ public class TopicActivity extends AbsSwipeBackActivity implements PullToRefresh
             mFragment.setArguments(args);
             fragmentManager.beginTransaction().add(R.id.content, mFragment).commit();
             fragmentManager.executePendingTransactions();
+        }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_topic, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            return true;
+        case R.id.refresh:
+            mFragment.refresh();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
         }
     }
     
