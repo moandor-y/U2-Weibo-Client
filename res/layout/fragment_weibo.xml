@@ -52,10 +52,10 @@
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
             android:layout_below="@+id/avatar"
-            android:lineSpacingMultiplier="1.2"
-            android:layout_marginTop="@dimen/margin_horizontal" />
+            android:layout_marginTop="@dimen/margin_horizontal"
+            android:textSize="15sp"
+            android:lineSpacingMultiplier="1.2" />
         
         <gov.moandor.androidweibo.widget.WeiboDetailPicView
             android:id="@+id/pic"

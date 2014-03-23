@@ -16,8 +16,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
         
-        <View style="@style/action_bar_divider"/>
-        
         <com.astuetz.viewpager.extensions.PagerSlidingTabStrip
             android:id="@+id/tabs"
             android:layout_width="match_parent"

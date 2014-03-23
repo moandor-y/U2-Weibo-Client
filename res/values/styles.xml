@@ -9,12 +9,6 @@
         <item name="android:contentDescription">@string/weibo_pic</item>
     </style>
     
-    <style name="action_bar_divider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">3px</item>
-        <item name="android:background">?action_bar_divider_color</item>
-    </style>
-    
     <style name="settings_divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
