@@ -9,7 +9,7 @@
         <item name="icon_pic">@drawable/ic_camera_light</item>
         <item name="icon_send">@drawable/ic_send_light</item>
         <item name="action_bar_divider_color">#1b1b1b</item>
-        <item name="action_bar_background">#222222</item>
+        <item name="drawer_background">#222222</item>
         <item name="link_color">@color/dark_blue</item>
         <item name="link_pressed_background_color">@color/holo_blue_light</item>
         <item name="retweet_background">@color/retweet_background_light</item>
@@ -20,6 +20,7 @@
         <item name="item_background">@drawable/clickable_item_light</item>
         <item name="action_menu_text_color">?android:attr/textColorPrimaryInverse</item>
         <item name="icon_refresh">@drawable/ic_refresh_light</item>
+        <item name="bottom_background">@drawable/bottom_bg_light</item>
     </style>
     
     <style name="Theme.Weibo.Dark" parent="style/Theme.AppCompat" >
@@ -30,7 +31,7 @@
         <item name="icon_pic">@drawable/ic_camera_dark</item>
         <item name="icon_send">@drawable/ic_send_dark</item>
         <item name="action_bar_divider_color">#31afdd</item>
-        <item name="action_bar_background">#000000</item>
+        <item name="drawer_background">#000000</item>
         <item name="link_color">@color/steel_blue</item>
         <item name="link_pressed_background_color">#002e3e</item>
         <item name="retweet_background">@color/retweet_background_dark</item>
@@ -41,6 +42,7 @@
         <item name="item_background">@drawable/clickable_item_dark</item>
         <item name="action_menu_text_color">?android:attr/textColorPrimary</item>
         <item name="icon_refresh">@drawable/ic_refresh_dark</item>
+        <item name="bottom_background">@drawable/bottom_bg_dark</item>
     </style>
     
     <style name="Translucent">

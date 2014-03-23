@@ -10,7 +10,7 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/drawer_shadow"
         android:orientation="vertical"
-        android:background="?action_bar_background" >
+        android:background="?drawer_background" >
         
         <TextView
             android:layout_width="match_parent"

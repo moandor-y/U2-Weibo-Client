@@ -6,8 +6,8 @@
     <color name="steel_blue">#4682b4</color>
     <color name="dark_blue">#7874b8</color>
     <color name="ics_blue_semi">#6633b5e5</color>
-    <color name="retweet_background_light">#80c0c0c0</color>
-    <color name="retweet_background_dark">#80404040</color>
+    <color name="retweet_background_light">#60c0c0c0</color>
+    <color name="retweet_background_dark">#60404040</color>
     <color name="quick_post_divider_light">#b1b1b1</color>
     <color name="quick_post_divider_dark">#63676b</color>
     <color name="image_place_holder_light">#f0f0f0</color>

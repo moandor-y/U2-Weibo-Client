@@ -20,7 +20,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/action_height"
-            android:background="?action_bar_background" />
+            android:background="?bottom_background" />
         
     </LinearLayout>
     

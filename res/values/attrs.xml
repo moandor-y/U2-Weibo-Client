@@ -7,7 +7,7 @@
     <attr name="icon_pic" format="reference"/>
     <attr name="icon_send" format="reference"/>
     <attr name="action_bar_divider_color" format="color"/>
-    <attr name="action_bar_background" format="color"/>
+    <attr name="drawer_background" format="color"/>
     <attr name="link_color" format="color"/>
     <attr name="link_pressed_background_color" format="color"/>
     <attr name="retweet_background" format="color"/>
@@ -18,5 +18,6 @@
     <attr name="item_background" format="reference"/>
     <attr name="action_menu_text_color" format="color"/>
     <attr name="icon_refresh" format="reference"/>
+    <attr name="bottom_background" format="reference"/>
     
 </resources>
