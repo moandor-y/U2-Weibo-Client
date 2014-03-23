@@ -22,6 +22,18 @@
         androidweibo:showAsAction="ifRoom|withText" />
     
     <item
+        android:id="@+id/favorite"
+        android:title="@string/favorite"
+        android:icon="@drawable/ic_favorited"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
+        android:id="@+id/unfavorite"
+        android:title="@string/unfavorite"
+        android:icon="@drawable/ic_unfavorited"
+        androidweibo:showAsAction="ifRoom|withText" />
+    
+    <item
         android:id="@+id/share"
         android:title="@string/share"
         android:icon="@drawable/ic_menu_share_dark"

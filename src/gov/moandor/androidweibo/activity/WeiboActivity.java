@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,11 +22,13 @@ import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.fragment.WeiboCommentListFragment;
 import gov.moandor.androidweibo.fragment.WeiboFragment;
 import gov.moandor.androidweibo.fragment.WeiboRepostListFragment;
+import gov.moandor.androidweibo.util.FavoriteTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
+import gov.moandor.androidweibo.util.UnfavoriteTask;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -87,6 +90,16 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     }
     
     @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (mWeiboStatus.favorited) {
+            menu.findItem(R.id.favorite).setVisible(false);
+        } else {
+            menu.findItem(R.id.unfavorite).setVisible(false);
+        }
+        return true;
+    }
+    
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
@@ -100,6 +113,11 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         case R.id.refresh:
             refresh();
             return true;
+        case R.id.favorite:
+            new FavoriteTask(mWeiboStatus, new OnFavoriteFinishedListener()).execute();
+            return true;
+        case R.id.unfavorite:
+            new UnfavoriteTask(mWeiboStatus, new OnUnfavoriteFinishedListener()).execute();
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -161,6 +179,13 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         startActivity(intent);
     }
     
+    private void setResult() {
+        Intent data = new Intent();
+        data.putExtra(WEIBO_STATUS, mWeiboStatus);
+        data.putExtra(POSITION, mPosition);
+        setResult(RESULT_OK, data);
+    }
+    
     public WeiboStatus getWeiboStatus() {
         return mWeiboStatus;
     }
@@ -218,11 +243,36 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
                 mWeiboStatus.commentCount = commentCount;
                 mWeiboStatus.repostCount = repostCount;
                 mTabStrip.notifyDataSetChanged();
-                Intent data = new Intent();
-                data.putExtra(WEIBO_STATUS, mWeiboStatus);
-                data.putExtra(POSITION, mPosition);
-                setResult(RESULT_OK, data);
+                setResult();
             }
+        }
+    }
+    
+    private class OnFavoriteFinishedListener implements FavoriteTask.OnFavoriteFinishedListener {
+        @Override
+        public void onFavoriteFinished(final WeiboStatus status) {
+            Utilities.notice(R.string.favorited_successfully);
+            setResult();
+            supportInvalidateOptionsMenu();
+        }
+        
+        @Override
+        public void onFavoriteFailed(WeiboException e) {
+            Utilities.notice(R.string.favorite_failed_reason, e.getMessage());
+        }
+    }
+    
+    private class OnUnfavoriteFinishedListener implements UnfavoriteTask.OnUnfavoriteFinishedListener {
+        @Override
+        public void onUnfavoriteFinished(final WeiboStatus status) {
+            Utilities.notice(R.string.unfavorited_successfully);
+            setResult();
+            supportInvalidateOptionsMenu();
+        }
+        
+        @Override
+        public void onUnfavoriteFailed(WeiboException e) {
+            Utilities.notice(R.string.unfavorite_failed_reason, e.getMessage());
         }
     }
 }
