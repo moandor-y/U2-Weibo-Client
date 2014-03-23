@@ -251,6 +251,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private class OnFavoriteFinishedListener implements FavoriteTask.OnFavoriteFinishedListener {
         @Override
         public void onFavoriteFinished(final WeiboStatus status) {
+            mWeiboStatus = status;
             Utilities.notice(R.string.favorited_successfully);
             setResult();
             supportInvalidateOptionsMenu();
@@ -265,6 +266,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private class OnUnfavoriteFinishedListener implements UnfavoriteTask.OnUnfavoriteFinishedListener {
         @Override
         public void onUnfavoriteFinished(final WeiboStatus status) {
+            mWeiboStatus = status;
             Utilities.notice(R.string.unfavorited_successfully);
             setResult();
             supportInvalidateOptionsMenu();
