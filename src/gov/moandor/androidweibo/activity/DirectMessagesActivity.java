@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class DirectMessagesActivity extends AbsSwipeBackActivity implements PullToRefreshAttacherOwner {
+public class DirectMessagesActivity extends AbsActivity implements PullToRefreshAttacherOwner {
     private PullToRefreshAttacher mPullToRefreshAttacher;
     private DirectMessagesUserListFragment mFragment;
     

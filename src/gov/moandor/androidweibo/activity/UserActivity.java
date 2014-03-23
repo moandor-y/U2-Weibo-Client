@@ -21,7 +21,7 @@ import gov.moandor.androidweibo.util.UnfollowTask;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class UserActivity extends AbsSwipeBackActivity {
+public class UserActivity extends AbsActivity {
     public static final String USER;
     public static final String LOADING_DIALOG = "loading_dialog";
     

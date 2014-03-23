@@ -16,7 +16,7 @@ import gov.moandor.androidweibo.fragment.FollowingListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class UserListActivity extends AbsSwipeBackActivity implements PullToRefreshAttacherOwner {
+public class UserListActivity extends AbsActivity implements PullToRefreshAttacherOwner {
     public static final String TYPE;
     public static final String USER;
     

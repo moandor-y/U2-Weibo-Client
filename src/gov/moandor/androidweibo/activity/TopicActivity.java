@@ -11,7 +11,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.TopicWeiboListFragment;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class TopicActivity extends AbsSwipeBackActivity implements PullToRefreshAttacherOwner {
+public class TopicActivity extends AbsActivity implements PullToRefreshAttacherOwner {
     private TopicWeiboListFragment mFragment;
     private PullToRefreshAttacher mPullToRefreshAttacher;
     

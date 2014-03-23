@@ -27,7 +27,7 @@ import gov.moandor.androidweibo.notification.SendWeiboService;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 
-public class DraftBoxActivity extends AbsSwipeBackActivity {
+public class DraftBoxActivity extends AbsActivity {
     private ListView mListView;
     private ListAdapter mListAdapter;
     private List<AbsDraftBean> mBeans = new ArrayList<AbsDraftBean>();

@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.fragment.UserWeiboListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class UserWeiboListActivity extends AbsSwipeBackActivity implements PullToRefreshAttacherOwner {
+public class UserWeiboListActivity extends AbsActivity implements PullToRefreshAttacherOwner {
     public static final String USER;
     
     static {

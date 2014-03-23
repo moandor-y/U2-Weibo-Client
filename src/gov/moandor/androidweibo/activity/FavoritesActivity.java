@@ -9,7 +9,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.FavoritesFragment;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class FavoritesActivity extends AbsSwipeBackActivity implements PullToRefreshAttacherOwner {
+public class FavoritesActivity extends AbsActivity implements PullToRefreshAttacherOwner {
     private PullToRefreshAttacher mPullToRefreshAttacher;
     private FavoritesFragment mFragment;
     

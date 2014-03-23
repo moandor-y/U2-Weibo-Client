@@ -28,7 +28,7 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class AtUserActivity extends AbsSwipeBackActivity {
+public class AtUserActivity extends AbsActivity {
     private ListAdapter mAdapter;
     private List<UserSuggestion> mSuggestions = new ArrayList<UserSuggestion>();
     
