@@ -40,10 +40,12 @@ public class FetchUnreadMessageService extends IntentService {
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
             UnreadCount unreadCount = Utilities.getUnreadCountFromJson(response);
-            Intent intent = new Intent();
-            intent.setAction(MainActivity.ACTION_UNREAD_UPDATED);
-            intent.putExtra(MainActivity.UNREAD_COUNT, unreadCount);
-            context.sendBroadcast(intent);
+            if (account.user.id == GlobalContext.getCurrentAccount().user.id) {
+                Intent intent = new Intent();
+                intent.setAction(MainActivity.ACTION_UNREAD_UPDATED);
+                intent.putExtra(MainActivity.UNREAD_COUNT, unreadCount);
+                context.sendBroadcast(intent);
+            }
             WeiboComment comment = null;
             if (unreadCount.comment > 0 && GlobalContext.isNotificationCommentEnabled()) {
                 List<WeiboComment> comments = fetchComments(account);
