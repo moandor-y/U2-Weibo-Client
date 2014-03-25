@@ -18,6 +18,7 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class FetchUnreadMessageService extends IntentService {
@@ -104,7 +105,7 @@ public class FetchUnreadMessageService extends IntentService {
             params.addParam("since_id", String.valueOf(oldStatus.id));
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return Utilities.getWeiboStatusesFromJson(response);
+        return Arrays.asList(Utilities.getWeiboStatusesFromJson(response));
     }
     
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {

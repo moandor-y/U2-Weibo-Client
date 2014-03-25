@@ -62,32 +62,32 @@ public class Utilities {
         }
     }
     
-    public static List<WeiboStatus> getWeiboStatusesFromJson(String jsonStr) throws WeiboException {
+    public static WeiboStatus[] getWeiboStatusesFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray statuses = jsonStatuses.getJSONArray("statuses");
             int len = statuses.length();
-            List<WeiboStatus> weiboStatuses = new ArrayList<WeiboStatus>();
+            List<WeiboStatus> result = new ArrayList<WeiboStatus>();
             for (int i = 0; i < len; i++) {
-                weiboStatuses.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
+                result.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
             }
-            return weiboStatuses;
+            return result.toArray(new WeiboStatus[result.size()]);
         } catch (JSONException e) {
             Logger.logExcpetion(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
     
-    public static List<WeiboStatus> getWeiboRepostsFromJson(String jsonStr) throws WeiboException {
+    public static WeiboStatus[] getWeiboRepostsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray statuses = jsonStatuses.getJSONArray("reposts");
             int len = statuses.length();
-            List<WeiboStatus> weiboStatuses = new ArrayList<WeiboStatus>();
+            List<WeiboStatus> result = new ArrayList<WeiboStatus>();
             for (int i = 0; i < len; i++) {
-                weiboStatuses.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
+                result.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
             }
-            return weiboStatuses;
+            return result.toArray(new WeiboStatus[result.size()]);
         } catch (JSONException e) {
             Logger.logExcpetion(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));

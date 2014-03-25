@@ -6,6 +6,7 @@ import android.support.v7.view.ActionMode;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.Arrays;
 import java.util.List;
 
 import gov.moandor.androidweibo.activity.ImageViewerActivity;
@@ -63,7 +64,7 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Utilities.getWeiboStatusesFromJson(json);
+        return Arrays.asList(Utilities.getWeiboStatusesFromJson(json));
     }
     
     @Override
