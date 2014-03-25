@@ -191,6 +191,12 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         return DatabaseUtils.getTimelinePosition(MainActivity.WEIBO_LIST, GlobalContext.getWeiboGroup());
     }
     
+    @Override
+    public void notifyAccountOrGroupChanged() {
+        super.notifyAccountOrGroupChanged();
+        ((MainActivity) getActivity()).resetWeiboUnreadCount();
+    }
+    
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {
         @Override
         public void onMultiPictureClick(int position, int picIndex) {
