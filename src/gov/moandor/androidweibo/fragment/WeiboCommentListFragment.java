@@ -20,7 +20,6 @@ import gov.moandor.androidweibo.dao.CommentsShowDao;
 import gov.moandor.androidweibo.notification.SendCommentService;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -60,15 +59,9 @@ public class WeiboCommentListFragment extends
     
     @Override
     protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
-        return new CommentsShowDao();
-    }
-    
-    @Override
-    HttpParams getRequestParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("id", String.valueOf(mWeiboStatus.id));
-        return params;
+        CommentsShowDao dao = new CommentsShowDao();
+        dao.setWeiboId(mWeiboStatus.id);
+        return dao;
     }
     
     @Override

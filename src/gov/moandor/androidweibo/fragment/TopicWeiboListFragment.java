@@ -13,7 +13,6 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.SearchTopicsDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
@@ -69,15 +68,9 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        return new SearchTopicsDao();
-    }
-    
-    @Override
-    HttpParams getRequestParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("q", mTopic);
-        return params;
+        SearchTopicsDao dao = new SearchTopicsDao();
+        dao.setTopic(mTopic);
+        return dao;
     }
     
     @Override

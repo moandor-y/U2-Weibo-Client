@@ -16,7 +16,6 @@ import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.RepostTimelineDao;
 import gov.moandor.androidweibo.notification.SendWeiboService;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
@@ -62,15 +61,9 @@ public class WeiboRepostListFragment extends
     
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        return new RepostTimelineDao();
-    }
-    
-    @Override
-    HttpParams getRequestParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("id", String.valueOf(mWeiboStatus.id));
-        return params;
+        RepostTimelineDao dao = new RepostTimelineDao();
+        dao.setWeiboId(mWeiboStatus.id);
+        return dao;
     }
     
     @Override

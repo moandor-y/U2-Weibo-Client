@@ -18,7 +18,6 @@ import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.MentionsTimelineDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
@@ -87,15 +86,9 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        return new MentionsTimelineDao();
-    }
-    
-    @Override
-    HttpParams getRequestParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("filter_by_author", String.valueOf(GlobalContext.getAtmeFilter()));
-        return params;
+        MentionsTimelineDao dao = new MentionsTimelineDao();
+        dao.setFilter(GlobalContext.getAtmeFilter());
+        return dao;
     }
     
     @Override

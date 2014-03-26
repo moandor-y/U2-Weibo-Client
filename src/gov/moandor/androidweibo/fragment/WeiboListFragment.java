@@ -20,7 +20,6 @@ import gov.moandor.androidweibo.dao.BilateralTimelineDao;
 import gov.moandor.androidweibo.dao.FriendsTimelineDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
@@ -111,13 +110,6 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         default:
             return new FriendsTimelineDao();
         }
-    }
-    
-    @Override
-    HttpParams getRequestParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        return params;
     }
     
     @Override

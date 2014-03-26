@@ -19,7 +19,6 @@ import gov.moandor.androidweibo.dao.CommentsToMeDao;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -73,20 +72,12 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
         case ALL:
         case FOLLOWED:
         default:
-            return new CommentsToMeDao();
+            CommentsToMeDao dao = new CommentsToMeDao();
+            if (GlobalContext.getCommentFilter() == FOLLOWED) {
+                dao.setFilter(1);
+            }
+            return dao;
         }
-    }
-    
-    @Override
-    HttpParams getRequestParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        switch (GlobalContext.getCommentFilter()) {
-        case FOLLOWED:
-            params.putParam("filter_by_author", "1");
-            break;
-        }
-        return params;
     }
     
     @Override

@@ -28,7 +28,6 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
@@ -348,8 +347,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     abstract TimelineListAdapter createListAdapter();
-    
-    abstract HttpParams getRequestParams();
     
     abstract List<DataBean> getBeansFromJson(String json) throws WeiboException;
     
