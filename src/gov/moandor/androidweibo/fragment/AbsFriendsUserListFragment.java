@@ -6,16 +6,16 @@ import android.view.View;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.FriendsUserListAdapter;
 import gov.moandor.androidweibo.bean.WeiboUser;
+import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
+
+import java.util.List;
 
 public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<FriendsUserListAdapter, WeiboUser> {
     private long mUserId;
@@ -40,8 +40,8 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     @Override
     HttpParams getParams() {
         HttpParams params = new HttpParams();
-        params.addParam("uid", String.valueOf(mUserId));
-        params.addParam("trim_status", "1");
+        params.putParam("uid", String.valueOf(mUserId));
+        params.putParam("trim_status", "1");
         return params;
     }
     

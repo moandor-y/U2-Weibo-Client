@@ -108,7 +108,8 @@ public class HttpUtils {
         public static final String REMIND_UNREAD_COUNT = "https://rm.api.weibo.com/2/remind/unread_count.json";
         public static final String REMIND_SET_COUNT = "https://rm.api.weibo.com/2/remind/set_count.json";
         public static final String SEARCH_TOPICS = "https://api.weibo.com/2/search/topics.json";
-        public static final String SEARCH_SUGGESTIONS_AT_USERS = "https://api.weibo.com/2/search/suggestions/at_users.json";
+        public static final String SEARCH_SUGGESTIONS_AT_USERS =
+                "https://api.weibo.com/2/search/suggestions/at_users.json";
         public static final String FAVORITES = "https://api.weibo.com/2/favorites.json";
         public static final String FAVORITES_CREATE = "https://api.weibo.com/2/favorites/create.json";
         public static final String FAVORITES_DESTROY = "https://api.weibo.com/2/favorites/destroy.json";
@@ -140,7 +141,7 @@ public class HttpUtils {
         return !Thread.currentThread().isInterrupted() && download(urlAddress, cachePath, listener);
     }
     
-    public static boolean executeUploadTask(String urlAddress, HttpParams params, String path, String fileParamKey, 
+    public static boolean executeUploadTask(String urlAddress, HttpParams params, String path, String fileParamKey,
             UploadListener listener) throws WeiboException {
         return !Thread.currentThread().isInterrupted() && uploadFile(urlAddress, params, path, fileParamKey, listener);
     }
@@ -355,7 +356,7 @@ public class HttpUtils {
         }
     }
     
-    private static boolean uploadFile(String urlAddress, HttpParams params, String path, String fileParamKey, 
+    private static boolean uploadFile(String urlAddress, HttpParams params, String path, String fileParamKey,
             UploadListener listener) throws WeiboException {
         StringBuffer sb = new StringBuffer();
         sb.append("--").append(BOUNDARY).append("\r\n");

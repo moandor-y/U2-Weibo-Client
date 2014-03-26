@@ -12,6 +12,7 @@ import android.text.ParcelableSpan;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
 import gov.moandor.androidweibo.R;
 
 public class WeiboTextUrlSpan extends ClickableSpan implements ParcelableSpan {

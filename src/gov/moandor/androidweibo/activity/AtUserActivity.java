@@ -14,9 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -27,6 +24,9 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AtUserActivity extends AbsActivity {
     private ListAdapter mAdapter;
@@ -124,9 +124,9 @@ public class AtUserActivity extends AbsActivity {
         protected List<UserSuggestion> doInBackground(Void... v) {
             String url = HttpUtils.UrlHelper.SEARCH_SUGGESTIONS_AT_USERS;
             HttpParams params = new HttpParams();
-            params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.addParam("q", mKeyword);
-            params.addParam("type", "0");
+            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+            params.putParam("q", mKeyword);
+            params.putParam("type", "0");
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 return Utilities.getUserSuggestionsFromJson(response);

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.bean.GpsLocation;
@@ -86,12 +87,12 @@ public class SendWeiboService extends Service {
         @Override
         protected Void doInBackground(Void... v) {
             HttpParams params = new HttpParams();
-            params.addParam("access_token", mToken);
-            params.addParam("status", mDraft.content);
+            params.putParam("access_token", mToken);
+            params.putParam("status", mDraft.content);
             GpsLocation location = mDraft.location;
             if (location != null) {
-                params.addParam("lat", String.valueOf(location.latitude));
-                params.addParam("long", String.valueOf(location.longitude));
+                params.putParam("lat", String.valueOf(location.latitude));
+                params.putParam("long", String.valueOf(location.longitude));
             }
             if (TextUtils.isEmpty(mDraft.picPath)) {
                 String url;
@@ -99,13 +100,13 @@ public class SendWeiboService extends Service {
                     url = HttpUtils.UrlHelper.STATUSES_UPDATE;
                 } else {
                     url = HttpUtils.UrlHelper.STATUSES_REPOST;
-                    params.addParam("id", String.valueOf(mDraft.retweetStatus.id));
+                    params.putParam("id", String.valueOf(mDraft.retweetStatus.id));
                     if (mDraft.commentWhenRepost && mDraft.commentOriWhenRepost) {
-                        params.addParam("is_comment", "3");
+                        params.putParam("is_comment", "3");
                     } else if (mDraft.commentWhenRepost) {
-                        params.addParam("is_comment", "1");
+                        params.putParam("is_comment", "1");
                     } else if (mDraft.commentOriWhenRepost) {
-                        params.addParam("is_comment", "2");
+                        params.putParam("is_comment", "2");
                     }
                 }
                 try {

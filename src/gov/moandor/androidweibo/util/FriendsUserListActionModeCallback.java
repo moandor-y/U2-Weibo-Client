@@ -13,7 +13,7 @@ public class FriendsUserListActionModeCallback implements ActionMode.Callback {
     private FriendsUserListAdapter mAdapter;
     private AbsUserListFragment<FriendsUserListAdapter, WeiboUser> mFragment;
     
-    public FriendsUserListActionModeCallback(FriendsUserListAdapter adapter, 
+    public FriendsUserListActionModeCallback(FriendsUserListAdapter adapter,
             AbsUserListFragment<FriendsUserListAdapter, WeiboUser> fragment) {
         mAdapter = adapter;
         mFragment = fragment;
@@ -44,12 +44,11 @@ public class FriendsUserListActionModeCallback implements ActionMode.Callback {
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
         case R.id.follow:
-            new FollowTask(mAdapter.getSelectedItem(), new OnFollowFinishedListener(
-                    mAdapter.getSelection())).execute();
+            new FollowTask(mAdapter.getSelectedItem(), new OnFollowFinishedListener(mAdapter.getSelection())).execute();
             break;
         case R.id.unfollow:
-            new UnfollowTask(mAdapter.getSelectedItem(), new OnUnfollowFinishedListener(
-                    mAdapter.getSelection())).execute();
+            new UnfollowTask(mAdapter.getSelectedItem(), new OnUnfollowFinishedListener(mAdapter.getSelection()))
+                    .execute();
             break;
         }
         mode.finish();
@@ -84,7 +83,7 @@ public class FriendsUserListActionModeCallback implements ActionMode.Callback {
     }
     
     private class OnUnfollowFinishedListener implements UnfollowTask.OnUnfollowFinishedListener {
-private int mSelection;
+        private int mSelection;
         
         public OnUnfollowFinishedListener(int selection) {
             mSelection = selection;

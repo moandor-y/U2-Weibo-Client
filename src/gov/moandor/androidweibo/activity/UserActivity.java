@@ -139,8 +139,8 @@ public class UserActivity extends AbsActivity {
         protected WeiboUser doInBackground(Void... v) {
             String url = HttpUtils.UrlHelper.USERS_SHOW;
             HttpParams params = new HttpParams();
-            params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.addParam("screen_name", mUserName);
+            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+            params.putParam("screen_name", mUserName);
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 return Utilities.getWeiboUserFromJson(response);

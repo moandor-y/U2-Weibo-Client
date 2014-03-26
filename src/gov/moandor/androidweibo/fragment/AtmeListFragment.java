@@ -22,7 +22,6 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
@@ -60,7 +59,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Arrays.asList(Utilities.getWeiboStatusesFromJson(json));
+        return Utilities.getWeiboStatusesFromJson(json);
     }
     
     @Override
@@ -93,8 +92,8 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     @Override
     HttpParams getRequestParams() {
         HttpParams params = new HttpParams();
-        params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.addParam("filter_by_author", String.valueOf(GlobalContext.getAtmeFilter()));
+        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+        params.putParam("filter_by_author", String.valueOf(GlobalContext.getAtmeFilter()));
         return params;
     }
     
@@ -110,8 +109,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    DatabaseUtils.insertOrUpdateTimelinePosition(position, MainActivity.ATME_LIST, filter,
-                            accountId);
+                    DatabaseUtils.insertOrUpdateTimelinePosition(position, MainActivity.ATME_LIST, filter, accountId);
                 }
             });
             
@@ -141,8 +139,8 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             }
             
             @Override
-            protected void updateDatabase(final WeiboStatus status, final int position, 
-                    final long accountId, final int group) {
+            protected void updateDatabase(final WeiboStatus status, final int position, final long accountId,
+                    final int group) {
                 MyAsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {

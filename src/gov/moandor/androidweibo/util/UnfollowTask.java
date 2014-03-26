@@ -19,8 +19,8 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     protected WeiboUser doInBackground(Void... v) {
         String url = HttpUtils.UrlHelper.FRIENDSHIPS_DESTROY;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.addParam("uid", String.valueOf(mUser.id));
+        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+        params.putParam("uid", String.valueOf(mUser.id));
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
             return Utilities.getWeiboUserFromJson(response);
@@ -49,6 +49,7 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     
     public static interface OnUnfollowFinishedListener {
         public void onUnfollowFinished(WeiboUser user);
+        
         public void onUnfollowFailed(WeiboException e);
     }
 }

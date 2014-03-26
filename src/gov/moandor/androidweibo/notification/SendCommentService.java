@@ -81,17 +81,17 @@ public class SendCommentService extends Service {
         @Override
         protected Void doInBackground(Void... v) {
             HttpParams params = new HttpParams();
-            params.addParam("access_token", mToken);
-            params.addParam("comment", mDraft.content);
-            params.addParam("id", String.valueOf(mDraft.commentedStatus.id));
+            params.putParam("access_token", mToken);
+            params.putParam("comment", mDraft.content);
+            params.putParam("id", String.valueOf(mDraft.commentedStatus.id));
             if (mDraft.commentOri) {
-                params.addParam("comment_ori", "1");
+                params.putParam("comment_ori", "1");
             }
             String url;
             if (mDraft.repliedComment == null) {
                 url = HttpUtils.UrlHelper.COMMENTS_CREATE;
             } else {
-                params.addParam("cid", String.valueOf(mDraft.repliedComment.id));
+                params.putParam("cid", String.valueOf(mDraft.repliedComment.id));
                 url = HttpUtils.UrlHelper.COMMENTS_REPLY;
             }
             try {

@@ -103,8 +103,9 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mCommentListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, 
-                R.string.open_drawer, R.string.close_drawer);
+        mActionBarDrawerToggle =
+                new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.open_drawer,
+                        R.string.close_drawer);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment drawer = fragmentManager.findFragmentById(R.id.left_drawer);
@@ -117,23 +118,24 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             fragmentTransaction.commit();
             fragmentManager.executePendingTransactions();
         }
-        mWeiboListFragment = (WeiboListFragment) fragmentManager.findFragmentByTag(
-                MainPagerAdapter.makeFragmentName(WEIBO_LIST));
+        mWeiboListFragment =
+                (WeiboListFragment) fragmentManager.findFragmentByTag(MainPagerAdapter.makeFragmentName(WEIBO_LIST));
         if (mWeiboListFragment == null) {
             mWeiboListFragment = new WeiboListFragment();
         }
-        mAtmeListFragment = (AtmeListFragment) fragmentManager.findFragmentByTag(
-                MainPagerAdapter.makeFragmentName(ATME_LIST));
+        mAtmeListFragment =
+                (AtmeListFragment) fragmentManager.findFragmentByTag(MainPagerAdapter.makeFragmentName(ATME_LIST));
         if (mAtmeListFragment == null) {
             mAtmeListFragment = new AtmeListFragment();
         }
-        mCommentListFragment = (CommentListFragment) fragmentManager.findFragmentByTag(
-                MainPagerAdapter.makeFragmentName(COMMENT_LIST));
+        mCommentListFragment =
+                (CommentListFragment) fragmentManager
+                        .findFragmentByTag(MainPagerAdapter.makeFragmentName(COMMENT_LIST));
         if (mCommentListFragment == null) {
             mCommentListFragment = new CommentListFragment();
         }
-        mProfileFragment = (ProfileFragment) fragmentManager.findFragmentByTag(
-                MainPagerAdapter.makeFragmentName(PROFILE));
+        mProfileFragment =
+                (ProfileFragment) fragmentManager.findFragmentByTag(MainPagerAdapter.makeFragmentName(PROFILE));
         if (mProfileFragment == null) {
             mProfileFragment = new ProfileFragment();
         }

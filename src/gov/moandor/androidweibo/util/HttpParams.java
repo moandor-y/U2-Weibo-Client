@@ -7,7 +7,7 @@ import java.util.Set;
 public class HttpParams {
     private Map<String, String> mParams = new HashMap<String, String>();
     
-    public void addParam(String key, String value) {
+    public void putParam(String key, String value) {
         mParams.put(key, value);
     }
     

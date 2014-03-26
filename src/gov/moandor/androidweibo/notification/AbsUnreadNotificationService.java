@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
@@ -119,8 +120,8 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
             public void run() {
                 String url = HttpUtils.UrlHelper.REMIND_SET_COUNT;
                 HttpParams params = new HttpParams();
-                params.addParam("access_token", token);
-                params.addParam("type", countType);
+                params.putParam("access_token", token);
+                params.putParam("type", countType);
                 try {
                     HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
                 } catch (WeiboException e) {

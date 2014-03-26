@@ -24,8 +24,8 @@ public class DeleteCommentTask extends MyAsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... v) {
         String url = HttpUtils.UrlHelper.COMMENTS_DESTROY;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", mToken);
-        params.addParam("cid", String.valueOf(mId));
+        params.putParam("access_token", mToken);
+        params.putParam("cid", String.valueOf(mId));
         try {
             HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
         } catch (WeiboException e) {
@@ -50,6 +50,7 @@ public class DeleteCommentTask extends MyAsyncTask<Void, Void, Void> {
     
     public static interface OnDeleteFinishedListener {
         public void onDeleteFinished();
+        
         public void onDeleteFailed(WeiboException e);
     }
 }

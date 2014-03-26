@@ -168,8 +168,8 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         protected List<DataBean> doInBackground(Void... v) {
             String url = getUrl();
             HttpParams params = getParams();
-            params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.addParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
+            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+            params.putParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
@@ -210,9 +210,9 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         protected List<DataBean> doInBackground(Void... v) {
             String url = getUrl();
             HttpParams params = getParams();
-            params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.addParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
-            params.addParam("cursor", String.valueOf(mNextCursor));
+            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+            params.putParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
+            params.putParam("cursor", String.valueOf(mNextCursor));
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);

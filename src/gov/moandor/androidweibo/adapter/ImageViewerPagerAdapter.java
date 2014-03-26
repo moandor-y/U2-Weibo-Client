@@ -18,7 +18,6 @@ import android.widget.ProgressBar;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.ImageViewerPictureReadTask;
@@ -70,8 +69,8 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         });
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         Button retryButton = (Button) view.findViewById(R.id.button_retry);
-        ImageViewerPictureReadTask task = new ImageViewerPictureReadTask(url, mImageType, webView, 
-                photoView, progressBar, retryButton);
+        ImageViewerPictureReadTask task =
+                new ImageViewerPictureReadTask(url, mImageType, webView, photoView, progressBar, retryButton);
         task.execute();
         container.addView(view);
         return view;

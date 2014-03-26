@@ -20,7 +20,6 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class WeiboRepostListFragment extends
@@ -57,7 +56,7 @@ public class WeiboRepostListFragment extends
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Arrays.asList(Utilities.getWeiboRepostsFromJson(json));
+        return Utilities.getWeiboRepostsFromJson(json);
     }
     
     @Override
@@ -68,8 +67,8 @@ public class WeiboRepostListFragment extends
     @Override
     HttpParams getRequestParams() {
         HttpParams params = new HttpParams();
-        params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.addParam("id", String.valueOf(mWeiboStatus.id));
+        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+        params.putParam("id", String.valueOf(mWeiboStatus.id));
         return params;
     }
     

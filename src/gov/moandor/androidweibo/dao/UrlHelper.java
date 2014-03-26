@@ -7,8 +7,7 @@ public class UrlHelper {
     public static final String OAUTH2_AUTHORIZE = "https://api.weibo.com/oauth2/authorize";
     public static final String OAUTH2_ACCESS_TOKEN = "https://api.weibo.com/oauth2/access_token";
     public static final String STATUSES_FRIENDS_TIMELINE = "https://api.weibo.com/2/statuses/friends_timeline.json";
-    public static final String STATUSES_BILATERAL_TIMELINE =
-            "https://api.weibo.com/2/statuses/bilateral_timeline.json";
+    public static final String STATUSES_BILATERAL_TIMELINE = "https://api.weibo.com/2/statuses/bilateral_timeline.json";
     public static final String STATUSES_MENTIONS = "https://api.weibo.com/2/statuses/mentions.json";
     public static final String STATUSES_REPOST_TIMELINE = "https://api.weibo.com/2/statuses/repost_timeline.json";
     public static final String STATUSES_SHOW = "https://api.weibo.com/2/statuses/show.json";

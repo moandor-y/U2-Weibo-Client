@@ -68,24 +68,23 @@ public class ClearCacheRunnable implements Runnable {
         List<String> result = new ArrayList<String>();
         for (Account account : GlobalContext.getAccounts()) {
             HttpParams params = new HttpParams();
-            params.addParam("access_token", account.token);
-            params.addParam("uid", String.valueOf(account.user.id));
-            params.addParam("count", "200");
+            params.putParam("access_token", account.token);
+            params.putParam("uid", String.valueOf(account.user.id));
+            params.putParam("count", "200");
             int nextCursor = 0;
             do {
-                params.addParam("cursor", String.valueOf(nextCursor));
+                params.putParam("cursor", String.valueOf(nextCursor));
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
                 List<WeiboUser> users = Utilities.getWeiboUsersFromJson(json);
                 users.add(account.user);
                 for (WeiboUser user : users) {
-                    String path = FileUtils.getImagePathFromUrl(user.avatarLargeUrl, 
-                            ImageDownloader.ImageType.AVATAR_LARGE);
+                    String path =
+                            FileUtils.getImagePathFromUrl(user.avatarLargeUrl, ImageDownloader.ImageType.AVATAR_LARGE);
                     if (!result.contains(path)) {
                         result.add(path);
                     }
-                    path = FileUtils.getImagePathFromUrl(user.profileImageUrl, 
-                            ImageDownloader.ImageType.AVATAR_SMALL);
+                    path = FileUtils.getImagePathFromUrl(user.profileImageUrl, ImageDownloader.ImageType.AVATAR_SMALL);
                     if (!result.contains(path)) {
                         result.add(path);
                     }

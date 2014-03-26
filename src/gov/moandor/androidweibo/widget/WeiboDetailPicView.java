@@ -19,17 +19,9 @@ import gov.moandor.androidweibo.util.ImageUtils;
 import gov.moandor.androidweibo.util.Utilities;
 
 public class WeiboDetailPicView extends FrameLayout {
-    private static final String HTML =
-            "<html>" +
-            "    <head>" +
-            "        <style>" +
-            "            html,body{margin:0;padding:0;}" +
-            "        </style>" +
-            "    </head>" +
-            "    <body>" +
-            "        <img src=\"file://%s\" width=\"100%%\">" +
-            "    </body>" +
-            "</html>";
+    private static final String HTML = "<html>" + "    <head>" + "        <style>"
+            + "            html,body{margin:0;padding:0;}" + "        </style>" + "    </head>" + "    <body>"
+            + "        <img src=\"file://%s\" width=\"100%%\">" + "    </body>" + "</html>";
     
     private ImageWebView mImageWebView;
     private ImageView mImageView;

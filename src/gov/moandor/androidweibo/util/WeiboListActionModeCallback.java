@@ -53,12 +53,12 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             repost(mAdapter.getSelectedItem());
             break;
         case R.id.favorite:
-            new FavoriteTask(mAdapter.getSelectedItem(), new OnFavoriteFinishedListener(
-                    mAdapter.getSelection())).execute();
+            new FavoriteTask(mAdapter.getSelectedItem(), new OnFavoriteFinishedListener(mAdapter.getSelection()))
+                    .execute();
             break;
         case R.id.unfavorite:
-            new UnfavoriteTask(mAdapter.getSelectedItem(), new OnUnfavoriteFinishedListener(
-                    mAdapter.getSelection())).execute();
+            new UnfavoriteTask(mAdapter.getSelectedItem(), new OnUnfavoriteFinishedListener(mAdapter.getSelection()))
+                    .execute();
             break;
         case R.id.delete:
             delete();
@@ -106,8 +106,9 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
     }
     
     private void delete() {
-        DeleteWeiboTask task = new DeleteWeiboTask(mAdapter.getSelectedItem().id, 
-                new OnDeleteFinishedListener(mAdapter.getSelection()));
+        DeleteWeiboTask task =
+                new DeleteWeiboTask(mAdapter.getSelectedItem().id,
+                        new OnDeleteFinishedListener(mAdapter.getSelection()));
         ConfirmDeleteDialogFragment dialog = new ConfirmDeleteDialogFragment();
         dialog.setTask(task);
         dialog.show(mFragment.getFragmentManager(), DELETE_DIALOG);

@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;

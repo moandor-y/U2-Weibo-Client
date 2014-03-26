@@ -17,6 +17,7 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
@@ -72,7 +73,7 @@ public class AuthorizeActivity extends AbsActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mWebView!= null && isFinishing()) {
+        if (mWebView != null && isFinishing()) {
             mWebView.stopLoading();
         }
     }
@@ -80,7 +81,7 @@ public class AuthorizeActivity extends AbsActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mWebView!= null) {
+        if (mWebView != null) {
             mWebView.clearCache(true);
         }
     }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.SparseArray;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -32,7 +33,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     private static final Gson sGson = new Gson();
     
     private static final String CREATE_ACCOUNT_TABLE = "create table " + Table.Account.TABLE_NAME + "("
-            + Table.Account.ID + " integer primary key, " + Table.Account.TOKEN + " text, " 
+            + Table.Account.ID + " integer primary key, " + Table.Account.TOKEN + " text, "
             + Table.Account.USER_INFO_DATA + " text)";
     
     private static final String CREATE_WEIBO_GROUP_TABLE = "create table " + Table.WeiboGroup.TABLE_NAME + "("
@@ -52,12 +53,12 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             + " integer, " + Table.TimelinePosition.SPINNER_POSITION + " integer, " + Table.TimelinePosition.POSITION
             + " integer, " + Table.TimelinePosition.TOP + " integer)";
     
-    private static final String CREATE_DRAFT_TABLE = "create table " + Table.Draft.TABLE_NAME + "("
-            + Table.Draft.ID + " integer primary key autoincrement, " + Table.Draft.ACCOUNT_ID + " integer, "
-            + Table.Draft.TYPE + " integer, " + Table.Draft.CONTENT_DATA + " text)";
+    private static final String CREATE_DRAFT_TABLE = "create table " + Table.Draft.TABLE_NAME + "(" + Table.Draft.ID
+            + " integer primary key autoincrement, " + Table.Draft.ACCOUNT_ID + " integer, " + Table.Draft.TYPE
+            + " integer, " + Table.Draft.CONTENT_DATA + " text)";
     
-    private static final String CREATE_FOLLOWING_AVATAR_PATH_TABLE = "create table " + Table.FollowingAvatarPath.TABLE_NAME
-            + "(" + Table.FollowingAvatarPath.CONTENT_DATA + " text)";
+    private static final String CREATE_FOLLOWING_AVATAR_PATH_TABLE = "create table "
+            + Table.FollowingAvatarPath.TABLE_NAME + "(" + Table.FollowingAvatarPath.CONTENT_DATA + " text)";
     
     private static final String CREATE_DM_USER_TABLE = "create table " + Table.DmUser.TABLE_NAME + "("
             + Table.DmUser.ACCOUNT_ID + " integer, " + Table.DmUser.CONTENT_DATA + " text)";
@@ -190,15 +191,15 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized void removeWeiboStatus(int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
-        Cursor cursor = database.rawQuery("select * from " + tableName + " where " + Table.WeiboStatus.POSITION
-                + ">" + position, null);
+        Cursor cursor =
+                database.rawQuery("select * from " + tableName + " where " + Table.WeiboStatus.POSITION + ">"
+                        + position, null);
         database.delete(tableName, Table.WeiboStatus.POSITION + ">=" + position, null);
         while (cursor.moveToNext()) {
             ContentValues values = new ContentValues();
-            values.put(Table.WeiboStatus.POSITION, cursor.getInt(cursor.getColumnIndex(
-                    Table.WeiboStatus.POSITION)) - 1);
-            values.put(Table.WeiboStatus.CONTENT_DATA, cursor.getString(cursor.getColumnIndex(
-                    Table.WeiboStatus.CONTENT_DATA)));
+            values.put(Table.WeiboStatus.POSITION, cursor.getInt(cursor.getColumnIndex(Table.WeiboStatus.POSITION)) - 1);
+            values.put(Table.WeiboStatus.CONTENT_DATA, cursor.getString(cursor
+                    .getColumnIndex(Table.WeiboStatus.CONTENT_DATA)));
             database.insert(tableName, null, values);
         }
         cursor.close();
@@ -267,15 +268,15 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized void removeAtmeStatus(int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, group);
-        Cursor cursor = database.rawQuery("select * from " + tableName + " where " + Table.AtmeStatus.POSITION
-                + ">" + position, null);
+        Cursor cursor =
+                database.rawQuery(
+                        "select * from " + tableName + " where " + Table.AtmeStatus.POSITION + ">" + position, null);
         database.delete(tableName, Table.AtmeStatus.POSITION + ">=" + position, null);
         while (cursor.moveToNext()) {
             ContentValues values = new ContentValues();
-            values.put(Table.AtmeStatus.POSITION, cursor.getInt(cursor.getColumnIndex(
-                    Table.AtmeStatus.POSITION)) - 1);
-            values.put(Table.AtmeStatus.CONTENT_DATA, cursor.getString(cursor.getColumnIndex(
-                    Table.AtmeStatus.CONTENT_DATA)));
+            values.put(Table.AtmeStatus.POSITION, cursor.getInt(cursor.getColumnIndex(Table.AtmeStatus.POSITION)) - 1);
+            values.put(Table.AtmeStatus.CONTENT_DATA, cursor.getString(cursor
+                    .getColumnIndex(Table.AtmeStatus.CONTENT_DATA)));
             database.insert(tableName, null, values);
         }
         cursor.close();
@@ -334,15 +335,14 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized void removeComment(int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.Comment.TABLE_NAME, accountId, group);
-        Cursor cursor = database.rawQuery("select * from " + tableName + " where " + Table.Comment.POSITION
-                + ">" + position, null);
+        Cursor cursor =
+                database.rawQuery("select * from " + tableName + " where " + Table.Comment.POSITION + ">" + position,
+                        null);
         database.delete(tableName, Table.Comment.POSITION + ">=" + position, null);
         while (cursor.moveToNext()) {
             ContentValues values = new ContentValues();
-            values.put(Table.Comment.POSITION, cursor.getInt(cursor.getColumnIndex(
-                    Table.Comment.POSITION)) - 1);
-            values.put(Table.Comment.CONTENT_DATA, cursor.getString(cursor.getColumnIndex(
-                    Table.Comment.CONTENT_DATA)));
+            values.put(Table.Comment.POSITION, cursor.getInt(cursor.getColumnIndex(Table.Comment.POSITION)) - 1);
+            values.put(Table.Comment.CONTENT_DATA, cursor.getString(cursor.getColumnIndex(Table.Comment.CONTENT_DATA)));
             database.insert(tableName, null, values);
         }
         cursor.close();
@@ -465,8 +465,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     
     public static synchronized List<AbsDraftBean> getDrafts(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
-        Cursor cursor = database.rawQuery("select * from " + Table.Draft.TABLE_NAME + " where "
-                + Table.Draft.ACCOUNT_ID + "=" + accountId + " order by " + Table.Draft.ID + " desc", null);
+        Cursor cursor =
+                database.rawQuery("select * from " + Table.Draft.TABLE_NAME + " where " + Table.Draft.ACCOUNT_ID + "="
+                        + accountId + " order by " + Table.Draft.ID + " desc", null);
         List<AbsDraftBean> result = new ArrayList<AbsDraftBean>();
         while (cursor.moveToNext()) {
             String contentData = cursor.getString(cursor.getColumnIndex(Table.Draft.CONTENT_DATA));
@@ -503,7 +504,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         List<String> result = null;
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.FollowingAvatarPath.CONTENT_DATA));
-            result = sGson.fromJson(json, new TypeToken<List<String>>(){}.getType());
+            result = sGson.fromJson(json, new TypeToken<List<String>>() {}.getType());
         }
         cursor.close();
         database.close();
@@ -514,7 +515,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.FollowingAvatarPath.TABLE_NAME, null);
         ContentValues values = new ContentValues();
-        values.put(Table.FollowingAvatarPath.CONTENT_DATA, sGson.toJson(paths, new TypeToken<List<String>>(){}.getType()));
+        values.put(Table.FollowingAvatarPath.CONTENT_DATA, sGson.toJson(paths, new TypeToken<List<String>>() {}
+                .getType()));
         if (cursor.getCount() > 0) {
             database.update(Table.FollowingAvatarPath.TABLE_NAME, values, null, null);
         } else {
@@ -536,8 +538,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     
     public static synchronized DmUsers getDmUsers(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
-        String sql = "select * from " + Table.DmUser.TABLE_NAME + " where " + Table.DmUser.ACCOUNT_ID + "="
-                + accountId;
+        String sql = "select * from " + Table.DmUser.TABLE_NAME + " where " + Table.DmUser.ACCOUNT_ID + "=" + accountId;
         Cursor cursor = database.rawQuery(sql, null);
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.DmUser.CONTENT_DATA));

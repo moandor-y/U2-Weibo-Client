@@ -217,8 +217,8 @@ public class ProfileFragment extends Fragment {
         protected WeiboUser doInBackground(Void... v) {
             String url = HttpUtils.UrlHelper.USERS_SHOW;
             HttpParams params = new HttpParams();
-            params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.addParam("uid", String.valueOf(mUser.id));
+            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+            params.putParam("uid", String.valueOf(mUser.id));
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 return Utilities.getWeiboUserFromJson(response);

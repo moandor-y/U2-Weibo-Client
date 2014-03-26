@@ -87,8 +87,9 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
     }
     
     private void delete() {
-        DeleteCommentTask task = new DeleteCommentTask(mAdapter.getSelectedItem().id, 
-                new OnDeleteFinishedListener(mAdapter.getSelection()));
+        DeleteCommentTask task =
+                new DeleteCommentTask(mAdapter.getSelectedItem().id, new OnDeleteFinishedListener(mAdapter
+                        .getSelection()));
         ConfirmDeleteDialogFragment dialog = new ConfirmDeleteDialogFragment();
         dialog.setTask(task);
         dialog.show(mFragment.getFragmentManager(), DELETE_DIALOG);

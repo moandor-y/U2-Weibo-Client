@@ -278,7 +278,7 @@ public class SettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.theme, mThemes, GlobalContext.getAppTheme(), 
+                    buildListDialog(R.string.theme, mThemes, GlobalContext.getAppTheme(),
                             new OnThemeSelectedListener(), SettingsActivity.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -401,7 +401,7 @@ public class SettingsActivity extends AbsActivity {
         public void onClick(View v) {
             AlertDialog.Builder builder =
                     buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, GlobalContext
-                            .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(), 
+                            .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(),
                             SettingsActivity.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);

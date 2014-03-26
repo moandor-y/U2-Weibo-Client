@@ -64,6 +64,6 @@ public class ImageUtils {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
-        return (options.outWidth > MAX_DISPLAY_SIZE || options.outHeight > MAX_DISPLAY_SIZE);
+        return options.outWidth > MAX_DISPLAY_SIZE || options.outHeight > MAX_DISPLAY_SIZE;
     }
 }

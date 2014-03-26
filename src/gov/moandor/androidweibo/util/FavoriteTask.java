@@ -29,8 +29,8 @@ public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
     protected WeiboStatus doInBackground(Void... v) {
         String url = HttpUtils.UrlHelper.FAVORITES_CREATE;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", mToken);
-        params.addParam("id", String.valueOf(mStatus.id));
+        params.putParam("access_token", mToken);
+        params.putParam("id", String.valueOf(mStatus.id));
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
             JSONObject json = new JSONObject(response);
@@ -63,6 +63,7 @@ public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
     
     public static interface OnFavoriteFinishedListener {
         public void onFavoriteFinished(WeiboStatus status);
+        
         public void onFavoriteFailed(WeiboException e);
     }
 }

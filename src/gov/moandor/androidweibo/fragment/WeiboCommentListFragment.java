@@ -65,8 +65,8 @@ public class WeiboCommentListFragment extends
     @Override
     HttpParams getRequestParams() {
         HttpParams params = new HttpParams();
-        params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.addParam("id", String.valueOf(mWeiboStatus.id));
+        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+        params.putParam("id", String.valueOf(mWeiboStatus.id));
         return params;
     }
     

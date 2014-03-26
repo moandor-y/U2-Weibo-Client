@@ -6,13 +6,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.ParseException;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TimeUtils;
+
+import java.text.ParseException;
 
 public class DirectMessagesConversationAdapter extends AbsTimelineListAdapter<DirectMessage> {
     private static final long MIN_TIME_TO_DISPLAY = 1000 * 60 * 60 * 10;

@@ -77,10 +77,10 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     @Override
     HttpParams getRequestParams() {
         HttpParams params = new HttpParams();
-        params.addParam("access_token", GlobalContext.getCurrentAccount().token);
+        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
         switch (GlobalContext.getCommentFilter()) {
         case FOLLOWED:
-            params.addParam("filter_by_author", "1");
+            params.putParam("filter_by_author", "1");
             break;
         }
         return params;
@@ -98,8 +98,8 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    DatabaseUtils.insertOrUpdateTimelinePosition(position, MainActivity.COMMENT_LIST, filter,
-                            accountId);
+                    DatabaseUtils
+                            .insertOrUpdateTimelinePosition(position, MainActivity.COMMENT_LIST, filter, accountId);
                 }
             });
             

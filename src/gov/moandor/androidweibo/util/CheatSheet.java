@@ -31,8 +31,9 @@ public class CheatSheet {
             int height = v.getHeight();
             int screenWidth = Utilities.getScreenWidth();
             Toast cheatSheet = Toast.makeText(context, mTextResId, Toast.LENGTH_SHORT);
-            cheatSheet.setGravity(Gravity.TOP | Gravity.RIGHT, screenWidth - screenPos[0] - width / 2, 
-                    displayFrame.height() - height - TOAST_HEIGHT);
+            cheatSheet.setGravity(Gravity.TOP | Gravity.RIGHT, screenWidth - screenPos[0] - width / 2, displayFrame
+                    .height()
+                    - height - TOAST_HEIGHT);
             cheatSheet.show();
             return true;
         }

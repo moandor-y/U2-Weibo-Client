@@ -215,8 +215,8 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         @Override
         protected Integer[] doInBackground(Void... v) {
             HttpParams params = new HttpParams();
-            params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.addParam("id", String.valueOf(mWeiboStatus.id));
+            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+            params.putParam("id", String.valueOf(mWeiboStatus.id));
             try {
                 String response =
                         HttpUtils.executeNormalTask(HttpUtils.Method.GET, HttpUtils.UrlHelper.STATUSES_SHOW, params);

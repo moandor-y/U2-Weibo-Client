@@ -6,9 +6,6 @@ import android.support.v7.view.ActionMode;
 import android.view.View;
 import android.widget.AdapterView;
 
-import java.util.Arrays;
-import java.util.List;
-
 import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
@@ -19,6 +16,8 @@ import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
+
+import java.util.List;
 
 public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     public static final String TOPIC = "topic";
@@ -64,7 +63,7 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Arrays.asList(Utilities.getWeiboStatusesFromJson(json));
+        return Utilities.getWeiboStatusesFromJson(json);
     }
     
     @Override
@@ -75,8 +74,8 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     @Override
     HttpParams getRequestParams() {
         HttpParams params = new HttpParams();
-        params.addParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.addParam("q", mTopic);
+        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
+        params.putParam("q", mTopic);
         return params;
     }
     

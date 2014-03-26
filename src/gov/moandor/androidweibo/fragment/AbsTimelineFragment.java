@@ -251,8 +251,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected List<DataBean> doInBackground(Void... v) {
             String url = getUrl();
             HttpParams params = getRequestParams();
-            params.addParam("since_id", String.valueOf(mSinceId));
-            params.addParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
+            params.putParam("since_id", String.valueOf(mSinceId));
+            params.putParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 List<DataBean> beans = getBeansFromJson(response);
@@ -299,8 +299,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected List<DataBean> doInBackground(Void... v) {
             String url = getUrl();
             HttpParams params = getRequestParams();
-            params.addParam("max_id", String.valueOf(mMaxId));
-            params.addParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
+            params.putParam("max_id", String.valueOf(mMaxId));
+            params.putParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 List<DataBean> beans = getBeansFromJson(response);

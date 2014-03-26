@@ -24,8 +24,8 @@ public class ImageDownloader {
         AVATAR_SMALL, AVATAR_LARGE, PICTURE_SMALL, PICTURE_MEDIUM, PICTURE_LARGE
     }
     
-    public static void downloadMultiPicture(ImageView view, WeiboStatus status, boolean isFling,
-            ImageType type, int picIndex) {
+    public static void downloadMultiPicture(ImageView view, WeiboStatus status, boolean isFling, ImageType type,
+            int picIndex) {
         String url;
         switch (type) {
         case PICTURE_SMALL:

@@ -62,7 +62,7 @@ public class Utilities {
         }
     }
     
-    public static WeiboStatus[] getWeiboStatusesFromJson(String jsonStr) throws WeiboException {
+    public static List<WeiboStatus> getWeiboStatusesFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray statuses = jsonStatuses.getJSONArray("statuses");
@@ -71,14 +71,14 @@ public class Utilities {
             for (int i = 0; i < len; i++) {
                 result.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
             }
-            return result.toArray(new WeiboStatus[result.size()]);
+            return result;
         } catch (JSONException e) {
             Logger.logExcpetion(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
     
-    public static WeiboStatus[] getWeiboRepostsFromJson(String jsonStr) throws WeiboException {
+    public static List<WeiboStatus> getWeiboRepostsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray statuses = jsonStatuses.getJSONArray("reposts");
@@ -87,7 +87,7 @@ public class Utilities {
             for (int i = 0; i < len; i++) {
                 result.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
             }
-            return result.toArray(new WeiboStatus[result.size()]);
+            return result;
         } catch (JSONException e) {
             Logger.logExcpetion(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
@@ -621,13 +621,13 @@ public class Utilities {
     public static void fetchAndSaveAccountInfo(String token) throws WeiboException {
         String url = HttpUtils.UrlHelper.ACCOUNT_GET_UID;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", token);
+        params.putParam("access_token", token);
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
         long id = Utilities.getWeiboAccountIdFromJson(response);
         params.clear();
         url = HttpUtils.UrlHelper.USERS_SHOW;
-        params.addParam("access_token", token);
-        params.addParam("uid", String.valueOf(id));
+        params.putParam("access_token", token);
+        params.putParam("uid", String.valueOf(id));
         response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
         Account account = new Account();
         account.token = token;

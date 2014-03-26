@@ -7,29 +7,18 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import uk.co.senab.photoview.PhotoView;
-
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
 
 public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boolean> {
-    private static final String HTML =
-            "<html>" +
-            "    <head>" +
-            "        <style>html,body{margin:0;padding:0;}</style>" +
-            "    </head>" +
-            "    <body>" +
-            "        <table style=\"width: 100%%;height:100%%;\">" +
-            "            <tr style=\"width: 100%%;\">" +
-            "                <td valign=\"middle\" align=\"center\" style=\"width: 100%%;\">" +
-            "                    <div style=\"display:block\">" +
-            "                        <img src=\"file://%s\" width=\"100%%\" /" +
-            "                    </div>" +
-            "                </td>" +
-            "            </tr>" +
-            "        </table>" +
-            "    </body>" +
-            "</html>";
+    private static final String HTML = "<html>" + "    <head>"
+            + "        <style>html,body{margin:0;padding:0;}</style>" + "    </head>" + "    <body>"
+            + "        <table style=\"width: 100%%;height:100%%;\">" + "            <tr style=\"width: 100%%;\">"
+            + "                <td valign=\"middle\" align=\"center\" style=\"width: 100%%;\">"
+            + "                    <div style=\"display:block\">"
+            + "                        <img src=\"file://%s\" width=\"100%%\" /" + "                    </div>"
+            + "                </td>" + "            </tr>" + "        </table>" + "    </body>" + "</html>";
     
     private boolean mUseWebView;
     private String mUrl;
@@ -41,8 +30,8 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     private Button mRetryButton;
     private Bitmap mBitmap;
     
-    public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type, WebView webView, 
-            PhotoView photoView, ProgressBar progressBar, Button retryButton) {
+    public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type, WebView webView, PhotoView photoView,
+            ProgressBar progressBar, Button retryButton) {
         mUrl = url;
         mType = type;
         mWebView = webView;
@@ -94,8 +83,9 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
             mRetryButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ImageViewerPictureReadTask task = new ImageViewerPictureReadTask(mUrl, 
-                            mType, mWebView, mPhotoView, mProgressBar, mRetryButton);
+                    ImageViewerPictureReadTask task =
+                            new ImageViewerPictureReadTask(mUrl, mType, mWebView, mPhotoView, mProgressBar,
+                                    mRetryButton);
                     task.execute();
                 }
             });

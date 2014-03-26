@@ -18,7 +18,6 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class FetchUnreadMessageService extends IntentService {
@@ -37,7 +36,7 @@ public class FetchUnreadMessageService extends IntentService {
     private static void fetch(Context context, Account account) {
         String url = HttpUtils.UrlHelper.REMIND_UNREAD_COUNT;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", account.token);
+        params.putParam("access_token", account.token);
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
             UnreadCount unreadCount = Utilities.getUnreadCountFromJson(response);
@@ -82,10 +81,10 @@ public class FetchUnreadMessageService extends IntentService {
         }
         String url = HttpUtils.UrlHelper.COMMENTS_TO_ME;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", account.token);
-        params.addParam("count", "1");
+        params.putParam("access_token", account.token);
+        params.putParam("count", "1");
         if (oldComment != null) {
-            params.addParam("since_id", String.valueOf(oldComment.id));
+            params.putParam("since_id", String.valueOf(oldComment.id));
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
         return Utilities.getWeiboCommentsFromJson(response);
@@ -99,13 +98,13 @@ public class FetchUnreadMessageService extends IntentService {
         }
         String url = HttpUtils.UrlHelper.STATUSES_MENTIONS;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", account.token);
-        params.addParam("count", "1");
+        params.putParam("access_token", account.token);
+        params.putParam("count", "1");
         if (oldStatus != null) {
-            params.addParam("since_id", String.valueOf(oldStatus.id));
+            params.putParam("since_id", String.valueOf(oldStatus.id));
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return Arrays.asList(Utilities.getWeiboStatusesFromJson(response));
+        return Utilities.getWeiboStatusesFromJson(response);
     }
     
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {
@@ -116,16 +115,16 @@ public class FetchUnreadMessageService extends IntentService {
         }
         String url = HttpUtils.UrlHelper.COMMENTS_MENTIONS;
         HttpParams params = new HttpParams();
-        params.addParam("access_token", account.token);
-        params.addParam("count", "1");
+        params.putParam("access_token", account.token);
+        params.putParam("count", "1");
         if (oldComment != null) {
-            params.addParam("since_id", String.valueOf(oldComment.id));
+            params.putParam("since_id", String.valueOf(oldComment.id));
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
         return Utilities.getWeiboCommentsFromJson(response);
     }
     
-    private static void showNotification(Context context, WeiboComment comment, WeiboStatus mentionStatus, 
+    private static void showNotification(Context context, WeiboComment comment, WeiboStatus mentionStatus,
             WeiboComment mentionComment, Account account, UnreadCount unreadCount) {
         if (comment != null) {
             Intent clickIntent = new Intent();
@@ -135,10 +134,10 @@ public class FetchUnreadMessageService extends IntentService {
             clickIntent.putExtra(MainActivity.ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
             Intent intent = new Intent();
             intent.setClass(context, UnreadCommentNotificationService.class);
-            intent.putExtra(UnreadCommentNotificationService.ACCOUNT, account);
-            intent.putExtra(UnreadCommentNotificationService.MESSAGE, comment);
-            intent.putExtra(UnreadCommentNotificationService.CLICK_INTENT, clickIntent);
-            intent.putExtra(UnreadCommentNotificationService.COUNT, unreadCount.comment);
+            intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
+            intent.putExtra(AbsUnreadNotificationService.MESSAGE, comment);
+            intent.putExtra(AbsUnreadNotificationService.CLICK_INTENT, clickIntent);
+            intent.putExtra(AbsUnreadNotificationService.COUNT, unreadCount.comment);
             context.startService(intent);
         }
         if (mentionStatus != null) {
@@ -149,10 +148,10 @@ public class FetchUnreadMessageService extends IntentService {
             clickIntent.putExtra(MainActivity.ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
             Intent intent = new Intent();
             intent.setClass(context, UnreadMentionWeiboNotificationService.class);
-            intent.putExtra(UnreadMentionWeiboNotificationService.ACCOUNT, account);
-            intent.putExtra(UnreadMentionWeiboNotificationService.MESSAGE, mentionStatus);
-            intent.putExtra(UnreadMentionWeiboNotificationService.CLICK_INTENT, clickIntent);
-            intent.putExtra(UnreadMentionWeiboNotificationService.COUNT, unreadCount.mentionWeibo);
+            intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
+            intent.putExtra(AbsUnreadNotificationService.MESSAGE, mentionStatus);
+            intent.putExtra(AbsUnreadNotificationService.CLICK_INTENT, clickIntent);
+            intent.putExtra(AbsUnreadNotificationService.COUNT, unreadCount.mentionWeibo);
             context.startService(intent);
         }
         if (mentionComment != null) {
@@ -163,10 +162,10 @@ public class FetchUnreadMessageService extends IntentService {
             clickIntent.putExtra(MainActivity.ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
             Intent intent = new Intent();
             intent.setClass(context, UnreadMentionCommentNotificationService.class);
-            intent.putExtra(UnreadMentionCommentNotificationService.ACCOUNT, account);
-            intent.putExtra(UnreadMentionCommentNotificationService.MESSAGE, mentionComment);
-            intent.putExtra(UnreadMentionCommentNotificationService.CLICK_INTENT, clickIntent);
-            intent.putExtra(UnreadMentionCommentNotificationService.COUNT, unreadCount.mentionComment);
+            intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
+            intent.putExtra(AbsUnreadNotificationService.MESSAGE, mentionComment);
+            intent.putExtra(AbsUnreadNotificationService.CLICK_INTENT, clickIntent);
+            intent.putExtra(AbsUnreadNotificationService.COUNT, unreadCount.mentionComment);
             context.startService(intent);
         }
     }

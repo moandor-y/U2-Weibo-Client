@@ -76,16 +76,17 @@ public class FileUtils {
         File sourceFile = new File(sourcePath);
         String sourceName = sourceFile.getName();
         String extension = sourceName.substring(sourceName.lastIndexOf("."));
-        if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".gif") 
+        if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".gif")
                 && !extension.equalsIgnoreCase(".jpg")) {
             extension = ".jpg";
         }
-        String targetPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                .getAbsolutePath() + File.separator + Long.toHexString(System.currentTimeMillis()) + extension;
+        String targetPath =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+                        + File.separator + Long.toHexString(System.currentTimeMillis()) + extension;
         File targetFile = createFile(targetPath);
         if (targetFile != null && copy(sourceFile, targetFile)) {
-            MediaScannerConnection.scanFile(GlobalContext.getInstance(), 
-                    new String[]{targetFile.getAbsolutePath()}, null, null);
+            MediaScannerConnection.scanFile(GlobalContext.getInstance(), new String[]{targetFile.getAbsolutePath()},
+                    null, null);
             return true;
         }
         return false;

@@ -5,8 +5,6 @@ import android.view.View;
 
 import org.json.JSONObject;
 
-import java.util.List;
-
 import gov.moandor.androidweibo.adapter.DirectMessagesUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -18,8 +16,10 @@ import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class DirectMessagesUserListFragment extends 
-AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
+import java.util.List;
+
+public class DirectMessagesUserListFragment extends
+        AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

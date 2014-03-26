@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.support.v4.content.CursorLoader;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,8 +73,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             mEditText.setHint(mRetweetWeiboStatus.text);
             if (mRetweetWeiboStatus.retweetStatus != null) {
                 mEditText.setText("//@" + mRetweetWeiboStatus.weiboUser.name + ":" + mRetweetWeiboStatus.text);
-                mEditText.getViewTreeObserver()
-                .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                mEditText.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     @Override
                     public boolean onPreDraw() {
                         mEditText.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -233,9 +233,9 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     private String getPath(Uri uri) {
         String path = uri.getPath();
         if (path.startsWith("/external")) {
-            String[] proj = {MediaStore.Images.Media.DATA};
+            String[] proj = {MediaColumns.DATA};
             Cursor cursor = new CursorLoader(this, uri, proj, null, null, null).loadInBackground();
-            int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int columnIndex = cursor.getColumnIndex(MediaColumns.DATA);
             cursor.moveToFirst();
             return cursor.getString(columnIndex);
         }
@@ -257,8 +257,8 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     
     private void addLocation() {
         LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && 
-                !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                && !manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             Utilities.notice(R.string.open_gps);
             return;
         }
@@ -278,13 +278,14 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     }
     
     private OnAddPicDialogClickListener mOnAddPicDialogClickListener = new OnAddPicDialogClickListener();
+    
     private class OnAddPicDialogClickListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
             case 0:
-                mImageFileUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, 
-                        new ContentValues());
+                mImageFileUri =
+                        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
                 if (mImageFileUri != null) {
                     Intent intent = new Intent();
                     intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -308,7 +309,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
     }
     
-    private LocationListener mLocationListener = new LocationListener( ) {
+    private LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
         

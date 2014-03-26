@@ -27,8 +27,8 @@ public class HackLoginActivity extends AbsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hack_login);
         final Spinner spinner = (Spinner) findViewById(R.id.type);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
-                R.array.hack_login_types, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter =
+                ArrayAdapter.createFromResource(this, R.array.hack_login_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         final EditText username = (EditText) findViewById(R.id.username);
@@ -49,13 +49,14 @@ public class HackLoginActivity extends AbsActivity {
                     public void run() {
                         String url = HttpUtils.UrlHelper.OAUTH2_ACCESS_TOKEN;
                         HttpParams params = new HttpParams();
-                        params.addParam("username", username.getText().toString());
-                        params.addParam("password", password.getText().toString());
-                        params.addParam("client_id", getResources().getStringArray(R.array.hack_login_keys)
-                                [spinner.getSelectedItemPosition()]);
-                        params.addParam("client_secret", getResources().getStringArray(R.array.hack_login_secrets)
-                                [spinner.getSelectedItemPosition()]);
-                        params.addParam("grant_type", "password");
+                        params.putParam("username", username.getText().toString());
+                        params.putParam("password", password.getText().toString());
+                        params.putParam("client_id", getResources().getStringArray(R.array.hack_login_keys)[spinner
+                                .getSelectedItemPosition()]);
+                        params.putParam("client_secret",
+                                getResources().getStringArray(R.array.hack_login_secrets)[spinner
+                                        .getSelectedItemPosition()]);
+                        params.putParam("grant_type", "password");
                         String response;
                         try {
                             response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);

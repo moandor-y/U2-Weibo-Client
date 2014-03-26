@@ -15,7 +15,6 @@ public class UnreadCommentReceiver extends BroadcastReceiver {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         Account account = GlobalContext.getAccount(intent.getIntExtra(MainActivity.ACCOUNT_INDEX, 0));
-        AbsUnreadNotificationService.clearUnreadCount(account.token, 
-                UnreadCommentNotificationService.COUNT_TYPE);
+        AbsUnreadNotificationService.clearUnreadCount(account.token, UnreadCommentNotificationService.COUNT_TYPE);
     }
 }

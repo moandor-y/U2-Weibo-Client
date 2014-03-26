@@ -84,8 +84,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
         int position = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
         if (position < GlobalContext.getAccountCount()) {
             getActivity().getMenuInflater().inflate(R.menu.main_drawer_context_menu, menu);
-            menu.setHeaderTitle(GlobalContext.getAccount(((AdapterView.AdapterContextMenuInfo) menuInfo).position)
-                    .user.name);
+            menu.setHeaderTitle(GlobalContext.getAccount(((AdapterView.AdapterContextMenuInfo) menuInfo).position).user.name);
         }
     }
     
@@ -96,8 +95,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
             GlobalContext.removeAccount(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
             if (GlobalContext.getCurrentAccount() != null) {
                 mAdapter.notifyDataSetChanged();
-                ((OnAccountClickListener) getActivity()).onAccountClick(GlobalContext
-                        .getCurrentAccountIndex());
+                ((OnAccountClickListener) getActivity()).onAccountClick(GlobalContext.getCurrentAccountIndex());
             } else {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), AuthorizeActivity.class);

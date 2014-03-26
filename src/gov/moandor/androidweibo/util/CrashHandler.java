@@ -31,8 +31,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             fileWriter = new FileWriter(FileUtils.createFile(path));
             out = new BufferedWriter(fileWriter);
             out.write("Android Weibo Uncaught Exception\n");
-            PackageInfo packageInfo = GlobalContext.getInstance().getPackageManager().getPackageInfo(
-                    GlobalContext.getInstance().getPackageName(), 0);
+            PackageInfo packageInfo =
+                    GlobalContext.getInstance().getPackageManager().getPackageInfo(
+                            GlobalContext.getInstance().getPackageName(), 0);
             out.write("Version: " + packageInfo.versionName + "\n");
             out.write("Android: " + Build.VERSION.RELEASE + "\n");
             out.write("Manufacturer: " + Build.MANUFACTURER + "\n");
