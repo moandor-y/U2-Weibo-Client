@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter {
+    private static final int MAX_COUNT = 500;
+    
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled;
@@ -34,7 +36,6 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
-    private int mMaxCount = Utilities.getLoadWeiboCount();
     private int mSelectedPosition = -1;
     
     public AbsTimelineListAdapter() {
@@ -147,7 +148,6 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     
     public void updateState() {
         mAvatarType = Utilities.getAvatarType();
-        mMaxCount = Utilities.getLoadWeiboCount();
     }
     
     public List<T> getItems() {
@@ -163,8 +163,8 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     public void addAllFirst(List<T> beans) {
         mBeans.addAll(0, beans);
         int size = mBeans.size();
-        if (size > mMaxCount) {
-            mBeans.subList(mMaxCount, size).clear();
+        if (size > MAX_COUNT) {
+            mBeans.subList(MAX_COUNT, size).clear();
         }
     }
     

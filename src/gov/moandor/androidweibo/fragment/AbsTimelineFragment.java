@@ -26,9 +26,9 @@ import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
@@ -235,28 +235,24 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
-        private long mSinceId;
+        private DataBean mLatestMessage;
+        private BaseTimelineJsonDao<DataBean> mDao;
         
         @Override
         protected void onPreExecute() {
-            if (mAdapter.getCount() <= 0) {
-                mSinceId = 0;
-                return;
+            if (mAdapter.getCount() > 0) {
+                mLatestMessage = mAdapter.getItem(0);
             }
-            DataBean firstItem = mAdapter.getItem(0);
-            mSinceId = firstItem.id;
         }
         
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            String url = getUrl();
-            HttpParams params = getRequestParams();
-            params.putParam("since_id", String.valueOf(mSinceId));
-            params.putParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
+            mDao = onCreateDao();
+            mDao.setToken(GlobalContext.getCurrentAccount().token);
+            mDao.setCount(Utilities.getLoadWeiboCount());
+            mDao.setSinceMessage(mLatestMessage);
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                List<DataBean> beans = getBeansFromJson(response);
-                return beans;
+                return mDao.getData();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
@@ -275,7 +271,11 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mFooterText.setText(R.string.loading);
             mFooterIcon.setVisibility(View.VISIBLE);
             if (result != null) {
-                mAdapter.addAllFirst(result);
+                if (mDao.noEnoughNewMessages()) {
+                    mAdapter.addAllFirst(result);
+                } else {
+                    mAdapter.updateDataSet(result);
+                }
                 mAdapter.notifyDataSetChanged();
                 mListView.setSelection(0);
             }
@@ -297,14 +297,12 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            String url = getUrl();
-            HttpParams params = getRequestParams();
-            params.putParam("max_id", String.valueOf(mMaxId));
-            params.putParam("count", String.valueOf(Utilities.getLoadWeiboCount()));
+            BaseTimelineJsonDao<DataBean> dao = onCreateDao();
+            dao.setToken(GlobalContext.getCurrentAccount().token);
+            dao.setCount(Utilities.getLoadWeiboCount());
+            dao.setMaxId(mMaxId);
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                List<DataBean> beans = getBeansFromJson(response);
-                return beans;
+                return dao.getData();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
@@ -351,8 +349,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     abstract TimelineListAdapter createListAdapter();
     
-    abstract String getUrl();
-    
     abstract HttpParams getRequestParams();
     
     abstract List<DataBean> getBeansFromJson(String json) throws WeiboException;
@@ -366,4 +362,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
     
     abstract ActionMode.Callback getActionModeCallback();
+    
+    protected abstract BaseTimelineJsonDao<DataBean> onCreateDao();
 }

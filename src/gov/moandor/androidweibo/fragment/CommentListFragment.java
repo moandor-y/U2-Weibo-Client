@@ -12,11 +12,14 @@ import gov.moandor.androidweibo.adapter.CommentListAdapter;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
+import gov.moandor.androidweibo.dao.CommentsByMeDao;
+import gov.moandor.androidweibo.dao.CommentsMentionsDao;
+import gov.moandor.androidweibo.dao.CommentsToMeDao;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -61,16 +64,16 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
     
     @Override
-    String getUrl() {
+    protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
         switch (GlobalContext.getCommentFilter()) {
         case ATME:
-            return HttpUtils.UrlHelper.COMMENTS_MENTIONS;
+            return new CommentsMentionsDao();
         case BY_ME:
-            return HttpUtils.UrlHelper.COMMENTS_BY_ME;
+            return new CommentsByMeDao();
         case ALL:
         case FOLLOWED:
         default:
-            return HttpUtils.UrlHelper.COMMENTS_TO_ME;
+            return new CommentsToMeDao();
         }
     }
     

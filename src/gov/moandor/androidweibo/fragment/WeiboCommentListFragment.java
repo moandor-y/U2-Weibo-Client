@@ -15,11 +15,12 @@ import gov.moandor.androidweibo.adapter.WeiboTimelineListAdapter;
 import gov.moandor.androidweibo.bean.CommentDraft;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.bean.WeiboStatus;
+import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
+import gov.moandor.androidweibo.dao.CommentsShowDao;
 import gov.moandor.androidweibo.notification.SendCommentService;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -58,8 +59,8 @@ public class WeiboCommentListFragment extends
     }
     
     @Override
-    String getUrl() {
-        return HttpUtils.UrlHelper.COMMENTS_SHOW;
+    protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
+        return new CommentsShowDao();
     }
     
     @Override

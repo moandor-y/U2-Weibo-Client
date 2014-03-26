@@ -10,9 +10,10 @@ import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
+import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
+import gov.moandor.androidweibo.dao.FavoritesDao;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
@@ -61,8 +62,8 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
     
     @Override
-    String getUrl() {
-        return HttpUtils.UrlHelper.FAVORITES;
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
+        return new FavoritesDao();
     }
     
     @Override

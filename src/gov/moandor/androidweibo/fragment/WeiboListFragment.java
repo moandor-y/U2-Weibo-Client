@@ -15,10 +15,12 @@ import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.concurrency.WifiAutoDownloadPicRunnable;
+import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
+import gov.moandor.androidweibo.dao.BilateralTimelineDao;
+import gov.moandor.androidweibo.dao.FriendsTimelineDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
@@ -101,13 +103,13 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     @Override
-    String getUrl() {
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         switch (GlobalContext.getWeiboGroup()) {
         case GROUP_BILATERAL:
-            return HttpUtils.UrlHelper.STATUSES_BILATERAL_TIMELINE;
+            return new BilateralTimelineDao();
         case GROUP_ALL:
         default:
-            return HttpUtils.UrlHelper.STATUSES_FRIENDS_TIMELINE;
+            return new FriendsTimelineDao();
         }
     }
     
