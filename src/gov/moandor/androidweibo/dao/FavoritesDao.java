@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -17,13 +17,13 @@ public class FavoritesDao extends WeiboStatusDao {
     
     @Override
     protected List<WeiboStatus> parceJson(String json) throws WeiboException {
-        return Utilities.getFavoritesFromJson(json);
+        return JsonUtils.getFavoritesFromJson(json);
     }
     
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("page", String.valueOf(mPage));
+        params.putParam("page", mPage);
     }
     
     public void setPage(int page) {

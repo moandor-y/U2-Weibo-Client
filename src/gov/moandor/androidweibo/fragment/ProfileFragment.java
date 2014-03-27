@@ -25,6 +25,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
@@ -218,10 +219,10 @@ public class ProfileFragment extends Fragment {
             String url = HttpUtils.UrlHelper.USERS_SHOW;
             HttpParams params = new HttpParams();
             params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("uid", String.valueOf(mUser.id));
+            params.putParam("uid", mUser.id);
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                return Utilities.getWeiboUserFromJson(response);
+                return JsonUtils.getWeiboUserFromJson(response);
             } catch (WeiboException e) {
                 Utilities.notice(e.getMessage());
             }

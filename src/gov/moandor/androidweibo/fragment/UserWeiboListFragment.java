@@ -13,7 +13,7 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.UserTimelineDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
@@ -70,7 +70,7 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Utilities.getWeiboStatusesFromJson(json);
+        return JsonUtils.getWeiboStatusesFromJson(json);
     }
     
     @Override

@@ -13,7 +13,7 @@ import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -106,7 +106,7 @@ public class DirectMessagesUserListFragment extends
     
     @Override
     List<DirectMessagesUser> getDataFromJson(JSONObject json) throws WeiboException {
-        return Utilities.getDmUsersFromJson(json);
+        return JsonUtils.getDmUsersFromJson(json);
     }
     
     private class DmUserListRefreshTask extends RefreshTask {

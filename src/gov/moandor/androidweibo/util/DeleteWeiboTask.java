@@ -25,7 +25,7 @@ public class DeleteWeiboTask extends MyAsyncTask<Void, Void, Void> {
         String url = HttpUtils.UrlHelper.STATUSES_DESTROY;
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
-        params.putParam("id", String.valueOf(mId));
+        params.putParam("id", mId);
         try {
             HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
         } catch (WeiboException e) {

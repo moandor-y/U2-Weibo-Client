@@ -251,7 +251,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setSinceMessage(mLatestMessage);
             try {
-                return mDao.getData();
+                return mDao.fetchData();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
@@ -301,7 +301,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             dao.setCount(Utilities.getLoadWeiboCount());
             dao.setMaxId(mMaxId);
             try {
-                return dao.getData();
+                return dao.fetchData();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());

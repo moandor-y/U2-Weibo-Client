@@ -7,7 +7,7 @@ import java.util.List;
 public abstract class BaseDataSetJsonDao<T> {
     protected String mUrl = getUrl();
     
-    public abstract List<T> getData() throws WeiboException;
+    public abstract List<T> fetchData() throws WeiboException;
     
     protected abstract String getUrl();
 }

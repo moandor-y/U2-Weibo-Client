@@ -16,6 +16,7 @@ import gov.moandor.androidweibo.util.FollowTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.UnfollowTask;
 import gov.moandor.androidweibo.util.Utilities;
@@ -143,7 +144,7 @@ public class UserActivity extends AbsActivity {
             params.putParam("screen_name", mUserName);
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                return Utilities.getWeiboUserFromJson(response);
+                return JsonUtils.getWeiboUserFromJson(response);
             } catch (WeiboException e) {
                 Utilities.notice(e.getMessage());
             }

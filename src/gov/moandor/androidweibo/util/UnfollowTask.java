@@ -20,10 +20,10 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
         String url = HttpUtils.UrlHelper.FRIENDSHIPS_DESTROY;
         HttpParams params = new HttpParams();
         params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("uid", String.valueOf(mUser.id));
+        params.putParam("uid", mUser.id);
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-            return Utilities.getWeiboUserFromJson(response);
+            return JsonUtils.getWeiboUserFromJson(response);
         } catch (WeiboException e) {
             if (e.getCode() == CODE_ALREADY_UNFOLLOWED) {
                 mUser.following = false;

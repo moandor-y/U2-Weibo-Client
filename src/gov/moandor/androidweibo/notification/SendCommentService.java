@@ -83,7 +83,7 @@ public class SendCommentService extends Service {
             HttpParams params = new HttpParams();
             params.putParam("access_token", mToken);
             params.putParam("comment", mDraft.content);
-            params.putParam("id", String.valueOf(mDraft.commentedStatus.id));
+            params.putParam("id", mDraft.commentedStatus.id);
             if (mDraft.commentOri) {
                 params.putParam("comment_ori", "1");
             }
@@ -91,7 +91,7 @@ public class SendCommentService extends Service {
             if (mDraft.repliedComment == null) {
                 url = HttpUtils.UrlHelper.COMMENTS_CREATE;
             } else {
-                params.putParam("cid", String.valueOf(mDraft.repliedComment.id));
+                params.putParam("cid", mDraft.repliedComment.id);
                 url = HttpUtils.UrlHelper.COMMENTS_REPLY;
             }
             try {

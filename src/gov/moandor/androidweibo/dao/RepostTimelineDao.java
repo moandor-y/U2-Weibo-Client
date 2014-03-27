@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -18,12 +18,12 @@ public class RepostTimelineDao extends WeiboStatusDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("id", String.valueOf(mWeiboId));
+        params.putParam("id", mWeiboId);
     }
     
     @Override
     protected List<WeiboStatus> parceJson(String json) throws WeiboException {
-        return Utilities.getWeiboRepostsFromJson(json);
+        return JsonUtils.getWeiboRepostsFromJson(json);
     }
     
     public void setWeiboId(long weiboId) {

@@ -11,6 +11,18 @@ public class HttpParams {
         mParams.put(key, value);
     }
     
+    public void putParam(String key, int value) {
+        mParams.put(key, String.valueOf(value));
+    }
+    
+    public void putParam(String key, long value) {
+        mParams.put(key, String.valueOf(value));
+    }
+    
+    public void putParam(String key, double value) {
+        mParams.put(key, String.valueOf(value));
+    }
+    
     public void clear() {
         mParams.clear();
     }

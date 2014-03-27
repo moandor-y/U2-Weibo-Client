@@ -91,8 +91,8 @@ public class SendWeiboService extends Service {
             params.putParam("status", mDraft.content);
             GpsLocation location = mDraft.location;
             if (location != null) {
-                params.putParam("lat", String.valueOf(location.latitude));
-                params.putParam("long", String.valueOf(location.longitude));
+                params.putParam("lat", location.latitude);
+                params.putParam("long", location.longitude);
             }
             if (TextUtils.isEmpty(mDraft.picPath)) {
                 String url;
@@ -100,7 +100,7 @@ public class SendWeiboService extends Service {
                     url = HttpUtils.UrlHelper.STATUSES_UPDATE;
                 } else {
                     url = HttpUtils.UrlHelper.STATUSES_REPOST;
-                    params.putParam("id", String.valueOf(mDraft.retweetStatus.id));
+                    params.putParam("id", mDraft.retweetStatus.id);
                     if (mDraft.commentWhenRepost && mDraft.commentOriWhenRepost) {
                         params.putParam("is_comment", "3");
                     } else if (mDraft.commentWhenRepost) {

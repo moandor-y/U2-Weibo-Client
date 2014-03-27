@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     @Override
     HttpParams getParams() {
         HttpParams params = new HttpParams();
-        params.putParam("uid", String.valueOf(mUserId));
+        params.putParam("uid", mUserId);
         params.putParam("trim_status", "1");
         return params;
     }
@@ -71,7 +71,7 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     
     @Override
     List<WeiboUser> getDataFromJson(JSONObject json) throws WeiboException {
-        return Utilities.getWeiboUsersFromJson(json);
+        return JsonUtils.getWeiboUsersFromJson(json);
     }
     
     private class FriendsUserListRefreshTask extends RefreshTask {

@@ -69,14 +69,14 @@ public class ClearCacheRunnable implements Runnable {
         for (Account account : GlobalContext.getAccounts()) {
             HttpParams params = new HttpParams();
             params.putParam("access_token", account.token);
-            params.putParam("uid", String.valueOf(account.user.id));
+            params.putParam("uid", account.user.id);
             params.putParam("count", "200");
             int nextCursor = 0;
             do {
-                params.putParam("cursor", String.valueOf(nextCursor));
+                params.putParam("cursor", nextCursor);
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
                 JSONObject json = new JSONObject(response);
-                List<WeiboUser> users = Utilities.getWeiboUsersFromJson(json);
+                List<WeiboUser> users = JsonUtils.getWeiboUsersFromJson(json);
                 users.add(account.user);
                 for (WeiboUser user : users) {
                     String path =

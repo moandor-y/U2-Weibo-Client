@@ -13,7 +13,7 @@ public class UserTimelineDao extends WeiboStatusDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("uid", String.valueOf(mUserId));
+        params.putParam("uid", mUserId);
     }
     
     public void setUserId(long userId) {

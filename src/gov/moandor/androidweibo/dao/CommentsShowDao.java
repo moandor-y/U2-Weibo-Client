@@ -13,7 +13,7 @@ public class CommentsShowDao extends WeiboCommentDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("id", String.valueOf(mWeiboId));
+        params.putParam("id", mWeiboId);
     }
     
     public void setWeiboId(long weiboId) {

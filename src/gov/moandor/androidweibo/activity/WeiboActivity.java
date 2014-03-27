@@ -26,6 +26,7 @@ import gov.moandor.androidweibo.util.FavoriteTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.UnfavoriteTask;
@@ -216,12 +217,12 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         protected Integer[] doInBackground(Void... v) {
             HttpParams params = new HttpParams();
             params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("id", String.valueOf(mWeiboStatus.id));
+            params.putParam("id", mWeiboStatus.id);
             try {
                 String response =
                         HttpUtils.executeNormalTask(HttpUtils.Method.GET, HttpUtils.UrlHelper.STATUSES_SHOW, params);
                 JSONObject json = new JSONObject(response);
-                WeiboStatus status = Utilities.getWeiboStatusFromJson(json);
+                WeiboStatus status = JsonUtils.getWeiboStatusFromJson(json);
                 return new Integer[]{status.commentCount, status.repostCount};
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);

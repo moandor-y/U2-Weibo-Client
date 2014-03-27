@@ -16,7 +16,7 @@ import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.RepostTimelineDao;
 import gov.moandor.androidweibo.notification.SendWeiboService;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
@@ -56,7 +56,7 @@ public class WeiboRepostListFragment extends
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Utilities.getWeiboRepostsFromJson(json);
+        return JsonUtils.getWeiboRepostsFromJson(json);
     }
     
     @Override

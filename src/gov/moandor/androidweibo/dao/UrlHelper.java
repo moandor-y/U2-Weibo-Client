@@ -29,6 +29,7 @@ public class UrlHelper {
     public static final String FRIENDSHIPS_FOLLOWERS = "https://api.weibo.com/2/friendships/followers.json";
     public static final String FRIENDSHIPS_CREATE = "https://api.weibo.com/2/friendships/create.json";
     public static final String FRIENDSHIPS_DESTROY = "https://api.weibo.com/2/friendships/destroy.json";
+    public static final String FRIENDSHIPS_FRIENDS_IDS = "https://api.weibo.com/2/friendships/friends/ids.json";
     public static final String REMIND_UNREAD_COUNT = "https://rm.api.weibo.com/2/remind/unread_count.json";
     public static final String REMIND_SET_COUNT = "https://rm.api.weibo.com/2/remind/set_count.json";
     public static final String SEARCH_TOPICS = "https://api.weibo.com/2/search/topics.json";

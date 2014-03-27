@@ -14,8 +14,8 @@ import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class FetchUnreadMessageService extends IntentService {
         params.putParam("access_token", account.token);
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-            UnreadCount unreadCount = Utilities.getUnreadCountFromJson(response);
+            UnreadCount unreadCount = JsonUtils.getUnreadCountFromJson(response);
             if (account.user.id == GlobalContext.getCurrentAccount().user.id) {
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.ACTION_UNREAD_UPDATED);
@@ -84,10 +84,10 @@ public class FetchUnreadMessageService extends IntentService {
         params.putParam("access_token", account.token);
         params.putParam("count", "1");
         if (oldComment != null) {
-            params.putParam("since_id", String.valueOf(oldComment.id));
+            params.putParam("since_id", oldComment.id);
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return Utilities.getWeiboCommentsFromJson(response);
+        return JsonUtils.getWeiboCommentsFromJson(response);
     }
     
     private static List<WeiboStatus> fetchMentionStatuses(Account account) throws WeiboException {
@@ -101,10 +101,10 @@ public class FetchUnreadMessageService extends IntentService {
         params.putParam("access_token", account.token);
         params.putParam("count", "1");
         if (oldStatus != null) {
-            params.putParam("since_id", String.valueOf(oldStatus.id));
+            params.putParam("since_id", oldStatus.id);
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return Utilities.getWeiboStatusesFromJson(response);
+        return JsonUtils.getWeiboStatusesFromJson(response);
     }
     
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {
@@ -118,10 +118,10 @@ public class FetchUnreadMessageService extends IntentService {
         params.putParam("access_token", account.token);
         params.putParam("count", "1");
         if (oldComment != null) {
-            params.putParam("since_id", String.valueOf(oldComment.id));
+            params.putParam("since_id", oldComment.id);
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return Utilities.getWeiboCommentsFromJson(response);
+        return JsonUtils.getWeiboCommentsFromJson(response);
     }
     
     private static void showNotification(Context context, WeiboComment comment, WeiboStatus mentionStatus,

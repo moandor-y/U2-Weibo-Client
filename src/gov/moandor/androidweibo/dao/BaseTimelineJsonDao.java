@@ -16,7 +16,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
     private boolean mNoEnoughNewMessages;
     
     @Override
-    public List<T> getData() throws WeiboException {
+    public List<T> fetchData() throws WeiboException {
         HttpParams params = new HttpParams();
         addParams(params);
         HttpUtils.Method method = HttpUtils.Method.GET;
@@ -59,12 +59,12 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
     protected void addParams(HttpParams params) {
         params.putParam("access_token", mToken);
         if (mSinceMessage != null) {
-            params.putParam("since_id", String.valueOf(mSinceMessage.id - 1));
+            params.putParam("since_id", mSinceMessage.id - 1);
         } else {
-            params.putParam("since_id", String.valueOf(mSinceId));
+            params.putParam("since_id", mSinceId);
         }
-        params.putParam("max_id", String.valueOf(mMaxId));
-        params.putParam("count", String.valueOf(mCount));
+        params.putParam("max_id", mMaxId);
+        params.putParam("count", mCount);
     }
     
     protected abstract List<T> parceJson(String json) throws WeiboException;

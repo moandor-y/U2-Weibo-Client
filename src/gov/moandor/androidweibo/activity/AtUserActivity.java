@@ -20,6 +20,7 @@ import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -129,7 +130,7 @@ public class AtUserActivity extends AbsActivity {
             params.putParam("type", "0");
             try {
                 String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                return Utilities.getUserSuggestionsFromJson(response);
+                return JsonUtils.getUserSuggestionsFromJson(response);
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());

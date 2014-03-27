@@ -20,7 +20,7 @@ import gov.moandor.androidweibo.dao.BilateralTimelineDao;
 import gov.moandor.androidweibo.dao.FriendsTimelineDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
@@ -78,7 +78,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     
     @Override
     List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return Utilities.getWeiboStatusesFromJson(json);
+        return JsonUtils.getWeiboStatusesFromJson(json);
     }
     
     @Override

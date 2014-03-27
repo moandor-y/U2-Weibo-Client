@@ -20,10 +20,10 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
         String url = HttpUtils.UrlHelper.FRIENDSHIPS_CREATE;
         HttpParams params = new HttpParams();
         params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("uid", String.valueOf(mUser.id));
+        params.putParam("uid", mUser.id);
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-            WeiboUser result = Utilities.getWeiboUserFromJson(response);
+            WeiboUser result = JsonUtils.getWeiboUserFromJson(response);
             result.following = true;
             return result;
         } catch (WeiboException e) {

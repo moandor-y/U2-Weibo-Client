@@ -13,7 +13,7 @@ public class CommentsToMeDao extends WeiboCommentDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("filter_by_author", String.valueOf(mFilter));
+        params.putParam("filter_by_author", mFilter);
     }
     
     public void setFilter(int filter) {

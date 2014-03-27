@@ -30,11 +30,11 @@ public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
         String url = HttpUtils.UrlHelper.FAVORITES_CREATE;
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
-        params.putParam("id", String.valueOf(mStatus.id));
+        params.putParam("id", mStatus.id);
         try {
             String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
             JSONObject json = new JSONObject(response);
-            return Utilities.getWeiboStatusFromJson(json.getJSONObject("status"));
+            return JsonUtils.getWeiboStatusFromJson(json.getJSONObject("status"));
         } catch (WeiboException e) {
             Logger.logExcpetion(e);
             mException = e;
