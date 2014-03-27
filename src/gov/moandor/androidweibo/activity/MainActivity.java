@@ -330,9 +330,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     @Override
     public void onAccountClick(int position) {
         mDrawerLayout.closeDrawer(Gravity.LEFT);
-        if (position == GlobalContext.getCurrentAccountIndex()) {
-            return;
-        }
         mWeiboListFragment.saveListPosition();
         mAtmeListFragment.saveListPosition();
         mCommentListFragment.saveListPosition();
