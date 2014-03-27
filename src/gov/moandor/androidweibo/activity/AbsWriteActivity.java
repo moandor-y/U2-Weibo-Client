@@ -30,6 +30,7 @@ import gov.moandor.androidweibo.widget.SmileyPicker;
 public abstract class AbsWriteActivity extends AbsActivity {
     private static final int MAX_LENGTH = 140;
     private static final int REQUEST_AT_USER = 2;
+    private static final long SMILEY_PICKER_DELAY = 100;
     private static final String SAVE_DRAFT_DIALOG = "save_draft_dialog";
     public static final String AT_USER_RESULT_NAME;
     
@@ -127,7 +128,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             public void run() {
                 mSmileyPicker.setVisibility(View.GONE);
             }
-        }, 200);
+        }, SMILEY_PICKER_DELAY);
     }
     
     private void showSmileyPicker() {
@@ -137,7 +138,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             public void run() {
                 mSmileyPicker.setVisibility(View.VISIBLE);
             }
-        }, 200);
+        }, SMILEY_PICKER_DELAY);
     }
     
     void toggleEmotionPanel() {
