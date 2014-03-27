@@ -27,7 +27,7 @@ import java.util.Locale;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 13;
+    private static final int VERSION = 14;
     
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -63,6 +63,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String CREATE_DM_USER_TABLE = "create table " + Table.DmUser.TABLE_NAME + "("
             + Table.DmUser.ACCOUNT_ID + " integer, " + Table.DmUser.CONTENT_DATA + " text)";
     
+    private static final String CREATE_FOLLOWING_ID_TABLE = "create table " + Table.FollowingId.TABLE_NAME + "("
+            + Table.FollowingId.ACCOUNT_ID + " integer, " + Table.FollowingId.CONTENT_DATA + " text)";
+    
     private DatabaseUtils() {
         super(GlobalContext.getInstance(), NAME, null, VERSION);
     }
@@ -75,6 +78,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         db.execSQL(CREATE_DRAFT_TABLE);
         db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
         db.execSQL(CREATE_DM_USER_TABLE);
+        db.execSQL(CREATE_FOLLOWING_ID_TABLE);
     }
     
     @Override
@@ -89,6 +93,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         case 12:
             db.execSQL("drop table if exists " + Table.DmUser.TABLE_NAME);
             db.execSQL(CREATE_DM_USER_TABLE);
+        case 13:
+            db.execSQL(CREATE_FOLLOWING_ID_TABLE);
         }
     }
     
@@ -547,6 +553,27 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         return null;
     }
     
+    public static synchronized void updateFollowingIds(long[] ids, long accountId) {
+        SQLiteDatabase database = sInstance.getWritableDatabase();
+        database.delete(Table.FollowingId.TABLE_NAME, Table.FollowingId.ACCOUNT_ID + "=" + accountId, null);
+        ContentValues values = new ContentValues();
+        values.put(Table.FollowingId.ACCOUNT_ID, accountId);
+        values.put(Table.FollowingId.CONTENT_DATA, sGson.toJson(ids));
+        database.insert(Table.FollowingId.TABLE_NAME, null, values);
+        database.close();
+    }
+    
+    public static synchronized long[] getFollowingIds(long accountId) {
+        SQLiteDatabase database = sInstance.getReadableDatabase();
+        String sql = "select * from " + Table.FollowingId.TABLE_NAME + " where " + Table.FollowingId.ACCOUNT_ID + "=" + accountId;
+        Cursor cursor = database.rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            String json = cursor.getString(cursor.getColumnIndex(Table.FollowingId.CONTENT_DATA));
+            return sGson.fromJson(json, long[].class);
+        }
+        return null;
+    }
+    
     public static class DmUsers {
         public DirectMessagesUser[] users;
         public int nextCursor;
@@ -610,6 +637,12 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         
         public static final class DmUser {
             public static final String TABLE_NAME = "dm_user";
+            public static final String ACCOUNT_ID = "account_id";
+            public static final String CONTENT_DATA = "content_data";
+        }
+        
+        public static final class FollowingId {
+            public static final String TABLE_NAME = "following_ids";
             public static final String ACCOUNT_ID = "account_id";
             public static final String CONTENT_DATA = "content_data";
         }

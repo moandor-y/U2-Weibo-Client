@@ -16,6 +16,7 @@ import android.support.v4.util.LruCache;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.AbsActivity;
 import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -243,6 +244,9 @@ public class GlobalContext extends Application {
         Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
+        if (Utilities.isSpeEnabled()) {
+            MyAsyncTask.execute(new UpdateFollowingIdsRunnable());
+        }
     }
     
     private void buildCache() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <bool name="hack_enabled">true</bool>
+    <bool name="spe_enabled">true</bool>
     
     <string-array name="hack_login_types">
         <item>Weico Android</item>
