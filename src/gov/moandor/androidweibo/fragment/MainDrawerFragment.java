@@ -69,9 +69,11 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
     
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (view != mFooterView && position != GlobalContext.getCurrentAccountIndex()) {
-            ((OnAccountClickListener) getActivity()).onAccountClick(position);
-            mAdapter.notifyDataSetChanged();
+        if (view != mFooterView) {
+            if (position != GlobalContext.getCurrentAccountIndex()) {
+                ((OnAccountClickListener) getActivity()).onAccountClick(position);
+                mAdapter.notifyDataSetChanged();
+            }
         } else {
             Intent intent = new Intent();
             intent.setClass(getActivity(), AuthorizeActivity.class);
