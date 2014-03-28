@@ -244,7 +244,7 @@ public class GlobalContext extends Application {
         Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
-        if (Utilities.isSpeEnabled()) {
+        if (Utilities.isBmEnabled()) {
             MyAsyncTask.execute(new UpdateFollowingIdsRunnable());
         }
     }

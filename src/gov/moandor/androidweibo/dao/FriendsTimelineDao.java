@@ -18,7 +18,7 @@ public class FriendsTimelineDao extends WeiboStatusDao {
     @Override
     public List<WeiboStatus> fetchData() throws WeiboException {
         List<WeiboStatus> result = super.fetchData();
-        if (Utilities.isSpeEnabled()) {
+        if (Utilities.isBmEnabled()) {
             long[] followingIds = DatabaseUtils.getFollowingIds(GlobalContext.getCurrentAccount().user.id);
             if (followingIds != null) {
                 for (WeiboStatus status : result) {

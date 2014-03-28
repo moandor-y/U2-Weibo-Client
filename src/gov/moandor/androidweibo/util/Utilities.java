@@ -359,8 +359,8 @@ public class Utilities {
         GlobalContext.addOrUpdateAccount(account);
     }
     
-    public static boolean isSpeEnabled() {
-        return GlobalContext.getInstance().getResources().getBoolean(R.bool.spe_enabled);
+    public static boolean isBmEnabled() {
+        return GlobalContext.getInstance().getResources().getBoolean(R.bool.bm_enabled);
     }
     
     public static void registerShareActionMenu(MenuItem item, AbsItemBean bean) {

@@ -40,7 +40,7 @@ public class AuthorizeActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.login);
-        if (Utilities.isSpeEnabled()) {
+        if (Utilities.isBmEnabled()) {
             HackLoginDialogFragment dialog = new HackLoginDialogFragment();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), HACK_LOGIN_DIALOG);

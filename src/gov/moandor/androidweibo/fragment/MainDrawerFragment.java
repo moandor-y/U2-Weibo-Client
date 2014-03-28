@@ -52,7 +52,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
             }
         });
         Button directMessages = (Button) view.findViewById(R.id.direct_messages);
-        if (Utilities.isSpeEnabled()) {
+        if (Utilities.isBmEnabled()) {
             directMessages.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
