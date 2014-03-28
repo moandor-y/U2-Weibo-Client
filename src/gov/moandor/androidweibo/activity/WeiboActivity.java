@@ -51,7 +51,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private PullToRefreshAttacher mPullToRefreshAttacher;
     private WeiboPagerAdapter mPagerAdapter;
     private PagerSlidingTabStrip mTabStrip;
-    private RefreshWeiboInfoTask mRefreshTask;
     private int mPosition;
     
     @Override
@@ -78,8 +77,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.weibo);
-        mRefreshTask = new RefreshWeiboInfoTask();
-        mRefreshTask.execute();
+        new RefreshWeiboInfoTask().execute();
     }
     
     @Override
@@ -96,6 +94,11 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             menu.findItem(R.id.favorite).setVisible(false);
         } else {
             menu.findItem(R.id.unfavorite).setVisible(false);
+        }
+        if (mViewPager.getCurrentItem() == WeiboPagerAdapter.WEIBO) {
+            menu.findItem(R.id.refresh).setVisible(false);
+        } else {
+            menu.findItem(R.id.refresh).setVisible(true);
         }
         return true;
     }
@@ -133,6 +136,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     @Override
     public void onPageSelected(int position) {
         mPullToRefreshAttacher.setRefreshComplete();
+        supportInvalidateOptionsMenu();
         switch (position) {
         case WeiboPagerAdapter.COMMENT_LIST:
             mWeiboCommentListFragment.onShown();
@@ -150,13 +154,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     
     private void refresh() {
         switch (mViewPager.getCurrentItem()) {
-        case WeiboPagerAdapter.WEIBO:
-            if (mRefreshTask == null && mPullToRefreshAttacher.isEnabled()) {
-                mRefreshTask = new RefreshWeiboInfoTask();
-                mRefreshTask.execute();
-                mPullToRefreshAttacher.setRefreshing(true);
-            }
-            break;
         case WeiboPagerAdapter.COMMENT_LIST:
             mWeiboCommentListFragment.refresh();
             break;
@@ -234,8 +231,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         
         @Override
         protected void onPostExecute(Integer[] result) {
-            mRefreshTask = null;
-            mPullToRefreshAttacher.setRefreshComplete();
             if (result != null) {
                 int commentCount = result[0];
                 int repostCount = result[1];
