@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
@@ -124,7 +123,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized List<Account> getAccounts() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.Account.TABLE_NAME, null);
-        List<Account> result = new CopyOnWriteArrayList<Account>();
+        List<Account> result = new ArrayList<Account>();
         while (cursor.moveToNext()) {
             Account account = new Account();
             account.token = cursor.getString(cursor.getColumnIndex(Table.Account.TOKEN));

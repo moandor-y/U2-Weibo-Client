@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GlobalContext extends Application {
     public static final int LIGHT = 0;
@@ -234,7 +235,7 @@ public class GlobalContext extends Application {
             setTheme(R.style.Theme_Weibo_Dark);
             break;
         }
-        sAccounts = DatabaseUtils.getAccounts();
+        sAccounts = new CopyOnWriteArrayList<Account>(DatabaseUtils.getAccounts());
         HttpUtils.trustAllHosts();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
