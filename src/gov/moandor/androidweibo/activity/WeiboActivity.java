@@ -77,7 +77,9 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.weibo);
-        new RefreshWeiboInfoTask().execute();
+        if (GlobalContext.isInWifi()) {
+            new RefreshWeiboInfoTask().execute();
+        }
     }
     
     @Override
