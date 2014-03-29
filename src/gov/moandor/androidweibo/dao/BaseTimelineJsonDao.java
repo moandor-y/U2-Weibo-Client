@@ -23,7 +23,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         List<T> result = new CopyOnWriteArrayList<T>(parceJson(response));
-        if (mSinceMessage != null) {
+        if (mSinceMessage != null && result.size() >= 1) {
             T earliestMessage = result.get(result.size() - 1);
             if (mSinceMessage.id == earliestMessage.id) {
                 mNoEnoughNewMessages = true;
