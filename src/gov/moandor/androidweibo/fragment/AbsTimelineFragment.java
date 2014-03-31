@@ -269,7 +269,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mNoEarlierMessage = false;
             mFooterText.setText(R.string.loading);
             mFooterIcon.setVisibility(View.VISIBLE);
-            if (result != null) {
+            if (result != null && result.size() >= 1) {
                 if (mDao.noEnoughNewMessages()) {
                     mAdapter.addAllFirst(result);
                 } else {

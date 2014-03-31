@@ -30,6 +30,7 @@ public class UpdateFollowingIdsRunnable implements Runnable {
                 ids.addAll(dao.fetchData());
                 nextCursor = dao.getNextCursor();
             } while (nextCursor != 0);
+            ids.add(account.user.id);
             long[] result = new long[ids.size()];
             for (int i = 0; i < ids.size(); i++) {
                 result[i] = ids.get(i);
