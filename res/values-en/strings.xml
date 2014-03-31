@@ -3,7 +3,7 @@
     
     <string-array name="weibo_list_spinner">
         <item>ALL</item>
-        <item>BILATERAL FRIENDS</item>
+        <item>FOLLOWED EACH OTHER</item>
     </string-array>
     
     <string-array name="atme_list_spinner">
