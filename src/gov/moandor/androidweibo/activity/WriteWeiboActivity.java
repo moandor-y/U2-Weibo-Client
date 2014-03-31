@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.GpsLocation;
@@ -26,6 +29,7 @@ import gov.moandor.androidweibo.fragment.AddPictureDialogFragment;
 import gov.moandor.androidweibo.notification.SendWeiboService;
 import gov.moandor.androidweibo.util.CheatSheet;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ImageUtils;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 
@@ -51,10 +55,13 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     private Uri mImageFileUri;
     private String mPicPath;
     private GpsLocation mLocation;
+    private ImageButton mAddPicButton;
+    private ImageView mPreview;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPreview = (ImageView) findViewById(R.id.preview);
         WeiboDraft draft = getIntent().getParcelableExtra(DRAFT);
         if (draft != null) {
             mRetweetWeiboStatus = draft.retweetStatus;
@@ -92,6 +99,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             mCommentWhenRepost = savedInstanceState.getBoolean(STATE_COMMENT_WHEN_REPOST);
             mCommentOriWhenRepost = savedInstanceState.getBoolean(STATE_COMMENT_ORI_WHEN_REPOST);
         }
+        loadPicPreview();
     }
     
     @Override
@@ -107,6 +115,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
                 mEditText.setSelection(mEditText.getText().length());
             }
             mPicPath = getPath(mImageFileUri);
+            loadPicPreview();
             break;
         case GALLERY_REQUEST_CODE:
             if (TextUtils.isEmpty(mEditText.getText())) {
@@ -114,6 +123,8 @@ public class WriteWeiboActivity extends AbsWriteActivity {
                 mEditText.setSelection(mEditText.getText().length());
             }
             mPicPath = getPath(data.getData());
+            loadPicPreview();
+            break;
         }
     }
     
@@ -181,6 +192,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             return;
         }
         mPicPath = savedInstanceState.getString(STATE_PIC_PATH);
+        loadPicPreview();
     }
     
     @Override
@@ -197,7 +209,8 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     void onCreateBottomMenu(ViewGroup container) {
         if (mRetweetWeiboStatus == null) {
             getLayoutInflater().inflate(R.layout.bottom_menu_write_weibo, container);
-            CheatSheet.setup(container.findViewById(R.id.add_picture), R.string.add_picture);
+            mAddPicButton = (ImageButton) container.findViewById(R.id.add_picture);
+            CheatSheet.setup(mAddPicButton, R.string.add_picture);
         } else {
             getLayoutInflater().inflate(R.layout.bottom_menu_write_no_pic, container);
             CheatSheet.setup(container.findViewById(R.id.insert_topic), R.string.insert_topic);
@@ -275,6 +288,22 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         mLocation = new GpsLocation();
         mLocation.latitude = location.getLatitude();
         mLocation.longitude = location.getLongitude();
+    }
+    
+    private void loadPicPreview() {
+        if (!TextUtils.isEmpty(mPicPath)) {
+            Bitmap thumb = ImageUtils.getBitmapFromFile(mPicPath, 
+                    mAddPicButton.getWidth(), mAddPicButton.getHeight());
+            mAddPicButton.setImageBitmap(thumb);
+            Bitmap preview = ImageUtils.getBitmapFromFile(mPicPath, 
+                    Utilities.getScreenWidth(), Utilities.getScreenHeight());
+            mPreview.setImageBitmap(preview);
+            mPreview.setVisibility(View.VISIBLE);
+        } else {
+            mAddPicButton.setImageResource(R.drawable.ic_camera_dark);
+            mPreview.setVisibility(View.GONE);
+            mPreview.setImageBitmap(null);
+        }
     }
     
     private OnAddPicDialogClickListener mOnAddPicDialogClickListener = new OnAddPicDialogClickListener();

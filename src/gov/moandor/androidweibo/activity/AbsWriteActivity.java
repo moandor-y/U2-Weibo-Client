@@ -62,11 +62,6 @@ public abstract class AbsWriteActivity extends AbsActivity {
         mSmileyPicker.setOnItemClickListener(new OnSmileyClickListener());
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-    
-    @Override
-    protected void onStart() {
-        super.onStart();
         LinearLayout bottomMenu = (LinearLayout) findViewById(R.id.bottom_menu);
         bottomMenu.removeAllViews();
         onCreateBottomMenu(bottomMenu);
