@@ -116,6 +116,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             return true;
         case R.id.repost:
             repost();
+            return true;
         case R.id.refresh:
             refresh();
             return true;
@@ -124,6 +125,10 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             return true;
         case R.id.unfavorite:
             new UnfavoriteTask(mWeiboStatus, new OnUnfavoriteFinishedListener()).execute();
+            return true;
+        case R.id.copy:
+            Utilities.copyText(mWeiboStatus.text);
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
