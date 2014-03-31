@@ -64,10 +64,17 @@ public class UserActivity extends AbsActivity {
         }
         if (mUser.following) {
             menu.findItem(R.id.follow).setVisible(false);
-            menu.findItem(R.id.unfollow).setVisible(true);
+            if (mUser.followMe) {
+                menu.findItem(R.id.followed_each_other).setVisible(true);
+                menu.findItem(R.id.unfollow).setVisible(false);
+            } else {
+                menu.findItem(R.id.followed_each_other).setVisible(false);
+                menu.findItem(R.id.unfollow).setVisible(true);
+            }
         } else {
             menu.findItem(R.id.follow).setVisible(true);
             menu.findItem(R.id.unfollow).setVisible(false);
+            menu.findItem(R.id.followed_each_other).setVisible(false);
         }
         return true;
     }
@@ -82,6 +89,7 @@ public class UserActivity extends AbsActivity {
             new FollowTask(mUser, new OnFollowFinishedListener()).execute();
             return true;
         case R.id.unfollow:
+        case R.id.followed_each_other:
             new UnfollowTask(mUser, new OnUnfollowFinishedListener()).execute();
             return true;
         default:

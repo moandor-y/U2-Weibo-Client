@@ -15,4 +15,10 @@
         androidweibo:showAsAction="ifRoom|withText"
         android:visible="false" />
     
+    <item
+        android:id="@+id/followed_each_other"
+        android:title="@string/followed_each_other"
+        androidweibo:showAsAction="ifRoom|withText"
+        android:visible="false" />
+    
 </menu>

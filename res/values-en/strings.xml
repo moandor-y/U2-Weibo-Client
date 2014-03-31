@@ -241,6 +241,7 @@
     <string name="followers_of">%s\'s Followers</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="followed_each_other">Followed Each Other</string>
     
     <!-- Error -->
     <string name="unknown_error">Unknown Error</string>
