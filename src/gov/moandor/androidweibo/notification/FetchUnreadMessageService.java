@@ -34,6 +34,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static void fetch(Context context, Account account) {
+        Logger.logToFile(FetchUnreadMessageService.class.getName() + ".fetch invoked.");
         String url = HttpUtils.UrlHelper.REMIND_UNREAD_COUNT;
         HttpParams params = new HttpParams();
         params.putParam("access_token", account.token);
@@ -74,6 +75,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static List<WeiboComment> fetchComments(Account account) throws WeiboException {
+        Logger.logToFile(FetchUnreadMessageService.class.getName() + ".fetchComments invoked.");
         List<WeiboComment> oldComments = DatabaseUtils.getComments(account.user.id, CommentListFragment.ALL);
         WeiboComment oldComment = null;
         if (oldComments.size() > 0) {
@@ -91,6 +93,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static List<WeiboStatus> fetchMentionStatuses(Account account) throws WeiboException {
+        Logger.logToFile(FetchUnreadMessageService.class.getName() + ".fetchMentionStatuses invoked.");
         List<WeiboStatus> oldStatuses = DatabaseUtils.getAtmeStatuses(account.user.id, 0);
         WeiboStatus oldStatus = null;
         if (oldStatuses.size() > 0) {
@@ -108,6 +111,7 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {
+        Logger.logToFile(FetchUnreadMessageService.class.getName() + ".fetchMentionComments invoked.");
         List<WeiboComment> oldComments = DatabaseUtils.getComments(account.user.id, CommentListFragment.ATME);
         WeiboComment oldComment = null;
         if (oldComments.size() > 0) {

@@ -14,10 +14,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileUtils {
-    public static final String CACHE_SD = GlobalContext.getSDCacheDir();
+    public static final String CACHE_SD = GlobalContext.getSdCacheDir();
     private static final String WEIBO_CACHE_SD = CACHE_SD + File.separator + "weibo";
     public static final String WEIBO_PICTURE_CACHE = WEIBO_CACHE_SD + File.separator + "weibo_pictures";
     public static final String WEIBO_AVATAR_CACHE = WEIBO_CACHE_SD + File.separator + "weibo_avatars";
+    public static final String LOGS = CACHE_SD + File.separator + "logs";
     private static final String ACCOUNT_AVATARS = CACHE_SD + File.separator + "account_avatars";
     
     public static File createFile(String path) {

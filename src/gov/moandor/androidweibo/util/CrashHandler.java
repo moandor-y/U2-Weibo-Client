@@ -52,7 +52,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     
     private String getLogPath(Date date) {
         String fileName = date.getTime() + ".log";
-        return FileUtils.CACHE_SD + File.separator + "log" + File.separator + fileName;
+        return FileUtils.LOGS + File.separator + fileName;
     }
     
     public static void register() {

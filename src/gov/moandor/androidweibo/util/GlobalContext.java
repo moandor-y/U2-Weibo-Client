@@ -561,7 +561,7 @@ public class GlobalContext extends Application {
                 ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
     }
     
-    public static String getSDCacheDir() {
+    public static String getSdCacheDir() {
         File file = sInstance.getExternalCacheDir();
         return file.getAbsolutePath();
     }
