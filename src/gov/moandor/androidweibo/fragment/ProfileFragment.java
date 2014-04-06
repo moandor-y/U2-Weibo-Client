@@ -36,7 +36,6 @@ import java.text.DecimalFormat;
 public class ProfileFragment extends Fragment {
     public static final String USER = "user";
     
-    private static DecimalFormat sDecimalFormat = new DecimalFormat("#,###");
     private ImageView mAvatar;
     private TextView mName;
     private TextView mSummary;
@@ -120,9 +119,10 @@ public class ProfileFragment extends Fragment {
         mName.setText(mUser.name);
         mSummary.setText(mUser.description);
         mAddress.setText(mUser.location);
-        mWeiboCount.setText(sDecimalFormat.format(mUser.statusesCount));
-        mFollowingCount.setText(sDecimalFormat.format(mUser.friendsCount));
-        mFollowerCount.setText(sDecimalFormat.format(mUser.followersCount));
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        mWeiboCount.setText(decimalFormat.format(mUser.statusesCount));
+        mFollowingCount.setText(decimalFormat.format(mUser.friendsCount));
+        mFollowerCount.setText(decimalFormat.format(mUser.followersCount));
     }
     
     private void initFontSize() {

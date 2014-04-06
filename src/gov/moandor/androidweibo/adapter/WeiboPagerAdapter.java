@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.text.DecimalFormat;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.WeiboCommentListFragment;
 import gov.moandor.androidweibo.fragment.WeiboFragment;
@@ -45,15 +47,16 @@ public class WeiboPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         String title = mTitles[position];
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
         switch (position) {
         case COMMENT_LIST:
             if (mCommentCount > 0) {
-                title += " (" + mCommentCount + ")";
+                title += " (" + decimalFormat.format(mCommentCount) + ")";
             }
             break;
         case REPOST_LIST:
             if (mRepostCount > 0) {
-                title += " (" + mRepostCount + ")";
+                title += " (" + decimalFormat.format(mRepostCount) + ")";
             }
             break;
         }
