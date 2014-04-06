@@ -44,16 +44,7 @@ public class ImageUtils {
             final int widthRatio = Math.round((float) width / (float) reqWidth);
             inSampleSize = Math.max(heightRatio, widthRatio);
         }
-        int roundedSize;
-        if (inSampleSize <= 8) {
-            roundedSize = 1;
-            while (roundedSize < inSampleSize) {
-                roundedSize <<= 1;
-            }
-        } else {
-            roundedSize = (inSampleSize + 7) / 8 * 8;
-        }
-        return roundedSize;
+        return inSampleSize;
     }
     
     public static Drawable bitmapToDrawable(Bitmap bitmap) {
