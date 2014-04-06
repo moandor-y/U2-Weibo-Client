@@ -43,7 +43,7 @@ public class Logger {
             FileWriter fileWriter = null;
             BufferedWriter out = null;
             try {
-                fileWriter = new FileWriter(FileUtils.createFile(path), true);
+                fileWriter = new FileWriter(file, true);
                 out = new BufferedWriter(fileWriter);
                 out.write("Date: " + new Date() + "\n\n");
                 out.write(message);

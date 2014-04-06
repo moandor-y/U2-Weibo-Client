@@ -51,7 +51,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     }
     
     private String getLogPath(Date date) {
-        String fileName = date.getTime() + ".log";
+        String fileName = "crash_" + date.getTime() + ".log";
         return FileUtils.LOGS + File.separator + fileName;
     }
     
