@@ -20,8 +20,8 @@ import android.webkit.WebViewClient;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.UrlHelper;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
@@ -120,11 +120,11 @@ public class AuthorizeActivity extends AbsActivity {
     
     private String getWeiboOAuthUrl() {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("client_id", HttpUtils.UrlHelper.APPKEY);
+        params.put("client_id", UrlHelper.APPKEY);
         params.put("response_type", "token");
-        params.put("redirect_uri", HttpUtils.UrlHelper.AUTH_REDIRECT);
+        params.put("redirect_uri", UrlHelper.AUTH_REDIRECT);
         params.put("display", "mobile");
-        return HttpUtils.UrlHelper.OAUTH2_AUTHORIZE + "?" + Utilities.encodeUrl(params)
+        return UrlHelper.OAUTH2_AUTHORIZE + "?" + Utilities.encodeUrl(params)
                 + "&scope=friendships_groups_read,friendships_groups_write";
     }
     
@@ -137,7 +137,7 @@ public class AuthorizeActivity extends AbsActivity {
         
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            if (url.startsWith(HttpUtils.UrlHelper.AUTH_REDIRECT)) {
+            if (url.startsWith(UrlHelper.AUTH_REDIRECT)) {
                 handleRedirectUrl(view, url);
                 view.stopLoading();
                 return;

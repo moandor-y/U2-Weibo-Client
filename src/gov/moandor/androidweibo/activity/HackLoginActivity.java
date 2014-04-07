@@ -8,14 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.Oauth2AcessTokenDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -47,21 +43,14 @@ public class HackLoginActivity extends AbsActivity {
                 MyAsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        String url = HttpUtils.UrlHelper.OAUTH2_ACCESS_TOKEN;
-                        HttpParams params = new HttpParams();
-                        params.putParam("username", username.getText().toString());
-                        params.putParam("password", password.getText().toString());
-                        params.putParam("client_id", getResources().getStringArray(R.array.hack_login_keys)[spinner
-                                .getSelectedItemPosition()]);
-                        params.putParam("client_secret",
-                                getResources().getStringArray(R.array.hack_login_secrets)[spinner
-                                        .getSelectedItemPosition()]);
-                        params.putParam("grant_type", "password");
-                        String response;
+                        Oauth2AcessTokenDao dao = new Oauth2AcessTokenDao();
+                        dao.setUsername(username.getText().toString());
+                        dao.setPassword(password.getText().toString());
+                        dao.setClientId(getResources().getStringArray(R.array.hack_login_keys)[spinner.getSelectedItemPosition()]);
+                        dao.setClientSecret(getResources().getStringArray(R.array.hack_login_secrets)[spinner.getSelectedItemPosition()]);
+                        dao.setGrantType("password");
                         try {
-                            response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-                            JSONObject json = new JSONObject(response);
-                            String token = json.getString("access_token");
+                            String token = dao.fetchData();
                             Utilities.fetchAndSaveAccountInfo(token);
                             Utilities.notice(R.string.auth_success);
                             Intent intent = new Intent();
@@ -72,9 +61,6 @@ public class HackLoginActivity extends AbsActivity {
                         } catch (WeiboException e) {
                             Logger.logExcpetion(e);
                             Utilities.notice(e.getMessage());
-                        } catch (JSONException e) {
-                            Logger.logExcpetion(e);
-                            Utilities.notice(R.string.json_error);
                         }
                     }
                 });

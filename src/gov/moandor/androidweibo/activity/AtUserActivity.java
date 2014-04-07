@@ -17,10 +17,7 @@ import android.widget.TextView;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
-import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.JsonUtils;
+import gov.moandor.androidweibo.dao.AtUserSuggestionsDao;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -123,14 +120,10 @@ public class AtUserActivity extends AbsActivity {
         
         @Override
         protected List<UserSuggestion> doInBackground(Void... v) {
-            String url = HttpUtils.UrlHelper.SEARCH_SUGGESTIONS_AT_USERS;
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("q", mKeyword);
-            params.putParam("type", "0");
+            AtUserSuggestionsDao dao = new AtUserSuggestionsDao();
+            dao.setKeyword(mKeyword);
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                return JsonUtils.getUserSuggestionsFromJson(response);
+                return dao.fetchData();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
