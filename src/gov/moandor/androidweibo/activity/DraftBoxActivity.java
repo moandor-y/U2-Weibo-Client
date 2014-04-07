@@ -43,11 +43,19 @@ public class DraftBoxActivity extends AbsActivity {
         mListView.setAdapter(mListAdapter);
         mListView.setOnItemClickListener(new OnItemClickListener());
         mListView.setOnItemLongClickListener(new OnItemLongClickListener());
-        mTask = new GetDraftsTask();
-        mTask.execute();
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.draft_box);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mTask != null && mTask.getStatus() != MyAsyncTask.Status.FINISHED) {
+            mTask.cancel(true);
+        }
+        mTask = new GetDraftsTask();
+        mTask.execute();
     }
     
     @Override
@@ -182,7 +190,6 @@ public class DraftBoxActivity extends AbsActivity {
         
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            // TODO Auto-generated method stub
             return false;
         }
     };
