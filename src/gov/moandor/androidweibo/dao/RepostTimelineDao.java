@@ -7,7 +7,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public class RepostTimelineDao extends WeiboStatusDao {
+public class RepostTimelineDao extends BaseWeiboStatusTimelineDao {
     private long mWeiboId;
     
     @Override

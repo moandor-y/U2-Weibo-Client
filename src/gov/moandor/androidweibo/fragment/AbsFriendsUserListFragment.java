@@ -4,17 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import org.json.JSONObject;
-
 import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.FriendsUserListAdapter;
 import gov.moandor.androidweibo.bean.WeiboUser;
+import gov.moandor.androidweibo.dao.BaseUserListDao;
 import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
-
 import java.util.List;
 
 public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<FriendsUserListAdapter, WeiboUser> {
@@ -38,11 +33,9 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     }
     
     @Override
-    HttpParams getParams() {
-        HttpParams params = new HttpParams();
-        params.putParam("uid", mUserId);
-        params.putParam("trim_status", "1");
-        return params;
+    protected void onDaoCreated(BaseUserListDao<WeiboUser> dao) {
+        dao.setUid(mUserId);
+        dao.setTrimStatus(1);
     }
     
     @Override
@@ -67,11 +60,6 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     @Override
     void onListItemChecked(int position) {
         mAdapter.setSelectedPosition(position);
-    }
-    
-    @Override
-    List<WeiboUser> getDataFromJson(JSONObject json) throws WeiboException {
-        return JsonUtils.getWeiboUsersFromJson(json);
     }
     
     private class FriendsUserListRefreshTask extends RefreshTask {

@@ -10,13 +10,11 @@ import android.view.MenuItem;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.UserShowDao;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.ProgressDialogFragment;
 import gov.moandor.androidweibo.util.FollowTask;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.UnfollowTask;
 import gov.moandor.androidweibo.util.Utilities;
@@ -146,13 +144,11 @@ public class UserActivity extends AbsActivity {
         
         @Override
         protected WeiboUser doInBackground(Void... v) {
-            String url = HttpUtils.UrlHelper.USERS_SHOW;
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("screen_name", mUserName);
+            UserShowDao dao = new UserShowDao();
+            dao.setToken(GlobalContext.getCurrentAccount().token);
+            dao.setScreenName(mUserName);
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                return JsonUtils.getWeiboUserFromJson(response);
+                return dao.fetchData();
             } catch (WeiboException e) {
                 Utilities.notice(e.getMessage());
             }

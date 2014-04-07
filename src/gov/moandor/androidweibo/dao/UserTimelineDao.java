@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
 
-public class UserTimelineDao extends WeiboStatusDao {
+public class UserTimelineDao extends BaseWeiboStatusTimelineDao {
     private long mUserId;
     
     @Override

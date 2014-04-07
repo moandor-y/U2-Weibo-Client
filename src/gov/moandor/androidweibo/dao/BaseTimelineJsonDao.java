@@ -15,6 +15,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
     private long mMaxId;
     private int mCount = 20;
     private boolean mNoEnoughNewMessages;
+    private boolean mDataFetched;
     
     @Override
     public List<T> fetchData() throws WeiboException {
@@ -30,6 +31,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
             }
             result.remove(earliestMessage);
         }
+        mDataFetched = true;
         return result;
     }
     
@@ -54,6 +56,9 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
     }
     
     public boolean noEnoughNewMessages() {
+        if (!mDataFetched) {
+            throw new IllegalStateException("You must call fetchData() before call noEnoughNewMessages().");
+        }
         return mNoEnoughNewMessages;
     }
     

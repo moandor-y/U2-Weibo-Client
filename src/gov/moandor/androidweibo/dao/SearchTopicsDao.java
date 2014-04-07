@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
 
-public class SearchTopicsDao extends WeiboStatusDao {
+public class SearchTopicsDao extends BaseWeiboStatusTimelineDao {
     private String mTopic;
     
     @Override

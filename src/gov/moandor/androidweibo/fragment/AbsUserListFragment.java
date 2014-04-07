@@ -14,16 +14,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseUserListDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
@@ -131,6 +127,8 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mActionMode = null;
     }
     
+    protected void onDaoCreated(BaseUserListDao<DataBean> dao) {}
+    
     private class OnListScrollListener implements AbsListView.OnScrollListener {
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
@@ -166,23 +164,17 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     abstract class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            String url = getUrl();
-            HttpParams params = getParams();
-            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("count", Utilities.getLoadWeiboCount());
+            BaseUserListDao<DataBean> dao = onCreateDao();
+            onDaoCreated(dao);
+            dao.setToken(GlobalContext.getCurrentAccount().token);
+            dao.setCount(Utilities.getLoadWeiboCount());
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                JSONObject json = new JSONObject(response);
-                List<DataBean> beans = getDataFromJson(json);
-                mNextCursor = json.getInt("next_cursor");
+                List<DataBean> beans = dao.fetchData();
+                mNextCursor = dao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
-                return null;
-            } catch (JSONException e) {
-                Logger.logExcpetion(e);
-                Utilities.notice(R.string.json_error);
                 return null;
             }
         }
@@ -208,24 +200,18 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            String url = getUrl();
-            HttpParams params = getParams();
-            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("count", Utilities.getLoadWeiboCount());
-            params.putParam("cursor", mNextCursor);
+            BaseUserListDao<DataBean> dao = onCreateDao();
+            onDaoCreated(dao);
+            dao.setToken(GlobalContext.getCurrentAccount().token);
+            dao.setCount(Utilities.getLoadWeiboCount());
+            dao.setCursor(mNextCursor);
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                JSONObject json = new JSONObject(response);
-                List<DataBean> beans = getDataFromJson(json);
-                mNextCursor = json.getInt("next_cursor");
+                List<DataBean> beans = dao.fetchData();
+                mNextCursor = dao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());
-                return null;
-            } catch (JSONException e) {
-                Logger.logExcpetion(e);
-                Utilities.notice(R.string.json_error);
                 return null;
             }
         }
@@ -261,10 +247,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         }
     }
     
-    abstract String getUrl();
-    
-    abstract HttpParams getParams();
-    
     abstract void onItemClick(int position);
     
     abstract MyAsyncTask<Void, ?, ?> onCreateRefreshTask();
@@ -273,5 +255,5 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     abstract void onListItemChecked(int position);
     
-    abstract List<DataBean> getDataFromJson(JSONObject json) throws WeiboException;
+    protected abstract BaseUserListDao<DataBean> onCreateDao();
 }

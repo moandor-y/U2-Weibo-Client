@@ -7,7 +7,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public class FavoritesDao extends WeiboStatusDao {
+public class FavoritesDao extends BaseWeiboStatusTimelineDao {
     private int mPage;
     
     @Override

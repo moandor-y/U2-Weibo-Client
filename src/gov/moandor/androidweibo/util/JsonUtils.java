@@ -67,6 +67,15 @@ public class JsonUtils {
         }
     }
     
+    public static WeiboStatus getWeiboStatusFromJson(String jsonStr) throws WeiboException {
+        try {
+            return getWeiboStatusFromJson(new JSONObject(jsonStr));
+        } catch (JSONException e) {
+            Logger.logExcpetion(e);
+            throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
+        }
+    }
+    
     public static WeiboStatus getWeiboStatusFromJson(JSONObject json) {
         WeiboStatus weiboStatus = new WeiboStatus();
         weiboStatus.createdAt = json.optString("created_at", null);

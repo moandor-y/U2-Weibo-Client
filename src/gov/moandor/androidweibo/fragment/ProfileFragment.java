@@ -20,12 +20,10 @@ import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.UserShowDao;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
-import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
@@ -216,13 +214,11 @@ public class ProfileFragment extends Fragment {
     private class RefreshTask extends MyAsyncTask<Void, Void, WeiboUser> {
         @Override
         protected WeiboUser doInBackground(Void... v) {
-            String url = HttpUtils.UrlHelper.USERS_SHOW;
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("uid", mUser.id);
+            UserShowDao dao = new UserShowDao();
+            dao.setToken(GlobalContext.getCurrentAccount().token);
+            dao.setUid(mUser.id);
             try {
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                return JsonUtils.getWeiboUserFromJson(response);
+                return dao.fetchData();
             } catch (WeiboException e) {
                 Utilities.notice(e.getMessage());
             }

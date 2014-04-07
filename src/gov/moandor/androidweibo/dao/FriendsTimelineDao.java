@@ -9,7 +9,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public class FriendsTimelineDao extends WeiboStatusDao {
+public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
     @Override
     protected String getUrl() {
         return UrlHelper.STATUSES_FRIENDS_TIMELINE;

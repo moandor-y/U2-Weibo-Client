@@ -18,6 +18,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.AtUserSuggestionsDao;
+import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -121,6 +122,7 @@ public class AtUserActivity extends AbsActivity {
         @Override
         protected List<UserSuggestion> doInBackground(Void... v) {
             AtUserSuggestionsDao dao = new AtUserSuggestionsDao();
+            dao.setToken(GlobalContext.getCurrentAccount().token);
             dao.setKeyword(mKeyword);
             try {
                 return dao.fetchData();

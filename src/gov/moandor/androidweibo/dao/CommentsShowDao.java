@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
 
-public class CommentsShowDao extends WeiboCommentDao {
+public class CommentsShowDao extends BaseWeiboCommentTimelineDao {
     private long mWeiboId;
     
     @Override

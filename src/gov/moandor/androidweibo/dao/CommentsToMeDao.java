@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
 
-public class CommentsToMeDao extends WeiboCommentDao {
+public class CommentsToMeDao extends BaseWeiboCommentTimelineDao {
     private int mFilter;
     
     @Override

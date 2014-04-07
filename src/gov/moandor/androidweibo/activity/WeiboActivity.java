@@ -8,9 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
@@ -19,14 +16,12 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.WeiboPagerAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.WeiboStatusDao;
 import gov.moandor.androidweibo.fragment.WeiboCommentListFragment;
 import gov.moandor.androidweibo.fragment.WeiboFragment;
 import gov.moandor.androidweibo.fragment.WeiboRepostListFragment;
 import gov.moandor.androidweibo.util.FavoriteTask;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.UnfavoriteTask;
@@ -219,18 +214,13 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private class RefreshWeiboInfoTask extends MyAsyncTask<Void, Void, Integer[]> {
         @Override
         protected Integer[] doInBackground(Void... v) {
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-            params.putParam("id", mWeiboStatus.id);
+            WeiboStatusDao dao = new WeiboStatusDao();
+            dao.setToken(GlobalContext.getCurrentAccount().token);
+            dao.setId(mWeiboStatus.id);
             try {
-                String response =
-                        HttpUtils.executeNormalTask(HttpUtils.Method.GET, HttpUtils.UrlHelper.STATUSES_SHOW, params);
-                JSONObject json = new JSONObject(response);
-                WeiboStatus status = JsonUtils.getWeiboStatusFromJson(json);
+                WeiboStatus status = dao.fetchData();
                 return new Integer[]{status.commentCount, status.repostCount};
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
-            } catch (JSONException e) {
                 Logger.logExcpetion(e);
             }
             return null;

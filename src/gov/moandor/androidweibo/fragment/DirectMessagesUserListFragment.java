@@ -3,19 +3,14 @@ package gov.moandor.androidweibo.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import org.json.JSONObject;
-
 import gov.moandor.androidweibo.adapter.DirectMessagesUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseUserListDao;
+import gov.moandor.androidweibo.dao.DirectMessagesUserListDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
-
 import java.util.List;
 
 public class DirectMessagesUserListFragment extends
@@ -74,14 +69,8 @@ public class DirectMessagesUserListFragment extends
     }
     
     @Override
-    String getUrl() {
-        return HttpUtils.UrlHelper.DIRECT_MESSAGES_USER_LIST;
-    }
-    
-    @Override
-    HttpParams getParams() {
-        HttpParams params = new HttpParams();
-        return params;
+    protected BaseUserListDao<DirectMessagesUser> onCreateDao() {
+        return new DirectMessagesUserListDao();
     }
     
     @Override
@@ -102,11 +91,6 @@ public class DirectMessagesUserListFragment extends
     @Override
     void onListItemChecked(int position) {
         // TODO Auto-generated method stub
-    }
-    
-    @Override
-    List<DirectMessagesUser> getDataFromJson(JSONObject json) throws WeiboException {
-        return JsonUtils.getDmUsersFromJson(json);
     }
     
     private class DmUserListRefreshTask extends RefreshTask {
