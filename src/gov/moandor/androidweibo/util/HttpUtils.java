@@ -235,6 +235,7 @@ public class HttpUtils {
     }
     
     private static String doGet(String urlAddress, HttpParams params) throws WeiboException {
+        Logger.logToFile("doGet : " + urlAddress);
         try {
             URL url = new URL(urlAddress + "?" + params.getParams());
             Proxy proxy = getProxy();
@@ -264,6 +265,7 @@ public class HttpUtils {
     }
     
     private static String doPost(String urlAddress, HttpParams params) throws WeiboException {
+        Logger.logToFile("doPost : " + urlAddress);
         try {
             URL url = new URL(urlAddress);
             Proxy proxy = getProxy();
