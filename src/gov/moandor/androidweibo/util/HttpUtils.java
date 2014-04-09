@@ -147,6 +147,7 @@ public class HttpUtils {
     }
     
     private static boolean download(String urlAddress, String cachePath, DownloadListener listener) {
+        Logger.logToFile("download : " + urlAddress);
         File cacheFile = FileUtils.createFile(cachePath);
         if (cacheFile == null) {
             return false;
@@ -360,6 +361,7 @@ public class HttpUtils {
     
     private static boolean uploadFile(String urlAddress, HttpParams params, String path, String fileParamKey,
             UploadListener listener) throws WeiboException {
+        Logger.logToFile("uploadFile : " + urlAddress);
         StringBuffer sb = new StringBuffer();
         sb.append("--").append(BOUNDARY).append("\r\n");
         Iterator<String> keys = params.keySet().iterator();
