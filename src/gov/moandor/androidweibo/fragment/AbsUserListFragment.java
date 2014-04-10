@@ -169,7 +169,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             dao.setToken(GlobalContext.getCurrentAccount().token);
             dao.setCount(Utilities.getLoadWeiboCount());
             try {
-                List<DataBean> beans = dao.fetchData();
+                List<DataBean> beans = dao.execute();
                 mNextCursor = dao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
@@ -206,7 +206,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             dao.setCount(Utilities.getLoadWeiboCount());
             dao.setCursor(mNextCursor);
             try {
-                List<DataBean> beans = dao.fetchData();
+                List<DataBean> beans = dao.execute();
                 mNextCursor = dao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {

@@ -9,12 +9,13 @@ import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.bean.WeiboStatus;
+import gov.moandor.androidweibo.dao.CommentsMentionsDao;
+import gov.moandor.androidweibo.dao.CommentsToMeDao;
+import gov.moandor.androidweibo.dao.MentionsWeiboTimelineDao;
+import gov.moandor.androidweibo.dao.UnreadCountDao;
 import gov.moandor.androidweibo.fragment.CommentListFragment;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -34,12 +35,11 @@ public class FetchUnreadMessageService extends IntentService {
     }
     
     private static void fetch(Context context, Account account) {
-        String url = HttpUtils.UrlHelper.REMIND_UNREAD_COUNT;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", account.token);
+        UnreadCountDao dao = new UnreadCountDao();
+        dao.setToken(account.token);
+        
         try {
-            String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-            UnreadCount unreadCount = JsonUtils.getUnreadCountFromJson(response);
+            UnreadCount unreadCount = dao.execute();
             if (account.user.id == GlobalContext.getCurrentAccount().user.id) {
                 Intent intent = new Intent();
                 intent.setAction(MainActivity.ACTION_UNREAD_UPDATED);
@@ -79,15 +79,13 @@ public class FetchUnreadMessageService extends IntentService {
         if (oldComments.size() > 0) {
             oldComment = oldComments.get(0);
         }
-        String url = HttpUtils.UrlHelper.COMMENTS_TO_ME;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", account.token);
-        params.putParam("count", "1");
+        CommentsToMeDao dao = new CommentsToMeDao();
+        dao.setToken(account.token);
+        dao.setCount(1);
         if (oldComment != null) {
-            params.putParam("since_id", oldComment.id);
+            dao.setSinceId(oldComment.id);
         }
-        String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return JsonUtils.getWeiboCommentsFromJson(response);
+        return dao.execute();
     }
     
     private static List<WeiboStatus> fetchMentionStatuses(Account account) throws WeiboException {
@@ -96,15 +94,13 @@ public class FetchUnreadMessageService extends IntentService {
         if (oldStatuses.size() > 0) {
             oldStatus = oldStatuses.get(0);
         }
-        String url = HttpUtils.UrlHelper.STATUSES_MENTIONS;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", account.token);
-        params.putParam("count", "1");
+        MentionsWeiboTimelineDao dao = new MentionsWeiboTimelineDao();
+        dao.setToken(account.token);
+        dao.setCount(1);
         if (oldStatus != null) {
-            params.putParam("since_id", oldStatus.id);
+            dao.setSinceId(oldStatus.id);
         }
-        String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return JsonUtils.getWeiboStatusesFromJson(response);
+        return dao.execute();
     }
     
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {
@@ -113,15 +109,13 @@ public class FetchUnreadMessageService extends IntentService {
         if (oldComments.size() > 0) {
             oldComment = oldComments.get(0);
         }
-        String url = HttpUtils.UrlHelper.COMMENTS_MENTIONS;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", account.token);
-        params.putParam("count", "1");
+        CommentsMentionsDao dao = new CommentsMentionsDao();
+        dao.setToken(account.token);
+        dao.setCount(1);
         if (oldComment != null) {
-            params.putParam("since_id", oldComment.id);
+            dao.setSinceId(oldComment.id);
         }
-        String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        return JsonUtils.getWeiboCommentsFromJson(response);
+        return dao.execute();
     }
     
     private static void showNotification(Context context, WeiboComment comment, WeiboStatus mentionStatus,

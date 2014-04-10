@@ -7,13 +7,13 @@ import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class UserShowDao extends BaseDataJsonDao<WeiboUser> {
+public class UserShowDao extends BaseHttpDao<WeiboUser> {
     private String mToken;
     private String mScreenName;
     private long mUid;
     
     @Override
-    public WeiboUser fetchData() throws WeiboException {
+    public WeiboUser execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
         if (mUid != 0) {

@@ -10,7 +10,7 @@ import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class Oauth2AcessTokenDao extends BaseDataJsonDao<String> {
+public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
     private String mUsername;
     private String mPassword;
     private String mClientId;
@@ -18,7 +18,7 @@ public class Oauth2AcessTokenDao extends BaseDataJsonDao<String> {
     private String mGrantType;
     
     @Override
-    public String fetchData() throws WeiboException {
+    public String execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.putParam("username", mUsername);
         params.putParam("password", mPassword);

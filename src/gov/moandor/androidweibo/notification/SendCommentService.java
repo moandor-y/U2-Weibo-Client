@@ -12,10 +12,11 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.bean.CommentDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseSendCommentDao;
+import gov.moandor.androidweibo.dao.CreateCommentDao;
+import gov.moandor.androidweibo.dao.ReplyCommentDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
@@ -80,22 +81,19 @@ public class SendCommentService extends Service {
         
         @Override
         protected Void doInBackground(Void... v) {
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", mToken);
-            params.putParam("comment", mDraft.content);
-            params.putParam("id", mDraft.commentedStatus.id);
-            if (mDraft.commentOri) {
-                params.putParam("comment_ori", "1");
-            }
-            String url;
+            BaseSendCommentDao dao;
             if (mDraft.repliedComment == null) {
-                url = HttpUtils.UrlHelper.COMMENTS_CREATE;
+                dao = new CreateCommentDao();
             } else {
-                params.putParam("cid", mDraft.repliedComment.id);
-                url = HttpUtils.UrlHelper.COMMENTS_REPLY;
+                dao = new ReplyCommentDao();
+                ((ReplyCommentDao) dao).setCid(mDraft.repliedComment.id);
             }
+            dao.setToken(mToken);
+            dao.setComment(mDraft.content);
+            dao.setId(mDraft.commentedStatus.id);
+            dao.setCommentOri(mDraft.commentOri);
             try {
-                HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
+                dao.execute();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 mDraft.error = e.getMessage();

@@ -148,7 +148,7 @@ public class UserActivity extends AbsActivity {
             dao.setToken(GlobalContext.getCurrentAccount().token);
             dao.setScreenName(mUserName);
             try {
-                return dao.fetchData();
+                return dao.execute();
             } catch (WeiboException e) {
                 Utilities.notice(e.getMessage());
             }

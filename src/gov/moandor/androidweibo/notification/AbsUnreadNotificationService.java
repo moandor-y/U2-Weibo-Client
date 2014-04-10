@@ -17,9 +17,8 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.ResetUnreadCountDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
-import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -118,12 +117,11 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         MyAsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                String url = HttpUtils.UrlHelper.REMIND_SET_COUNT;
-                HttpParams params = new HttpParams();
-                params.putParam("access_token", token);
-                params.putParam("type", countType);
+                ResetUnreadCountDao dao = new ResetUnreadCountDao();
+                dao.setToken(token);
+                dao.setCountType(countType);
                 try {
-                    HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
+                    dao.execute();
                 } catch (WeiboException e) {
                     Logger.logExcpetion(e);
                 }

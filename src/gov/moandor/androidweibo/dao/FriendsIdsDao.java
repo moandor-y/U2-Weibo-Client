@@ -8,7 +8,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public class FriendsIdsDao extends BaseDataSetJsonDao<Long> {
+public class FriendsIdsDao extends BaseHttpDao<List<Long>> {
     private String mToken;
     private long mUserId;
     private int mCount = 500;
@@ -16,7 +16,7 @@ public class FriendsIdsDao extends BaseDataSetJsonDao<Long> {
     private int mNextCursor;
     
     @Override
-    public List<Long> fetchData() throws WeiboException {
+    public List<Long> execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
         params.putParam("uid", mUserId);

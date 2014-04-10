@@ -218,7 +218,7 @@ public class ProfileFragment extends Fragment {
             dao.setToken(GlobalContext.getCurrentAccount().token);
             dao.setUid(mUser.id);
             try {
-                return dao.fetchData();
+                return dao.execute();
             } catch (WeiboException e) {
                 Utilities.notice(e.getMessage());
             }

@@ -125,7 +125,7 @@ public class AtUserActivity extends AbsActivity {
             dao.setToken(GlobalContext.getCurrentAccount().token);
             dao.setKeyword(mKeyword);
             try {
-                return dao.fetchData();
+                return dao.execute();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 Utilities.notice(e.getMessage());

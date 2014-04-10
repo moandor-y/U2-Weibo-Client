@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public abstract class BaseUserListDao<T> extends BaseDataSetJsonDao<T> {
+public abstract class BaseUserListDao<T> extends BaseHttpDao<List<T>> {
     private String mToken;
     private int mCount;
     private int mCursor;
@@ -22,7 +22,7 @@ public abstract class BaseUserListDao<T> extends BaseDataSetJsonDao<T> {
     private boolean mDataFetched;
     
     @Override
-    public List<T> fetchData() throws WeiboException {
+    public List<T> execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
         params.putParam("count", mCount);

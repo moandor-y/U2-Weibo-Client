@@ -1,35 +1,26 @@
 package gov.moandor.androidweibo.dao;
 
-import gov.moandor.androidweibo.bean.UserSuggestion;
+import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.List;
-
-public class AtUserSuggestionsDao extends BaseHttpDao<List<UserSuggestion>> {
-    private String mKeyword;
+public class UnreadCountDao extends BaseHttpDao<UnreadCount> {
     private String mToken;
     
     @Override
-    public List<UserSuggestion> execute() throws WeiboException {
+    public UnreadCount execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
-        params.putParam("q", mKeyword);
-        params.putParam("type", "0");
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
-        return JsonUtils.getUserSuggestionsFromJson(response);
+        return JsonUtils.getUnreadCountFromJson(response);
     }
     
     @Override
     protected String getUrl() {
-        return UrlHelper.SEARCH_SUGGESTIONS_AT_USERS;
-    }
-    
-    public void setKeyword(String keyword) {
-        mKeyword = keyword;
+        return UrlHelper.REMIND_UNREAD_COUNT;
     }
     
     public void setToken(String token) {

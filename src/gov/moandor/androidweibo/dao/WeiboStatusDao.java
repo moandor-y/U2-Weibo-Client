@@ -6,12 +6,12 @@ import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class WeiboStatusDao extends BaseDataJsonDao<WeiboStatus> {
+public class WeiboStatusDao extends BaseHttpDao<WeiboStatus> {
     private String mToken;
     private long mId;
     
     @Override
-    public WeiboStatus fetchData() throws WeiboException {
+    public WeiboStatus execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.putParam("access_token", mToken);
         params.putParam("id", mId);

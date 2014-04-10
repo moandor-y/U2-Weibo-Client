@@ -218,7 +218,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             dao.setToken(GlobalContext.getCurrentAccount().token);
             dao.setId(mWeiboStatus.id);
             try {
-                WeiboStatus status = dao.fetchData();
+                WeiboStatus status = dao.execute();
                 return new Integer[]{status.commentCount, status.repostCount};
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);

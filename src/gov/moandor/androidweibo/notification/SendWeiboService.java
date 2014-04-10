@@ -11,12 +11,14 @@ import android.support.v4.app.NotificationCompat;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
-import gov.moandor.androidweibo.bean.GpsLocation;
 import gov.moandor.androidweibo.bean.WeiboDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseSendWeiboDao;
+import gov.moandor.androidweibo.dao.RepostWeiboDao;
+import gov.moandor.androidweibo.dao.UpdateWeiboDao;
+import gov.moandor.androidweibo.dao.UploadWeiboDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
@@ -86,31 +88,38 @@ public class SendWeiboService extends Service {
         
         @Override
         protected Void doInBackground(Void... v) {
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", mToken);
-            params.putParam("status", mDraft.content);
-            GpsLocation location = mDraft.location;
-            if (location != null) {
-                params.putParam("lat", location.latitude);
-                params.putParam("long", location.longitude);
-            }
+            BaseSendWeiboDao<?> dao;
             if (TextUtils.isEmpty(mDraft.picPath)) {
-                String url;
                 if (mDraft.retweetStatus == null) {
-                    url = HttpUtils.UrlHelper.STATUSES_UPDATE;
+                    dao = new UpdateWeiboDao();
                 } else {
-                    url = HttpUtils.UrlHelper.STATUSES_REPOST;
-                    params.putParam("id", mDraft.retweetStatus.id);
+                    RepostWeiboDao repostWeiboDao = new RepostWeiboDao();
+                    repostWeiboDao.setId(mDraft.retweetStatus.id);
                     if (mDraft.commentWhenRepost && mDraft.commentOriWhenRepost) {
-                        params.putParam("is_comment", "3");
+                        repostWeiboDao.setIsComment(3);
                     } else if (mDraft.commentWhenRepost) {
-                        params.putParam("is_comment", "1");
+                        repostWeiboDao.setIsComment(1);
                     } else if (mDraft.commentOriWhenRepost) {
-                        params.putParam("is_comment", "2");
+                        repostWeiboDao.setIsComment(2);
                     }
+                    dao = repostWeiboDao;
                 }
+            } else {
+                UploadWeiboDao uploadWeiboDao = new UploadWeiboDao();
+                uploadWeiboDao.setPicPath(mDraft.picPath);
+                uploadWeiboDao.setUploadListener(new UploadListener());
+                dao = uploadWeiboDao;
+            }
+            dao.setToken(mToken);
+            dao.setStatus(mDraft.content);
+            dao.setLocation(mDraft.location);
+            if (dao instanceof UploadWeiboDao) {
                 try {
-                    HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
+                    if (!((UploadWeiboDao) dao).execute()) {
+                        mDraft.error = getString(R.string.upload_failed);
+                        DatabaseUtils.insertDraft(mDraft);
+                        cancel(true);
+                    }
                 } catch (WeiboException e) {
                     Logger.logExcpetion(e);
                     mDraft.error = e.getMessage();
@@ -118,13 +127,8 @@ public class SendWeiboService extends Service {
                     cancel(true);
                 }
             } else {
-                String url = HttpUtils.UrlHelper.STATUSES_UPLOAD;
                 try {
-                    if (!HttpUtils.executeUploadTask(url, params, mDraft.picPath, "pic", new UploadListener())) {
-                        mDraft.error = getString(R.string.upload_failed);
-                        DatabaseUtils.insertDraft(mDraft);
-                        cancel(true);
-                    }
+                    dao.execute();
                 } catch (WeiboException e) {
                     Logger.logExcpetion(e);
                     mDraft.error = e.getMessage();

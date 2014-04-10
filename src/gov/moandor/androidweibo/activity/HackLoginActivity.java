@@ -50,7 +50,7 @@ public class HackLoginActivity extends AbsActivity {
                         dao.setClientSecret(getResources().getStringArray(R.array.hack_login_secrets)[spinner.getSelectedItemPosition()]);
                         dao.setGrantType("password");
                         try {
-                            String token = dao.fetchData();
+                            String token = dao.execute();
                             Utilities.fetchAndSaveAccountInfo(token);
                             Utilities.notice(R.string.auth_success);
                             Intent intent = new Intent();

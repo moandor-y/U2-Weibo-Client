@@ -8,7 +8,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDataSetJsonDao<T> {
+public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHttpDao<List<T>> {
     private String mToken;
     private T mSinceMessage;
     private long mSinceId;
@@ -18,7 +18,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseDat
     private boolean mDataFetched;
     
     @Override
-    public List<T> fetchData() throws WeiboException {
+    public List<T> execute() throws WeiboException {
         HttpParams params = new HttpParams();
         addParams(params);
         HttpUtils.Method method = HttpUtils.Method.GET;
