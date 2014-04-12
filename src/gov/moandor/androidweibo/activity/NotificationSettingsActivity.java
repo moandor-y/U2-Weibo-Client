@@ -179,10 +179,10 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    SettingsActivity.buildListDialog(R.string.interval, mIntervals, GlobalContext
+                    SettingsActivityOldApi.buildListDialog(R.string.interval, mIntervals, GlobalContext
                             .getNotificationFrequency(), new OnIntervalSelectedListener(),
                             NotificationSettingsActivity.this);
-            SettingsActivity.SettingsDialogFragment dialog = new SettingsActivity.SettingsDialogFragment();
+            SettingsActivityOldApi.SettingsDialogFragment dialog = new SettingsActivityOldApi.SettingsDialogFragment();
             dialog.setBuilder(builder);
             dialog.show(getSupportFragmentManager(), INTERVAL_DIALOG);
         }

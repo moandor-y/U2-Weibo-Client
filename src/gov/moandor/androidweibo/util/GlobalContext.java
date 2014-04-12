@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.util.LruCache;
 
 import gov.moandor.androidweibo.R;
@@ -53,7 +54,6 @@ public class GlobalContext extends Application {
     public static final float FONT_SIZE_SMALL = 10.0F;
     public static final float FONT_SIZE_MEDIUM = 15.0F;
     public static final float FONT_SIZE_LARGE = 20.0F;
-    private static final String PREFERENCE = "settings";
     private static final String THEME = "theme";
     private static final String CURRENT_ACCOUNT_INDEX = "current_account_index";
     private static final String WEIBO_GROUP = "weibo_group";
@@ -200,7 +200,7 @@ public class GlobalContext extends Application {
         sInstance = this;
         sHandler = new Handler();
         CrashHandler.register();
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences();
         sTheme = sharedPreferences.getInt(THEME, LIGHT);
         sCurrentAccountIndex = sharedPreferences.getInt(CURRENT_ACCOUNT_INDEX, 0);
         sWeiboGroup = sharedPreferences.getInt(WEIBO_GROUP, 0);
@@ -262,7 +262,7 @@ public class GlobalContext extends Application {
     }
     
     public static synchronized void savePreferences() {
-        SharedPreferences sharedPreferences = sInstance.getSharedPreferences(PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(THEME, sTheme);
         editor.putInt(CURRENT_ACCOUNT_INDEX, sCurrentAccountIndex);
@@ -603,5 +603,9 @@ public class GlobalContext extends Application {
     
     public static Map<String, String> getEmotionNameMap() {
         return sWeiboEmotionNameMap;
+    }
+    
+    private static SharedPreferences getSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(sInstance);
     }
 }

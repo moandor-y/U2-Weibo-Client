@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <CheckBoxPreference
+        android:key="fast_scroll_enabled"
+        android:title="@string/fast_scroll"
+        android:defaultValue="true" />
+    
+</PreferenceScreen>

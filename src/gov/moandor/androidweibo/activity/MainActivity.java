@@ -388,7 +388,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     
     private void settings() {
         Intent intent = new Intent();
-        intent.setClass(this, SettingsActivity.class);
+        intent.setClass(this, SettingsActivityOldApi.class);
         startActivity(intent);
     }
     
