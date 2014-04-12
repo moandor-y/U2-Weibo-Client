@@ -132,9 +132,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
-        if (isThisCurrentFragment()) {
-            mSwipeRefreshLayout.setRefreshing(true);
-        }
+        mSwipeRefreshLayout.setRefreshing(true);
         mRefreshTask = createRefreshTask();
         mRefreshTask.execute();
         mAdapter.updateState();
@@ -258,9 +256,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
-            if (isThisCurrentFragment()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            mSwipeRefreshLayout.setRefreshing(false);
             hideLoadingFooter();
             mNoEarlierMessage = false;
             mFooterText.setText(R.string.loading);
@@ -308,9 +304,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
-            if (isThisCurrentFragment()) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
+            mSwipeRefreshLayout.setRefreshing(false);
             if (result != null && result.size() == 0) {
                 mNoEarlierMessage = true;
                 mFooterText.setText(R.string.no_earlier_message);
