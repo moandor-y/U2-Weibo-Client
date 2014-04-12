@@ -20,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
-
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
 import gov.moandor.androidweibo.R;
@@ -34,11 +32,10 @@ import gov.moandor.androidweibo.fragment.MainDrawerFragment;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
-        MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener, PullToRefreshAttacherOwner {
+        MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
     private static final String STATE_TAB = "state_tab";
     private static final String STATE_UNREAD_COUNT = "state_unread_count";
     public static final int WEIBO_LIST = 0;
@@ -71,7 +68,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private ArrayAdapter<String> mWeiboListSpinnerAdapter;
     private ArrayAdapter<String> mAtmeListSpinnerAdapter;
     private ArrayAdapter<String> mCommentListSpinnerAdapter;
-    private PullToRefreshAttacher mPullToRefreshAttacher;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private PagerSlidingTabStrip mTabStrip;
     private MainPagerAdapter mPagerAdapter;
@@ -87,7 +83,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             return;
         }
         Resources res = getResources();
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         setContentView(R.layout.activity_main);
         mWeiboListSpinnerAdapter =
                 new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1, res
@@ -282,7 +277,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     
     @Override
     public void onPageSelected(int position) {
-        mPullToRefreshAttacher.setRefreshComplete();
         ActionBar actionBar = getSupportActionBar();
         if (position == mUnreadPage) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -384,11 +378,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         default:
             return false;
         }
-    }
-    
-    @Override
-    public PullToRefreshAttacher getAttacher() {
-        return mPullToRefreshAttacher;
     }
     
     private void writeWeibo() {

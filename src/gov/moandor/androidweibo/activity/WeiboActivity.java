@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
@@ -23,13 +22,11 @@ import gov.moandor.androidweibo.fragment.WeiboRepostListFragment;
 import gov.moandor.androidweibo.util.FavoriteTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.UnfavoriteTask;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnPageChangeListener,
-        PullToRefreshAttacherOwner {
+public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnPageChangeListener {
     public static final String WEIBO_STATUS;
     public static final String POSITION;
     
@@ -43,7 +40,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private ViewPager mViewPager;
     private WeiboCommentListFragment mWeiboCommentListFragment;
     private WeiboRepostListFragment mWeiboRepostListFragment;
-    private PullToRefreshAttacher mPullToRefreshAttacher;
     private WeiboPagerAdapter mPagerAdapter;
     private PagerSlidingTabStrip mTabStrip;
     private int mPosition;
@@ -68,7 +64,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         mTabStrip.setTextColorResource(android.R.color.white);
         mTabStrip.setIndicatorColorResource(R.color.holo_blue_light);
         mTabStrip.setTabPaddingLeftRight(getResources().getDimensionPixelSize(R.dimen.tab_padding));
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.weibo);
@@ -137,7 +132,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     
     @Override
     public void onPageSelected(int position) {
-        mPullToRefreshAttacher.setRefreshComplete();
         supportInvalidateOptionsMenu();
         switch (position) {
         case WeiboPagerAdapter.COMMENT_LIST:
@@ -147,11 +141,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             mWeiboRepostListFragment.onShown();
             break;
         }
-    }
-    
-    @Override
-    public PullToRefreshAttacher getAttacher() {
-        return mPullToRefreshAttacher;
     }
     
     private void refresh() {

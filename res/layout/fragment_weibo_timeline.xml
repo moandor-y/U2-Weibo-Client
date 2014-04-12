@@ -5,12 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <ListView
-        android:id="@+id/list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:drawSelectorOnTop="true" />
+        android:layout_weight="1" >
+        
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawSelectorOnTop="true" />
+        
+    </android.support.v4.widget.SwipeRefreshLayout>
     
     <RelativeLayout
         android:id="@+id/quick_post_layout"

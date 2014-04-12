@@ -5,20 +5,16 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.TopicWeiboListFragment;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class TopicActivity extends AbsActivity implements PullToRefreshAttacherOwner {
+public class TopicActivity extends AbsActivity {
     private TopicWeiboListFragment mFragment;
-    private PullToRefreshAttacher mPullToRefreshAttacher;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic);
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         mFragment = (TopicWeiboListFragment) fragmentManager.findFragmentById(R.id.content);
         String topicUri = getIntent().getData().toString();
@@ -56,10 +52,5 @@ public class TopicActivity extends AbsActivity implements PullToRefreshAttacherO
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
-    
-    @Override
-    public PullToRefreshAttacher getAttacher() {
-        return mPullToRefreshAttacher;
     }
 }

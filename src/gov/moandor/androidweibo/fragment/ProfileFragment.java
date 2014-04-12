@@ -1,17 +1,16 @@
 package gov.moandor.androidweibo.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.UserListActivity;
@@ -24,7 +23,6 @@ import gov.moandor.androidweibo.dao.UserShowDao;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -48,7 +46,7 @@ public class ProfileFragment extends Fragment {
     private TextView mAddressLabel;
     private TextView mStatisticsLabel;
     private RefreshTask mRefreshTask;
-    private PullToRefreshAttacher mPullToRefreshAttacher;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeiboUser mUser;
     private float mFontSize = Utilities.getFontSize();;
     private float mSmallFontSize = mFontSize - 3;
@@ -83,17 +81,12 @@ public class ProfileFragment extends Fragment {
         view.findViewById(R.id.weibo_count_layout).setOnClickListener(new OnWeiboCountLayoutClickListener());
         view.findViewById(R.id.following_count_layout).setOnClickListener(new OnFollowingCountLayoutClickListener());
         view.findViewById(R.id.follower_count_layout).setOnClickListener(new OnFollowerCountLayoutClickListener());
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
+        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, 
+                R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
         initFontSize();
         buildLayout();
-    }
-    
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Activity activity = getActivity();
-        if (activity instanceof PullToRefreshAttacherOwner) {
-            mPullToRefreshAttacher = ((PullToRefreshAttacherOwner) activity).getAttacher();
-        }
     }
     
     public void notifyAccountChanged() {
@@ -139,19 +132,23 @@ public class ProfileFragment extends Fragment {
     }
     
     private boolean isThisCurrentFragment() {
-        MainActivity activity = (MainActivity) getActivity();
-        if (activity != null) {
-            return activity.isCurrentFragment(this);
+        if (getActivity() instanceof MainActivity) {
+            MainActivity activity = (MainActivity) getActivity();
+            if (activity != null) {
+                return activity.isCurrentFragment(this);
+            }
+            return false;
+        } else {
+            return true;
         }
-        return false;
     }
     
     public void refresh() {
         if (mRefreshTask != null) {
             return;
         }
-        if (isThisCurrentFragment() && mPullToRefreshAttacher != null) {
-            mPullToRefreshAttacher.setRefreshing(true);
+        if (isThisCurrentFragment()) {
+            mSwipeRefreshLayout.setRefreshing(true);
         }
         mRefreshTask = new RefreshTask();
         mRefreshTask.execute();
@@ -227,9 +224,7 @@ public class ProfileFragment extends Fragment {
         
         @Override
         protected void onPostExecute(WeiboUser result) {
-            if (mPullToRefreshAttacher != null) {
-                mPullToRefreshAttacher.setRefreshComplete();
-            }
+            mSwipeRefreshLayout.setRefreshing(false);
             mRefreshTask = null;
             if (result == null) {
                 return;
@@ -273,6 +268,13 @@ public class ProfileFragment extends Fragment {
             intent.putExtra(UserListActivity.USER, mUser);
             intent.putExtra(UserListActivity.TYPE, UserListActivity.Type.FOLLOWERS);
             startActivity(intent);
+        }
+    }
+    
+    private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+        @Override
+        public void onRefresh() {
+            refresh();
         }
     }
 }

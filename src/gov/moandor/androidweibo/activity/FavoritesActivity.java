@@ -4,20 +4,16 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.FavoritesFragment;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class FavoritesActivity extends AbsActivity implements PullToRefreshAttacherOwner {
-    private PullToRefreshAttacher mPullToRefreshAttacher;
+public class FavoritesActivity extends AbsActivity {
     private FavoritesFragment mFragment;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         mFragment = (FavoritesFragment) fragmentManager.findFragmentById(R.id.content);
         if (mFragment == null) {
@@ -38,10 +34,5 @@ public class FavoritesActivity extends AbsActivity implements PullToRefreshAttac
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    
-    @Override
-    public PullToRefreshAttacher getAttacher() {
-        return mPullToRefreshAttacher;
     }
 }

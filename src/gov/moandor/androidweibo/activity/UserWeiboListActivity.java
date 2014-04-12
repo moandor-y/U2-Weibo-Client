@@ -5,14 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.MenuItem;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.UserWeiboListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class UserWeiboListActivity extends AbsActivity implements PullToRefreshAttacherOwner {
+public class UserWeiboListActivity extends AbsActivity {
     public static final String USER;
     
     static {
@@ -20,13 +18,10 @@ public class UserWeiboListActivity extends AbsActivity implements PullToRefreshA
         USER = packageName + ".user";
     }
     
-    private PullToRefreshAttacher mPullToRefreshAttacher;
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_weibo_list);
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         WeiboUser user = getIntent().getParcelableExtra(USER);
         FragmentManager fm = getSupportFragmentManager();
         if (fm.findFragmentById(R.id.content) == null) {
@@ -50,10 +45,5 @@ public class UserWeiboListActivity extends AbsActivity implements PullToRefreshA
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
-    
-    @Override
-    public PullToRefreshAttacher getAttacher() {
-        return mPullToRefreshAttacher;
     }
 }

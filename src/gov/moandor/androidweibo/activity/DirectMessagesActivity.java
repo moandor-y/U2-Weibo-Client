@@ -6,20 +6,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 
-public class DirectMessagesActivity extends AbsActivity implements PullToRefreshAttacherOwner {
-    private PullToRefreshAttacher mPullToRefreshAttacher;
+public class DirectMessagesActivity extends AbsActivity {
     private DirectMessagesUserListFragment mFragment;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dm_user_list);
-        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
         FragmentManager fragmentManager = getSupportFragmentManager();
         mFragment = (DirectMessagesUserListFragment) fragmentManager.findFragmentById(R.id.content);
         if (mFragment == null) {
@@ -51,10 +47,5 @@ public class DirectMessagesActivity extends AbsActivity implements PullToRefresh
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
-    
-    @Override
-    public PullToRefreshAttacher getAttacher() {
-        return mPullToRefreshAttacher;
     }
 }

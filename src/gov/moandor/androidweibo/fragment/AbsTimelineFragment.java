@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -17,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
@@ -29,7 +29,6 @@ import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -42,8 +41,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     TimelineListAdapter mAdapter;
     ListView mListView;
     ActionMode mActionMode;
-    PullToRefreshAttacher mPullToRefreshAttacher;
     MyAsyncTask<Void, Void, List<DataBean>> mRefreshTask;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
     private int mListScrollState;
     private boolean mNoEarlierMessage = false;
     private View mFooter;
@@ -56,13 +55,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-    
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mPullToRefreshAttacher = ((PullToRefreshAttacherOwner) getActivity()).getAttacher();
-        mPullToRefreshAttacher.addRefreshableView(mListView, new OnListRefreshListener());
     }
     
     @Override
@@ -93,6 +85,10 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mAdapter.setOnAvatarLongClickListener(new OnAvatarLongClickListener());
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new OnListItemClickListener());
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
+        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, 
+                R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
     }
     
     @Override
@@ -119,11 +115,11 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     public void setPullToRefreshEnabled(boolean enabled) {
-        mPullToRefreshAttacher.setEnabled(enabled);
+        mSwipeRefreshLayout.setEnabled(enabled);
     }
     
     void loadMore() {
-        if (mRefreshTask != null || !mPullToRefreshAttacher.isEnabled() || mNoEarlierMessage) {
+        if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
         }
         mRefreshTask = createLoadMoreTask();
@@ -133,11 +129,11 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     public void refresh() {
-        if (mRefreshTask != null || !mPullToRefreshAttacher.isEnabled()) {
+        if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
         if (isThisCurrentFragment()) {
-            mPullToRefreshAttacher.setRefreshing(true);
+            mSwipeRefreshLayout.setRefreshing(true);
         }
         mRefreshTask = createRefreshTask();
         mRefreshTask.execute();
@@ -226,9 +222,9 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
     };
     
-    private class OnListRefreshListener implements PullToRefreshAttacher.OnRefreshListener {
+    private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
-        public void onRefreshStarted(View view) {
+        public void onRefresh() {
             refresh();
         }
     }
@@ -263,7 +259,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             if (isThisCurrentFragment()) {
-                mPullToRefreshAttacher.setRefreshComplete();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
             hideLoadingFooter();
             mNoEarlierMessage = false;
@@ -313,7 +309,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             if (isThisCurrentFragment()) {
-                mPullToRefreshAttacher.setRefreshComplete();
+                mSwipeRefreshLayout.setRefreshing(false);
             }
             if (result != null && result.size() == 0) {
                 mNoEarlierMessage = true;

@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -14,14 +15,12 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.util.PullToRefreshAttacherOwner;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -36,7 +35,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     MyAsyncTask<Void, ?, ?> mRefreshTask;
     int mNextCursor;
     boolean mNoMoreUser;
-    private PullToRefreshAttacher mPullToRefreshAttacher;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private View mFooter;
     private View mFooterIcon;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
@@ -52,8 +51,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mPullToRefreshAttacher = ((PullToRefreshAttacherOwner) getActivity()).getAttacher();
-        mPullToRefreshAttacher.addRefreshableView(mListView, new OnListRefreshListener());
         if (mAdapter.getCount() == 0) {
             initContent();
         }
@@ -76,6 +73,10 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                         .inflate(R.layout.timeline_list_footer, mListView, false);
         mFooterIcon = mFooter.findViewById(R.id.image);
         showLoadingFooter();
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, 
+                R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
+        mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
     }
     
     public boolean isListViewFling() {
@@ -98,10 +99,10 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     }
     
     private void loadMore() {
-        if (mRefreshTask != null || !mPullToRefreshAttacher.isEnabled() || mNoMoreUser) {
+        if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled() || mNoMoreUser) {
             return;
         }
-        mPullToRefreshAttacher.setRefreshing(true);
+        mSwipeRefreshLayout.setRefreshing(true);
         mRefreshTask = onCreateloLoadMoreTask();
         mRefreshTask.execute();
     }
@@ -111,16 +112,16 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     }
     
     public void refresh() {
-        if (mRefreshTask != null || !mPullToRefreshAttacher.isEnabled()) {
+        if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
-        mPullToRefreshAttacher.setRefreshing(true);
+        mSwipeRefreshLayout.setRefreshing(true);
         mRefreshTask = onCreateRefreshTask();
         mRefreshTask.execute();
     }
     
     public void setPullToRefreshEnabled(boolean enabled) {
-        mPullToRefreshAttacher.setEnabled(enabled);
+        mSwipeRefreshLayout.setEnabled(enabled);
     }
     
     public void onActionModeFinished() {
@@ -182,7 +183,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
-            mPullToRefreshAttacher.setRefreshComplete();
+            mSwipeRefreshLayout.setRefreshing(false);
             hideLoadingFooter();
             if (mNextCursor == 0) {
                 mNoMoreUser = true;
@@ -220,7 +221,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             hideLoadingFooter();
-            mPullToRefreshAttacher.setRefreshComplete();
+            mSwipeRefreshLayout.setRefreshing(false);
             if (mNextCursor == 0) {
                 mNoMoreUser = true;
             }
@@ -240,9 +241,9 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         }
     }
     
-    private class OnListRefreshListener implements PullToRefreshAttacher.OnRefreshListener {
+    private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
-        public void onRefreshStarted(View view) {
+        public void onRefresh() {
             refresh();
         }
     }

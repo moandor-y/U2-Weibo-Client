@@ -59,7 +59,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
         if (mRefreshTask != null) {
             mRefreshTask.cancel(true);
         }
-        mPullToRefreshAttacher.setRefreshComplete();
+        mSwipeRefreshLayout.setRefreshing(false);
         if (mActionMode != null) {
             mActionMode.finish();
         }
