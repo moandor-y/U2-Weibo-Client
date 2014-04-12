@@ -35,10 +35,9 @@ public class UserActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
         mUser = getIntent().getParcelableExtra(USER);
         FragmentManager fm = getSupportFragmentManager();
-        mFragment = (ProfileFragment) fm.findFragmentById(R.id.content);
+        mFragment = (ProfileFragment) fm.findFragmentById(android.R.id.content);
         if (mFragment == null) {
             buildContent();
         } else {
@@ -128,7 +127,7 @@ public class UserActivity extends AbsActivity {
         mFragment.setArguments(args);
         FragmentManager fm = getSupportFragmentManager();
         try {
-            fm.beginTransaction().add(R.id.content, mFragment).commit();
+            fm.beginTransaction().add(android.R.id.content, mFragment).commit();
         } catch (IllegalStateException e) {
             Logger.logExcpetion(e);
         }

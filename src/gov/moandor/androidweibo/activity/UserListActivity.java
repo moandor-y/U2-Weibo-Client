@@ -29,11 +29,10 @@ public class UserListActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_list);
         Type type = (Type) getIntent().getSerializableExtra(TYPE);
         WeiboUser user = getIntent().getParcelableExtra(USER);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = (AbsFriendsUserListFragment) fragmentManager.findFragmentById(R.id.content);
+        mFragment = (AbsFriendsUserListFragment) fragmentManager.findFragmentById(android.R.id.content);
         if (mFragment == null) {
             Bundle args = new Bundle();
             args.putLong(AbsUserListFragment.USER_ID, user.id);
@@ -42,12 +41,12 @@ public class UserListActivity extends AbsActivity {
             case FOLLOWING:
                 mFragment = new FollowingListFragment();
                 mFragment.setArguments(args);
-                fragmentTransaction.add(R.id.content, mFragment);
+                fragmentTransaction.add(android.R.id.content, mFragment);
                 break;
             case FOLLOWERS:
                 mFragment = new FollowerListFragment();
                 mFragment.setArguments(args);
-                fragmentTransaction.add(R.id.content, mFragment);
+                fragmentTransaction.add(android.R.id.content, mFragment);
             }
             fragmentTransaction.commit();
         }

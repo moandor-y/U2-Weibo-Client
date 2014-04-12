@@ -15,13 +15,12 @@ public class DirectMessagesActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dm_user_list);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = (DirectMessagesUserListFragment) fragmentManager.findFragmentById(R.id.content);
+        mFragment = (DirectMessagesUserListFragment) fragmentManager.findFragmentById(android.R.id.content);
         if (mFragment == null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             mFragment = new DirectMessagesUserListFragment();
-            fragmentTransaction.add(R.id.content, mFragment);
+            fragmentTransaction.add(android.R.id.content, mFragment);
             fragmentTransaction.commit();
         }
         getSupportActionBar().setDisplayShowHomeEnabled(false);

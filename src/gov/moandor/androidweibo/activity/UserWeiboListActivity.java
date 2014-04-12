@@ -21,15 +21,14 @@ public class UserWeiboListActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_weibo_list);
         WeiboUser user = getIntent().getParcelableExtra(USER);
         FragmentManager fm = getSupportFragmentManager();
-        if (fm.findFragmentById(R.id.content) == null) {
+        if (fm.findFragmentById(android.R.id.content) == null) {
             Fragment fragment = new UserWeiboListFragment();
             Bundle args = new Bundle();
             args.putLong(UserWeiboListFragment.USER_ID, user.id);
             fragment.setArguments(args);
-            fm.beginTransaction().add(R.id.content, fragment).commit();
+            fm.beginTransaction().add(android.R.id.content, fragment).commit();
         }
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

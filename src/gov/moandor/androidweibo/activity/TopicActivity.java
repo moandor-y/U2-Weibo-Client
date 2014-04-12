@@ -14,9 +14,8 @@ public class TopicActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_topic);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = (TopicWeiboListFragment) fragmentManager.findFragmentById(R.id.content);
+        mFragment = (TopicWeiboListFragment) fragmentManager.findFragmentById(android.R.id.content);
         String topicUri = getIntent().getData().toString();
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -29,7 +28,7 @@ public class TopicActivity extends AbsActivity {
             Bundle args = new Bundle();
             args.putString(TopicWeiboListFragment.TOPIC, topic);
             mFragment.setArguments(args);
-            fragmentManager.beginTransaction().add(R.id.content, mFragment).commit();
+            fragmentManager.beginTransaction().add(android.R.id.content, mFragment).commit();
             fragmentManager.executePendingTransactions();
         }
     }

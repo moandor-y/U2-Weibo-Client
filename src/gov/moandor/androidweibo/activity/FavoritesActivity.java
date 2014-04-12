@@ -13,12 +13,11 @@ public class FavoritesActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = (FavoritesFragment) fragmentManager.findFragmentById(R.id.content);
+        mFragment = (FavoritesFragment) fragmentManager.findFragmentById(android.R.id.content);
         if (mFragment == null) {
             mFragment = new FavoritesFragment();
-            fragmentManager.beginTransaction().add(R.id.content, mFragment).commit();
+            fragmentManager.beginTransaction().add(android.R.id.content, mFragment).commit();
             fragmentManager.executePendingTransactions();
         }
         getSupportActionBar().setDisplayShowHomeEnabled(false);
