@@ -30,6 +30,8 @@ import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
+import gov.moandor.androidweibo.dao.GetAccountIdDao;
+import gov.moandor.androidweibo.dao.UserShowDao;
 
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
@@ -343,19 +345,15 @@ public class Utilities {
     }
     
     public static void fetchAndSaveAccountInfo(String token) throws WeiboException {
-        String url = HttpUtils.UrlHelper.ACCOUNT_GET_UID;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", token);
-        String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-        long id = JsonUtils.getWeiboAccountIdFromJson(response);
-        params.clear();
-        url = HttpUtils.UrlHelper.USERS_SHOW;
-        params.putParam("access_token", token);
-        params.putParam("uid", id);
-        response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
+        GetAccountIdDao getAccountIdDao = new GetAccountIdDao();
+        getAccountIdDao.setToken(token);
+        long id = getAccountIdDao.execute();
+        UserShowDao userShowDao = new UserShowDao();
+        userShowDao.setToken(token);
+        userShowDao.setUid(id);
         Account account = new Account();
         account.token = token;
-        account.user = JsonUtils.getWeiboUserFromJson(response);
+        account.user = userShowDao.execute();
         GlobalContext.addOrUpdateAccount(account);
     }
     

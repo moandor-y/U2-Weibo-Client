@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.util;
 
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.DeleteWeiboDao;
 
 public class DeleteWeiboTask extends MyAsyncTask<Void, Void, Void> {
     private static final int CODE_ALREADY_DELETED = 20101;
@@ -22,12 +23,11 @@ public class DeleteWeiboTask extends MyAsyncTask<Void, Void, Void> {
     
     @Override
     protected Void doInBackground(Void... v) {
-        String url = HttpUtils.UrlHelper.STATUSES_DESTROY;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("id", mId);
+        DeleteWeiboDao dao = new DeleteWeiboDao();
+        dao.setToken(mToken);
+        dao.setId(mId);
         try {
-            HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
+            dao.execute();
         } catch (WeiboException e) {
             Logger.logExcpetion(e);
             if (e.getCode() != CODE_ALREADY_DELETED) {

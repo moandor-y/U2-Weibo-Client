@@ -67,7 +67,7 @@ public abstract class BaseUserListDao<T> extends BaseHttpDao<List<T>> {
     
     public int getNextCursor() {
         if (!mDataFetched) {
-            throw new IllegalStateException("You must call fetchData() before call getNextCursor().");
+            throw new IllegalStateException("You must call execute() before call getNextCursor().");
         }
         return mNextCursor;
     }

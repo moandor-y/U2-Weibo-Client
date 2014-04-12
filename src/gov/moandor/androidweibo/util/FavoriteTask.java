@@ -1,11 +1,8 @@
 package gov.moandor.androidweibo.util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.FavoriteDao;
 
 public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
     private static final int CODE_ALREADY_FAVORITED = 20704;
@@ -27,20 +24,14 @@ public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
     
     @Override
     protected WeiboStatus doInBackground(Void... v) {
-        String url = HttpUtils.UrlHelper.FAVORITES_CREATE;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("id", mStatus.id);
+        FavoriteDao dao = new FavoriteDao();
+        dao.setToken(mToken);
+        dao.setId(mStatus.id);
         try {
-            String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-            JSONObject json = new JSONObject(response);
-            return JsonUtils.getWeiboStatusFromJson(json.getJSONObject("status"));
+            return dao.execute();
         } catch (WeiboException e) {
             Logger.logExcpetion(e);
             mException = e;
-        } catch (JSONException e) {
-            Logger.logExcpetion(e);
-            mException = new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
         cancel(true);
         return null;

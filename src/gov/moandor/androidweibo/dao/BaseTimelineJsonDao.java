@@ -57,7 +57,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHtt
     
     public boolean noEnoughNewMessages() {
         if (!mDataFetched) {
-            throw new IllegalStateException("You must call fetchData() before call noEnoughNewMessages().");
+            throw new IllegalStateException("You must call execute() before call noEnoughNewMessages().");
         }
         return mNoEnoughNewMessages;
     }

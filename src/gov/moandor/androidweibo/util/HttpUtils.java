@@ -74,7 +74,7 @@ public class HttpUtils {
     public static enum Method {
         POST, GET
     }
-    
+    /*
     public static final class UrlHelper {
         public static final String APPKEY = "1578201915";
         public static final String AUTH_REDIRECT = "https://api.weibo.com/oauth2/default.html";
@@ -115,7 +115,7 @@ public class HttpUtils {
         public static final String FAVORITES_DESTROY = "https://api.weibo.com/2/favorites/destroy.json";
         public static final String DIRECT_MESSAGES_USER_LIST = "https://api.weibo.com/2/direct_messages/user_list.json";
     }
-    
+    */
     private static Proxy getProxy() {
         String proxyHost = System.getProperty("http.proxyHost");
         String proxyPort = System.getProperty("http.proxyPort");

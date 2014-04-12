@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.util;
 
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.UnfollowDao;
 
 public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     private static final int CODE_ALREADY_UNFOLLOWED = 20522;
@@ -9,6 +10,7 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     private WeiboUser mUser;
     private OnUnfollowFinishedListener mListener;
     private WeiboException mException;
+    private String mToken;
     
     public UnfollowTask(WeiboUser user, OnUnfollowFinishedListener l) {
         mUser = user;
@@ -16,14 +18,17 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     }
     
     @Override
+    protected void onPreExecute() {
+        mToken = GlobalContext.getCurrentAccount().token;
+    }
+    
+    @Override
     protected WeiboUser doInBackground(Void... v) {
-        String url = HttpUtils.UrlHelper.FRIENDSHIPS_DESTROY;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("uid", mUser.id);
+        UnfollowDao dao = new UnfollowDao();
+        dao.setToken(mToken);
+        dao.setUid(mUser.id);
         try {
-            String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-            return JsonUtils.getWeiboUserFromJson(response);
+            return dao.execute();
         } catch (WeiboException e) {
             if (e.getCode() == CODE_ALREADY_UNFOLLOWED) {
                 mUser.following = false;

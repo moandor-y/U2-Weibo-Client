@@ -1,11 +1,10 @@
 package gov.moandor.androidweibo.util;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
+import gov.moandor.androidweibo.dao.FollowingDao;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,19 +63,16 @@ public class ClearCacheRunnable implements Runnable {
     }
     
     private static List<String> fetchSkipPaths() throws WeiboException, JSONException {
-        String url = HttpUtils.UrlHelper.FRIENDSHIPS_FRIENDS;
         List<String> result = new ArrayList<String>();
         for (Account account : GlobalContext.getAccounts()) {
-            HttpParams params = new HttpParams();
-            params.putParam("access_token", account.token);
-            params.putParam("uid", account.user.id);
-            params.putParam("count", "200");
+            FollowingDao dao = new FollowingDao();
+            dao.setToken(account.token);
+            dao.setUid(account.user.id);
+            dao.setCount(200);
             int nextCursor = 0;
             do {
-                params.putParam("cursor", nextCursor);
-                String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, url, params);
-                JSONObject json = new JSONObject(response);
-                List<WeiboUser> users = JsonUtils.getWeiboUsersFromJson(json);
+                dao.setCursor(nextCursor);
+                List<WeiboUser> users = dao.execute();
                 users.add(account.user);
                 for (WeiboUser user : users) {
                     String path =
@@ -89,7 +85,7 @@ public class ClearCacheRunnable implements Runnable {
                         result.add(path);
                     }
                 }
-                nextCursor = json.getInt("next_cursor");
+                nextCursor = dao.getNextCursor();
             } while (nextCursor != 0);
         }
         return result;

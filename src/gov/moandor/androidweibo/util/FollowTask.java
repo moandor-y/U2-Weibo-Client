@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.util;
 
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.FollowDao;
 
 public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     private static final int CODE_ALREADY_FOLLOWED = 20506;
@@ -9,6 +10,7 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     private WeiboUser mUser;
     private OnFollowFinishedListener mListener;
     private WeiboException mException;
+    private String mToken;
     
     public FollowTask(WeiboUser user, OnFollowFinishedListener l) {
         mUser = user;
@@ -16,14 +18,17 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     }
     
     @Override
+    protected void onPreExecute() {
+        mToken = GlobalContext.getCurrentAccount().token;
+    }
+    
+    @Override
     protected WeiboUser doInBackground(Void... v) {
-        String url = HttpUtils.UrlHelper.FRIENDSHIPS_CREATE;
-        HttpParams params = new HttpParams();
-        params.putParam("access_token", GlobalContext.getCurrentAccount().token);
-        params.putParam("uid", mUser.id);
+        FollowDao dao = new FollowDao();
+        dao.setToken(mToken);
+        dao.setUid(mUser.id);
         try {
-            String response = HttpUtils.executeNormalTask(HttpUtils.Method.POST, url, params);
-            WeiboUser result = JsonUtils.getWeiboUserFromJson(response);
+            WeiboUser result = dao.execute();
             result.following = true;
             return result;
         } catch (WeiboException e) {
