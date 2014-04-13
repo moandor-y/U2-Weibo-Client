@@ -200,33 +200,7 @@ public class GlobalContext extends Application {
         sInstance = this;
         sHandler = new Handler();
         CrashHandler.register();
-        SharedPreferences sharedPreferences = getSharedPreferences();
-        sTheme = sharedPreferences.getInt(THEME, LIGHT);
-        sCurrentAccountIndex = sharedPreferences.getInt(CURRENT_ACCOUNT_INDEX, 0);
-        sWeiboGroup = sharedPreferences.getInt(WEIBO_GROUP, 0);
-        sPictureQuality = sharedPreferences.getInt(PICTURE_QUALITY, PICTURE_SMALL);
-        sPictureWifiQuality = sharedPreferences.getInt(PICTURE_WIFI_QUALITY, PICTURE_LARGE);
-        sAtmeFilter = sharedPreferences.getInt(ATME_FILTER, 0);
-        sCommentFilter = sharedPreferences.getInt(COMMENT_FILTER, 0);
-        sFastScrollEnabled = sharedPreferences.getBoolean(FAST_SCROLL_ENABLED, true);
-        sFontSizeMode = sharedPreferences.getInt(FONT_SIZE_MODE, FONT_SIZE_MODE_MEDIUM);
-        sAvatarQuality = sharedPreferences.getInt(AVATAR_QUALITY, AVATAR_AUTO);
-        sNoPictureMode = sharedPreferences.getBoolean(NO_PICTURE_MODE, false);
-        sLoadWeiboCountMode = sharedPreferences.getInt(LOAD_WEIBO_COUNT_MODE, 0);
-        sCommentRepostListAvatarMode =
-                sharedPreferences.getInt(COMMENT_REPOST_LIST_AVATAR_MODE, COMMENT_REPOST_LIST_AVATAR_AUTO);
-        sNotificationEnabled = sharedPreferences.getBoolean(NOTIFICATION_ENABLED, false);
-        sNotificationFrequency = sharedPreferences.getInt(NOTIFICATION_FREQUENCY, FIFTEEN_MINUTES);
-        sNotificationMentionWeiboEnabled = sharedPreferences.getBoolean(NOTIFICATION_MENTION_WEIBO_ENABLED, true);
-        sNotificationCommentEnabled = sharedPreferences.getBoolean(NOTIFICATION_COMMENT_ENABLED, true);
-        sNotificationMentionCommentEnabled = sharedPreferences.getBoolean(NOTIFICATION_MENTION_COMMENT_ENABLED, true);
-        sNotificationVibrateEnabled = sharedPreferences.getBoolean(NOTIFICATION_VIBRATE_ENABLED, true);
-        sNotificationLedEnabled = sharedPreferences.getBoolean(NOTIFICATION_LED_ENABLED, true);
-        sNotificationRingtone = sharedPreferences.getString(NOTIFICATION_RINGTONE, null);
-        sWifiAutoDownloadPicEnabled = sharedPreferences.getBoolean(WIFI_AUTO_DOWNLOAD_PIC_ENABLED, true);
-        sListHwAccelEnabled = sharedPreferences.getBoolean(LIST_HW_ACCEL_ENABLED, true);
-        sPicHwAccelEnabled = sharedPreferences.getBoolean(PIC_HW_ACCEL_ENABLED, true);
-        sScreenOrientation = sharedPreferences.getInt(SCREEN_ORIENTATION, ORIENTATION_USER);
+        readPreferences();
         switch (sTheme) {
         case LIGHT:
             setTheme(R.style.Theme_Weibo_Light);
@@ -260,6 +234,36 @@ public class GlobalContext extends Application {
             }
         };
     }
+	
+	public static synchronized void readPreferences() {
+		SharedPreferences sharedPreferences = getSharedPreferences();
+        sTheme = sharedPreferences.getInt(THEME, LIGHT);
+        sCurrentAccountIndex = sharedPreferences.getInt(CURRENT_ACCOUNT_INDEX, 0);
+        sWeiboGroup = sharedPreferences.getInt(WEIBO_GROUP, 0);
+        sPictureQuality = sharedPreferences.getInt(PICTURE_QUALITY, PICTURE_SMALL);
+        sPictureWifiQuality = sharedPreferences.getInt(PICTURE_WIFI_QUALITY, PICTURE_LARGE);
+        sAtmeFilter = sharedPreferences.getInt(ATME_FILTER, 0);
+        sCommentFilter = sharedPreferences.getInt(COMMENT_FILTER, 0);
+        sFastScrollEnabled = sharedPreferences.getBoolean(FAST_SCROLL_ENABLED, true);
+        sFontSizeMode = sharedPreferences.getInt(FONT_SIZE_MODE, FONT_SIZE_MODE_MEDIUM);
+        sAvatarQuality = sharedPreferences.getInt(AVATAR_QUALITY, AVATAR_AUTO);
+        sNoPictureMode = sharedPreferences.getBoolean(NO_PICTURE_MODE, false);
+        sLoadWeiboCountMode = sharedPreferences.getInt(LOAD_WEIBO_COUNT_MODE, 0);
+        sCommentRepostListAvatarMode =
+			sharedPreferences.getInt(COMMENT_REPOST_LIST_AVATAR_MODE, COMMENT_REPOST_LIST_AVATAR_AUTO);
+        sNotificationEnabled = sharedPreferences.getBoolean(NOTIFICATION_ENABLED, false);
+        sNotificationFrequency = sharedPreferences.getInt(NOTIFICATION_FREQUENCY, FIFTEEN_MINUTES);
+        sNotificationMentionWeiboEnabled = sharedPreferences.getBoolean(NOTIFICATION_MENTION_WEIBO_ENABLED, true);
+        sNotificationCommentEnabled = sharedPreferences.getBoolean(NOTIFICATION_COMMENT_ENABLED, true);
+        sNotificationMentionCommentEnabled = sharedPreferences.getBoolean(NOTIFICATION_MENTION_COMMENT_ENABLED, true);
+        sNotificationVibrateEnabled = sharedPreferences.getBoolean(NOTIFICATION_VIBRATE_ENABLED, true);
+        sNotificationLedEnabled = sharedPreferences.getBoolean(NOTIFICATION_LED_ENABLED, true);
+        sNotificationRingtone = sharedPreferences.getString(NOTIFICATION_RINGTONE, null);
+        sWifiAutoDownloadPicEnabled = sharedPreferences.getBoolean(WIFI_AUTO_DOWNLOAD_PIC_ENABLED, true);
+        sListHwAccelEnabled = sharedPreferences.getBoolean(LIST_HW_ACCEL_ENABLED, true);
+        sPicHwAccelEnabled = sharedPreferences.getBoolean(PIC_HW_ACCEL_ENABLED, true);
+        sScreenOrientation = sharedPreferences.getInt(SCREEN_ORIENTATION, ORIENTATION_USER);
+	}
     
     public static synchronized void savePreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences();
