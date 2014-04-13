@@ -292,11 +292,10 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     
     private void loadPicPreview() {
         if (!TextUtils.isEmpty(mPicPath)) {
-            Bitmap thumb = ImageUtils.getBitmapFromFile(mPicPath, 
-                    Utilities.dpToPx(30), Utilities.dpToPx(30));
+            Bitmap thumb = ImageUtils.getBitmapFromFile(mPicPath, Utilities.dpToPx(30), Utilities.dpToPx(30));
             mAddPicButton.setImageBitmap(thumb);
-            Bitmap preview = ImageUtils.getBitmapFromFile(mPicPath, 
-                    Utilities.getScreenWidth(), Utilities.getScreenHeight());
+            Bitmap preview =
+                    ImageUtils.getBitmapFromFile(mPicPath, Utilities.getScreenWidth(), Utilities.getScreenHeight());
             mPreview.setImageBitmap(preview);
             mPreview.setVisibility(View.VISIBLE);
         } else {

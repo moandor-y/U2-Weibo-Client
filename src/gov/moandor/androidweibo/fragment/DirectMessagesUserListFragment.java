@@ -11,6 +11,7 @@ import gov.moandor.androidweibo.dao.DirectMessagesUserListDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
+
 import java.util.List;
 
 public class DirectMessagesUserListFragment extends

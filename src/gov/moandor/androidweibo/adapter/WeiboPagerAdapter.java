@@ -4,13 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import java.text.DecimalFormat;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.WeiboCommentListFragment;
 import gov.moandor.androidweibo.fragment.WeiboFragment;
 import gov.moandor.androidweibo.fragment.WeiboRepostListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
+
+import java.text.DecimalFormat;
 
 public class WeiboPagerAdapter extends FragmentPagerAdapter {
     public static final int TAB_COUNT = 3;

@@ -46,8 +46,10 @@ public class HackLoginActivity extends AbsActivity {
                         Oauth2AcessTokenDao dao = new Oauth2AcessTokenDao();
                         dao.setUsername(username.getText().toString());
                         dao.setPassword(password.getText().toString());
-                        dao.setClientId(getResources().getStringArray(R.array.hack_login_keys)[spinner.getSelectedItemPosition()]);
-                        dao.setClientSecret(getResources().getStringArray(R.array.hack_login_secrets)[spinner.getSelectedItemPosition()]);
+                        dao.setClientId(getResources().getStringArray(R.array.hack_login_keys)[spinner
+                                .getSelectedItemPosition()]);
+                        dao.setClientSecret(getResources().getStringArray(R.array.hack_login_secrets)[spinner
+                                .getSelectedItemPosition()]);
                         dao.setGrantType("password");
                         try {
                             String token = dao.execute();

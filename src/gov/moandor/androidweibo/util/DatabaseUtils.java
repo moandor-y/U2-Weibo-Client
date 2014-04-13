@@ -565,7 +565,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     
     public static synchronized long[] getFollowingIds(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
-        String sql = "select * from " + Table.FollowingId.TABLE_NAME + " where " + Table.FollowingId.ACCOUNT_ID + "=" + accountId;
+        String sql =
+                "select * from " + Table.FollowingId.TABLE_NAME + " where " + Table.FollowingId.ACCOUNT_ID + "="
+                        + accountId;
         Cursor cursor = database.rawQuery(sql, null);
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.FollowingId.CONTENT_DATA));

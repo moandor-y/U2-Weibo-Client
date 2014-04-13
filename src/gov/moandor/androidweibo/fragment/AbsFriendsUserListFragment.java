@@ -10,6 +10,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
 import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
+
 import java.util.List;
 
 public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<FriendsUserListAdapter, WeiboUser> {

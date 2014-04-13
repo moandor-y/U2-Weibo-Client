@@ -1,10 +1,10 @@
 package gov.moandor.androidweibo.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.dao.FriendsIdsDao;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UpdateFollowingIdsRunnable implements Runnable {
     @Override

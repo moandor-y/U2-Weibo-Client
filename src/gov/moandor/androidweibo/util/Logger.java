@@ -2,13 +2,13 @@ package gov.moandor.androidweibo.util;
 
 import android.util.Log;
 
+import gov.moandor.androidweibo.BuildConfig;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
-
-import gov.moandor.androidweibo.BuildConfig;
 
 public class Logger {
     private static final String DEFAULT_TAG = Logger.class.getSimpleName();

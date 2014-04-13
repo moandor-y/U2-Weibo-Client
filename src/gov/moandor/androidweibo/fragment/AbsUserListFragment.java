@@ -74,7 +74,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mFooterIcon = mFooter.findViewById(R.id.image);
         showLoadingFooter();
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, 
+        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
         mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
     }

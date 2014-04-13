@@ -87,7 +87,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mListView.setOnItemClickListener(new OnListItemClickListener());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
-        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2, 
+        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
     }
     

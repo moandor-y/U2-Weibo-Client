@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
 import gov.moandor.androidweibo.R;

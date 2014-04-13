@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.util;
 
 import org.json.JSONException;
+
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
