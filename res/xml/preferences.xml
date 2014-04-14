@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     
+	<ListPreference
+		android:key="theme"
+		android:title="@string/theme"
+		android:entries="@array/themes"
+		android:entryValues="@array/theme_values" />
+	
     <CheckBoxPreference
         android:key="fast_scroll_enabled"
         android:title="@string/fast_scroll"

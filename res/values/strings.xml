@@ -35,6 +35,11 @@
         <item>白色</item>
         <item>黑色</item>
     </string-array>
+	
+	<string-array name="theme_values">
+		<item>0</item>
+		<item>1</item>
+	</string-array>
     
     <string-array name="avatar_modes">
         <item>自动</item>
@@ -42,24 +47,48 @@
         <item>大</item>
     </string-array>
     
+	<string-array name="avatar_mode_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
     <string-array name="picture_modes">
         <item>小</item>
         <item>中</item>
         <item>大</item>
     </string-array>
     
+	<string-array name="picture_mode_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
     <string-array name="font_sizes">
         <item>小</item>
         <item>中</item>
         <item>大</item>
     </string-array>
     
+	<string-array name="font_size_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
     <string-array name="comment_repost_list_avatar_modes">
         <item>自动</item>
         <item>开启</item>
         <item>关闭</item>
     </string-array>
     
+	<string-array name="comment_repost_list_avatar_mode_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
     <string-array name="load_weibo_counts">
         <item>自动</item>
         <item>25</item>
@@ -68,12 +97,26 @@
         <item>100</item>
     </string-array>
     
+	<string-array name="load_weibo_count_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+	</string-array>
+	
     <string-array name="notification_intervals">
         <item>三分钟</item>
         <item>十五分钟</item>
         <item>半小时</item>
     </string-array>
     
+	<string-array name="notification_interval_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	
     <string-array name="add_picture_dialog_items">
         <item>拍照</item>
         <item>图库</item>

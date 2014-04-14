@@ -11,10 +11,10 @@ public abstract class AbsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         switch (GlobalContext.getAppTheme()) {
-        case GlobalContext.LIGHT:
+        case GlobalContext.THEME_LIGHT:
             setTheme(R.style.Theme_Weibo_Light);
             break;
-        case GlobalContext.DARK:
+        case GlobalContext.THEME_DARK:
             setTheme(R.style.Theme_Weibo_Dark);
             break;
         }

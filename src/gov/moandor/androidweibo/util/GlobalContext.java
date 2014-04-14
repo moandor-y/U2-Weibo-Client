@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GlobalContext extends Application {
-    public static final int LIGHT = 0;
-    public static final int DARK = 1;
+    public static final int THEME_LIGHT = 0;
+    public static final int THEME_DARK = 1;
     public static final int PICTURE_SMALL = 0;
     public static final int PICTURE_MEDIUM = 1;
     public static final int PICTURE_LARGE = 2;
@@ -54,6 +54,7 @@ public class GlobalContext extends Application {
     public static final float FONT_SIZE_SMALL = 10.0F;
     public static final float FONT_SIZE_MEDIUM = 15.0F;
     public static final float FONT_SIZE_LARGE = 20.0F;
+	private static final String PREFERENCE_VERSION_KEY = "preference_version";
     private static final String THEME = "theme";
     private static final String CURRENT_ACCOUNT_INDEX = "current_account_index";
     private static final String WEIBO_GROUP = "weibo_group";
@@ -80,6 +81,7 @@ public class GlobalContext extends Application {
     private static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     private static final String SCREEN_ORIENTATION = "screen_orientation";
     private static final int MIN_CACHE_SIZE = 1024 * 1024 * 8;
+	private static final int PREFERENCE_VERSION = 2;
     
     private static volatile GlobalContext sInstance;
     private static volatile AbsActivity sActivity;
@@ -202,10 +204,10 @@ public class GlobalContext extends Application {
         CrashHandler.register();
         readPreferences();
         switch (sTheme) {
-        case LIGHT:
+        case THEME_LIGHT:
             setTheme(R.style.Theme_Weibo_Light);
             break;
-        case DARK:
+        case THEME_DARK:
             setTheme(R.style.Theme_Weibo_Dark);
             break;
         }
@@ -237,7 +239,13 @@ public class GlobalContext extends Application {
 	
 	public static synchronized void readPreferences() {
 		SharedPreferences sharedPreferences = getSharedPreferences();
-        sTheme = sharedPreferences.getInt(THEME, LIGHT);
+		if (sharedPreferences.getInt(PREFERENCE_VERSION_KEY, 0) < PREFERENCE_VERSION) {
+			SharedPreferences.Editor editor = sharedPreferences.edit();
+			editor.clear();
+			editor.putInt(PREFERENCE_VERSION_KEY, PREFERENCE_VERSION);
+			editor.commit();
+		}
+        sTheme = Integer.parseInt(sharedPreferences.getString(THEME, String.valueOf(THEME_LIGHT)));
         sCurrentAccountIndex = sharedPreferences.getInt(CURRENT_ACCOUNT_INDEX, 0);
         sWeiboGroup = sharedPreferences.getInt(WEIBO_GROUP, 0);
         sPictureQuality = sharedPreferences.getInt(PICTURE_QUALITY, PICTURE_SMALL);
@@ -263,12 +271,13 @@ public class GlobalContext extends Application {
         sListHwAccelEnabled = sharedPreferences.getBoolean(LIST_HW_ACCEL_ENABLED, true);
         sPicHwAccelEnabled = sharedPreferences.getBoolean(PIC_HW_ACCEL_ENABLED, true);
         sScreenOrientation = sharedPreferences.getInt(SCREEN_ORIENTATION, ORIENTATION_USER);
+		savePreferences();
 	}
     
     public static synchronized void savePreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences();
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(THEME, sTheme);
+        editor.putString(THEME, String.valueOf(sTheme));
         editor.putInt(CURRENT_ACCOUNT_INDEX, sCurrentAccountIndex);
         editor.putInt(WEIBO_GROUP, sWeiboGroup);
         editor.putInt(PICTURE_QUALITY, sPictureQuality);
