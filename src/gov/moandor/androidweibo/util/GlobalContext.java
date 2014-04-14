@@ -81,7 +81,7 @@ public class GlobalContext extends Application {
     private static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     private static final String SCREEN_ORIENTATION = "screen_orientation";
     private static final int MIN_CACHE_SIZE = 1024 * 1024 * 8;
-	private static final int PREFERENCE_VERSION = 2;
+	private static final int PREFERENCE_VERSION = 3;
     
     private static volatile GlobalContext sInstance;
     private static volatile AbsActivity sActivity;
@@ -248,7 +248,7 @@ public class GlobalContext extends Application {
         sTheme = Integer.parseInt(sharedPreferences.getString(THEME, String.valueOf(THEME_LIGHT)));
         sCurrentAccountIndex = sharedPreferences.getInt(CURRENT_ACCOUNT_INDEX, 0);
         sWeiboGroup = sharedPreferences.getInt(WEIBO_GROUP, 0);
-        sPictureQuality = sharedPreferences.getInt(PICTURE_QUALITY, PICTURE_SMALL);
+        sPictureQuality = Integer.parseInt(sharedPreferences.getString(PICTURE_QUALITY, String.valueOf(PICTURE_SMALL)));
         sPictureWifiQuality = sharedPreferences.getInt(PICTURE_WIFI_QUALITY, PICTURE_LARGE);
         sAtmeFilter = sharedPreferences.getInt(ATME_FILTER, 0);
         sCommentFilter = sharedPreferences.getInt(COMMENT_FILTER, 0);
@@ -280,7 +280,7 @@ public class GlobalContext extends Application {
         editor.putString(THEME, String.valueOf(sTheme));
         editor.putInt(CURRENT_ACCOUNT_INDEX, sCurrentAccountIndex);
         editor.putInt(WEIBO_GROUP, sWeiboGroup);
-        editor.putInt(PICTURE_QUALITY, sPictureQuality);
+        editor.putString(PICTURE_QUALITY, String.valueOf(sPictureQuality));
         editor.putInt(PICTURE_WIFI_QUALITY, sPictureWifiQuality);
         editor.putInt(ATME_FILTER, sAtmeFilter);
         editor.putInt(COMMENT_FILTER, sCommentFilter);

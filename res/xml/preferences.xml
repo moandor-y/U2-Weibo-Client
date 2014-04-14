@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     
-	<ListPreference
-		android:key="theme"
-		android:title="@string/theme"
-		android:entries="@array/themes"
-		android:entryValues="@array/theme_values" />
+	<PreferenceCategory android:title="@string/general">
+		
+		<ListPreference
+			android:key="theme"
+			android:title="@string/theme"
+			android:entries="@array/themes"
+			android:entryValues="@array/theme_values" />
+		
+		<CheckBoxPreference
+			android:key="fast_scroll_enabled"
+			android:title="@string/fast_scroll"
+			android:defaultValue="true" />
+		
+	</PreferenceCategory>
 	
-    <CheckBoxPreference
-        android:key="fast_scroll_enabled"
-        android:title="@string/fast_scroll"
-        android:defaultValue="true" />
-    
+	<PreferenceCategory android:title="@string/data_control">
+		
+		<ListPreference
+			android:key="picture_quality"
+			android:title="@string/picture"
+			android:entries="@array/picture_modes"
+			android:entryValues="@array/picture_mode_values" />
+		
+	</PreferenceCategory>
+	
 </PreferenceScreen>

@@ -166,7 +166,7 @@
     <string name="quick_repost">Quick Repost</string>
     
     <!-- SettingsActivity -->
-    <string name="general">GENERAL</string>
+    <string name="general">General</string>
     <string name="theme">Themes</string>
     <string name="data_control">Data Control</string>
     <string name="picture">Pictures</string>
