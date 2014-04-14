@@ -11,8 +11,7 @@
 		
 		<CheckBoxPreference
 			android:key="fast_scroll_enabled"
-			android:title="@string/fast_scroll"
-			android:defaultValue="true" />
+			android:title="@string/fast_scroll" />
 		
 	</PreferenceCategory>
 	

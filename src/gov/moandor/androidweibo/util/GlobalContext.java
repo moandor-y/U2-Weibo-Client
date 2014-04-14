@@ -534,19 +534,24 @@ public class GlobalContext extends Application {
     }
     
     public static synchronized Account[] getAccounts() {
-        return sAccounts.toArray(new Account[sAccounts.size()]);
+        return sAccounts.toArray(new Account[0]);
     }
     
-    public static synchronized void addOrUpdateAccount(Account account) {
-        for (Account a : sAccounts) {
-            if (a.user.id == account.user.id) {
-                sAccounts.remove(a);
-                break;
-            }
-        }
-        sAccounts.add(account);
-        sCurrentAccountIndex = sAccounts.indexOf(account);
-        DatabaseUtils.insertOrUpdateAccount(account);
+    public static synchronized void addOrUpdateAccount(final Account account) {
+		MyAsyncTask.execute(new Runnable() {
+			@Override
+			public void run() {
+				DatabaseUtils.insertOrUpdateAccount(account);
+			}
+		});
+		for (int i = 0; i < sAccounts.size(); i++) {
+			if (sAccounts.get(i).user.id == account.user.id) {
+				sAccounts.set(i, account);
+				return;
+			}
+		}
+		sAccounts.add(account);
+		sCurrentAccountIndex = sAccounts.indexOf(account);
     }
     
     public static synchronized void removeAccount(int index) {
