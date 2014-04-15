@@ -42,7 +42,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int group = GlobalContext.getWeiboGroup();
+            final int group = GlobalContext.getAtmeFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -68,18 +68,14 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
     
     @Override
-    void saveRefreshResultToDatabase(List<WeiboStatus> statuses) {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int filter = GlobalContext.getAtmeFilter();
-        DatabaseUtils.removeAtmeStatuses(accountId, filter);
-        DatabaseUtils.insertAtmeStatuses(statuses, accountId, filter);
+    void saveRefreshResultToDatabase(List<WeiboStatus> statuses, long accountId, int group) {
+        DatabaseUtils.removeAtmeStatuses(accountId, group);
+        DatabaseUtils.insertAtmeStatuses(statuses, accountId, group);
     }
     
     @Override
-    void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses) {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int filter = GlobalContext.getAtmeFilter();
-        DatabaseUtils.insertAtmeStatuses(statuses, accountId, filter);
+    void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses, long accountId, int group) {
+        DatabaseUtils.insertAtmeStatuses(statuses, accountId, group);
     }
     
     @Override
@@ -157,8 +153,8 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
     
     @Override
-    TimelinePosition onRestoreListPosition() {
-        return DatabaseUtils.getTimelinePosition(MainActivity.ATME_LIST, GlobalContext.getAtmeFilter());
+    TimelinePosition onRestoreListPosition(int group) {
+        return DatabaseUtils.getTimelinePosition(MainActivity.ATME_LIST, group);
     }
 	
 	@Override

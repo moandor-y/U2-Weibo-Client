@@ -46,18 +46,14 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
     
     @Override
-    void saveRefreshResultToDatabase(List<WeiboComment> comments) {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int filter = GlobalContext.getCommentFilter();
-        DatabaseUtils.removeComments(accountId, filter);
-        DatabaseUtils.insertComments(comments, accountId, filter);
+    void saveRefreshResultToDatabase(List<WeiboComment> comments, long accountId, int group) {
+        DatabaseUtils.removeComments(accountId, group);
+        DatabaseUtils.insertComments(comments, accountId, group);
     }
     
-    @Override
-    void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments) {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int filter = GlobalContext.getCommentFilter();
-        DatabaseUtils.insertComments(comments, accountId, filter);
+	@Override
+    void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments, long accountId, int group) {
+        DatabaseUtils.insertComments(comments, accountId, group);
     }
     
     @Override
@@ -137,8 +133,8 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
     
     @Override
-    TimelinePosition onRestoreListPosition() {
-        return DatabaseUtils.getTimelinePosition(MainActivity.COMMENT_LIST, GlobalContext.getCommentFilter());
+    TimelinePosition onRestoreListPosition(int group) {
+        return DatabaseUtils.getTimelinePosition(MainActivity.COMMENT_LIST, group);
     }
 	
 	@Override

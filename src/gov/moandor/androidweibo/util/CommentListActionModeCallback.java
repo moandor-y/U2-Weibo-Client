@@ -115,7 +115,7 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
             mAdapter.removeItem(mSelection);
             mAdapter.notifyDataSetChanged();
             long accountId = GlobalContext.getCurrentAccount().user.id;
-            int group = GlobalContext.getWeiboGroup();
+            int group = GlobalContext.getCommentFilter();
             removeFromDatabase(mSelection, accountId, group);
         }
         

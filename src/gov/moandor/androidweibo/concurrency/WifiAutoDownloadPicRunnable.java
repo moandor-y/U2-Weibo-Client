@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class WifiAutoDownloadPicRunnable implements Runnable {
     private List<WeiboStatus> mStatuses;
+	private ImageDownloader.ImageType mListPictureType = Utilities.getListPictureType();
+	private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     
     public WifiAutoDownloadPicRunnable(List<WeiboStatus> statuses, int position) {
         mStatuses = statuses;
@@ -21,7 +23,7 @@ public class WifiAutoDownloadPicRunnable implements Runnable {
     @Override
     public void run() {
         ImageDownloader.ImageType[] order = new ImageDownloader.ImageType[5];
-        switch (Utilities.getListPictureType()) {
+        switch (mListPictureType) {
         case PICTURE_SMALL:
             order[0] = ImageDownloader.ImageType.PICTURE_SMALL;
             order[1] = ImageDownloader.ImageType.PICTURE_LARGE;
@@ -40,7 +42,7 @@ public class WifiAutoDownloadPicRunnable implements Runnable {
         default:
             throw new IllegalStateException("wrong list picture type");
         }
-        switch (Utilities.getAvatarType()) {
+        switch (mAvatarType) {
         case AVATAR_SMALL:
             order[3] = ImageDownloader.ImageType.AVATAR_SMALL;
             order[4] = ImageDownloader.ImageType.AVATAR_LARGE;

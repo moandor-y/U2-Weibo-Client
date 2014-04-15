@@ -37,7 +37,6 @@ public class FetchUnreadMessageService extends IntentService {
     private static void fetch(Context context, Account account) {
         UnreadCountDao dao = new UnreadCountDao();
         dao.setToken(account.token);
-        
         try {
             UnreadCount unreadCount = dao.execute();
             if (account.user.id == GlobalContext.getCurrentAccount().user.id) {

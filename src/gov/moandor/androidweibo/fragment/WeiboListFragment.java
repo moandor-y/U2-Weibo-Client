@@ -87,25 +87,16 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     @Override
-    void saveRefreshResultToDatabase(final List<WeiboStatus> statuses) {
-        final long accountId = GlobalContext.getCurrentAccount().user.id;
-        final int group = GlobalContext.getWeiboGroup();
-		MyAsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                DatabaseUtils.removeWeiboStatuses(accountId, group);
-				DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
-            }
-        });
+    void saveRefreshResultToDatabase(final List<WeiboStatus> statuses, long accountId, int group) {
+        DatabaseUtils.removeWeiboStatuses(accountId, group);
+		DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
     
     @Override
-    void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses) {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int group = GlobalContext.getWeiboGroup();
+    void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses, long accountId, int group) {
         DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
-    
+	
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         switch (GlobalContext.getWeiboGroup()) {
@@ -185,8 +176,8 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     @Override
-    TimelinePosition onRestoreListPosition() {
-        return DatabaseUtils.getTimelinePosition(MainActivity.WEIBO_LIST, GlobalContext.getWeiboGroup());
+    TimelinePosition onRestoreListPosition(int group) {
+        return DatabaseUtils.getTimelinePosition(MainActivity.WEIBO_LIST, group);
     }
     
 	@Override

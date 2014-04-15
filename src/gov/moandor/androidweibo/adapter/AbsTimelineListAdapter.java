@@ -31,16 +31,12 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
-    boolean mNoPictureModeEnabled;
+    boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
     float mTimeFontSize = mFontSize - 3;
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private int mSelectedPosition = -1;
-    
-    public AbsTimelineListAdapter() {
-        mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
-    }
     
     @Override
     public int getCount() {

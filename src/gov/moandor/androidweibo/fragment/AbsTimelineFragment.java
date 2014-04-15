@@ -230,6 +230,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private DataBean mLatestMessage;
         private BaseTimelineJsonDao<DataBean> mDao;
+		private int mLoadCount = Utilities.getLoadWeiboCount();
         
         @Override
         protected void onPreExecute() {
@@ -242,7 +243,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected List<DataBean> doInBackground(Void... v) {
             mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
-            mDao.setCount(Utilities.getLoadWeiboCount());
+            mDao.setCount(mLoadCount);
             mDao.setSinceMessage(mLatestMessage);
             try {
                 return mDao.execute();
@@ -275,6 +276,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private long mMaxId;
+		private int mLoadCount = Utilities.getLoadWeiboCount();
         
         @Override
         protected void onPreExecute() {
@@ -290,7 +292,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected List<DataBean> doInBackground(Void... v) {
             BaseTimelineJsonDao<DataBean> dao = onCreateDao();
             dao.setToken(GlobalContext.getCurrentAccount().token);
-            dao.setCount(Utilities.getLoadWeiboCount());
+            dao.setCount(mLoadCount);
             dao.setMaxId(mMaxId);
             try {
                 return dao.execute();
