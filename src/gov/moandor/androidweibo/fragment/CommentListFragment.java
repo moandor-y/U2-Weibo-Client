@@ -23,6 +23,7 @@ import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, CommentListAdapter> {
     public static final int ALL = 0;
@@ -58,7 +59,7 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     
     @Override
     protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
-        switch (GlobalContext.getCommentFilter()) {
+        switch (ConfigManager.getCommentFilter()) {
         case ATME:
             return new CommentsMentionsDao();
         case BY_ME:
@@ -67,7 +68,7 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
         case FOLLOWED:
         default:
             CommentsToMeDao dao = new CommentsToMeDao();
-            if (GlobalContext.getCommentFilter() == FOLLOWED) {
+            if (ConfigManager.getCommentFilter() == FOLLOWED) {
                 dao.setFilter(1);
             }
             return dao;
@@ -82,7 +83,7 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
             position.position = mListView.getFirstVisiblePosition();
             position.top = mListView.getChildAt(0).getTop();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int filter = GlobalContext.getCommentFilter();
+            final int filter = ConfigManager.getCommentFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -139,6 +140,6 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
 	
 	@Override
 	protected int getGroup() {
-		return GlobalContext.getCommentFilter();
+		return ConfigManager.getCommentFilter();
 	}
 }

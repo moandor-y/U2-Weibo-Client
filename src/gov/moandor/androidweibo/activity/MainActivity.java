@@ -33,6 +33,7 @@ import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
@@ -148,7 +149,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             mPagerAdapter.setWeiboUnreadCount(unreadCount);
         } else if (mUnreadPage != -1) {
             int accountIndex = getIntent().getIntExtra(ACCOUNT_INDEX, -1);
-            GlobalContext.setCurrentAccountIndex(accountIndex);
+            ConfigManager.setCurrentAccountIndex(accountIndex);
             mUnreadGroup = getIntent().getIntExtra(UNREAD_GROUP, -1);
             Bundle args = new Bundle();
             args.putBoolean(AbsMainTimelineFragment.IS_FROM_UNREAD, true);
@@ -213,8 +214,8 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem orientation = menu.findItem(R.id.orientation);
-        switch (GlobalContext.getScreenOrientation()) {
-        case GlobalContext.ORIENTATION_USER:
+        switch (ConfigManager.getScreenOrientation()) {
+        case ConfigManager.ORIENTATION_USER:
             orientation.setTitle(R.string.lock_orientation);
             if (Utilities.isScreenLandscape()) {
                 orientation.setIcon(R.drawable.ic_menu_lock_orientation_land);
@@ -222,8 +223,8 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 orientation.setIcon(R.drawable.ic_menu_lock_orientation_port);
             }
             break;
-        case GlobalContext.ORIENTATION_LANDSCAPE:
-        case GlobalContext.ORIENTATION_PORTRAIT:
+        case ConfigManager.ORIENTATION_LANDSCAPE:
+        case ConfigManager.ORIENTATION_PORTRAIT:
             orientation.setTitle(R.string.unlock_orientation);
             orientation.setIcon(R.drawable.ic_menu_unlock_orientation);
             break;
@@ -300,19 +301,19 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
             actionBar.setTitle("");
             actionBar.setListNavigationCallbacks(mWeiboListSpinnerAdapter, this);
-            actionBar.setSelectedNavigationItem(GlobalContext.getWeiboGroup());
+            actionBar.setSelectedNavigationItem(ConfigManager.getWeiboGroup());
             break;
         case ATME_LIST:
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
             actionBar.setTitle("");
             actionBar.setListNavigationCallbacks(mAtmeListSpinnerAdapter, this);
-            actionBar.setSelectedNavigationItem(GlobalContext.getAtmeFilter());
+            actionBar.setSelectedNavigationItem(ConfigManager.getAtmeFilter());
             break;
         case COMMENT_LIST:
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
             actionBar.setTitle("");
             actionBar.setListNavigationCallbacks(mCommentListSpinnerAdapter, this);
-            actionBar.setSelectedNavigationItem(GlobalContext.getCommentFilter());
+            actionBar.setSelectedNavigationItem(ConfigManager.getCommentFilter());
             break;
         case PROFILE:
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -327,7 +328,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mWeiboListFragment.saveListPosition();
         mAtmeListFragment.saveListPosition();
         mCommentListFragment.saveListPosition();
-        GlobalContext.setCurrentAccountIndex(position);
+        ConfigManager.setCurrentAccountIndex(position);
         mWeiboListFragment.notifyAccountOrGroupChanged();
         mAtmeListFragment.notifyAccountOrGroupChanged();
         mCommentListFragment.notifyAccountOrGroupChanged();
@@ -341,23 +342,23 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         switch (mViewPager.getCurrentItem()) {
         case WEIBO_LIST:
-            if (itemPosition != GlobalContext.getWeiboGroup()) {
+            if (itemPosition != ConfigManager.getWeiboGroup()) {
                 mWeiboListFragment.saveListPosition();
-                GlobalContext.setWeiboGroup(itemPosition);
+                ConfigManager.setWeiboGroup(itemPosition);
                 mWeiboListFragment.notifyAccountOrGroupChanged();
             }
             break;
         case ATME_LIST:
-            if (itemPosition != GlobalContext.getAtmeFilter()) {
+            if (itemPosition != ConfigManager.getAtmeFilter()) {
                 mAtmeListFragment.saveListPosition();
-                GlobalContext.setAtmeFilter(itemPosition);
+                ConfigManager.setAtmeFilter(itemPosition);
                 mAtmeListFragment.notifyAccountOrGroupChanged();
             }
             break;
         case COMMENT_LIST:
-            if (itemPosition != GlobalContext.getCommentFilter()) {
+            if (itemPosition != ConfigManager.getCommentFilter()) {
                 mCommentListFragment.saveListPosition();
-                GlobalContext.setCommentFilter(itemPosition);
+                ConfigManager.setCommentFilter(itemPosition);
                 mCommentListFragment.notifyAccountOrGroupChanged();
             }
             break;
@@ -388,21 +389,21 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     
     private void settings() {
         Intent intent = new Intent();
-        intent.setClass(this, SettingsActivity.class);
+        intent.setClass(this, SettingsActivityOldApi.class);
         startActivity(intent);
     }
     
     private void toggleOrientationLock() {
-        if (GlobalContext.getScreenOrientation() == GlobalContext.ORIENTATION_USER) {
+        if (ConfigManager.getScreenOrientation() == ConfigManager.ORIENTATION_USER) {
             if (Utilities.isScreenLandscape()) {
-                GlobalContext.setScreenOrientation(GlobalContext.ORIENTATION_LANDSCAPE);
+                ConfigManager.setScreenOrientation(ConfigManager.ORIENTATION_LANDSCAPE);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             } else {
-                GlobalContext.setScreenOrientation(GlobalContext.ORIENTATION_PORTRAIT);
+                ConfigManager.setScreenOrientation(ConfigManager.ORIENTATION_PORTRAIT);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             }
         } else {
-            GlobalContext.setScreenOrientation(GlobalContext.ORIENTATION_USER);
+            ConfigManager.setScreenOrientation(ConfigManager.ORIENTATION_USER);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
         }
         supportInvalidateOptionsMenu();

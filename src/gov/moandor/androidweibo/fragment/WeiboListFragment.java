@@ -6,7 +6,6 @@ import android.support.v7.view.ActionMode;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
-
 import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
@@ -18,12 +17,12 @@ import gov.moandor.androidweibo.concurrency.WifiAutoDownloadPicRunnable;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.BilateralTimelineDao;
 import gov.moandor.androidweibo.dao.FriendsTimelineDao;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
-
 import java.util.List;
 
 public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
@@ -49,7 +48,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int group = GlobalContext.getWeiboGroup();
+            final int group = ConfigManager.getWeiboGroup();
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -60,7 +59,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     private void startWifiAutoDownloadPic(int position) {
-        if (!GlobalContext.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi()) {
+        if (!ConfigManager.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi()) {
             return;
         }
         if (mWifiAutoDownloadThread != null && mWifiAutoDownloadThread.getState() != Thread.State.TERMINATED) {
@@ -99,7 +98,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
 	
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        switch (GlobalContext.getWeiboGroup()) {
+        switch (ConfigManager.getWeiboGroup()) {
         case GROUP_BILATERAL:
             return new BilateralTimelineDao();
         case GROUP_ALL:
@@ -116,7 +115,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             position.position = mListView.getFirstVisiblePosition();
             position.top = view.getTop();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int group = GlobalContext.getWeiboGroup();
+            final int group = ConfigManager.getWeiboGroup();
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -182,7 +181,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     
 	@Override
 	protected int getGroup() {
-		return GlobalContext.getWeiboGroup();
+		return ConfigManager.getWeiboGroup();
 	}
 	
     @Override

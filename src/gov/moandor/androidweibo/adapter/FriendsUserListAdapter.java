@@ -4,14 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.fragment.AbsUserListFragment;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class FriendsUserListAdapter extends AbsBaseAdapter {
     private AbsUserListFragment<FriendsUserListAdapter, WeiboUser> mFragment;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private float mFontSizeSmall = mFontSize - 3;
-    private boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
+    private boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     private int mSelectedPosition = -1;
     
     @Override

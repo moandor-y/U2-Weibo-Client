@@ -14,6 +14,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
 
 import java.io.File;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class MainDrawerListAdapter extends AbsBaseAdapter {
     @Override
@@ -46,7 +47,7 @@ public class MainDrawerListAdapter extends AbsBaseAdapter {
         task.execute();
         viewHolder.nameView.setText(account.user.name);
         viewHolder.nameView.getPaint().setFakeBoldText(true);
-        if (position != GlobalContext.getCurrentAccountIndex()) {
+        if (position != ConfigManager.getCurrentAccountIndex()) {
             viewHolder.tickView.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.tickView.setVisibility(View.VISIBLE);

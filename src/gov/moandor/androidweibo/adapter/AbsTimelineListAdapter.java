@@ -10,19 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.LongClickableLinkMovementMethod;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
-    boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
+    boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     float mTimeFontSize = mFontSize - 3;
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;

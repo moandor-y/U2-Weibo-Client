@@ -149,16 +149,16 @@ public class Utilities {
     }
     
     public static ImageDownloader.ImageType getAvatarType() {
-        switch (GlobalContext.getAvatarQuality()) {
-        case GlobalContext.AVATAR_AUTO:
+        switch (ConfigManager.getAvatarQuality()) {
+        case ConfigManager.AVATAR_AUTO:
             if (GlobalContext.isInWifi()) {
                 return ImageDownloader.ImageType.AVATAR_LARGE;
             } else {
                 return ImageDownloader.ImageType.AVATAR_SMALL;
             }
-        case GlobalContext.AVATAR_LARGE:
+        case ConfigManager.AVATAR_LARGE:
             return ImageDownloader.ImageType.AVATAR_LARGE;
-        case GlobalContext.AVATAR_SMALL:
+        case ConfigManager.AVATAR_SMALL:
             return ImageDownloader.ImageType.AVATAR_SMALL;
         default:
             return null;
@@ -168,16 +168,16 @@ public class Utilities {
     public static ImageDownloader.ImageType getListPictureType() {
         int imageQuality;
         if (GlobalContext.isInWifi()) {
-            imageQuality = GlobalContext.getPictureWifiQuality();
+            imageQuality = ConfigManager.getPictureWifiQuality();
         } else {
-            imageQuality = GlobalContext.getPictureQuality();
+            imageQuality = ConfigManager.getPictureQuality();
         }
         switch (imageQuality) {
-        case GlobalContext.PICTURE_LARGE:
+        case ConfigManager.PICTURE_LARGE:
             return ImageDownloader.ImageType.PICTURE_LARGE;
-        case GlobalContext.PICTURE_MEDIUM:
+        case ConfigManager.PICTURE_MEDIUM:
             return ImageDownloader.ImageType.PICTURE_MEDIUM;
-        case GlobalContext.PICTURE_SMALL:
+        case ConfigManager.PICTURE_SMALL:
             return ImageDownloader.ImageType.PICTURE_SMALL;
         default:
             return null;
@@ -197,14 +197,14 @@ public class Utilities {
     }
     
     public static int getLoadWeiboCount() {
-        int loadWeiboCountMode = GlobalContext.getLoadWeiboCountMode();
+        int loadWeiboCountMode = ConfigManager.getLoadWeiboCountMode();
         if (loadWeiboCountMode > 0) {
             return loadWeiboCountMode * 25;
         } else {
             if (GlobalContext.isInWifi()) {
-                return GlobalContext.LOAD_WEIBO_COUNT_MORE;
+                return ConfigManager.LOAD_WEIBO_COUNT_MORE;
             } else {
-                return GlobalContext.LOAD_WEIBO_COUNT_FEWER;
+                return ConfigManager.LOAD_WEIBO_COUNT_FEWER;
             }
         }
     }
@@ -255,25 +255,25 @@ public class Utilities {
     }
     
     public static float getFontSize() {
-        switch (GlobalContext.getFontSizeMode()) {
-        case GlobalContext.FONT_SIZE_MODE_SMALL:
-            return GlobalContext.FONT_SIZE_SMALL;
+        switch (ConfigManager.getFontSizeMode()) {
+        case ConfigManager.FONT_SIZE_MODE_SMALL:
+            return ConfigManager.FONT_SIZE_SMALL;
         default:
-        case GlobalContext.FONT_SIZE_MODE_MEDIUM:
-            return GlobalContext.FONT_SIZE_MEDIUM;
-        case GlobalContext.FONT_SIZE_MODE_LARGE:
-            return GlobalContext.FONT_SIZE_LARGE;
+        case ConfigManager.FONT_SIZE_MODE_MEDIUM:
+            return ConfigManager.FONT_SIZE_MEDIUM;
+        case ConfigManager.FONT_SIZE_MODE_LARGE:
+            return ConfigManager.FONT_SIZE_LARGE;
         }
     }
     
     public static boolean isCommentRepostListAvatarEnabled() {
-        switch (GlobalContext.getCommentRepostListAvatarMode()) {
+        switch (ConfigManager.getCommentRepostListAvatarMode()) {
         default:
-        case GlobalContext.COMMENT_REPOST_LIST_AVATAR_AUTO:
+        case ConfigManager.COMMENT_REPOST_LIST_AVATAR_AUTO:
             return GlobalContext.isInWifi();
-        case GlobalContext.COMMENT_REPOST_LIST_AVATAR_ENABLED:
+        case ConfigManager.COMMENT_REPOST_LIST_AVATAR_ENABLED:
             return true;
-        case GlobalContext.COMMENT_REPOST_LIST_AVATAR_DISABLED:
+        case ConfigManager.COMMENT_REPOST_LIST_AVATAR_DISABLED:
             return false;
         }
     }

@@ -4,16 +4,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +20,7 @@ public class DirectMessagesUserListAdapter extends AbsBaseAdapter {
     private List<DirectMessagesUser> mDmUsers = new ArrayList<DirectMessagesUser>();
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private DirectMessagesUserListFragment mFragment;
-    private boolean mNoPictureModeEnabled = GlobalContext.isNoPictureMode();
+    private boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     private int mSelectedPosition = -1;
     
     public DirectMessagesUserListAdapter(DirectMessagesUserListFragment fragment) {

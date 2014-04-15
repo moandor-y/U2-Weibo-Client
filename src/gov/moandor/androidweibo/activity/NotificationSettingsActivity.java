@@ -18,6 +18,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class NotificationSettingsActivity extends AbsActivity {
     private static final int REQUEST_RINGTONE = 0;
@@ -50,7 +51,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.notifications);
-        action.setChecked(GlobalContext.isNotificationEnabled());
+        action.setChecked(ConfigManager.isNotificationEnabled());
         action.setOnCheckedChangeListener(new OnActionCheckeChangeListener());
         mIntervals = getResources().getStringArray(R.array.notification_intervals);
         mIntervalStatus = (TextView) findViewById(R.id.interval_status);
@@ -84,9 +85,9 @@ public class NotificationSettingsActivity extends AbsActivity {
         case REQUEST_RINGTONE:
             mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
             if (mRingtoneUri != null) {
-                GlobalContext.setNotificationRingtone(mRingtoneUri.toString());
+                ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
             } else {
-                GlobalContext.setNotificationRingtone(null);
+                ConfigManager.setNotificationRingtone(null);
             }
             setupRingtone();
         }
@@ -123,44 +124,44 @@ public class NotificationSettingsActivity extends AbsActivity {
     }
     
     private void setupInterval() {
-        boolean enabled = GlobalContext.isNotificationEnabled();
+        boolean enabled = ConfigManager.isNotificationEnabled();
         mIntervalLayout.setEnabled(enabled);
         mIntervalLabel.setEnabled(enabled);
         mIntervalStatus.setEnabled(enabled);
-        mIntervalStatus.setText(mIntervals[GlobalContext.getNotificationFrequency()]);
+        mIntervalStatus.setText(mIntervals[ConfigManager.getNotificationFrequency()]);
     }
     
     private void setupMentionWeibo() {
-        mMentionWeibo.setEnabled(GlobalContext.isNotificationEnabled());
-        mMentionWeibo.setChecked(GlobalContext.isNotificationMentionWeiboEnabled());
+        mMentionWeibo.setEnabled(ConfigManager.isNotificationEnabled());
+        mMentionWeibo.setChecked(ConfigManager.isNotificationMentionWeiboEnabled());
     }
     
     private void setupComment() {
-        mComment.setEnabled(GlobalContext.isNotificationEnabled());
-        mComment.setChecked(GlobalContext.isNotificationCommentEnabled());
+        mComment.setEnabled(ConfigManager.isNotificationEnabled());
+        mComment.setChecked(ConfigManager.isNotificationCommentEnabled());
     }
     
     private void setupMentionComment() {
-        mMentionComment.setEnabled(GlobalContext.isNotificationEnabled());
-        mMentionComment.setChecked(GlobalContext.isNotificationMentionCommentEnabled());
+        mMentionComment.setEnabled(ConfigManager.isNotificationEnabled());
+        mMentionComment.setChecked(ConfigManager.isNotificationMentionCommentEnabled());
     }
     
     private void setupVibrate() {
-        mVibrate.setEnabled(GlobalContext.isNotificationEnabled());
-        mVibrate.setChecked(GlobalContext.isNotificationVibrateEnabled());
+        mVibrate.setEnabled(ConfigManager.isNotificationEnabled());
+        mVibrate.setChecked(ConfigManager.isNotificationVibrateEnabled());
     }
     
     private void setupNotificationLed() {
-        mNotificationLed.setEnabled(GlobalContext.isNotificationEnabled());
-        mNotificationLed.setChecked(GlobalContext.isNotificationLedEnabled());
+        mNotificationLed.setEnabled(ConfigManager.isNotificationEnabled());
+        mNotificationLed.setChecked(ConfigManager.isNotificationLedEnabled());
     }
     
     private void setupRingtone() {
-        boolean enabled = GlobalContext.isNotificationEnabled();
+        boolean enabled = ConfigManager.isNotificationEnabled();
         mRingtoneLayout.setEnabled(enabled);
         mRingtoneLabel.setEnabled(enabled);
         mRingtoneStatus.setEnabled(enabled);
-        String ringtone = GlobalContext.getNotificationRingtone();
+        String ringtone = ConfigManager.getNotificationRingtone();
         if (!TextUtils.isEmpty(ringtone)) {
             mRingtoneUri = Uri.parse(ringtone);
             mRingtoneStatus.setText(RingtoneManager.getRingtone(this, mRingtoneUri).getTitle(this));
@@ -179,7 +180,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    SettingsActivityOldApi.buildListDialog(R.string.interval, mIntervals, GlobalContext
+				SettingsActivityOldApi.buildListDialog(R.string.interval, mIntervals, ConfigManager
                             .getNotificationFrequency(), new OnIntervalSelectedListener(),
                             NotificationSettingsActivity.this);
             SettingsActivityOldApi.SettingsDialogFragment dialog = new SettingsActivityOldApi.SettingsDialogFragment();
@@ -192,7 +193,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             mMentionWeibo.toggle();
-            GlobalContext.setNotificationMentionWeiboEnabled(mMentionWeibo.isChecked());
+            ConfigManager.setNotificationMentionWeiboEnabled(mMentionWeibo.isChecked());
             requestRestart();
         }
     }
@@ -201,7 +202,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             mComment.toggle();
-            GlobalContext.setNotificationCommentEnabled(mComment.isChecked());
+            ConfigManager.setNotificationCommentEnabled(mComment.isChecked());
             requestRestart();
         }
     }
@@ -210,7 +211,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             mMentionComment.toggle();
-            GlobalContext.setNotificationMentionCommentEnabled(mMentionComment.isChecked());
+            ConfigManager.setNotificationMentionCommentEnabled(mMentionComment.isChecked());
             requestRestart();
         }
     }
@@ -219,7 +220,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             mVibrate.toggle();
-            GlobalContext.setNotificationVibrateEnabled(mVibrate.isChecked());
+            ConfigManager.setNotificationVibrateEnabled(mVibrate.isChecked());
             requestRestart();
         }
     }
@@ -228,7 +229,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             mNotificationLed.toggle();
-            GlobalContext.setNotificationLedEnabled(mNotificationLed.isChecked());
+            ConfigManager.setNotificationLedEnabled(mNotificationLed.isChecked());
             requestRestart();
         }
     }
@@ -251,10 +252,10 @@ public class NotificationSettingsActivity extends AbsActivity {
     private class OnIntervalSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getNotificationFrequency()) {
+            if (which == ConfigManager.getNotificationFrequency()) {
                 return;
             }
-            GlobalContext.setNotificationFrequency(which);
+            ConfigManager.setNotificationFrequency(which);
             requestRestart();
             dialog.dismiss();
             setupInterval();
@@ -264,7 +265,7 @@ public class NotificationSettingsActivity extends AbsActivity {
     private class OnActionCheckeChangeListener implements CompoundButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            GlobalContext.setNotificationEnabled(isChecked);
+            ConfigManager.setNotificationEnabled(isChecked);
             setupViews();
             requestRestart();
         }

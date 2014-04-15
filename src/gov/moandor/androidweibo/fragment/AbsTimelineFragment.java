@@ -17,7 +17,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
@@ -27,11 +26,11 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
-
 import java.util.List;
 
 public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
@@ -68,7 +67,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             setupListHwAccel();
         }
-        mListView.setFastScrollEnabled(GlobalContext.isFastScrollEnabled());
+        mListView.setFastScrollEnabled(ConfigManager.isFastScrollEnabled());
         mListView.setOnScrollListener(new OnListScrollListener());
         mListView.setOnItemLongClickListener(new OnListItemLongClickListener());
         mFooter =
@@ -160,7 +159,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupListHwAccel() {
-        if (!GlobalContext.isListHwAccelEnabled()) {
+        if (!ConfigManager.isListHwAccelEnabled()) {
             mListView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }

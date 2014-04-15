@@ -50,7 +50,6 @@ public class SettingsActivity extends AbsActivity {
     }
 	
 	private void exit() {
-		GlobalContext.readPreferences();
 		Intent intent = new Intent();
 		intent.setClass(GlobalContext.getInstance(), MainActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -25,6 +25,7 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean> extends Fragment {
     public static final String USER_ID = "user_id";
@@ -64,7 +65,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mListView = (ListView) view.findViewById(R.id.list);
-        mListView.setFastScrollEnabled(GlobalContext.isFastScrollEnabled());
+        mListView.setFastScrollEnabled(ConfigManager.isFastScrollEnabled());
         mListView.setOnScrollListener(new OnListScrollListener());
         mListView.setOnItemClickListener(new OnListItemClickListener());
         mListView.setOnItemLongClickListener(new OnListItemLongClickListener());

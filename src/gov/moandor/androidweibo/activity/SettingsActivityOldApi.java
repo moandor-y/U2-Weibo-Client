@@ -18,6 +18,7 @@ import android.widget.TextView;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class SettingsActivityOldApi extends AbsActivity {
     private static final String THEME_DIALOG = "theme_dialog";
@@ -152,19 +153,19 @@ public class SettingsActivityOldApi extends AbsActivity {
     }
     
     private void setupTheme() {
-        mThemeStatus.setText(mThemes[GlobalContext.getAppTheme()]);
+        mThemeStatus.setText(mThemes[ConfigManager.getAppTheme()]);
     }
     
     private void setupFontSize() {
-        mFontSizeStatus.setText(mFontSizes[GlobalContext.getFontSizeMode()]);
+        mFontSizeStatus.setText(mFontSizes[ConfigManager.getFontSizeMode()]);
     }
     
     private void setupFastScroll() {
-        mFastScroll.setChecked(GlobalContext.isFastScrollEnabled());
+        mFastScroll.setChecked(ConfigManager.isFastScrollEnabled());
     }
     
     private void setupLoadWeiboCount() {
-        int count = GlobalContext.getLoadWeiboCountMode();
+        int count = ConfigManager.getLoadWeiboCountMode();
         if (count != 0) {
             mLoadWeiboCountStatus.setText(String.valueOf(Utilities.getLoadWeiboCount()));
         } else {
@@ -173,11 +174,11 @@ public class SettingsActivityOldApi extends AbsActivity {
     }
     
     private void setupNoPictureMode() {
-        mNoPictureMode.setChecked(GlobalContext.isNoPictureMode());
+        mNoPictureMode.setChecked(ConfigManager.isNoPictureMode());
     }
     
     private void setupAvatarMode() {
-        if (GlobalContext.isNoPictureMode()) {
+        if (ConfigManager.isNoPictureMode()) {
             mAvatarModeLayout.setEnabled(false);
             mAvatarModeLabel.setEnabled(false);
             mAvatarModeStatus.setEnabled(false);
@@ -186,11 +187,11 @@ public class SettingsActivityOldApi extends AbsActivity {
             mAvatarModeLabel.setEnabled(true);
             mAvatarModeStatus.setEnabled(true);
         }
-        mAvatarModeStatus.setText(mAvatarModes[GlobalContext.getAvatarQuality()]);
+        mAvatarModeStatus.setText(mAvatarModes[ConfigManager.getAvatarQuality()]);
     }
     
     private void setupPictureMode() {
-        if (GlobalContext.isNoPictureMode()) {
+        if (ConfigManager.isNoPictureMode()) {
             mPictureModeLayout.setEnabled(false);
             mPictureModeLabel.setEnabled(false);
             mPictureModeStatus.setEnabled(false);
@@ -199,11 +200,11 @@ public class SettingsActivityOldApi extends AbsActivity {
             mPictureModeLabel.setEnabled(true);
             mPictureModeStatus.setEnabled(true);
         }
-        mPictureModeStatus.setText(mPictureModes[GlobalContext.getPictureQuality()]);
+        mPictureModeStatus.setText(mPictureModes[ConfigManager.getPictureQuality()]);
     }
     
     private void setupPictureWifiMode() {
-        if (GlobalContext.isNoPictureMode()) {
+        if (ConfigManager.isNoPictureMode()) {
             mPictureWifiModeLayout.setEnabled(false);
             mPictureWifiModeLabel.setEnabled(false);
             mPictureWifiModeStatus.setEnabled(false);
@@ -212,11 +213,11 @@ public class SettingsActivityOldApi extends AbsActivity {
             mPictureWifiModeLabel.setEnabled(true);
             mPictureWifiModeStatus.setEnabled(true);
         }
-        mPictureWifiModeStatus.setText(mPictureModes[GlobalContext.getPictureWifiQuality()]);
+        mPictureWifiModeStatus.setText(mPictureModes[ConfigManager.getPictureWifiQuality()]);
     }
     
     private void setupCommentRepostListAvatarMode() {
-        if (GlobalContext.isNoPictureMode()) {
+        if (ConfigManager.isNoPictureMode()) {
             mCommentRepostListAvatarLayout.setEnabled(false);
             mCommentRepostListAvatarLabel.setEnabled(false);
             mCommentRepostListAvatarStatus.setEnabled(false);
@@ -225,18 +226,18 @@ public class SettingsActivityOldApi extends AbsActivity {
             mCommentRepostListAvatarLabel.setEnabled(true);
             mCommentRepostListAvatarStatus.setEnabled(true);
         }
-        mCommentRepostListAvatarStatus.setText(mCommentRepostListAvatarModes[GlobalContext
+        mCommentRepostListAvatarStatus.setText(mCommentRepostListAvatarModes[ConfigManager
                 .getCommentRepostListAvatarMode()]);
     }
     
     private void setupWifiAutoDownloadPic() {
-        mWifiAutoDownloadPic.setChecked(GlobalContext.isWifiAutoDownloadPicEnabled());
-        mWifiAutoDownloadPic.setEnabled(!GlobalContext.isNoPictureMode());
+        mWifiAutoDownloadPic.setChecked(ConfigManager.isWifiAutoDownloadPicEnabled());
+        mWifiAutoDownloadPic.setEnabled(!ConfigManager.isNoPictureMode());
     }
     
     private void setupListHwAccel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mListHwAccel.setChecked(GlobalContext.isListHwAccelEnabled());
+            mListHwAccel.setChecked(ConfigManager.isListHwAccelEnabled());
         } else {
             mListHwAccel.setEnabled(false);
         }
@@ -244,7 +245,7 @@ public class SettingsActivityOldApi extends AbsActivity {
     
     private void setupPicHwAccel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mPicHwAccel.setChecked(GlobalContext.isPicHwAccelEnabled());
+            mPicHwAccel.setChecked(ConfigManager.isPicHwAccelEnabled());
         } else {
             mPicHwAccel.setEnabled(false);
         }
@@ -278,7 +279,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.theme, mThemes, GlobalContext.getAppTheme(),
+				buildListDialog(R.string.theme, mThemes, ConfigManager.getAppTheme(),
                             new OnThemeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -290,7 +291,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.font_size, mFontSizes, GlobalContext.getFontSizeMode(),
+				buildListDialog(R.string.font_size, mFontSizes, ConfigManager.getFontSizeMode(),
                             new OnFontSizeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -302,7 +303,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             mFastScroll.toggle();
-            GlobalContext.setFastScrollEnabled(mFastScroll.isChecked());
+            ConfigManager.setFastScrollEnabled(mFastScroll.isChecked());
             requestRestart();
         }
     }
@@ -311,7 +312,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.load_weibo_count, mLoadWeiboCounts, GlobalContext.getLoadWeiboCountMode(),
+                    buildListDialog(R.string.load_weibo_count, mLoadWeiboCounts, ConfigManager.getLoadWeiboCountMode(),
                             new OnLoadWeiboCountSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -323,7 +324,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             mNoPictureMode.toggle();
-            GlobalContext.setNoPictureMode(mNoPictureMode.isChecked());
+            ConfigManager.setNoPictureMode(mNoPictureMode.isChecked());
             requestRestart();
             setupAvatarMode();
             setupPictureMode();
@@ -337,7 +338,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.avatar, mAvatarModes, GlobalContext.getAvatarQuality(),
+				buildListDialog(R.string.avatar, mAvatarModes, ConfigManager.getAvatarQuality(),
                             new OnAvatarModeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -349,7 +350,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.picture, mPictureModes, GlobalContext.getPictureQuality(),
+				buildListDialog(R.string.picture, mPictureModes, ConfigManager.getPictureQuality(),
                             new OnPictureModeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -361,7 +362,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.picture_wifi, mPictureModes, GlobalContext.getPictureWifiQuality(),
+				buildListDialog(R.string.picture_wifi, mPictureModes, ConfigManager.getPictureWifiQuality(),
                             new OnPictureWifiModeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -373,7 +374,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             mWifiAutoDownloadPic.toggle();
-            GlobalContext.setWifiAutoDownloadPicEnabled(mWifiAutoDownloadPic.isChecked());
+            ConfigManager.setWifiAutoDownloadPicEnabled(mWifiAutoDownloadPic.isChecked());
             requestRestart();
         }
     }
@@ -382,7 +383,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             mListHwAccel.toggle();
-            GlobalContext.setListHwAccelEnabled(mListHwAccel.isChecked());
+            ConfigManager.setListHwAccelEnabled(mListHwAccel.isChecked());
             requestRestart();
         }
     }
@@ -391,7 +392,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             mPicHwAccel.toggle();
-            GlobalContext.setPicHwAccelEnabled(mPicHwAccel.isChecked());
+            ConfigManager.setPicHwAccelEnabled(mPicHwAccel.isChecked());
             requestRestart();
         }
     }
@@ -400,7 +401,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-                    buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, GlobalContext
+				buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, ConfigManager
                             .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(),
                             SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
@@ -412,10 +413,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnThemeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getAppTheme()) {
+            if (which == ConfigManager.getAppTheme()) {
                 return;
             }
-            GlobalContext.setAppTheme(which);
+            ConfigManager.setAppTheme(which);
             requestRestart();
             dialog.dismiss();
             Intent intent = new Intent();
@@ -431,10 +432,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnFontSizeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getFontSizeMode()) {
+            if (which == ConfigManager.getFontSizeMode()) {
                 return;
             }
-            GlobalContext.setFontSizeMode(which);
+            ConfigManager.setFontSizeMode(which);
             requestRestart();
             dialog.dismiss();
             setupFontSize();
@@ -444,10 +445,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnLoadWeiboCountSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getLoadWeiboCountMode()) {
+            if (which == ConfigManager.getLoadWeiboCountMode()) {
                 return;
             }
-            GlobalContext.setLoadWeiboCountMode(which);
+            ConfigManager.setLoadWeiboCountMode(which);
             requestRestart();
             dialog.dismiss();
             setupLoadWeiboCount();
@@ -457,10 +458,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnAvatarModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getAvatarQuality()) {
+            if (which == ConfigManager.getAvatarQuality()) {
                 return;
             }
-            GlobalContext.setAvatarQuality(which);
+            ConfigManager.setAvatarQuality(which);
             requestRestart();
             dialog.dismiss();
             setupAvatarMode();
@@ -470,10 +471,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnPictureModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getPictureQuality()) {
+            if (which == ConfigManager.getPictureQuality()) {
                 return;
             }
-            GlobalContext.setPictureQuality(which);
+            ConfigManager.setPictureQuality(which);
             requestRestart();
             dialog.dismiss();
             setupPictureMode();
@@ -483,10 +484,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnPictureWifiModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getPictureWifiQuality()) {
+            if (which == ConfigManager.getPictureWifiQuality()) {
                 return;
             }
-            GlobalContext.setPictureWifiQuality(which);
+            ConfigManager.setPictureWifiQuality(which);
             requestRestart();
             dialog.dismiss();
             setupPictureWifiMode();
@@ -496,10 +497,10 @@ public class SettingsActivityOldApi extends AbsActivity {
     private class OnCommentRepostListAvatarModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            if (which == GlobalContext.getCommentRepostListAvatarMode()) {
+            if (which == ConfigManager.getCommentRepostListAvatarMode()) {
                 return;
             }
-            GlobalContext.setCommentRepostListAvatarMode(which);
+            ConfigManager.setCommentRepostListAvatarMode(which);
             dialog.dismiss();
             setupCommentRepostListAvatarMode();
         }

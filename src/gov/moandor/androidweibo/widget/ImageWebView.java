@@ -6,8 +6,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.webkit.WebView;
-
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class ImageWebView extends WebView {
     public ImageWebView(Context context) {
@@ -36,7 +35,7 @@ public class ImageWebView extends WebView {
         setVerticalScrollBarEnabled(false);
         setHorizontalScrollBarEnabled(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (GlobalContext.isPicHwAccelEnabled()) {
+            if (ConfigManager.isPicHwAccelEnabled()) {
                 setLayerType(LAYER_TYPE_HARDWARE, null);
             } else {
                 setLayerType(LAYER_TYPE_SOFTWARE, null);

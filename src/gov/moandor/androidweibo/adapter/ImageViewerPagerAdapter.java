@@ -22,6 +22,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.ImageViewerPictureReadTask;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class ImageViewerPagerAdapter extends PagerAdapter {
     private ImageDownloader.ImageType mImageType;
@@ -102,7 +103,7 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
     private static void setupForNewApi(WebView webView, WebSettings settings) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             settings.setDisplayZoomControls(false);
-            if (!GlobalContext.isPicHwAccelEnabled()) {
+            if (!ConfigManager.isPicHwAccelEnabled()) {
                 webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             }
         }

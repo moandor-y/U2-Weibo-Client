@@ -12,12 +12,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.ResetUnreadCountDao;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
@@ -77,14 +77,14 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         if (mCount > 1) {
             builder.setNumber(mCount);
         }
-        if (GlobalContext.isNotificationVibrateEnabled()) {
+        if (ConfigManager.isNotificationVibrateEnabled()) {
             builder.setVibrate(VIBRATE_PATTERN);
         }
-        if (GlobalContext.isNotificationLedEnabled()) {
+        if (ConfigManager.isNotificationLedEnabled()) {
             builder.setLights(Color.WHITE, 2000, 2000);
         }
         Uri uri = null;
-        String ringtone = GlobalContext.getNotificationRingtone();
+        String ringtone = ConfigManager.getNotificationRingtone();
         if (!TextUtils.isEmpty(ringtone)) {
             uri = Uri.parse(ringtone);
         }

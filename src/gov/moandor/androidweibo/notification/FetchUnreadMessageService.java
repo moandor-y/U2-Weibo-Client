@@ -3,7 +3,6 @@ package gov.moandor.androidweibo.notification;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
@@ -14,11 +13,11 @@ import gov.moandor.androidweibo.dao.CommentsToMeDao;
 import gov.moandor.androidweibo.dao.MentionsWeiboTimelineDao;
 import gov.moandor.androidweibo.dao.UnreadCountDao;
 import gov.moandor.androidweibo.fragment.CommentListFragment;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.WeiboException;
-
 import java.util.List;
 
 public class FetchUnreadMessageService extends IntentService {
@@ -46,21 +45,21 @@ public class FetchUnreadMessageService extends IntentService {
                 context.sendBroadcast(intent);
             }
             WeiboComment comment = null;
-            if (unreadCount.comment > 0 && GlobalContext.isNotificationCommentEnabled()) {
+            if (unreadCount.comment > 0 && ConfigManager.isNotificationCommentEnabled()) {
                 List<WeiboComment> comments = fetchComments(account);
                 if (comments.size() > 0) {
                     comment = comments.get(0);
                 }
             }
             WeiboStatus mentionStatus = null;
-            if (unreadCount.mentionWeibo > 0 && GlobalContext.isNotificationMentionWeiboEnabled()) {
+            if (unreadCount.mentionWeibo > 0 && ConfigManager.isNotificationMentionWeiboEnabled()) {
                 List<WeiboStatus> mentionStatuses = fetchMentionStatuses(account);
                 if (mentionStatuses.size() > 0) {
                     mentionStatus = mentionStatuses.get(0);
                 }
             }
             WeiboComment mentionComment = null;
-            if (unreadCount.mentionComment > 0 && GlobalContext.isNotificationMentionCommentEnabled()) {
+            if (unreadCount.mentionComment > 0 && ConfigManager.isNotificationMentionCommentEnabled()) {
                 List<WeiboComment> mentionComments = fetchMentionComments(account);
                 if (mentionComments.size() > 0) {
                     mentionComment = mentionComments.get(0);

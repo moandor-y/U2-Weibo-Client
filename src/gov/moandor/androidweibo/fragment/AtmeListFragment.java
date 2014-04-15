@@ -23,6 +23,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 import java.util.List;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int REQUEST_CODE = 0;
@@ -42,7 +43,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int group = GlobalContext.getAtmeFilter();
+            final int group = ConfigManager.getAtmeFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -81,7 +82,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         MentionsWeiboTimelineDao dao = new MentionsWeiboTimelineDao();
-        dao.setFilter(GlobalContext.getAtmeFilter());
+        dao.setFilter(ConfigManager.getAtmeFilter());
         return dao;
     }
     
@@ -93,7 +94,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             position.position = mListView.getFirstVisiblePosition();
             position.top = mListView.getChildAt(0).getTop();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int filter = GlobalContext.getAtmeFilter();
+            final int filter = ConfigManager.getAtmeFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -159,7 +160,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
 	
 	@Override
 	protected int getGroup() {
-		return GlobalContext.getAtmeFilter();
+		return ConfigManager.getAtmeFilter();
 	}
     
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {

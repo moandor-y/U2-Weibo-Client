@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.AuthorizeActivity;
 import gov.moandor.androidweibo.activity.DirectMessagesActivity;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.activity.FavoritesActivity;
 import gov.moandor.androidweibo.adapter.MainDrawerListAdapter;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 
@@ -70,7 +70,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (view != mFooterView) {
-            if (position != GlobalContext.getCurrentAccountIndex()) {
+            if (position != ConfigManager.getCurrentAccountIndex()) {
                 ((OnAccountClickListener) getActivity()).onAccountClick(position);
                 mAdapter.notifyDataSetChanged();
             }
@@ -97,7 +97,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
             GlobalContext.removeAccount(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
             if (GlobalContext.getCurrentAccount() != null) {
                 mAdapter.notifyDataSetChanged();
-                ((OnAccountClickListener) getActivity()).onAccountClick(GlobalContext.getCurrentAccountIndex());
+                ((OnAccountClickListener) getActivity()).onAccountClick(ConfigManager.getCurrentAccountIndex());
             } else {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), AuthorizeActivity.class);
