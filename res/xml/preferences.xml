@@ -15,21 +15,74 @@
 			android:key="theme"
 			android:title="@string/theme"
 			android:entries="@array/themes"
-			android:entryValues="@array/theme_values" />
+			android:entryValues="@array/theme_values"
+			android:defaultValue="0" />
+		
+		<ListPreference
+			android:key="font_size_mode"
+			android:title="@string/font_size"
+			android:entries="@array/font_sizes"
+			android:entryValues="@array/font_size_values"
+			android:defaultValue="1" />
 		
 		<CheckBoxPreference
 			android:key="fast_scroll_enabled"
-			android:title="@string/fast_scroll" />
+			android:title="@string/fast_scroll"
+			android:defaultValue="true" />
 		
 	</PreferenceCategory>
 	
 	<PreferenceCategory android:title="@string/data_control">
 		
 		<ListPreference
+			android:key="load_weibo_count_mode"
+			android:title="@string/load_weibo_count"
+			android:entries="@array/load_weibo_counts"
+			android:entryValues="@array/load_weibo_count_values"
+			android:defaultValue="0" />
+		
+		<CheckBoxPreference
+			android:key="no_picture_mode"
+			android:title="@string/no_picture_mode"
+			android:disableDependentsState="true"
+			android:defaultValue="false" />
+		
+		<ListPreference
+			android:key="avatar_quality"
+			android:dependency="no_picture_mode"
+			android:title="@string/avatar"
+			android:entries="@array/avatar_modes"
+			android:entryValues="@array/avatar_mode_values"
+			android:defaultValue="0" />
+		
+		<ListPreference
 			android:key="picture_quality"
+			android:dependency="no_picture_mode"
 			android:title="@string/picture"
 			android:entries="@array/picture_modes"
-			android:entryValues="@array/picture_mode_values" />
+			android:entryValues="@array/picture_mode_values"
+			android:defaultValue="0" />
+		
+		<ListPreference
+			android:key="picture_wifi_quality"
+			android:dependency="no_picture_mode"
+			android:title="@string/picture_wifi"
+			android:entries="@array/picture_modes"
+			android:entryValues="@array/picture_mode_values"
+			android:defaultValue="2" />
+		
+		<ListPreference
+			android:key="comment_repost_list_avatar_mode"
+			android:dependency="no_picture_mode"
+			android:title="@string/comment_repost_list_avatar"
+			android:entries="@array/comment_repost_list_avatar_modes"
+			android:entryValues="@array/comment_repost_list_avatar_mode_values"
+			android:defaultValue="0" />
+		
+		<CheckBoxPreference
+			android:key="wifi_auto_download_pic_enabled"
+			android:title="@string/wifi_auto_download_pic"
+			android:defaultValue="true" />
 		
 	</PreferenceCategory>
 	
