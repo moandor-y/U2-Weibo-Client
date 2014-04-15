@@ -96,13 +96,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
                 String toast;
                 if (updatedCount > 0) {
                     toast = GlobalContext.getInstance().getString(R.string.new_posts_updated, updatedCount);
-                    final List<DataBean> beans = mAdapter.getItems();
-                    MyAsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            saveRefreshResultToDatabase(beans);
-                        }
-                    });
+					saveRefreshResultToDatabase(mAdapter.getItems());
                 } else {
                     toast = GlobalContext.getInstance().getString(R.string.no_new_posts);
                 }
@@ -133,16 +127,21 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     }
     
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DataBean>> {
+		private long mAccountId;
+		private int mGroup;
+		
         @Override
         protected void onPreExecute() {
             setPullToRefreshEnabled(false);
             mAdapter.clearDataSet();
             mAdapter.notifyDataSetChanged();
+			mAccountId = GlobalContext.getCurrentAccount().user.id;
+			mGroup = getGroup();
         }
         
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            return getBeansFromDatabase();
+            return getBeansFromDatabase(mAccountId, mGroup);
         }
         
         @Override
@@ -163,7 +162,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
         }
     }
     
-    abstract List<DataBean> getBeansFromDatabase();
+    abstract List<DataBean> getBeansFromDatabase(long accountId, int group);
     
     abstract void saveRefreshResultToDatabase(List<DataBean> beans);
     
@@ -172,4 +171,6 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     public abstract void saveListPosition();
     
     abstract TimelinePosition onRestoreListPosition();
+	
+	protected abstract int getGroup();
 }

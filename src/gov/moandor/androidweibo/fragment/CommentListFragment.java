@@ -41,10 +41,8 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
     
     @Override
-    List<WeiboComment> getBeansFromDatabase() {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int filter = GlobalContext.getCommentFilter();
-        return DatabaseUtils.getComments(accountId, filter);
+    List<WeiboComment> getBeansFromDatabase(long accountId, int group) {
+        return DatabaseUtils.getComments(accountId, group);
     }
     
     @Override
@@ -142,4 +140,9 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     TimelinePosition onRestoreListPosition() {
         return DatabaseUtils.getTimelinePosition(MainActivity.COMMENT_LIST, GlobalContext.getCommentFilter());
     }
+	
+	@Override
+	protected int getGroup() {
+		return GlobalContext.getCommentFilter();
+	}
 }

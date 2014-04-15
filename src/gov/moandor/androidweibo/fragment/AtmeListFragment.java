@@ -63,10 +63,8 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
     
     @Override
-    List<WeiboStatus> getBeansFromDatabase() {
-        long accountId = GlobalContext.getCurrentAccount().user.id;
-        int filter = GlobalContext.getAtmeFilter();
-        return DatabaseUtils.getAtmeStatuses(accountId, filter);
+    List<WeiboStatus> getBeansFromDatabase(long accountId, int group) {
+        return DatabaseUtils.getAtmeStatuses(accountId, group);
     }
     
     @Override
@@ -162,6 +160,11 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     TimelinePosition onRestoreListPosition() {
         return DatabaseUtils.getTimelinePosition(MainActivity.ATME_LIST, GlobalContext.getAtmeFilter());
     }
+	
+	@Override
+	protected int getGroup() {
+		return GlobalContext.getAtmeFilter();
+	}
     
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {
         @Override

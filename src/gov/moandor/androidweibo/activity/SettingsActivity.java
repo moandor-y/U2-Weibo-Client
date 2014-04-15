@@ -29,14 +29,6 @@ public class SettingsActivity extends AbsActivity {
         getSupportActionBar().setTitle(R.string.settings);
     }
 	
-	public static class SettingsFragment extends PreferenceFragment {
-		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.preferences);
-		}
-	}
-	
 	@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
@@ -64,5 +56,17 @@ public class SettingsActivity extends AbsActivity {
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 		finish();
+	}
+	
+	public static class SettingsFragment extends PreferenceFragment {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.preferences);
+		}
+	}
+	
+	public static class NotificationsActivity extends AbsActivity {
+		
 	}
 }

@@ -3,6 +3,14 @@
     
 	<PreferenceCategory android:title="@string/general">
 		
+		<Preference android:title="@string/notifications">
+			
+			<intent
+				android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$NotificationsActivity"
+				android:targetPackage="gov.moandor.androidweibo" />
+			
+		</Preference>
+		
 		<ListPreference
 			android:key="theme"
 			android:title="@string/theme"

@@ -82,16 +82,21 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     @Override
-    List<WeiboStatus> getBeansFromDatabase() {
-        return DatabaseUtils.getWeiboStatuses(GlobalContext.getCurrentAccount().user.id, GlobalContext.getWeiboGroup());
+    List<WeiboStatus> getBeansFromDatabase(long accountId, int group) {
+        return DatabaseUtils.getWeiboStatuses(accountId, group);
     }
     
     @Override
-    void saveRefreshResultToDatabase(List<WeiboStatus> statuses) {
+    void saveRefreshResultToDatabase(final List<WeiboStatus> statuses) {
         final long accountId = GlobalContext.getCurrentAccount().user.id;
         final int group = GlobalContext.getWeiboGroup();
-        DatabaseUtils.removeWeiboStatuses(accountId, group);
-        DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
+		MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseUtils.removeWeiboStatuses(accountId, group);
+				DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
+            }
+        });
     }
     
     @Override
@@ -184,6 +189,11 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         return DatabaseUtils.getTimelinePosition(MainActivity.WEIBO_LIST, GlobalContext.getWeiboGroup());
     }
     
+	@Override
+	protected int getGroup() {
+		return GlobalContext.getWeiboGroup();
+	}
+	
     @Override
     public void notifyAccountOrGroupChanged() {
         super.notifyAccountOrGroupChanged();
