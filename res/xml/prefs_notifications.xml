@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<CheckBoxPreference
+		android:key="notification_enabled"
+		android:title="@string/enabled"
+		android:defaultValue="false" />
+	
+	<PreferenceCategory android:title="@string/unread_messages">
+		
+		<ListPreference
+			android:key="notification_frequency"
+			android:dependency="notification_enabled"
+			android:title="@string/interval"
+			android:entries="@array/notification_intervals"
+			android:entryValues="@array/notification_interval_values"
+			android:defaultValue="1" />
+		
+		<CheckBoxPreference
+			android:key="notification_mention_weibo_enabled"
+			android:dependency="notification_enabled"
+			android:title="@string/notification_mention_weibo"
+			android:defaultValue="true" />
+		
+		<CheckBoxPreference
+			android:key="notification_comment_enabled"
+			android:dependency="notification_enabled"
+			android:title="@string/notification_comment"
+			android:defaultValue="true" />
+		
+		<CheckBoxPreference
+			android:key="notification_mention_comment_enabled"
+			android:dependency="notification_enabled"
+			android:title="@string/notification_mention_comment"
+			android:defaultValue="true" />
+		
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/notification_method">
+		
+		<CheckBoxPreference
+			android:key="notification_vibrate_enabled"
+			android:dependency="notification_enabled"
+			android:title="@string/vibrate"
+			android:defaultValue="true" />
+		
+		<CheckBoxPreference
+			android:key="notification_led_enabled"
+			android:dependency="notification_enabled"
+			android:title="@string/notification_led"
+			android:defaultValue="true" />
+		
+		<RingtonePreference
+			android:key="notification_ringtone"
+			android:dependency="notification_enabled"
+			android:title="@string/ringtone"
+			android:ringtoneType="notification"
+			android:showDefault="true"
+			android:showSilent="true"
+			android:defaultValue="" />
+		
+	</PreferenceCategory>
+	
+</PreferenceScreen>

@@ -66,6 +66,39 @@ public class SettingsActivity extends AbsActivity {
 	}
 	
 	public static class NotificationsActivity extends AbsActivity {
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			FragmentManager fm = getFragmentManager();
+			Fragment fragment = fm.findFragmentById(android.R.id.content);
+			if (fragment == null) {
+				fragment = new NotificationsFragment();
+				FragmentTransaction ft = fm.beginTransaction();
+				ft.add(android.R.id.content, fragment);
+				ft.commit();
+			}
+			getSupportActionBar().setDisplayShowHomeEnabled(false);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setTitle(R.string.settings);
+		}
 		
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
+		
+		public static class NotificationsFragment extends PreferenceFragment {
+			@Override
+			public void onCreate(Bundle savedInstanceState) {
+				super.onCreate(savedInstanceState);
+				addPreferencesFromResource(R.xml.prefs_notifications);
+			}
+		}
 	}
 }

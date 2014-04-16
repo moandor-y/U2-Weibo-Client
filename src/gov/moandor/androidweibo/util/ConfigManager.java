@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.util;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import gov.moandor.androidweibo.R;
 
 public class ConfigManager {
 	private static final int PREFERENCE_VERSION = 4;
@@ -63,6 +64,8 @@ public class ConfigManager {
 			editor.clear();
 			editor.putInt(PREFERENCE_VERSION_KEY, PREFERENCE_VERSION);
 			apply(editor);
+			PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.preferences, true);
+			PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_notifications, true);
 		}
 	}
 	

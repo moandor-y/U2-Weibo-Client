@@ -122,8 +122,10 @@ public class GlobalContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sInstance = this;
+		sInstance = this;
         sHandler = new Handler();
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
         CrashHandler.register();
         switch (ConfigManager.getAppTheme()) {
         case ConfigManager.THEME_LIGHT:

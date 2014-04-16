@@ -189,10 +189,11 @@
     <string name="notification_led">呼吸灯</string>
     <string name="ringtone">铃声</string>
     <string name="mute">静音</string>
-    <string name="wifi_auto_download_pic">Wi-Fi下自动下载图片</string>
+    <string name="wifi_auto_download_pic">自动下载图片 (Wi-Fi)</string>
     <string name="advanced">高级</string>
-    <string name="list_hw_accel">列表硬件加速 (Android 3.0+)</string>
-    <string name="pic_hw_accel">图片硬件加速 (Android 3.0+)</string>
+    <string name="list_hw_accel">列表硬件加速</string>
+    <string name="pic_hw_accel">图片硬件加速</string>
+	<string name="enabled">启用</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>
