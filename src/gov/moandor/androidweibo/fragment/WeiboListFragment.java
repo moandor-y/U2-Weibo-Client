@@ -59,7 +59,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     private void startWifiAutoDownloadPic(int position) {
-        if (!ConfigManager.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi()) {
+        if (!ConfigManager.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi() || ConfigManager.isNoPictureMode()) {
             return;
         }
         if (mWifiAutoDownloadThread != null && mWifiAutoDownloadThread.getState() != Thread.State.TERMINATED) {
