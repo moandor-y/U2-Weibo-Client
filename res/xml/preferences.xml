@@ -81,7 +81,22 @@
 		
 		<CheckBoxPreference
 			android:key="wifi_auto_download_pic_enabled"
+			android:dependency="no_picture_mode"
 			android:title="@string/wifi_auto_download_pic"
+			android:defaultValue="true" />
+		
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/advanced">
+		
+		<CheckBoxPreference
+			android:key="list_hw_accel_enabled"
+			android:title="@string/list_hw_accel"
+			android:defaultValue="true" />
+		
+		<CheckBoxPreference
+			android:key="pic_hw_accel_enabled"
+			android:title="@string/pic_hw_accel"
 			android:defaultValue="true" />
 		
 	</PreferenceCategory>
