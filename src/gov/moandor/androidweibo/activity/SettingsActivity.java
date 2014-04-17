@@ -80,7 +80,7 @@ public class SettingsActivity extends AbsActivity {
 			}
 			getSupportActionBar().setDisplayShowHomeEnabled(false);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			getSupportActionBar().setTitle(R.string.settings);
+			getSupportActionBar().setTitle(R.string.notifications);
 		}
 		
 		@Override
