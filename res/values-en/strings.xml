@@ -193,6 +193,7 @@
     <string name="list_hw_accel">List Hardware Acceleration</string>
     <string name="pic_hw_accel">Picture Hardware Acceleration</string>
 	<string name="enabled">Enabled</string>
+	<string name="notification_enabled_after_exit">Enabled after exit</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

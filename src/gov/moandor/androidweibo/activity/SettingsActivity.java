@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 
 public class SettingsActivity extends AbsActivity {
     @Override
@@ -80,6 +81,12 @@ public class SettingsActivity extends AbsActivity {
 			getSupportActionBar().setDisplayShowHomeEnabled(false);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			getSupportActionBar().setTitle(R.string.settings);
+		}
+		
+		@Override
+		protected void onDestroy() {
+			super.onDestroy();
+			ConnectivityChangeReceiver.judgeAlarm(GlobalContext.getInstance());
 		}
 		
 		@Override

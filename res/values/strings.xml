@@ -194,6 +194,7 @@
     <string name="list_hw_accel">列表硬件加速</string>
     <string name="pic_hw_accel">图片硬件加速</string>
 	<string name="enabled">启用</string>
+	<string name="notification_enabled_after_exit">退出后保留提醒</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

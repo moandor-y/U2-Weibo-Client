@@ -59,6 +59,12 @@
 			android:showSilent="true"
 			android:defaultValue="" />
 		
+		<CheckBoxPreference
+			android:key="notification_enabled_after_exit"
+			android:dependency="notification_enabled"
+			android:title="@string/notification_enabled_after_exit"
+			android:defaultValue="true" />
+		
 	</PreferenceCategory>
 	
 </PreferenceScreen>

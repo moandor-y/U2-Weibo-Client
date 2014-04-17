@@ -27,6 +27,9 @@ public class FetchUnreadMessageService extends IntentService {
     
     @Override
     protected void onHandleIntent(Intent intent) {
+		if (!ConfigManager.isNotificationEnabledAfterExit() && !MainActivity.isRunning()) {
+			return;
+		}
         List<Account> accounts = DatabaseUtils.getAccounts();
         for (Account account : accounts) {
             fetch(this, account);

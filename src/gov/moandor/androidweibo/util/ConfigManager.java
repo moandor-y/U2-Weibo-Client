@@ -52,7 +52,8 @@ public class ConfigManager {
     public static final String NOTIFICATION_VIBRATE_ENABLED = "notification_vibrate_enabled";
     public static final String NOTIFICATION_LED_ENABLED = "notification_led_enabled";
     public static final String NOTIFICATION_RINGTONE = "notification_ringtone";
-    public static final String WIFI_AUTO_DOWNLOAD_PIC_ENABLED = "wifi_auto_download_pic_enabled";
+    public static final String NOTIFICATION_ENABLED_AFTER_EXIT = "notification_enabled_after_exit";
+	public static final String WIFI_AUTO_DOWNLOAD_PIC_ENABLED = "wifi_auto_download_pic_enabled";
     public static final String LIST_HW_ACCEL_ENABLED = "list_hw_accel_enabled";
     public static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     public static final String SCREEN_ORIENTATION = "screen_orientation";
@@ -317,6 +318,10 @@ public class ConfigManager {
 		SharedPreferences.Editor editor = getPreferences().edit();
 		editor.putInt(SCREEN_ORIENTATION, value);
 		apply(editor);
+	}
+	
+	public static boolean isNotificationEnabledAfterExit() {
+		return getPreferences().getBoolean(NOTIFICATION_ENABLED_AFTER_EXIT, true);
 	}
 	
 	private static SharedPreferences getPreferences() {
