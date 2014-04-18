@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ConfigManager;
+import gov.moandor.androidweibo.util.Utilities;
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
     private static final int REQUEST_CODE = 0;
@@ -28,18 +29,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
     }
     
     private static void startAlarm(Context context) {
-        long time;
-        switch (ConfigManager.getNotificationFrequency()) {
-        case ConfigManager.THREE_MINUTES:
-            time = 3 * 60 * 1000;
-            break;
-        case ConfigManager.FIFTEEN_MINUTES:
-        default:
-            time = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-            break;
-        case ConfigManager.HALF_HOUR:
-            time = AlarmManager.INTERVAL_HALF_HOUR;
-        }
+        long time = Utilities.getNotificationInterval();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent();
         intent.setClass(context, FetchUnreadMessageService.class);

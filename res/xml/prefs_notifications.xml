@@ -16,6 +16,14 @@
 			android:entryValues="@array/notification_interval_values"
 			android:defaultValue="1" />
 		
+		<ListPreference
+			android:key="notification_frequency_wifi"
+			android:dependency="notification_enabled"
+			android:title="@string/interval_wifi"
+			android:entries="@array/notification_intervals"
+			android:entryValues="@array/notification_interval_values"
+			android:defaultValue="0" />
+		
 		<CheckBoxPreference
 			android:key="notification_mention_weibo_enabled"
 			android:dependency="notification_enabled"

@@ -648,5 +648,12 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             public static final String ACCOUNT_ID = "account_id";
             public static final String CONTENT_DATA = "content_data";
         }
+		
+		public static final class DmConversation {
+			public static final String TABLE_NAME = "dm_conversation";
+			public static final String ACCOUNT_ID = "account_id";
+			public static final String USER_ID = "user_id";
+			public static final String CONTENT_DATA = "content_data";
+		}
     }
 }

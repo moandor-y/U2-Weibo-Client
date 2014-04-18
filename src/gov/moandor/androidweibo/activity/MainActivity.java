@@ -35,6 +35,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.CompatUtils;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
@@ -393,7 +394,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     
     private void settings() {
         Intent intent = new Intent();
-        intent.setClass(this, SettingsActivity.class);
+        intent.setClass(this, CompatUtils.getSettingsActivity());
         startActivity(intent);
     }
     

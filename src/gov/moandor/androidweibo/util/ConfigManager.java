@@ -46,6 +46,7 @@ public class ConfigManager {
     public static final String COMMENT_REPOST_LIST_AVATAR_MODE = "comment_repost_list_avatar_mode";
     public static final String NOTIFICATION_ENABLED = "notification_enabled";
     public static final String NOTIFICATION_FREQUENCY = "notification_frequency";
+	public static final String NOTIFICATION_FREQUENCY_WIFI = "notification_frequency_wifi";
     public static final String NOTIFICATION_MENTION_WEIBO_ENABLED = "notification_mention_weibo_enabled";
     public static final String NOTIFICATION_COMMENT_ENABLED = "notification_comment_enabled";
     public static final String NOTIFICATION_MENTION_COMMENT_ENABLED = "notification_mention_comment_enabled";
@@ -219,6 +220,10 @@ public class ConfigManager {
 		editor.putString(NOTIFICATION_FREQUENCY, String.valueOf(value));
 		apply(editor);
 	}
+	
+	public static int getNotificationWifiFrequency() {
+		return Integer.parseInt(getPreferences().getString(NOTIFICATION_FREQUENCY_WIFI, String.valueOf(THREE_MINUTES)));
+    }
 	
     public static boolean isNotificationMentionWeiboEnabled() {
         return getPreferences().getBoolean(NOTIFICATION_MENTION_WEIBO_ENABLED, true);

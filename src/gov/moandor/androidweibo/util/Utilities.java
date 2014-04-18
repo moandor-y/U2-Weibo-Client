@@ -42,6 +42,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.app.AlarmManager;
 
 public class Utilities {
     public static void closeSilently(Closeable closeable) {
@@ -375,4 +376,22 @@ public class Utilities {
             provider.setShareIntent(intent);
         }
     }
+	
+	public static long getNotificationInterval() {
+		int mode;
+		if (GlobalContext.isInWifi()) {
+			mode = ConfigManager.getNotificationWifiFrequency();
+		} else {
+			mode = ConfigManager.getNotificationFrequency();
+		}
+		switch (mode) {
+        case ConfigManager.THREE_MINUTES:
+            return 3 * 60 * 1000;
+        case ConfigManager.FIFTEEN_MINUTES:
+        default:
+            return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+        case ConfigManager.HALF_HOUR:
+            return AlarmManager.INTERVAL_HALF_HOUR;
+        }
+	}
 }

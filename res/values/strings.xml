@@ -181,6 +181,7 @@
     <string name="load_weibo_count">载入微博数</string>
     <string name="unread_messages">未读消息</string>
     <string name="interval">间隔</string>
+	<string name="interval_wifi">间隔 (Wi-Fi)</string>
     <string name="notification_mention_weibo">\@我的微博</string>
     <string name="notification_comment">收到的评论</string>
     <string name="notification_mention_comment">\@我的评论</string>
