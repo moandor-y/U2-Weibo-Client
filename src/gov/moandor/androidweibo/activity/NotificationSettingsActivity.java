@@ -16,9 +16,9 @@ import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
-import gov.moandor.androidweibo.util.ConfigManager;
 
 public class NotificationSettingsActivity extends AbsActivity {
     private static final int REQUEST_RINGTONE = 0;
@@ -180,7 +180,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				SettingsActivityOldApi.buildListDialog(R.string.interval, mIntervals, ConfigManager
+                    SettingsActivityOldApi.buildListDialog(R.string.interval, mIntervals, ConfigManager
                             .getNotificationFrequency(), new OnIntervalSelectedListener(),
                             NotificationSettingsActivity.this);
             SettingsActivityOldApi.SettingsDialogFragment dialog = new SettingsActivityOldApi.SettingsDialogFragment();

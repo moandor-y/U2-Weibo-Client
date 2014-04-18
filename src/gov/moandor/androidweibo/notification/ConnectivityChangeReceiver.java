@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
 

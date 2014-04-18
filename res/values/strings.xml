@@ -35,7 +35,7 @@
         <item>白色</item>
         <item>黑色</item>
     </string-array>
-	
+    
     <string-array name="avatar_modes">
         <item>自动</item>
         <item>小</item>
@@ -181,7 +181,7 @@
     <string name="load_weibo_count">载入微博数</string>
     <string name="unread_messages">未读消息</string>
     <string name="interval">间隔</string>
-	<string name="interval_wifi">间隔 (Wi-Fi)</string>
+    <string name="interval_wifi">间隔 (Wi-Fi)</string>
     <string name="notification_mention_weibo">\@我的微博</string>
     <string name="notification_comment">收到的评论</string>
     <string name="notification_mention_comment">\@我的评论</string>
@@ -194,8 +194,8 @@
     <string name="advanced">高级</string>
     <string name="list_hw_accel">列表硬件加速</string>
     <string name="pic_hw_accel">图片硬件加速</string>
-	<string name="enabled">启用</string>
-	<string name="notification_enabled_after_exit">退出后保留提醒</string>
+    <string name="enabled">启用</string>
+    <string name="notification_enabled_after_exit">退出后保留提醒</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

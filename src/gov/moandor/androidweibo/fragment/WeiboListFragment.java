@@ -6,6 +6,7 @@ import android.support.v7.view.ActionMode;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
+
 import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
@@ -23,6 +24,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
+
 import java.util.List;
 
 public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
@@ -59,7 +61,8 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     private void startWifiAutoDownloadPic(int position) {
-        if (!ConfigManager.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi() || ConfigManager.isNoPictureMode()) {
+        if (!ConfigManager.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi()
+                || ConfigManager.isNoPictureMode()) {
             return;
         }
         if (mWifiAutoDownloadThread != null && mWifiAutoDownloadThread.getState() != Thread.State.TERMINATED) {
@@ -88,14 +91,14 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     @Override
     void saveRefreshResultToDatabase(final List<WeiboStatus> statuses, long accountId, int group) {
         DatabaseUtils.removeWeiboStatuses(accountId, group);
-		DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
+        DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
     
     @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses, long accountId, int group) {
         DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
-	
+    
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         switch (ConfigManager.getWeiboGroup()) {
@@ -179,11 +182,11 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         return DatabaseUtils.getTimelinePosition(MainActivity.WEIBO_LIST, group);
     }
     
-	@Override
-	protected int getGroup() {
-		return ConfigManager.getWeiboGroup();
-	}
-	
+    @Override
+    protected int getGroup() {
+        return ConfigManager.getWeiboGroup();
+    }
+    
     @Override
     public void notifyAccountOrGroupChanged() {
         super.notifyAccountOrGroupChanged();

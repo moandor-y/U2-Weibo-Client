@@ -180,7 +180,7 @@
     <string name="load_weibo_count">Load Weibo Count</string>
     <string name="unread_messages">Unread Messages</string>
     <string name="interval">Interval</string>
-	<string name="interval_wifi">Interval (Wi-Fi)</string>
+    <string name="interval_wifi">Interval (Wi-Fi)</string>
     <string name="notification_mention_weibo">Weibo @Me</string>
     <string name="notification_comment">Comments</string>
     <string name="notification_mention_comment">Comments @Me</string>
@@ -193,8 +193,8 @@
     <string name="advanced">ADVANCED</string>
     <string name="list_hw_accel">List Hardware Acceleration</string>
     <string name="pic_hw_accel">Picture Hardware Acceleration</string>
-	<string name="enabled">Enabled</string>
-	<string name="notification_enabled_after_exit">Enabled after exit</string>
+    <string name="enabled">Enabled</string>
+    <string name="notification_enabled_after_exit">Enabled after exit</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

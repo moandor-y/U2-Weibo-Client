@@ -21,8 +21,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.ImageViewerPictureReadTask;
-import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ConfigManager;
+import gov.moandor.androidweibo.util.GlobalContext;
 
 public class ImageViewerPagerAdapter extends PagerAdapter {
     private ImageDownloader.ImageType mImageType;

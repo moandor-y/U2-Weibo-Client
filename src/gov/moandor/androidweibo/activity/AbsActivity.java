@@ -3,6 +3,7 @@ package gov.moandor.androidweibo.activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;

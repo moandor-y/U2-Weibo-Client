@@ -31,11 +31,10 @@ import gov.moandor.androidweibo.fragment.CommentListFragment;
 import gov.moandor.androidweibo.fragment.MainDrawerFragment;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
+import gov.moandor.androidweibo.util.CompatUtils;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
-import gov.moandor.androidweibo.util.ConfigManager;
-import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.util.CompatUtils;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
@@ -60,7 +59,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         UNREAD_COUNT = packageName + ".UNREAD_COUNT";
     }
     
-	private static boolean sRunning;
+    private static boolean sRunning;
     private int mUnreadPage = -1;
     private int mUnreadGroup = -1;
     private ViewPager mViewPager;
@@ -181,7 +180,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_UNREAD_UPDATED);
         Utilities.registerReceiver(mUnreadUpdateReciever, intentFilter);
-		sRunning = true;
+        sRunning = true;
     }
     
     @Override
@@ -206,7 +205,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     @Override
     protected void onDestroy() {
         super.onDestroy();
-		sRunning = false;
+        sRunning = false;
         Utilities.unregisterReceiver(mUnreadUpdateReciever);
     }
     
@@ -418,10 +417,10 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mPagerAdapter.setWeiboUnreadCount(0);
         mTabStrip.notifyDataSetChanged();
     }
-	
-	public static boolean isRunning() {
-		return sRunning;
-	}
+    
+    public static boolean isRunning() {
+        return sRunning;
+    }
     
     private BroadcastReceiver mUnreadUpdateReciever = new BroadcastReceiver() {
         @Override

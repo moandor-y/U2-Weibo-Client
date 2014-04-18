@@ -16,9 +16,9 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
-import gov.moandor.androidweibo.util.ConfigManager;
 
 public class SettingsActivityOldApi extends AbsActivity {
     private static final String THEME_DIALOG = "theme_dialog";
@@ -279,7 +279,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				buildListDialog(R.string.theme, mThemes, ConfigManager.getAppTheme(),
+                    buildListDialog(R.string.theme, mThemes, ConfigManager.getAppTheme(),
                             new OnThemeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -291,7 +291,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				buildListDialog(R.string.font_size, mFontSizes, ConfigManager.getFontSizeMode(),
+                    buildListDialog(R.string.font_size, mFontSizes, ConfigManager.getFontSizeMode(),
                             new OnFontSizeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -338,7 +338,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				buildListDialog(R.string.avatar, mAvatarModes, ConfigManager.getAvatarQuality(),
+                    buildListDialog(R.string.avatar, mAvatarModes, ConfigManager.getAvatarQuality(),
                             new OnAvatarModeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -350,7 +350,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				buildListDialog(R.string.picture, mPictureModes, ConfigManager.getPictureQuality(),
+                    buildListDialog(R.string.picture, mPictureModes, ConfigManager.getPictureQuality(),
                             new OnPictureModeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -362,7 +362,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				buildListDialog(R.string.picture_wifi, mPictureModes, ConfigManager.getPictureWifiQuality(),
+                    buildListDialog(R.string.picture_wifi, mPictureModes, ConfigManager.getPictureWifiQuality(),
                             new OnPictureWifiModeSelectedListener(), SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
@@ -401,7 +401,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
-				buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, ConfigManager
+                    buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, ConfigManager
                             .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(),
                             SettingsActivityOldApi.this);
             SettingsDialogFragment dialog = new SettingsDialogFragment();

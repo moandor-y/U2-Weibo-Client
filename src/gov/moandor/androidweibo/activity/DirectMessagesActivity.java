@@ -47,8 +47,8 @@ public class DirectMessagesActivity extends AbsActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-	
-	public static class ConversationActivity extends AbsActivity {
-		public static final String USER = "user";
-	}
+    
+    public static class ConversationActivity extends AbsActivity {
+        public static final String USER = "user";
+    }
 }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.WeiboUser;
@@ -21,6 +22,7 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
+
 import java.util.ArrayList;
 import java.util.List;
 

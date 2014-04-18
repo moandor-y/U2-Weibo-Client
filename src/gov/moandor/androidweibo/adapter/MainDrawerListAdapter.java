@@ -9,12 +9,12 @@ import android.widget.TextView;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
 
 import java.io.File;
-import gov.moandor.androidweibo.util.ConfigManager;
 
 public class MainDrawerListAdapter extends AbsBaseAdapter {
     @Override

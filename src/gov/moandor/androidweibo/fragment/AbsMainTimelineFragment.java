@@ -69,7 +69,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     
     private void restoreListPosition() {
         mListView.setVisibility(View.INVISIBLE);
-		final int group = getGroup();
+        final int group = getGroup();
         new MyAsyncTask<Void, Void, TimelinePosition>() {
             @Override
             protected TimelinePosition doInBackground(Void... params) {
@@ -97,15 +97,15 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
                 String toast;
                 if (updatedCount > 0) {
                     toast = GlobalContext.getInstance().getString(R.string.new_posts_updated, updatedCount);
-					final List<DataBean> beans = mAdapter.getItems();
-					final long accountId = GlobalContext.getCurrentAccount().user.id;
-					final int group = getGroup();
-					MyAsyncTask.execute(new Runnable() {
-						@Override
-						public void run() {
-							saveRefreshResultToDatabase(beans, accountId, group);
-						}
-					});
+                    final List<DataBean> beans = mAdapter.getItems();
+                    final long accountId = GlobalContext.getCurrentAccount().user.id;
+                    final int group = getGroup();
+                    MyAsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            saveRefreshResultToDatabase(beans, accountId, group);
+                        }
+                    });
                 } else {
                     toast = GlobalContext.getInstance().getString(R.string.no_new_posts);
                 }
@@ -125,8 +125,8 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
                 for (DataBean bean : result) {
                     beans.append(mAdapter.positionOf(bean), bean);
                 }
-				final long accountId = GlobalContext.getCurrentAccount().user.id;
-				final int group = getGroup();
+                final long accountId = GlobalContext.getCurrentAccount().user.id;
+                final int group = getGroup();
                 MyAsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -138,16 +138,16 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     }
     
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DataBean>> {
-		private long mAccountId;
-		private int mGroup;
-		
+        private long mAccountId;
+        private int mGroup;
+        
         @Override
         protected void onPreExecute() {
             setPullToRefreshEnabled(false);
             mAdapter.clearDataSet();
             mAdapter.notifyDataSetChanged();
-			mAccountId = GlobalContext.getCurrentAccount().user.id;
-			mGroup = getGroup();
+            mAccountId = GlobalContext.getCurrentAccount().user.id;
+            mGroup = getGroup();
         }
         
         @Override
@@ -182,6 +182,6 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     public abstract void saveListPosition();
     
     abstract TimelinePosition onRestoreListPosition(int group);
-	
-	protected abstract int getGroup();
+    
+    protected abstract int getGroup();
 }

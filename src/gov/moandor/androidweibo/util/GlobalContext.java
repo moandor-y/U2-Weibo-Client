@@ -3,7 +3,6 @@ package gov.moandor.androidweibo.util;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -122,10 +121,10 @@ public class GlobalContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-		sInstance = this;
+        sInstance = this;
         sHandler = new Handler();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-		PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
         CrashHandler.register();
         switch (ConfigManager.getAppTheme()) {
         case ConfigManager.THEME_LIGHT:
@@ -178,7 +177,7 @@ public class GlobalContext extends Application {
     }
     
     public static synchronized Account getCurrentAccount() {
-		int index = ConfigManager.getCurrentAccountIndex();
+        int index = ConfigManager.getCurrentAccountIndex();
         if (index < sAccounts.size() && index > -1) {
             return sAccounts.get(index);
         } else {
@@ -195,26 +194,26 @@ public class GlobalContext extends Application {
     }
     
     public static synchronized void addOrUpdateAccount(final Account account) {
-		MyAsyncTask.execute(new Runnable() {
-			@Override
-			public void run() {
-				DatabaseUtils.insertOrUpdateAccount(account);
-			}
-		});
-		for (int i = 0; i < sAccounts.size(); i++) {
-			if (sAccounts.get(i).user.id == account.user.id) {
-				sAccounts.set(i, account);
-				return;
-			}
-		}
-		sAccounts.add(account);
-		ConfigManager.setCurrentAccountIndex(sAccounts.indexOf(account));
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseUtils.insertOrUpdateAccount(account);
+            }
+        });
+        for (int i = 0; i < sAccounts.size(); i++) {
+            if (sAccounts.get(i).user.id == account.user.id) {
+                sAccounts.set(i, account);
+                return;
+            }
+        }
+        sAccounts.add(account);
+        ConfigManager.setCurrentAccountIndex(sAccounts.indexOf(account));
     }
     
     public static synchronized void removeAccount(int index) {
         Account account = sAccounts.remove(index);
         if (ConfigManager.getCurrentAccountIndex() >= sAccounts.size() && sAccounts.size() > 0) {
-			ConfigManager.setCurrentAccountIndex(sAccounts.size() - 1);
+            ConfigManager.setCurrentAccountIndex(sAccounts.size() - 1);
         }
         DatabaseUtils.removeAccount(account.user.id);
     }

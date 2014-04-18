@@ -19,13 +19,13 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.ConfigManager;
 
 public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean> extends Fragment {
     public static final String USER_ID = "user_id";
@@ -165,8 +165,8 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     abstract class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private int mLoadCount = Utilities.getLoadWeiboCount();
-		
-		@Override
+        
+        @Override
         protected List<DataBean> doInBackground(Void... v) {
             BaseUserListDao<DataBean> dao = onCreateDao();
             onDaoCreated(dao);
@@ -198,8 +198,8 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private int mLoadCount = Utilities.getLoadWeiboCount();
-		
-		@Override
+        
+        @Override
         protected void onPreExecute() {
             showLoadingFooter();
         }

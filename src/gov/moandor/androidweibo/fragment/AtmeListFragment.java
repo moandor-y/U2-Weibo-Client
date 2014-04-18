@@ -16,6 +16,7 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.MentionsWeiboTimelineDao;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.JsonUtils;
@@ -23,7 +24,6 @@ import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.ConfigManager;
 
 public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int REQUEST_CODE = 0;
@@ -157,11 +157,11 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     TimelinePosition onRestoreListPosition(int group) {
         return DatabaseUtils.getTimelinePosition(MainActivity.ATME_LIST, group);
     }
-	
-	@Override
-	protected int getGroup() {
-		return ConfigManager.getAtmeFilter();
-	}
+    
+    @Override
+    protected int getGroup() {
+        return ConfigManager.getAtmeFilter();
+    }
     
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {
         @Override

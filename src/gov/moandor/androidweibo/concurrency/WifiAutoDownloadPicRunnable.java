@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class WifiAutoDownloadPicRunnable implements Runnable {
     private List<WeiboStatus> mStatuses;
-	private ImageDownloader.ImageType mListPictureType = Utilities.getListPictureType();
-	private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
+    private ImageDownloader.ImageType mListPictureType = Utilities.getListPictureType();
+    private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     
     public WifiAutoDownloadPicRunnable(List<WeiboStatus> statuses, int position) {
         mStatuses = statuses;

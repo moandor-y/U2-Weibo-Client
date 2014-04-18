@@ -17,13 +17,13 @@ import gov.moandor.androidweibo.dao.CommentsByMeDao;
 import gov.moandor.androidweibo.dao.CommentsMentionsDao;
 import gov.moandor.androidweibo.dao.CommentsToMeDao;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.ConfigManager;
 
 public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, CommentListAdapter> {
     public static final int ALL = 0;
@@ -52,7 +52,7 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
         DatabaseUtils.insertComments(comments, accountId, group);
     }
     
-	@Override
+    @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments, long accountId, int group) {
         DatabaseUtils.insertComments(comments, accountId, group);
     }
@@ -137,9 +137,9 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     TimelinePosition onRestoreListPosition(int group) {
         return DatabaseUtils.getTimelinePosition(MainActivity.COMMENT_LIST, group);
     }
-	
-	@Override
-	protected int getGroup() {
-		return ConfigManager.getCommentFilter();
-	}
+    
+    @Override
+    protected int getGroup() {
+        return ConfigManager.getCommentFilter();
+    }
 }

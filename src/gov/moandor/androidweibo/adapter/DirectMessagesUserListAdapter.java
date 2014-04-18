@@ -4,6 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
@@ -12,6 +13,7 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

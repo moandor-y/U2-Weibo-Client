@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
@@ -31,6 +32,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
+
 import java.util.List;
 
 public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
@@ -229,7 +231,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private DataBean mLatestMessage;
         private BaseTimelineJsonDao<DataBean> mDao;
-		private int mLoadCount = Utilities.getLoadWeiboCount();
+        private int mLoadCount = Utilities.getLoadWeiboCount();
         
         @Override
         protected void onPreExecute() {
@@ -275,7 +277,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private long mMaxId;
-		private int mLoadCount = Utilities.getLoadWeiboCount();
+        private int mLoadCount = Utilities.getLoadWeiboCount();
         
         @Override
         protected void onPreExecute() {

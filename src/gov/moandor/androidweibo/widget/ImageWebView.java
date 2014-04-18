@@ -6,6 +6,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.webkit.WebView;
+
 import gov.moandor.androidweibo.util.ConfigManager;
 
 public class ImageWebView extends WebView {

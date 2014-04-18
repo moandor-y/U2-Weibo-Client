@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;

@@ -3,6 +3,7 @@ package gov.moandor.androidweibo.notification;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
@@ -18,6 +19,7 @@ import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.WeiboException;
+
 import java.util.List;
 
 public class FetchUnreadMessageService extends IntentService {
@@ -27,9 +29,9 @@ public class FetchUnreadMessageService extends IntentService {
     
     @Override
     protected void onHandleIntent(Intent intent) {
-		if (!ConfigManager.isNotificationEnabledAfterExit() && !MainActivity.isRunning()) {
-			return;
-		}
+        if (!ConfigManager.isNotificationEnabledAfterExit() && !MainActivity.isRunning()) {
+            return;
+        }
         List<Account> accounts = DatabaseUtils.getAccounts();
         for (Account account : accounts) {
             fetch(this, account);
