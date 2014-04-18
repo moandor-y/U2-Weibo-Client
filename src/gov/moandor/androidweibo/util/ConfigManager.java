@@ -329,7 +329,7 @@ public class ConfigManager {
 		return getPreferences().getBoolean(NOTIFICATION_ENABLED_AFTER_EXIT, true);
 	}
 	
-	private static SharedPreferences getPreferences() {
+	public static SharedPreferences getPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(GlobalContext.getInstance());
 	}
 	
