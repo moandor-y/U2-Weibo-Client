@@ -1,5 +1,6 @@
 package gov.moandor.androidweibo.activity;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -7,19 +8,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

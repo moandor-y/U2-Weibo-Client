@@ -337,6 +337,6 @@ public class ConfigManager {
     }
     
     private static void apply(SharedPreferences.Editor editor) {
-        editor.apply();// TODO api level
+        CompatUtils.applySharedPreferences(editor);
     }
 }
