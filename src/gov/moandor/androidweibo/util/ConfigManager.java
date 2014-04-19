@@ -68,7 +68,7 @@ public class ConfigManager {
             editor.clear();
             editor.putInt(PREFERENCE_VERSION_KEY, PREFERENCE_VERSION);
             apply(editor);
-            PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.preferences, true);
+            PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs, true);
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_notifications, true);
         }
     }

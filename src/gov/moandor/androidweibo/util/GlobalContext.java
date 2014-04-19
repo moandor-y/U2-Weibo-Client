@@ -123,7 +123,7 @@ public class GlobalContext extends Application {
         super.onCreate();
         sInstance = this;
         sHandler = new Handler();
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
         PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
         CrashHandler.register();
         switch (ConfigManager.getAppTheme()) {

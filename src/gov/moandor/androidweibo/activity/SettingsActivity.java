@@ -15,6 +15,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ConfigManager;
@@ -72,7 +73,7 @@ public class SettingsActivity extends AbsActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.preferences);
+            addPreferencesFromResource(R.xml.prefs);
             buildSummaries();
         }
         
@@ -185,11 +186,20 @@ public class SettingsActivity extends AbsActivity {
         
         public static class NotificationsFragment extends PreferenceFragment implements
                 SharedPreferences.OnSharedPreferenceChangeListener {
+            private static final int REQUEST_RINGTONE = 0;
+            
+            private Uri mRingtoneUri;
+            
             @Override
             public void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 addPreferencesFromResource(R.xml.prefs_notifications);
                 buildSummaries();
+                findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(new OnRingtoneClickListener());
+                String ringtone = ConfigManager.getNotificationRingtone();
+                if (!TextUtils.isEmpty(ringtone)) {
+                    mRingtoneUri = Uri.parse(ringtone);
+                }
             }
             
             @Override
@@ -205,8 +215,41 @@ public class SettingsActivity extends AbsActivity {
             }
             
             @Override
+            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                super.onActivityResult(requestCode, resultCode, data);
+                if (resultCode != RESULT_OK) {
+                    return;
+                }
+                switch (requestCode) {
+                case REQUEST_RINGTONE:
+                    mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if (mRingtoneUri != null) {
+                        ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
+                    } else {
+                        ConfigManager.setNotificationRingtone(null);
+                    }
+                    buildRingtoneSummary();
+                }
+            }
+            
+            @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 buildSummaries();
+            }
+            
+            private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent();
+                    intent.setAction(RingtoneManager.ACTION_RINGTONE_PICKER);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone));
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
+                    startActivityForResult(intent, REQUEST_RINGTONE);
+                    return true;
+                }
             }
             
             private void buildSummaries() {

@@ -244,7 +244,6 @@ public class NotificationSettingsActivity extends AbsActivity {
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
             intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, mRingtoneUri);
             startActivityForResult(intent, REQUEST_RINGTONE);
         }
     }

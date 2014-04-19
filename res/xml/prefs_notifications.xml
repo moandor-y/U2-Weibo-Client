@@ -58,13 +58,10 @@
             android:title="@string/notification_led"
             android:defaultValue="true" />
         
-        <RingtonePreference
+        <Preference
             android:key="notification_ringtone"
             android:dependency="notification_enabled"
             android:title="@string/ringtone"
-            android:ringtoneType="notification"
-            android:showDefault="true"
-            android:showSilent="true"
             android:defaultValue="" />
         
         <CheckBoxPreference
