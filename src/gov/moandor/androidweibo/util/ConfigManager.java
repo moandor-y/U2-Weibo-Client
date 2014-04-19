@@ -60,6 +60,7 @@ public class ConfigManager {
     public static final String LIST_HW_ACCEL_ENABLED = "list_hw_accel_enabled";
     public static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     public static final String SCREEN_ORIENTATION = "screen_orientation";
+    public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowed_enabled";
     
     static {
         SharedPreferences sharedPreferences = getPreferences();
@@ -70,6 +71,7 @@ public class ConfigManager {
             apply(editor);
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs, true);
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_notifications, true);
+            PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_bm, true);
         }
     }
     
@@ -330,6 +332,10 @@ public class ConfigManager {
     
     public static boolean isNotificationEnabledAfterExit() {
         return getPreferences().getBoolean(NOTIFICATION_ENABLED_AFTER_EXIT, true);
+    }
+    
+    public static boolean isIgnoringUnfollowedEnabled() {
+        return getPreferences().getBoolean(IGNORING_UNFOLLOWED_ENABLED, true);
     }
     
     public static SharedPreferences getPreferences() {

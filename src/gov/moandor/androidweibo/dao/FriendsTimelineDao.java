@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
@@ -18,7 +19,7 @@ public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
     @Override
     public List<WeiboStatus> execute() throws WeiboException {
         List<WeiboStatus> result = super.execute();
-        if (Utilities.isBmEnabled()) {
+        if (Utilities.isBmEnabled() && ConfigManager.isIgnoringUnfollowedEnabled()) {
             long[] followingIds = DatabaseUtils.getFollowingIds(GlobalContext.getCurrentAccount().user.id);
             if (followingIds != null) {
                 for (WeiboStatus status : result) {

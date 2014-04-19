@@ -21,6 +21,7 @@ import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.Utilities;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
@@ -75,6 +76,14 @@ public class SettingsActivity extends AbsActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
             buildSummaries();
+            if (Utilities.isBmEnabled()) {
+                Preference preference = new Preference(getActivity());
+                preference.setTitle(R.string.black_magic);
+                Intent intent = new Intent();
+                intent.setClass(GlobalContext.getInstance(), BlackMagicActivity.class);
+                preference.setIntent(intent);
+                getPreferenceScreen().addPreference(preference);
+            }
         }
         
         @Override
@@ -278,6 +287,43 @@ public class SettingsActivity extends AbsActivity {
                 } else {
                     preference.setSummary(R.string.mute);
                 }
+            }
+        }
+    }
+    
+    public static class BlackMagicActivity extends AbsActivity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            FragmentManager fm = getFragmentManager();
+            Fragment fragment = fm.findFragmentById(android.R.id.content);
+            if (fragment == null) {
+                fragment = new BlackMagicFragment();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(android.R.id.content, fragment);
+                ft.commit();
+            }
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.black_magic);
+        }
+        
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+            }
+        }
+        
+        public static class BlackMagicFragment extends PreferenceFragment {
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                addPreferencesFromResource(R.xml.prefs_bm);
             }
         }
     }

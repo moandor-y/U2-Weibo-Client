@@ -65,13 +65,14 @@
             android:name=".activity.DraftBoxActivity"
             android:uiOptions="splitActionBarWhenNarrow" />
         
-        <activity android:name=".activity.AuthorizeActivity" />
-        <activity android:name=".activity.HackLoginActivity" />
-        <activity android:name=".activity.SettingsActivity" />
-        <activity android:name=".activity.SettingsActivity$NotificationsActivity" />
-        <activity android:name=".activity.SettingsActivityOldApi" />
-        <activity android:name=".activity.NotificationSettingsActivity" />
-        <activity android:name=".activity.ImageViewerActivity" />
+        <activity android:name=".activity.AuthorizeActivity"/>
+        <activity android:name=".activity.HackLoginActivity"/>
+        <activity android:name=".activity.SettingsActivity"/>
+        <activity android:name=".activity.SettingsActivity$NotificationsActivity"/>
+        <activity android:name=".activity.SettingsActivity$BlackMagicActivity"/>
+        <activity android:name=".activity.SettingsActivityOldApi"/>
+        <activity android:name=".activity.NotificationSettingsActivity"/>
+        <activity android:name=".activity.ImageViewerActivity"/>
         <activity android:name=".activity.UserListActivity"/>
         <activity android:name=".activity.UserWeiboListActivity"/>
         <activity android:name=".activity.AtUserActivity"/>

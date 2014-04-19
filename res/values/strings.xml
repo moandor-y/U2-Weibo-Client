@@ -196,6 +196,8 @@
     <string name="pic_hw_accel">图片硬件加速</string>
     <string name="enabled">启用</string>
     <string name="notification_enabled_after_exit">退出后保留提醒</string>
+    <string name="black_magic">黑魔法</string>
+    <string name="ignore_unfollowed">屏蔽未关注人微博</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

@@ -171,14 +171,14 @@
     <string name="data_control">Data Control</string>
     <string name="picture">Pictures</string>
     <string name="picture_wifi">Pictures (Wi-Fi)</string>
-    <string name="fast_scroll">Fast Scroll</string>
+    <string name="fast_scroll">Fast scroll</string>
     <string name="cancel">Cancel</string>
-    <string name="no_picture_mode">No Picture Mode</string>
-    <string name="font_size">Font Size</string>
-    <string name="comment_repost_list_avatar">Comment/Repost List Avatars</string>
+    <string name="no_picture_mode">No picture mode</string>
+    <string name="font_size">Font size</string>
+    <string name="comment_repost_list_avatar">Comment/Repost list avatars</string>
     <string name="auto">Auto</string>
-    <string name="load_weibo_count">Load Weibo Count</string>
-    <string name="unread_messages">Unread Messages</string>
+    <string name="load_weibo_count">Load weibo count</string>
+    <string name="unread_messages">Unread messages</string>
     <string name="interval">Interval</string>
     <string name="interval_wifi">Interval (Wi-Fi)</string>
     <string name="notification_mention_weibo">Weibo @Me</string>
@@ -189,12 +189,14 @@
     <string name="notification_led">Notification LED</string>
     <string name="ringtone">Ringtone</string>
     <string name="mute">Mute</string>
-    <string name="wifi_auto_download_pic">Auto Download Pictures (Wi-Fi)</string>
-    <string name="advanced">ADVANCED</string>
-    <string name="list_hw_accel">List Hardware Acceleration</string>
-    <string name="pic_hw_accel">Picture Hardware Acceleration</string>
+    <string name="wifi_auto_download_pic">Auto download pictures (Wi-Fi)</string>
+    <string name="advanced">Advanced</string>
+    <string name="list_hw_accel">List hardware acceleration</string>
+    <string name="pic_hw_accel">Picture hardware acceleration</string>
     <string name="enabled">Enabled</string>
     <string name="notification_enabled_after_exit">Enabled after exit</string>
+    <string name="black_magic">Black magic</string>
+    <string name="ignore_unfollowed">Ignore unfollowed weibo</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

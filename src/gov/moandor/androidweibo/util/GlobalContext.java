@@ -125,6 +125,7 @@ public class GlobalContext extends Application {
         sHandler = new Handler();
         PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
         PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs_bm, false);
         CrashHandler.register();
         switch (ConfigManager.getAppTheme()) {
         case ConfigManager.THEME_LIGHT:
