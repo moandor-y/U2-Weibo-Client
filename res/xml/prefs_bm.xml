@@ -2,8 +2,14 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <CheckBoxPreference
-        android:key="ignoring_unfollowed_enabled"
-        android:title="@string/ignore_unfollowed"
+        android:key="ignoring_unfollowing_enabled"
+        android:title="@string/ignore_unfollowing"
         android:defaultValue="true" />
+    
+    <Preference
+        android:key="update_following"
+        android:dependency="ignoring_unfollowing_enabled"
+        android:title="@string/update_following"
+        android:persistent="false" />
     
 </PreferenceScreen>

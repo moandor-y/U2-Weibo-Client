@@ -99,6 +99,17 @@
             android:title="@string/pic_hw_accel"
             android:defaultValue="true" />
         
+        <Preference
+            android:key="black_magic"
+            android:title="@string/black_magic"
+            android:persistent="false" >
+            
+            <intent
+                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$BlackMagicActivity"
+                android:targetPackage="gov.moandor.androidweibo" />
+            
+        </Preference>
+        
     </PreferenceCategory>
     
 </PreferenceScreen>

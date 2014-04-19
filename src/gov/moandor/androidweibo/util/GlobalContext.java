@@ -145,8 +145,8 @@ public class GlobalContext extends Application {
         Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
-        if (Utilities.isBmEnabled()) {
-            MyAsyncTask.execute(new UpdateFollowingIdsRunnable());
+        if (Utilities.isBmEnabled() && GlobalContext.isInWifi()) {
+            new UpdateFollowingIdsTask().execute();
         }
     }
     

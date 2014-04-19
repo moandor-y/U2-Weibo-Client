@@ -1,17 +1,34 @@
 package gov.moandor.androidweibo.util;
 
-import gov.moandor.androidweibo.bean.Account;
-import gov.moandor.androidweibo.dao.FriendsIdsDao;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateFollowingIdsRunnable implements Runnable {
+import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.FriendsIdsDao;
+
+public class UpdateFollowingIdsTask extends MyAsyncTask<Void, Void, Void> {
+    private OnUpdateFinishedListener mListener;
+    
     @Override
-    public void run() {
-        for (Account account : GlobalContext.getAccounts()) {
-            updateFollowingIds(account);
+    protected Void doInBackground(Void... params) {
+        synchronized (UpdateFollowingIdsTask.class) {
+            for (Account account : GlobalContext.getAccounts()) {
+                updateFollowingIds(account);
+            }
         }
+        return null;
+    }
+    
+    @Override
+    protected void onPostExecute(Void result) {
+        if (mListener != null) {
+            mListener.onUpdateFinidhed();
+        }
+    }
+    
+    public void setOnUpdateFinishedListener(OnUpdateFinishedListener l) {
+        mListener = l;
     }
     
     private static void updateFollowingIds(Account account) {
@@ -39,5 +56,9 @@ public class UpdateFollowingIdsRunnable implements Runnable {
         } catch (WeiboException e) {
             Logger.logExcpetion(e);
         }
+    }
+    
+    public static interface OnUpdateFinishedListener {
+        public void onUpdateFinidhed();
     }
 }

@@ -21,10 +21,13 @@ import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
+    private static final String KEY_BLACK_MAGIC = "black_magic";
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,13 +79,9 @@ public class SettingsActivity extends AbsActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs);
             buildSummaries();
-            if (Utilities.isBmEnabled()) {
-                Preference preference = new Preference(getActivity());
-                preference.setTitle(R.string.black_magic);
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), BlackMagicActivity.class);
-                preference.setIntent(intent);
-                getPreferenceScreen().addPreference(preference);
+            Preference preference = findPreference(KEY_BLACK_MAGIC);
+            if (!Utilities.isBmEnabled()) {
+                getPreferenceScreen().removePreference(preference);
             }
         }
         
@@ -320,10 +319,31 @@ public class SettingsActivity extends AbsActivity {
         }
         
         public static class BlackMagicFragment extends PreferenceFragment {
+            private static final String KEY_UPDATE_FOLLOWING = "update_following";
+            
             @Override
             public void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 addPreferencesFromResource(R.xml.prefs_bm);
+                findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
+            }
+            
+            private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    UpdateFollowingIdsTask task = new UpdateFollowingIdsTask();
+                    task.setOnUpdateFinishedListener(new OnUpdateFollowingFinishedListener());
+                    task.execute();
+                    Utilities.notice(R.string.updating);
+                    return true;
+                }
+            }
+            
+            private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
+                @Override
+                public void onUpdateFinidhed() {
+                    Utilities.notice(R.string.update_finished);
+                }
             }
         }
     }

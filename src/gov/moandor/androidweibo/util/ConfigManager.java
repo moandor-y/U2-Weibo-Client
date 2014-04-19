@@ -60,7 +60,7 @@ public class ConfigManager {
     public static final String LIST_HW_ACCEL_ENABLED = "list_hw_accel_enabled";
     public static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     public static final String SCREEN_ORIENTATION = "screen_orientation";
-    public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowed_enabled";
+    public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowing_enabled";
     
     static {
         SharedPreferences sharedPreferences = getPreferences();

@@ -197,7 +197,10 @@
     <string name="enabled">启用</string>
     <string name="notification_enabled_after_exit">退出后保留提醒</string>
     <string name="black_magic">黑魔法</string>
-    <string name="ignore_unfollowed">屏蔽未关注人微博</string>
+    <string name="ignore_unfollowing">屏蔽未关注人微博</string>
+    <string name="update_following">更新关注人</string>
+    <string name="updating">正在更新…</string>
+    <string name="update_finished">更新完成</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

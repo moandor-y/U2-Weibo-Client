@@ -196,7 +196,10 @@
     <string name="enabled">Enabled</string>
     <string name="notification_enabled_after_exit">Enabled after exit</string>
     <string name="black_magic">Black magic</string>
-    <string name="ignore_unfollowed">Ignore unfollowed weibo</string>
+    <string name="ignore_unfollowing">Ignore unfollowing\'s weibo</string>
+    <string name="update_following">Update following</string>
+    <string name="updating">Updating…</string>
+    <string name="update_finished">Update finished</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>
