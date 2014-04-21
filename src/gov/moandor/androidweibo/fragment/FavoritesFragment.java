@@ -43,9 +43,9 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
-            int position = data.getIntExtra(WeiboActivity.POSITION, -1);
             WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-            mAdapter.updatePosition(position, status);
+            int position = mAdapter.positionOf(status.id);
+			mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -71,7 +71,6 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), WeiboActivity.class);
-        intent.putExtra(WeiboActivity.POSITION, position);
         intent.putExtra(WeiboActivity.WEIBO_STATUS, mAdapter.getItem(position));
         startActivityForResult(intent, REQUEST_CODE);
     }

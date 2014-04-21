@@ -167,6 +167,15 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     public int positionOf(T bean) {
         return mBeans.indexOf(bean);
     }
+	
+	public int positionOf(long id) {
+		for (int i = 0; i < mBeans.size(); i++) {
+			if (mBeans.get(i).id == id) {
+				return i;
+			}
+		}
+		return -1;
+	}
     
     public void updateDataSet(List<T> beans) {
         mBeans.clear();

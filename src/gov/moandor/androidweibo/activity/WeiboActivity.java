@@ -27,12 +27,10 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnPageChangeListener {
     public static final String WEIBO_STATUS;
-    public static final String POSITION;
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
         WEIBO_STATUS = packageName + ".weibo.status";
-        POSITION = packageName + ".position";
     }
     
     private WeiboStatus mWeiboStatus;
@@ -49,7 +47,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         setContentView(R.layout.activity_weibo);
         Intent intent = getIntent();
         mWeiboStatus = intent.getParcelableExtra(WEIBO_STATUS);
-        mPosition = intent.getIntExtra(POSITION, -1);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new WeiboPagerAdapter(getSupportFragmentManager());
         mPagerAdapter.setCommentCount(mWeiboStatus.commentCount);
@@ -170,7 +167,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private void setResult() {
         Intent data = new Intent();
         data.putExtra(WEIBO_STATUS, mWeiboStatus);
-        data.putExtra(POSITION, mPosition);
         setResult(RESULT_OK, data);
     }
     

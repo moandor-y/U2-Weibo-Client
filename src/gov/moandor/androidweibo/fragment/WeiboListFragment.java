@@ -45,9 +45,10 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
-            final int position = data.getIntExtra(WeiboActivity.POSITION, -1);
+            
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-            mAdapter.updatePosition(position, status);
+            final int position = mAdapter.positionOf(status.id);
+			mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
             final int group = ConfigManager.getWeiboGroup();
@@ -133,7 +134,6 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), WeiboActivity.class);
-        intent.putExtra(WeiboActivity.POSITION, position);
         intent.putExtra(WeiboActivity.WEIBO_STATUS, mAdapter.getItem(position));
         startActivityForResult(intent, REQUEST_CODE);
     }
