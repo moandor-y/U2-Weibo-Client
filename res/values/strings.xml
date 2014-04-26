@@ -129,6 +129,7 @@
     <string name="view_pictures">查看图片</string>
     <string name="follow_failed_reason">关注失败：%s</string>
     <string name="unfollow_failed_reason">取消关注失败：%s</string>
+    <string name="gender">性别</string>
     
     <!-- Time -->
     <string name="just_now">刚刚</string>

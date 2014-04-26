@@ -128,6 +128,7 @@
     <string name="view_pictures">View Pictures</string>
     <string name="follow_failed_reason">Follow Failed : %s</string>
     <string name="unfollow_failed_reason">Unfollow Failed : %s</string>
+    <string name="gender">Gender</string>
     
     <!-- Time -->
     <string name="just_now">Just Now</string>
