@@ -119,7 +119,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mSwipeRefreshLayout.setEnabled(enabled);
     }
     
-    void loadMore() {
+    protected void loadMore() {
         if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
         }
@@ -342,8 +342,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     abstract TimelineListAdapter createListAdapter();
     
     abstract List<DataBean> getBeansFromJson(String json) throws WeiboException;
-    
-    abstract boolean isThisCurrentFragment();
     
     abstract LoadMoreTask createLoadMoreTask();
     

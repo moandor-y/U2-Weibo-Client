@@ -3,7 +3,7 @@ package gov.moandor.androidweibo.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import gov.moandor.androidweibo.adapter.DirectMessagesUserListAdapter;
+import gov.moandor.androidweibo.adapter.DmUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
@@ -14,13 +14,13 @@ import gov.moandor.androidweibo.util.GlobalContext;
 
 import java.util.List;
 
-public class DirectMessagesUserListFragment extends
-        AbsUserListFragment<DirectMessagesUserListAdapter, DirectMessagesUser> {
+public class DmUserListFragment extends
+        AbsUserListFragment<DmUserListAdapter, DirectMessagesUser> {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (mAdapter == null) {
-            mAdapter = new DirectMessagesUserListAdapter(this);
+            mAdapter = new DmUserListAdapter(this);
         }
         mListView.setAdapter(mAdapter);
         mActionModeCallback = new DmUserListActionModeCallback();

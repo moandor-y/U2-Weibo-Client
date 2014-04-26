@@ -7,19 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.fragment.DirectMessagesUserListFragment;
+import gov.moandor.androidweibo.fragment.DmUserListFragment;
 
-public class DirectMessagesActivity extends AbsActivity {
-    private DirectMessagesUserListFragment mFragment;
+public class DmActivity extends AbsActivity {
+    private DmUserListFragment mFragment;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = (DirectMessagesUserListFragment) fragmentManager.findFragmentById(android.R.id.content);
+        mFragment = (DmUserListFragment) fragmentManager.findFragmentById(android.R.id.content);
         if (mFragment == null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            mFragment = new DirectMessagesUserListFragment();
+            mFragment = new DmUserListFragment();
             fragmentTransaction.add(android.R.id.content, mFragment);
             fragmentTransaction.commit();
         }

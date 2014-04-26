@@ -12,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.CommentDraft;
+import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboComment;
@@ -572,6 +573,30 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.FollowingId.CONTENT_DATA));
             return sGson.fromJson(json, long[].class);
+        }
+        return null;
+    }
+    
+    public static synchronized void updateDmConversation(long accountId, long userId, DirectMessage[] messages) {
+        SQLiteDatabase database = sInstance.getWritableDatabase();
+        database.delete(Table.DmConversation.TABLE_NAME, Table.DmConversation.ACCOUNT_ID + "=" + accountId + " and "
+                + Table.DmConversation.USER_ID + "=" + userId, null);
+        ContentValues values = new ContentValues();
+        values.put(Table.DmConversation.ACCOUNT_ID, accountId);
+        values.put(Table.DmConversation.USER_ID, userId);
+        values.put(Table.DmConversation.CONTENT_DATA, sGson.toJson(messages));
+        database.insert(Table.DmConversation.TABLE_NAME, null, values);
+        database.close();
+    }
+    
+    public static synchronized DirectMessage[] getDmConversation(long accountId, long userId) {
+        SQLiteDatabase database = sInstance.getReadableDatabase();
+        String sql = "select * from " + Table.DmConversation.TABLE_NAME + " where " + Table.DmConversation.ACCOUNT_ID
+                + "=" + accountId + " and " + Table.DmConversation.USER_ID + "=" + userId;
+        Cursor cursor = database.rawQuery(sql, null);
+        if (cursor.moveToNext()) {
+            String json = cursor.getString(cursor.getColumnIndex(Table.DmConversation.CONTENT_DATA));
+            return sGson.fromJson(json, DirectMessage[].class);
         }
         return null;
     }

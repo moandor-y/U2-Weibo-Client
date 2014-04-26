@@ -74,11 +74,6 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
     }
     
     @Override
-    boolean isThisCurrentFragment() {
-        return true;
-    }
-    
-    @Override
     LoadMoreTask createLoadMoreTask() {
         return new LoadMoreTask();
     }

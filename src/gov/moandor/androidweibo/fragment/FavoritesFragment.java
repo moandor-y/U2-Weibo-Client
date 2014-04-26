@@ -77,11 +77,6 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
     
     @Override
-    boolean isThisCurrentFragment() {
-        return true;
-    }
-    
-    @Override
     LoadMoreTask createLoadMoreTask() {
         return new FavoritesLoadMoreTask();
     }
@@ -92,7 +87,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
     
     @Override
-    void loadMore() {
+    protected void loadMore() {
         if (!mNoMore) {
             super.loadMore();
         }

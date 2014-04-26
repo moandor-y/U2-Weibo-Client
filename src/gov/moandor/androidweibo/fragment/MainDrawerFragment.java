@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.AuthorizeActivity;
-import gov.moandor.androidweibo.activity.DirectMessagesActivity;
+import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.activity.FavoritesActivity;
 import gov.moandor.androidweibo.adapter.MainDrawerListAdapter;
@@ -58,7 +58,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(GlobalContext.getInstance(), DirectMessagesActivity.class);
+                    intent.setClass(GlobalContext.getInstance(), DmActivity.class);
                     startActivity(intent);
                 }
             });

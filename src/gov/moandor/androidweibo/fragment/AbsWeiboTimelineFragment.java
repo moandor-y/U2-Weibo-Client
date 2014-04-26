@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.util.TextUtils;
@@ -39,15 +38,6 @@ public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, Tim
     public void onResume() {
         super.onResume();
         hideKeyboard();
-    }
-    
-    @Override
-    boolean isThisCurrentFragment() {
-        WeiboActivity activity = (WeiboActivity) getActivity();
-        if (activity != null) {
-            return activity.isCurrentFragment(this);
-        }
-        return false;
     }
     
     @Override

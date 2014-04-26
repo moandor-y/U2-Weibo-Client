@@ -14,7 +14,7 @@ import gov.moandor.androidweibo.util.TimeUtils;
 
 import java.text.ParseException;
 
-public class DirectMessagesConversationAdapter extends AbsTimelineListAdapter<DirectMessage> {
+public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage> {
     private static final long MIN_TIME_TO_DISPLAY = 1000 * 60 * 60 * 10;
     
     @Override

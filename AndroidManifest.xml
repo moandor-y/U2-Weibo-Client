@@ -77,8 +77,8 @@
         <activity android:name=".activity.UserWeiboListActivity"/>
         <activity android:name=".activity.AtUserActivity"/>
         <activity android:name=".activity.FavoritesActivity"/>
-        <activity android:name=".activity.DirectMessagesActivity"/>
-        <activity android:name=".activity.DirectMessagesActivity$ConversationActivity"/>
+        <activity android:name=".activity.DmActivity"/>
+        <activity android:name=".activity.DmActivity$ConversationActivity"/>
         
         <service android:name=".notification.SendWeiboService"/>
         <service android:name=".notification.SendCommentService"/>
