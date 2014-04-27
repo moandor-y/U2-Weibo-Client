@@ -24,6 +24,7 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter {
@@ -180,6 +181,11 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     public void updateDataSet(List<T> beans) {
         mBeans.clear();
         mBeans.addAll(beans);
+    }
+    
+    public void updateDataSet(T[] beans) {
+        mBeans.clear();
+        mBeans.addAll(Arrays.asList(beans));
     }
     
     public void updatePosition(int position, T bean) {

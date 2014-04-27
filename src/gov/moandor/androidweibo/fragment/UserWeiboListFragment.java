@@ -13,11 +13,7 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.UserTimelineDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
-
-import java.util.List;
 
 public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     public static final String USER_ID = "user_id";
@@ -65,16 +61,6 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
         UserTimelineDao dao = new UserTimelineDao();
         dao.setUserId(mUserId);
         return dao;
-    }
-    
-    @Override
-    List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return JsonUtils.getWeiboStatusesFromJson(json);
-    }
-    
-    @Override
-    boolean isThisCurrentFragment() {
-        return true;
     }
     
     @Override

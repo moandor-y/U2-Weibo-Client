@@ -13,8 +13,6 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.FavoritesDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 import java.util.List;
@@ -56,11 +54,6 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
     
     @Override
-    List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return JsonUtils.getFavoritesFromJson(json);
-    }
-    
-    @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         FavoritesDao dao = new FavoritesDao();
         dao.setPage(mPage);
@@ -76,11 +69,6 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
     
     @Override
-    boolean isThisCurrentFragment() {
-        return true;
-    }
-    
-    @Override
     LoadMoreTask createLoadMoreTask() {
         return new FavoritesLoadMoreTask();
     }
@@ -91,7 +79,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
     
     @Override
-    void loadMore() {
+    protected void loadMore() {
         if (!mNoMore) {
             super.loadMore();
         }

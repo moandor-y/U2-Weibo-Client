@@ -34,7 +34,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin_vertical"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:drawablePadding="@dimen/margin_horizontal" />
             
             <TextView
                 android:id="@+id/summary_label"

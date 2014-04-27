@@ -114,6 +114,11 @@ public class ProfileFragment extends Fragment {
         mWeiboCount.setText(decimalFormat.format(mUser.statusesCount));
         mFollowingCount.setText(decimalFormat.format(mUser.friendsCount));
         mFollowerCount.setText(decimalFormat.format(mUser.followersCount));
+        if (mUser.gender.equals("m")) {
+            mName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_male, 0);
+        } else if (mUser.gender.equals("f")) {
+            mName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_female, 0);
+        }
     }
     
     private void initFontSize() {

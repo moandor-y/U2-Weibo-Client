@@ -20,8 +20,6 @@ import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
@@ -34,11 +32,6 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     @Override
     CommentListAdapter createListAdapter() {
         return new CommentListAdapter();
-    }
-    
-    @Override
-    List<WeiboComment> getBeansFromJson(String json) throws WeiboException {
-        return JsonUtils.getWeiboCommentsFromJson(json);
     }
     
     @Override

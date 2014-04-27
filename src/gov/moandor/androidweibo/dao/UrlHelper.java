@@ -38,4 +38,5 @@ public class UrlHelper {
     static final String FAVORITES_CREATE = "https://api.weibo.com/2/favorites/create.json";
     static final String FAVORITES_DESTROY = "https://api.weibo.com/2/favorites/destroy.json";
     static final String DIRECT_MESSAGES_USER_LIST = "https://api.weibo.com/2/direct_messages/user_list.json";
+    static final String DIRECT_MESSAGES_CONVERSATION = "https://api.weibo.com/2/direct_messages/conversation.json";
 }

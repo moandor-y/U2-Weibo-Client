@@ -2,8 +2,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="gov.moandor.androidweibo"
-    android:versionCode="156"
-    android:versionName="0.3.10.156 Alpha" >
+    android:versionCode="164"
+    android:versionName="0.3.11.164 Alpha" >
     
     <uses-sdk
         android:minSdkVersion="8"
@@ -77,8 +77,8 @@
         <activity android:name=".activity.UserWeiboListActivity"/>
         <activity android:name=".activity.AtUserActivity"/>
         <activity android:name=".activity.FavoritesActivity"/>
-        <activity android:name=".activity.DirectMessagesActivity"/>
-        <activity android:name=".activity.DirectMessagesActivity$ConversationActivity"/>
+        <activity android:name=".activity.DmActivity"/>
+        <activity android:name=".activity.DmActivity$ConversationActivity"/>
         
         <service android:name=".notification.SendWeiboService"/>
         <service android:name=".notification.SendCommentService"/>

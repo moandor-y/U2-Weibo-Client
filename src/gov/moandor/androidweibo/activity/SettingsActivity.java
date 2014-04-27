@@ -203,7 +203,8 @@ public class SettingsActivity extends AbsActivity {
                 super.onCreate(savedInstanceState);
                 addPreferencesFromResource(R.xml.prefs_notifications);
                 buildSummaries();
-                findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(new OnRingtoneClickListener());
+                findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(
+                        new OnRingtoneClickListener());
                 String ringtone = ConfigManager.getNotificationRingtone();
                 if (!TextUtils.isEmpty(ringtone)) {
                     mRingtoneUri = Uri.parse(ringtone);

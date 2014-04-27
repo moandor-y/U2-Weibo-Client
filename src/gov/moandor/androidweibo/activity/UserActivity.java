@@ -26,7 +26,7 @@ public class UserActivity extends AbsActivity {
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
-        USER = packageName + ".user";
+        USER = packageName + ".USER";
     }
     
     private WeiboUser mUser;

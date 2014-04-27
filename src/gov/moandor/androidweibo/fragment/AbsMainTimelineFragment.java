@@ -43,8 +43,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
         saveListPosition();
     }
     
-    @Override
-    boolean isThisCurrentFragment() {
+    private boolean isThisCurrentFragment() {
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
             return activity.isCurrentFragment(this);
