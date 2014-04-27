@@ -28,7 +28,7 @@ import java.util.Locale;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 14;
+    private static final int VERSION = 15;
     
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -67,6 +67,10 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String CREATE_FOLLOWING_ID_TABLE = "create table " + Table.FollowingId.TABLE_NAME + "("
             + Table.FollowingId.ACCOUNT_ID + " integer, " + Table.FollowingId.CONTENT_DATA + " text)";
     
+    private static final String CREATE_DM_CONVERSATION_TABLE = "create table " + Table.DmConversation.TABLE_NAME
+            + "(" + Table.DmConversation.ACCOUNT_ID + " integer, " + Table.DmConversation.USER_ID + " integer, "
+            + Table.DmConversation.CONTENT_DATA + " text)";
+    
     private DatabaseUtils() {
         super(GlobalContext.getInstance(), NAME, null, VERSION);
     }
@@ -80,6 +84,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
         db.execSQL(CREATE_DM_USER_TABLE);
         db.execSQL(CREATE_FOLLOWING_ID_TABLE);
+        db.execSQL(CREATE_DM_CONVERSATION_TABLE);
     }
     
     @Override
@@ -96,6 +101,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             db.execSQL(CREATE_DM_USER_TABLE);
         case 13:
             db.execSQL(CREATE_FOLLOWING_ID_TABLE);
+        case 14:
+            db.execSQL(CREATE_DM_CONVERSATION_TABLE);
         }
     }
     
@@ -591,8 +598,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     
     public static synchronized DirectMessage[] getDmConversation(long accountId, long userId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
-        String sql = "select * from " + Table.DmConversation.TABLE_NAME + " where " + Table.DmConversation.ACCOUNT_ID
-                + "=" + accountId + " and " + Table.DmConversation.USER_ID + "=" + userId;
+        String sql =
+                "select * from " + Table.DmConversation.TABLE_NAME + " where " + Table.DmConversation.ACCOUNT_ID + "="
+                        + accountId + " and " + Table.DmConversation.USER_ID + "=" + userId;
         Cursor cursor = database.rawQuery(sql, null);
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.DmConversation.CONTENT_DATA));

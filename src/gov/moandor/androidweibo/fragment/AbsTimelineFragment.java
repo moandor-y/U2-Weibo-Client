@@ -120,7 +120,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     protected void loadMore() {
-        if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
+        if ((mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED)
+                || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
         }
         mRefreshTask = createLoadMoreTask();
@@ -130,7 +131,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     public void refresh() {
-        if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled()) {
+        if ((mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED)
+                || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
         mSwipeRefreshLayout.setRefreshing(true);
@@ -340,8 +342,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     abstract TimelineListAdapter createListAdapter();
-    
-    abstract List<DataBean> getBeansFromJson(String json) throws WeiboException;
     
     abstract LoadMoreTask createLoadMoreTask();
     

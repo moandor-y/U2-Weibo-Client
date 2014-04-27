@@ -20,10 +20,6 @@ import gov.moandor.androidweibo.dao.CommentsShowDao;
 import gov.moandor.androidweibo.notification.SendCommentService;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
-
-import java.util.List;
 
 public class WeiboCommentListFragment extends
         AbsWeiboTimelineFragment<WeiboComment, WeiboTimelineListAdapter<WeiboComment>> {
@@ -50,11 +46,6 @@ public class WeiboCommentListFragment extends
     @Override
     WeiboTimelineListAdapter<WeiboComment> createListAdapter() {
         return new WeiboTimelineListAdapter<WeiboComment>();
-    }
-    
-    @Override
-    List<WeiboComment> getBeansFromJson(String json) throws WeiboException {
-        return JsonUtils.getWeiboCommentsFromJson(json);
     }
     
     @Override

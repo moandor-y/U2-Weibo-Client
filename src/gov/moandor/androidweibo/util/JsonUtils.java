@@ -310,4 +310,19 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
+    
+    public static List<DirectMessage> getDmsFromJson(String jsonStr) throws WeiboException {
+        try {
+            JSONObject json = new JSONObject(jsonStr);
+            JSONArray array = json.getJSONArray("direct_messages");
+            List<DirectMessage> result = new ArrayList<DirectMessage>();
+            for (int i = 0; i < array.length(); i++) {
+                result.add(getDirectMessageFromJson(array.getJSONObject(i)));
+            }
+            return result;
+        } catch (JSONException e) {
+            Logger.logExcpetion(e);
+            throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
+        }
+    }
 }

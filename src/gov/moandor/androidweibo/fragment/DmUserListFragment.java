@@ -1,21 +1,22 @@
 package gov.moandor.androidweibo.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.adapter.DmUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
-import gov.moandor.androidweibo.dao.DirectMessagesUserListDao;
+import gov.moandor.androidweibo.dao.DmUserListDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 
 import java.util.List;
 
-public class DmUserListFragment extends
-        AbsUserListFragment<DmUserListAdapter, DirectMessagesUser> {
+public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, DirectMessagesUser> {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -71,12 +72,15 @@ public class DmUserListFragment extends
     
     @Override
     protected BaseUserListDao<DirectMessagesUser> onCreateDao() {
-        return new DirectMessagesUserListDao();
+        return new DmUserListDao();
     }
     
     @Override
     void onItemClick(int position) {
-        // TODO Auto-generated method stub
+        Intent intent = new Intent();
+        intent.setClass(GlobalContext.getInstance(), DmActivity.ConversationActivity.class);
+        intent.putExtra(DmActivity.ConversationActivity.USER, mAdapter.getItem(position).user);
+        startActivity(intent);
     }
     
     @Override

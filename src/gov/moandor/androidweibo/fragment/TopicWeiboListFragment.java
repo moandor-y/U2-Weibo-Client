@@ -13,11 +13,7 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.SearchTopicsDao;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
-
-import java.util.List;
 
 public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     public static final String TOPIC = "topic";
@@ -59,11 +55,6 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
-    }
-    
-    @Override
-    List<WeiboStatus> getBeansFromJson(String json) throws WeiboException {
-        return JsonUtils.getWeiboStatusesFromJson(json);
     }
     
     @Override

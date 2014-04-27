@@ -8,7 +8,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
 
-public class DirectMessagesUserListDao extends BaseUserListDao<DirectMessagesUser> {
+public class DmUserListDao extends BaseUserListDao<DirectMessagesUser> {
     @Override
     protected List<DirectMessagesUser> getDataFromJson(JSONObject json) throws WeiboException {
         return JsonUtils.getDmUsersFromJson(json);

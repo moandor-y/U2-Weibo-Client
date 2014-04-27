@@ -3,6 +3,7 @@ package gov.moandor.androidweibo.util;
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
+
 import gov.moandor.androidweibo.activity.SettingsActivity;
 import gov.moandor.androidweibo.activity.SettingsActivityOldApi;
 
