@@ -43,7 +43,6 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
-            
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
             final int position = mAdapter.positionOf(status.id);
 			mAdapter.updatePosition(position, status);

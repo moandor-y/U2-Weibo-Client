@@ -13,6 +13,8 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TimeUtils;
 
 import java.text.ParseException;
+import java.util.List;
+import java.util.Collections;
 
 public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage> {
     private static final long MIN_TIME_TO_DISPLAY = 1000 * 60 * 10;
@@ -22,6 +24,53 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
         return super.getView(getCount() - 1 - position, convertView, parent);
     }
     
+	@Override
+	public DirectMessage getItem(int position) {
+		return super.getItem(getCount() - 1 - position);
+	}
+	
+	@Override
+	public long getItemId(int position) {
+		return super.getItemId(getCount() - 1 - position);
+	}
+	
+	@Override
+	public List<DirectMessage> getItems() {
+		List<DirectMessage> items = super.getItems();
+		Collections.reverse(items);
+		return items;
+	}
+	
+	@Override
+	public int positionOf(DirectMessage bean) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public int positionOf(long id) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void updatePosition(int position, DirectMessage bean) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void removeItem(int position) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public void setSelectedPosition(int position) {
+		super.setSelectedPosition(getCount() - 1 - position);
+	}
+	
+	@Override
+	public int getSelection() {
+		throw new UnsupportedOperationException();
+	}
+	
     @Override
     View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
         return inflater.inflate(R.layout.dm_conversation_item, parent, false);
@@ -66,7 +115,7 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
             holder.time.setVisibility(View.GONE);
         }
     }
-    
+	
     private static boolean shouldDisplayTime(DirectMessage message, DirectMessage prevMessage) {
         try {
             long time = TimeUtils.parseSinaTime(message);

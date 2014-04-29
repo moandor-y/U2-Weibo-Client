@@ -148,9 +148,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     }
     
     public List<T> getItems() {
-        List<T> result = new ArrayList<T>();
-        result.addAll(mBeans);
-        return result;
+        return new ArrayList<T>(mBeans);
     }
     
     public void addAll(List<T> beans) {
@@ -213,7 +211,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     }
     
     public T getSelectedItem() {
-        return getItem(mSelectedPosition);
+        return mBeans.get(mSelectedPosition);
     }
     
     public int getSelection() {
