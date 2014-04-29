@@ -10,6 +10,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.DmConversationFragment;
 import gov.moandor.androidweibo.fragment.DmUserListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.bean.WeiboUser;
 
 public class DmActivity extends AbsActivity {
     private DmUserListFragment mFragment;
@@ -61,20 +62,21 @@ public class DmActivity extends AbsActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+			WeiboUser user = getIntent().getParcelableExtra(USER);
             FragmentManager fragmentManager = getSupportFragmentManager();
             DmConversationFragment fragment = (DmConversationFragment) fragmentManager.findFragmentById(android.R.id.content);
             if (fragment == null) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragment = new DmConversationFragment();
                 Bundle args = new Bundle();
-                args.putParcelable(DmConversationFragment.USER, getIntent().getParcelableExtra(USER));
+                args.putParcelable(DmConversationFragment.USER, user);
                 fragment.setArguments(args);
                 fragmentTransaction.add(android.R.id.content, fragment);
                 fragmentTransaction.commit();
             }
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.direct_messages);
+            getSupportActionBar().setTitle(user.name);
         }
     }
 }

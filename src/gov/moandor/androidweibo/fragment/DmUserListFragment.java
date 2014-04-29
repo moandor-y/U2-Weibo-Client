@@ -80,7 +80,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), DmActivity.ConversationActivity.class);
         intent.putExtra(DmActivity.ConversationActivity.USER, mAdapter.getItem(position).user);
-        //startActivity(intent);
+        startActivity(intent);
     }
     
     @Override

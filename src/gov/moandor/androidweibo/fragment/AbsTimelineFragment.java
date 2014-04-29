@@ -72,11 +72,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mListView.setFastScrollEnabled(ConfigManager.isFastScrollEnabled());
         mListView.setOnScrollListener(new OnListScrollListener());
         mListView.setOnItemLongClickListener(new OnListItemLongClickListener());
-        mFooter =
-                GlobalContext.getActivity().getLayoutInflater()
-                        .inflate(R.layout.timeline_list_footer, mListView, false);
-        mFooterIcon = mFooter.findViewById(R.id.image);
-        mFooterText = (TextView) mFooter.findViewById(R.id.text);
+        buildLoadingFooter();
         showLoadingFooter();
         if (mAdapter == null) {
             mAdapter = createListAdapter();
@@ -87,7 +83,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new OnListItemClickListener());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-        mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
+        mSwipeRefreshLayout.setOnRefreshListener(getOnRefreshListener());
         mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
     }
@@ -106,7 +102,36 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mActionMode.finish();
         }
     }
+	
+	protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+		return new OnListRefreshListener();
+	}
+	
+	private void buildLoadingFooter() {
+		mFooter =
+			GlobalContext.getActivity().getLayoutInflater()
+			.inflate(R.layout.timeline_list_footer, mListView, false);
+        mFooterIcon = mFooter.findViewById(R.id.image);
+        mFooterText = (TextView) mFooter.findViewById(R.id.text);
+	}
     
+	private void showLoadingFooter() {
+		if (mFooter == null) {
+			return;
+		}
+        if (mListView.getFooterViewsCount() == 0) {
+            mListView.addFooterView(mFooter);
+            mFooterIcon.startAnimation(mFooterAnimation);
+        }
+    }
+	
+    private void hideLoadingFooter() {
+		if (mFooter == null) {
+			return;
+		}
+        mListView.removeFooterView(mFooter);
+    }
+	
     public boolean isListViewFling() {
         return mListScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING;
     }
@@ -118,7 +143,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     public void setPullToRefreshEnabled(boolean enabled) {
         mSwipeRefreshLayout.setEnabled(enabled);
     }
-    
+	
     protected void loadMore() {
         if ((mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED)
                 || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
@@ -144,17 +169,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     private boolean isLastItemVisible() {
         return mListView.getFirstVisiblePosition() + mListView.getChildCount() >= mAdapter.getCount() - 1;
-    }
-    
-    private void showLoadingFooter() {
-        if (mListView.getFooterViewsCount() == 0) {
-            mListView.addFooterView(mFooter);
-            mFooterIcon.startAnimation(mFooterAnimation);
-        }
-    }
-    
-    private void hideLoadingFooter() {
-        mListView.removeFooterView(mFooter);
     }
     
     public void onActionModeFinished() {

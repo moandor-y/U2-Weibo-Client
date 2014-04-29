@@ -214,7 +214,7 @@ public class JsonUtils {
         result.id = json.getLong("id");
         result.createdAt = json.getString("created_at");
         result.text = json.getString("text");
-        result.sender = getWeiboUserFromJson(json.getJSONObject("sender"));
+        result.weiboUser = getWeiboUserFromJson(json.getJSONObject("sender"));
         result.recipient = getWeiboUserFromJson(json.getJSONObject("recipient"));
         return result;
     }

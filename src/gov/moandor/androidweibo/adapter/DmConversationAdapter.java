@@ -15,10 +15,13 @@ import gov.moandor.androidweibo.util.TimeUtils;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Collections;
+import gov.moandor.androidweibo.util.GlobalContext;
 
 public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage> {
     private static final long MIN_TIME_TO_DISPLAY = 1000 * 60 * 10;
     
+	private WeiboUser mCurrentUser = GlobalContext.getCurrentAccount().user;
+	
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return super.getView(getCount() - 1 - position, convertView, parent);
@@ -78,8 +81,9 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
     
     @Override
     ViewHolder initViewHolder(View view) {
-        ViewHolder holder = new ViewHolder();
-        holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+        DmConversationViewHolder holder = new DmConversationViewHolder();
+        holder.avatar = (ImageView) view.findViewById(R.id.avatar_self);
+		holder.avatarOppo = (ImageView) view.findViewById(R.id.avatar_oppo);
         holder.text = (TextView) view.findViewById(R.id.text);
         holder.time = (TextView) view.findViewById(R.id.time);
         return holder;
@@ -90,25 +94,26 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
         holder.time.setTextSize(mTimeFontSize);
         holder.text.setTextSize(mFontSize);
         holder.text.setOnTouchListener(mTextOnTouchListener);
-        if (mNoPictureModeEnabled) {
-            holder.avatar.setVisibility(View.INVISIBLE);
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) holder.avatar.getLayoutParams();
-            params.width = 0;
-            params.rightMargin = 0;
-        }
     }
     
     @Override
-    void buildUserLayout(ViewHolder holder, WeiboUser user, int position) {
-        if (!mNoPictureModeEnabled) {
-            holder.avatar.setVisibility(View.VISIBLE);
-            buildAvatar(holder.avatar, user, position);
-        }
+    void buildUserLayout(ViewHolder h, WeiboUser user, int position) {
+		DmConversationViewHolder holder = (DmConversationAdapter.DmConversationViewHolder) h;
+		if (user.id == mCurrentUser.id) {
+			holder.avatarOppo.setVisibility(View.GONE);
+			holder.avatar.setVisibility(View.VISIBLE);
+			buildAvatar(holder.avatar, user, getCount() - 1 - position);
+		} else {
+			holder.avatar.setVisibility(View.GONE);
+			holder.avatarOppo.setVisibility(View.VISIBLE);
+			buildAvatar(holder.avatarOppo, user, getCount() - 1 - position);
+		}
+        
     }
     
     @Override
     void buildTime(ViewHolder holder, DirectMessage message, int position) {
-        if (position == 0 || shouldDisplayTime(message, mBeans.get(position - 1))) {
+        if (position == getCount() - 1 || shouldDisplayTime(message, mBeans.get(position + 1))) {
             holder.time.setVisibility(View.VISIBLE);
             super.buildTime(holder, message, position);
         } else {
@@ -126,4 +131,8 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
             return false;
         }
     }
+	
+	private static class DmConversationViewHolder extends ViewHolder {
+		public ImageView avatarOppo;
+	}
 }
