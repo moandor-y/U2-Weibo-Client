@@ -103,7 +103,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled() || mNoMoreUser) {
             return;
         }
-        mSwipeRefreshLayout.setRefreshing(true);
         mRefreshTask = onCreateloLoadMoreTask();
         mRefreshTask.execute();
     }
@@ -164,17 +163,21 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     }
     
     abstract class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
-        private int mLoadCount = Utilities.getLoadWeiboCount();
-        
+        private BaseUserListDao<DataBean> mDao;
+		
+		@Override
+		protected void onPreExecute() {
+			mDao = onCreateDao();
+            onDaoCreated(mDao);
+            mDao.setToken(GlobalContext.getCurrentAccount().token);
+            mDao.setCount(Utilities.getLoadWeiboCount());
+		}
+		
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            BaseUserListDao<DataBean> dao = onCreateDao();
-            onDaoCreated(dao);
-            dao.setToken(GlobalContext.getCurrentAccount().token);
-            dao.setCount(mLoadCount);
             try {
-                List<DataBean> beans = dao.execute();
-                mNextCursor = dao.getNextCursor();
+                List<DataBean> beans = mDao.execute();
+                mNextCursor = mDao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
@@ -197,23 +200,23 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     }
     
     abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
-        private int mLoadCount = Utilities.getLoadWeiboCount();
-        
+        private BaseUserListDao<DataBean> mDao;
+		
         @Override
         protected void onPreExecute() {
             showLoadingFooter();
+			mDao = onCreateDao();
+            onDaoCreated(mDao);
+            mDao.setToken(GlobalContext.getCurrentAccount().token);
+            mDao.setCount(Utilities.getLoadWeiboCount());
+            mDao.setCursor(mNextCursor);
         }
         
         @Override
         protected List<DataBean> doInBackground(Void... v) {
-            BaseUserListDao<DataBean> dao = onCreateDao();
-            onDaoCreated(dao);
-            dao.setToken(GlobalContext.getCurrentAccount().token);
-            dao.setCount(mLoadCount);
-            dao.setCursor(mNextCursor);
             try {
-                List<DataBean> beans = dao.execute();
-                mNextCursor = dao.getNextCursor();
+                List<DataBean> beans = mDao.execute();
+                mNextCursor = mDao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
@@ -226,7 +229,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             hideLoadingFooter();
-            mSwipeRefreshLayout.setRefreshing(false);
             if (mNextCursor == 0) {
                 mNoMoreUser = true;
             }

@@ -74,6 +74,11 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
 		throw new UnsupportedOperationException();
 	}
 	
+	@Override
+	public void addAllFirst(List<DirectMessage> beans) {
+		mBeans.addAll(0, beans);
+	}
+	
     @Override
     View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
         return inflater.inflate(R.layout.dm_conversation_item, parent, false);

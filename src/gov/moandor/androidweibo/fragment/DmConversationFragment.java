@@ -124,7 +124,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
 	
 	private class LoadEarlierMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
 		private BaseTimelineJsonDao<DirectMessage> mDao;
-
+		
         @Override
         protected void onPreExecute() {
 			long maxId = 0L;
@@ -136,7 +136,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setMaxId(maxId);
         }
-
+		
         @Override
         protected List<DirectMessage> doInBackground(Void... v) {
             try {
@@ -147,7 +147,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 return null;
             }
         }
-
+		
         @Override
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
