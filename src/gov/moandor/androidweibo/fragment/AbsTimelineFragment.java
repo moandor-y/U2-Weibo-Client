@@ -102,36 +102,36 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mActionMode.finish();
         }
     }
-	
-	protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
-		return new OnListRefreshListener();
-	}
-	
-	private void buildLoadingFooter() {
-		mFooter =
-			GlobalContext.getActivity().getLayoutInflater()
-			.inflate(R.layout.timeline_list_footer, mListView, false);
+    
+    protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return new OnListRefreshListener();
+    }
+    
+    private void buildLoadingFooter() {
+        mFooter =
+                GlobalContext.getActivity().getLayoutInflater()
+                        .inflate(R.layout.timeline_list_footer, mListView, false);
         mFooterIcon = mFooter.findViewById(R.id.image);
         mFooterText = (TextView) mFooter.findViewById(R.id.text);
-	}
+    }
     
-	private void showLoadingFooter() {
-		if (mFooter == null) {
-			return;
-		}
+    private void showLoadingFooter() {
+        if (mFooter == null) {
+            return;
+        }
         if (mListView.getFooterViewsCount() == 0) {
             mListView.addFooterView(mFooter);
             mFooterIcon.startAnimation(mFooterAnimation);
         }
     }
-	
+    
     private void hideLoadingFooter() {
-		if (mFooter == null) {
-			return;
-		}
+        if (mFooter == null) {
+            return;
+        }
         mListView.removeFooterView(mFooter);
     }
-	
+    
     public boolean isListViewFling() {
         return mListScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING;
     }
@@ -143,9 +143,9 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     public void setPullToRefreshEnabled(boolean enabled) {
         mSwipeRefreshLayout.setEnabled(enabled);
     }
-	
+    
     protected void loadMore() {
-        if ((mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED)
+        if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED
                 || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
         }
@@ -156,7 +156,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     public void refresh() {
-        if ((mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED)
+        if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED
                 || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
@@ -246,14 +246,14 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseTimelineJsonDao<DataBean> mDao;
-		
+        
         @Override
         protected void onPreExecute() {
-			DataBean latestMessage = null;
+            DataBean latestMessage = null;
             if (mAdapter.getCount() > 0) {
                 latestMessage = mAdapter.getItem(0);
             }
-			mDao = onCreateDao();
+            mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setSinceMessage(latestMessage);
@@ -292,15 +292,15 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     
     class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseTimelineJsonDao<DataBean> mDao;
-		
+        
         @Override
         protected void onPreExecute() {
-			long maxId = 0L;
+            long maxId = 0L;
             if (mAdapter.getCount() >= 1) {
                 maxId = mAdapter.getItemId(mAdapter.getCount() - 1) - 1;
             }
             showLoadingFooter();
-			mDao = onCreateDao();
+            mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setMaxId(maxId);

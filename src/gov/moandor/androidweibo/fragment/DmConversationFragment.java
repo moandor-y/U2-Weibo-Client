@@ -6,7 +6,7 @@ import android.support.v7.view.ActionMode.Callback;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import gov.moandor.androidweibo.R;
+
 import gov.moandor.androidweibo.adapter.DmConversationAdapter;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.WeiboUser;
@@ -18,6 +18,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,11 +79,11 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     protected void loadMore() {
         // do nothing
     }
-	
-	@Override
-	protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
-		return new OnListRefreshListener();
-	}
+    
+    @Override
+    protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return new OnListRefreshListener();
+    }
     
     private void stopRefreshTaskIfRunning() {
         if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED) {
@@ -121,22 +122,22 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             // TODO Auto-generated method stub
         }
     }
-	
-	private class LoadEarlierMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
-		private BaseTimelineJsonDao<DirectMessage> mDao;
-		
+    
+    private class LoadEarlierMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
+        private BaseTimelineJsonDao<DirectMessage> mDao;
+        
         @Override
         protected void onPreExecute() {
-			long maxId = 0L;
+            long maxId = 0L;
             if (mAdapter.getCount() >= 1) {
                 maxId = mAdapter.getItemId(0) - 1;
             }
-			mDao = onCreateDao();
+            mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setMaxId(maxId);
         }
-		
+        
         @Override
         protected List<DirectMessage> doInBackground(Void... v) {
             try {
@@ -147,7 +148,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 return null;
             }
         }
-		
+        
         @Override
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
@@ -155,22 +156,22 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             if (result != null && result.size() > 0) {
                 mAdapter.addAll(result);
                 mAdapter.notifyDataSetChanged();
-				mListView.setSelection(result.size());
+                mListView.setSelection(result.size());
             }
         }
-	}
-	
-	private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+    }
+    
+    private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {
-			if ((mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED)
-                || !mSwipeRefreshLayout.isEnabled()) {
-				return;
-			}
-			mRefreshTask = new LoadEarlierMessagesTask();
-			mRefreshTask.execute();
-			mAdapter.updateState();
-			mAdapter.notifyDataSetChanged();
+            if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED
+                    || !mSwipeRefreshLayout.isEnabled()) {
+                return;
+            }
+            mRefreshTask = new LoadEarlierMessagesTask();
+            mRefreshTask.execute();
+            mAdapter.updateState();
+            mAdapter.notifyDataSetChanged();
         }
     }
 }

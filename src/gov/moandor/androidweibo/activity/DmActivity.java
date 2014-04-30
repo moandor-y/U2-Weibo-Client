@@ -7,10 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.DmConversationFragment;
 import gov.moandor.androidweibo.fragment.DmUserListFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.bean.WeiboUser;
 
 public class DmActivity extends AbsActivity {
     private DmUserListFragment mFragment;
@@ -62,9 +62,10 @@ public class DmActivity extends AbsActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-			WeiboUser user = getIntent().getParcelableExtra(USER);
+            WeiboUser user = getIntent().getParcelableExtra(USER);
             FragmentManager fragmentManager = getSupportFragmentManager();
-            DmConversationFragment fragment = (DmConversationFragment) fragmentManager.findFragmentById(android.R.id.content);
+            DmConversationFragment fragment =
+                    (DmConversationFragment) fragmentManager.findFragmentById(android.R.id.content);
             if (fragment == null) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragment = new DmConversationFragment();

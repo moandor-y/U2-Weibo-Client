@@ -37,7 +37,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-			final int position = mAdapter.positionOf(status.id);
+            final int position = mAdapter.positionOf(status.id);
             mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
             final long accountId = GlobalContext.getCurrentAccount().user.id;

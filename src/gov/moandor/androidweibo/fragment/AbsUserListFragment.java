@@ -164,15 +164,15 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     abstract class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseUserListDao<DataBean> mDao;
-		
-		@Override
-		protected void onPreExecute() {
-			mDao = onCreateDao();
+        
+        @Override
+        protected void onPreExecute() {
+            mDao = onCreateDao();
             onDaoCreated(mDao);
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
-		}
-		
+        }
+        
         @Override
         protected List<DataBean> doInBackground(Void... v) {
             try {
@@ -201,11 +201,11 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseUserListDao<DataBean> mDao;
-		
+        
         @Override
         protected void onPreExecute() {
             showLoadingFooter();
-			mDao = onCreateDao();
+            mDao = onCreateDao();
             onDaoCreated(mDao);
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());

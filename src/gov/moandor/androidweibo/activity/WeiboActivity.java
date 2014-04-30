@@ -39,7 +39,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     private WeiboRepostListFragment mWeiboRepostListFragment;
     private WeiboPagerAdapter mPagerAdapter;
     private PagerSlidingTabStrip mTabStrip;
-    private int mPosition;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

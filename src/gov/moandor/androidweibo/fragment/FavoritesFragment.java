@@ -43,7 +43,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
         if (data != null) {
             WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
             int position = mAdapter.positionOf(status.id);
-			mAdapter.updatePosition(position, status);
+            mAdapter.updatePosition(position, status);
             mAdapter.notifyDataSetChanged();
         }
     }

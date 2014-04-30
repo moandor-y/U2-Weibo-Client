@@ -67,8 +67,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String CREATE_FOLLOWING_ID_TABLE = "create table " + Table.FollowingId.TABLE_NAME + "("
             + Table.FollowingId.ACCOUNT_ID + " integer, " + Table.FollowingId.CONTENT_DATA + " text)";
     
-    private static final String CREATE_DM_CONVERSATION_TABLE = "create table " + Table.DmConversation.TABLE_NAME
-            + "(" + Table.DmConversation.ACCOUNT_ID + " integer, " + Table.DmConversation.USER_ID + " integer, "
+    private static final String CREATE_DM_CONVERSATION_TABLE = "create table " + Table.DmConversation.TABLE_NAME + "("
+            + Table.DmConversation.ACCOUNT_ID + " integer, " + Table.DmConversation.USER_ID + " integer, "
             + Table.DmConversation.CONTENT_DATA + " text)";
     
     private DatabaseUtils() {
