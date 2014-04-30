@@ -54,7 +54,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     
     @Override
     RefreshTask createRefreshTask() {
-        return new RefreshTask();
+        return null;
     }
     
     @Override
@@ -73,6 +73,11 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         DmConversationDao dao = new DmConversationDao();
         dao.setUid(mUser.id);
         return dao;
+    }
+    
+    @Override
+    public void refresh() {
+        // do nothing
     }
     
     @Override
@@ -117,9 +122,12 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             if (result != null) {
                 mAdapter.updateDataSet(result);
             } else {
-                refresh();
+                mSwipeRefreshLayout.setRefreshing(true);
+                mRefreshTask = new FetchMessagesTask();
+                mRefreshTask.execute();
+                mAdapter.updateState();
+                mAdapter.notifyDataSetChanged();
             }
-            // TODO Auto-generated method stub
         }
     }
     
@@ -157,6 +165,56 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 mAdapter.addAll(result);
                 mAdapter.notifyDataSetChanged();
                 mListView.setSelection(result.size());
+            }
+        }
+    }
+    
+    private class FetchMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
+        private BaseTimelineJsonDao<DirectMessage> mDao;
+        
+        @Override
+        protected void onPreExecute() {
+            DirectMessage latestMessage = null;
+            if (mAdapter.getCount() > 0) {
+                latestMessage = mAdapter.getItem(0);
+            }
+            mDao = onCreateDao();
+            mDao.setToken(GlobalContext.getCurrentAccount().token);
+            mDao.setCount(Utilities.getLoadWeiboCount());
+            mDao.setSinceMessage(latestMessage);
+        }
+        
+        @Override
+        protected List<DirectMessage> doInBackground(Void... v) {
+            try {
+                return mDao.execute();
+            } catch (WeiboException e) {
+                Logger.logExcpetion(e);
+                Utilities.notice(e.getMessage());
+                return null;
+            }
+        }
+        
+        @Override
+        protected void onPostExecute(List<DirectMessage> result) {
+            mRefreshTask = null;
+            mSwipeRefreshLayout.setRefreshing(false);
+            if (result != null && result.size() >= 1) {
+                if (mDao.noEnoughNewMessages()) {
+                    mAdapter.updateDataSet(result);
+                } else {
+                    mAdapter.addAllFirst(result);
+                }
+                mAdapter.notifyDataSetChanged();
+                final long accountId = GlobalContext.getCurrentAccount().user.id;
+                final long userId = mUser.id;
+                final DirectMessage[] messages = mAdapter.getItems().toArray(new DirectMessage[0]);
+                MyAsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DatabaseUtils.updateDmConversation(accountId, userId, messages);
+                    }
+                });
             }
         }
     }
