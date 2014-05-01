@@ -3,10 +3,13 @@ package gov.moandor.androidweibo.fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.DmConversationAdapter;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.WeiboUser;
@@ -35,6 +38,11 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUser = getArguments().getParcelable(USER);
+    }
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_dm_conversation, container, false);
     }
     
     @Override
@@ -258,7 +266,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setSinceMessage(latestMessage);
-            if (mLastResult != null) {
+            if (mLastResult != null && mLastResult.size() > 0) {
                 mDao.setMaxId(mLastResult.get(mLastResult.size() - 1).id - 1);
             }
         }

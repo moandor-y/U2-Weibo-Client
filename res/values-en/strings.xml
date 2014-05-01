@@ -235,6 +235,9 @@
     <!-- ImageViewerActivity -->
     <string name="show_ori">Show Original Pictures</string>
     
+    <!-- DmActivity -->
+    <string name="send_dm">Send direct messages</string>
+    
     <!-- Notification -->
     <string name="new_comments">%d New Comments</string>
     <string name="new_mention_weibos">%d New Posts @Me</string>

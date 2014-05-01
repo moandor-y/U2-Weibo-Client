@@ -236,6 +236,9 @@
     <!-- ImageViewerActivity -->
     <string name="show_ori">显示原图</string>
     
+    <!-- DmActivity -->
+    <string name="send_dm">发送私信</string>
+    
     <!-- Notification -->
     <string name="new_comments">%d条评论</string>
     <string name="new_mention_weibos">%d条@微博</string>
