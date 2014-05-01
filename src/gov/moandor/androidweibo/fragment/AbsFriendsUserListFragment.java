@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode.Callback;
 import android.view.View;
 
 import gov.moandor.androidweibo.activity.UserActivity;
@@ -30,7 +31,6 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
         }
         mAdapter.setFragment(this);
         mListView.setAdapter(mAdapter);
-        mActionModeCallback = new FriendsUserListActionModeCallback(mAdapter, this);
     }
     
     @Override
@@ -59,8 +59,11 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     }
     
     @Override
-    void onListItemChecked(int position) {
-        mAdapter.setSelectedPosition(position);
+    protected Callback getActionModeCallback() {
+        FriendsUserListActionModeCallback callback = new FriendsUserListActionModeCallback();
+        callback.setFragment(this);
+        callback.setAdapter(mAdapter);
+        return callback;
     }
     
     private class FriendsUserListRefreshTask extends RefreshTask {

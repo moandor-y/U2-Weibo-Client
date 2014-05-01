@@ -4,13 +4,12 @@ import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import gov.moandor.androidweibo.adapter.DmUserListAdapter;
-import gov.moandor.androidweibo.bean.DirectMessagesUser;
-import gov.moandor.androidweibo.fragment.DmUserListFragment;
+import gov.moandor.androidweibo.adapter.DmConversationAdapter;
+import gov.moandor.androidweibo.fragment.DmConversationFragment;
 
-public class DmUserListActionModeCallback implements ActionMode.Callback {
-    private DmUserListFragment mFragment;
-    private DmUserListAdapter mAdapter;
+public class DmConversationActionModeCallback implements ActionMode.Callback {
+    private DmConversationFragment mFragment;
+    private DmConversationAdapter mAdapter;
     
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -20,9 +19,8 @@ public class DmUserListActionModeCallback implements ActionMode.Callback {
     
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        DirectMessagesUser user = mAdapter.getSelectedItem();
-        mode.setTitle(user.weiboUser.name);
-        return true;
+        // TODO Auto-generated method stub
+        return false;
     }
     
     @Override
@@ -39,11 +37,11 @@ public class DmUserListActionModeCallback implements ActionMode.Callback {
         mFragment.setPullToRefreshEnabled(true);
     }
     
-    public void setFragment(DmUserListFragment fragment) {
+    public void setFragment(DmConversationFragment fragment) {
         mFragment = fragment;
     }
     
-    public void setAdapter(DmUserListAdapter adapter) {
+    public void setAdapter(DmConversationAdapter adapter) {
         mAdapter = adapter;
     }
 }

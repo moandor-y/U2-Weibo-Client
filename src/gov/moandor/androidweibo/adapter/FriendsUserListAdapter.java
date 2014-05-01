@@ -15,7 +15,7 @@ import gov.moandor.androidweibo.util.Utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsUserListAdapter extends AbsBaseAdapter {
+public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectableAdapter<WeiboUser> {
     private List<WeiboUser> mUsers = new ArrayList<WeiboUser>();
     private AbsUserListFragment<FriendsUserListAdapter, WeiboUser> mFragment;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
@@ -77,10 +77,12 @@ public class FriendsUserListAdapter extends AbsBaseAdapter {
         mFragment = fragment;
     }
     
+    @Override
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
     }
     
+    @Override
     public WeiboUser getSelectedItem() {
         return getItem(mSelectedPosition);
     }
@@ -98,6 +100,7 @@ public class FriendsUserListAdapter extends AbsBaseAdapter {
         mUsers.set(position, user);
     }
     
+    @Override
     public int getSelection() {
         return mSelectedPosition;
     }

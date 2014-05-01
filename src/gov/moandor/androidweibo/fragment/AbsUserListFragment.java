@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.adapter.ISelectableAdapter;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
@@ -32,16 +33,16 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     Adapter mAdapter;
     ListView mListView;
-    ActionMode.Callback mActionModeCallback;
     MyAsyncTask<Void, ?, ?> mRefreshTask;
     int mNextCursor;
     boolean mNoMoreUser;
+    private int mListScrollState;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View mFooter;
     private View mFooterIcon;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
     private ActionMode mActionMode;
-    private int mListScrollState;
+    private ActionMode.Callback mActionModeCallback;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -241,8 +242,11 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             if (mActionMode != null) {
                 return false;
             }
-            onListItemChecked(position);
+            ((ISelectableAdapter<?>) mAdapter).setSelectedPosition(position);
             mAdapter.notifyDataSetChanged();
+            if (mActionModeCallback == null) {
+                mActionModeCallback = getActionModeCallback();
+            }
             mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             return true;
         }
@@ -261,7 +265,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     
     abstract MyAsyncTask<Void, ?, ?> onCreateloLoadMoreTask();
     
-    abstract void onListItemChecked(int position);
-    
     protected abstract BaseUserListDao<DataBean> onCreateDao();
+    
+    protected abstract ActionMode.Callback getActionModeCallback();
 }

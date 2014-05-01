@@ -10,14 +10,8 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.AbsUserListFragment;
 
 public class FriendsUserListActionModeCallback implements ActionMode.Callback {
-    private FriendsUserListAdapter mAdapter;
     private AbsUserListFragment<FriendsUserListAdapter, WeiboUser> mFragment;
-    
-    public FriendsUserListActionModeCallback(FriendsUserListAdapter adapter,
-            AbsUserListFragment<FriendsUserListAdapter, WeiboUser> fragment) {
-        mAdapter = adapter;
-        mFragment = fragment;
-    }
+    private FriendsUserListAdapter mAdapter;
     
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -61,6 +55,14 @@ public class FriendsUserListActionModeCallback implements ActionMode.Callback {
         mAdapter.setSelectedPosition(-1);
         mAdapter.notifyDataSetChanged();
         mFragment.setPullToRefreshEnabled(true);
+    }
+    
+    public void setFragment(AbsUserListFragment<FriendsUserListAdapter, WeiboUser> fragment) {
+        mFragment = fragment;
+    }
+    
+    public void setAdapter(FriendsUserListAdapter adapter) {
+        mAdapter = adapter;
     }
     
     private class OnFollowFinishedListener implements FollowTask.OnFollowFinishedListener {

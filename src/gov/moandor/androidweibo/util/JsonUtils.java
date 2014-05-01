@@ -204,7 +204,7 @@ public class JsonUtils {
         DirectMessage dm = getDirectMessageFromJson(json.getJSONObject("direct_message"));
         DirectMessagesUser result = new DirectMessagesUser();
         result.message = dm;
-        result.user = user;
+        result.weiboUser = user;
         result.unreadCount = json.getInt("unread_count");
         return result;
     }

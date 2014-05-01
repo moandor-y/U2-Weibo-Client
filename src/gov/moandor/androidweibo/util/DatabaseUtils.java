@@ -28,7 +28,7 @@ import java.util.Locale;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 15;
+    private static final int VERSION = 16;
     
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -103,6 +103,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             db.execSQL(CREATE_FOLLOWING_ID_TABLE);
         case 14:
             db.execSQL(CREATE_DM_CONVERSATION_TABLE);
+        case 15:
+            db.delete(Table.DmUser.TABLE_NAME, null, null);
         }
     }
     

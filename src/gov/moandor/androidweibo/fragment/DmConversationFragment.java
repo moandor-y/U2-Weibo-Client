@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.view.ActionMode.Callback;
+import android.support.v7.view.ActionMode;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -14,6 +14,7 @@ import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.DmConversationDao;
 import gov.moandor.androidweibo.util.DatabaseUtils;
+import gov.moandor.androidweibo.util.DmConversationActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
@@ -24,7 +25,10 @@ import java.util.List;
 
 public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, DmConversationAdapter> {
     public static final String USER = "user";
+    private static final long LOAD_INTERVAL = 3 * 60 * 1000;
+    private static final int MAX_DATABASE_MESSAGE_COUNT = 100;
     
+    private boolean mRunning;
     private WeiboUser mUser;
     
     @Override
@@ -40,6 +44,19 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         stopRefreshTaskIfRunning();
         mRefreshTask = new LoadFromDatabaseTask();
         mRefreshTask.execute();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        mRunning = true;
+        startAutoLoadNewMessages();
+    }
+    
+    @Override
+    public void onPause() {
+        super.onPause();
+        mRunning = false;
     }
     
     @Override
@@ -63,9 +80,11 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     }
     
     @Override
-    Callback getActionModeCallback() {
-        // TODO Auto-generated method stub
-        return null;
+    ActionMode.Callback getActionModeCallback() {
+        DmConversationActionModeCallback callback = new DmConversationActionModeCallback();
+        callback.setFragment(this);
+        callback.setAdapter(mAdapter);
+        return callback;
     }
     
     @Override
@@ -76,24 +95,30 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     }
     
     @Override
-    public void refresh() {
-        // do nothing
-    }
+    public void refresh() {/* do nothing */}
     
     @Override
-    protected void loadMore() {
-        // do nothing
-    }
+    protected void loadMore() {/* do nothing */}
     
     @Override
     protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return new OnListRefreshListener();
     }
     
-    private void stopRefreshTaskIfRunning() {
-        if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED) {
-            mRefreshTask.cancel(true);
-        }
+    private void startAutoLoadNewMessages() {
+        GlobalContext.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isRefreshTaskIfRunning()) {
+                    return;
+                }
+                mRefreshTask = new LoadNewMessagesTask();
+                mRefreshTask.execute();
+                if (mRunning) {
+                    GlobalContext.runOnUiThread(this, LOAD_INTERVAL);
+                }
+            }
+        });
     }
     
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
@@ -121,6 +146,8 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             mRefreshTask = null;
             if (result != null) {
                 mAdapter.updateDataSet(result);
+                mAdapter.notifyDataSetChanged();
+                hideLoadingFooter();
             } else {
                 mSwipeRefreshLayout.setRefreshing(true);
                 mRefreshTask = new FetchMessagesTask();
@@ -138,7 +165,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         protected void onPreExecute() {
             long maxId = 0L;
             if (mAdapter.getCount() >= 1) {
-                maxId = mAdapter.getItemId(0) - 1;
+                maxId = mAdapter.getItemId(mAdapter.getCount() - 1) - 1;
             }
             mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
@@ -174,14 +201,9 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         
         @Override
         protected void onPreExecute() {
-            DirectMessage latestMessage = null;
-            if (mAdapter.getCount() > 0) {
-                latestMessage = mAdapter.getItem(0);
-            }
             mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
-            mDao.setSinceMessage(latestMessage);
         }
         
         @Override
@@ -199,12 +221,9 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
             mSwipeRefreshLayout.setRefreshing(false);
+            hideLoadingFooter();
             if (result != null && result.size() >= 1) {
-                if (mDao.noEnoughNewMessages()) {
-                    mAdapter.updateDataSet(result);
-                } else {
-                    mAdapter.addAllFirst(result);
-                }
+                mAdapter.updateDataSet(result);
                 mAdapter.notifyDataSetChanged();
                 final long accountId = GlobalContext.getCurrentAccount().user.id;
                 final long userId = mUser.id;
@@ -215,6 +234,78 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                         DatabaseUtils.updateDmConversation(accountId, userId, messages);
                     }
                 });
+            }
+        }
+    }
+    
+    private class LoadNewMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
+        private BaseTimelineJsonDao<DirectMessage> mDao;
+        private List<DirectMessage> mLastResult;
+        
+        private LoadNewMessagesTask() {}
+        
+        private LoadNewMessagesTask(List<DirectMessage> lastResult) {
+            mLastResult = lastResult;
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            DirectMessage latestMessage = null;
+            if (mAdapter.getCount() > 0) {
+                latestMessage = mAdapter.getItem(0);
+            }
+            mDao = onCreateDao();
+            mDao.setToken(GlobalContext.getCurrentAccount().token);
+            mDao.setCount(Utilities.getLoadWeiboCount());
+            mDao.setSinceMessage(latestMessage);
+            if (mLastResult != null) {
+                mDao.setMaxId(mLastResult.get(mLastResult.size() - 1).id - 1);
+            }
+        }
+        
+        @Override
+        protected List<DirectMessage> doInBackground(Void... v) {
+            try {
+                return mDao.execute();
+            } catch (WeiboException e) {
+                Logger.logExcpetion(e);
+                Utilities.notice(e.getMessage());
+                return null;
+            }
+        }
+        
+        @Override
+        protected void onPostExecute(List<DirectMessage> result) {
+            mRefreshTask = null;
+            if (result != null) {
+                if (mDao.noEnoughNewMessages()) {
+                    if (mLastResult == null) {
+                        mRefreshTask = new LoadNewMessagesTask(result);
+                    } else {
+                        mLastResult.addAll(result);
+                        mRefreshTask = new LoadNewMessagesTask(mLastResult);
+                    }
+                    mRefreshTask.execute();
+                } else {
+                    if (mLastResult != null) {
+                        result.addAll(0, mLastResult);
+                    }
+                    mAdapter.addAllFirst(result);
+                    mAdapter.notifyDataSetChanged();
+                    final List<DirectMessage> messages = mAdapter.getItems();
+                    if (messages.size() > MAX_DATABASE_MESSAGE_COUNT) {
+                        messages.subList(MAX_DATABASE_MESSAGE_COUNT, messages.size()).clear();
+                    }
+                    final long accountId = GlobalContext.getCurrentAccount().user.id;
+                    final long userId = mUser.id;
+                    MyAsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            DatabaseUtils.updateDmConversation(accountId, userId, 
+                                    messages.toArray(new DirectMessage[0]));
+                        }
+                    });
+                }
             }
         }
     }

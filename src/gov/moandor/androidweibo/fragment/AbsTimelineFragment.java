@@ -103,6 +103,16 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
     }
     
+    protected boolean isRefreshTaskIfRunning() {
+        return mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED;
+    }
+    
+    protected void stopRefreshTaskIfRunning() {
+        if (isRefreshTaskIfRunning()) {
+            mRefreshTask.cancel(true);
+        }
+    }
+    
     protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return new OnListRefreshListener();
     }
@@ -115,7 +125,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mFooterText = (TextView) mFooter.findViewById(R.id.text);
     }
     
-    private void showLoadingFooter() {
+    protected void showLoadingFooter() {
         if (mFooter == null) {
             return;
         }
@@ -125,7 +135,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
     }
     
-    private void hideLoadingFooter() {
+    protected void hideLoadingFooter() {
         if (mFooter == null) {
             return;
         }
@@ -145,8 +155,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     protected void loadMore() {
-        if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED
-                || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
+        if (isRefreshTaskIfRunning() || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
         }
         mRefreshTask = createLoadMoreTask();
@@ -156,8 +165,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     public void refresh() {
-        if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED
-                || !mSwipeRefreshLayout.isEnabled()) {
+        if (isRefreshTaskIfRunning() || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
         mSwipeRefreshLayout.setRefreshing(true);

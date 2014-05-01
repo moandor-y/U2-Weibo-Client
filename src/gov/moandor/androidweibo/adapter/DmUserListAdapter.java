@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DmUserListAdapter extends AbsBaseAdapter {
+public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdapter<DirectMessagesUser> {
     private List<DirectMessagesUser> mDmUsers = new ArrayList<DirectMessagesUser>();
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private DmUserListFragment mFragment;
@@ -41,7 +41,7 @@ public class DmUserListAdapter extends AbsBaseAdapter {
     
     @Override
     public long getItemId(int position) {
-        return mDmUsers.get(position).user.id;
+        return mDmUsers.get(position).weiboUser.id;
     }
     
     @Override
@@ -66,7 +66,7 @@ public class DmUserListAdapter extends AbsBaseAdapter {
         }
         DirectMessagesUser dmUser = mDmUsers.get(position);
         DirectMessage message = dmUser.message;
-        WeiboUser user = dmUser.user;
+        WeiboUser user = dmUser.weiboUser;
         holder.userName.setText(user.name);
         if (!mNoPictureModeEnabled) {
             holder.avatar.setVisibility(View.VISIBLE);
@@ -97,6 +97,21 @@ public class DmUserListAdapter extends AbsBaseAdapter {
     
     public DirectMessagesUser[] getItems() {
         return mDmUsers.toArray(new DirectMessagesUser[mDmUsers.size()]);
+    }
+    
+    @Override
+    public void setSelectedPosition(int position) {
+        mSelectedPosition = position;
+    }
+    
+    @Override
+    public DirectMessagesUser getSelectedItem() {
+        return getItem(mSelectedPosition);
+    }
+    
+    @Override
+    public int getSelection() {
+        return mSelectedPosition;
     }
     
     private ViewHolder initViewHolder(View view) {

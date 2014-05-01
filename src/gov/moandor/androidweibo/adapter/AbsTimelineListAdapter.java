@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter {
+public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter implements ISelectableAdapter<T> {
     private static final int MAX_COUNT = 500;
     
     List<T> mBeans = new ArrayList<T>();
@@ -206,14 +206,17 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         mOnAvatarLongClickListener = l;
     }
     
+    @Override
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
     }
     
+    @Override
     public T getSelectedItem() {
         return mBeans.get(mSelectedPosition);
     }
     
+    @Override
     public int getSelection() {
         return mSelectedPosition;
     }

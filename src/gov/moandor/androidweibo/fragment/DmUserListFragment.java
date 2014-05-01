@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
 import android.view.View;
 
 import gov.moandor.androidweibo.activity.DmActivity;
@@ -24,7 +25,6 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             mAdapter = new DmUserListAdapter(this);
         }
         mListView.setAdapter(mAdapter);
-        mActionModeCallback = new DmUserListActionModeCallback();
     }
     
     @Override
@@ -79,7 +79,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     void onItemClick(int position) {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), DmActivity.ConversationActivity.class);
-        intent.putExtra(DmActivity.ConversationActivity.USER, mAdapter.getItem(position).user);
+        intent.putExtra(DmActivity.ConversationActivity.USER, mAdapter.getItem(position).weiboUser);
         startActivity(intent);
     }
     
@@ -94,8 +94,11 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     }
     
     @Override
-    void onListItemChecked(int position) {
-        // TODO Auto-generated method stub
+    protected ActionMode.Callback getActionModeCallback() {
+        DmUserListActionModeCallback callback = new DmUserListActionModeCallback();
+        callback.setFragment(this);
+        callback.setAdapter(mAdapter);
+        return callback;
     }
     
     private class DmUserListRefreshTask extends RefreshTask {

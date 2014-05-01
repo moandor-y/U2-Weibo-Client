@@ -14,7 +14,6 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TimeUtils;
 
 import java.text.ParseException;
-import java.util.Collections;
 import java.util.List;
 
 public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage> {
@@ -25,23 +24,6 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return super.getView(getCount() - 1 - position, convertView, parent);
-    }
-    
-    @Override
-    public DirectMessage getItem(int position) {
-        return super.getItem(getCount() - 1 - position);
-    }
-    
-    @Override
-    public long getItemId(int position) {
-        return super.getItemId(getCount() - 1 - position);
-    }
-    
-    @Override
-    public List<DirectMessage> getItems() {
-        List<DirectMessage> items = super.getItems();
-        Collections.reverse(items);
-        return items;
     }
     
     @Override
