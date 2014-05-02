@@ -103,12 +103,12 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
     }
     
-    protected boolean isRefreshTaskIfRunning() {
+    protected boolean isRefreshTaskRunning() {
         return mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED;
     }
     
     protected void stopRefreshTaskIfRunning() {
-        if (isRefreshTaskIfRunning()) {
+        if (isRefreshTaskRunning()) {
             mRefreshTask.cancel(true);
         }
     }
@@ -155,7 +155,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     protected void loadMore() {
-        if (isRefreshTaskIfRunning() || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
+        if (isRefreshTaskRunning() || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
         }
         mRefreshTask = createLoadMoreTask();
@@ -165,7 +165,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     public void refresh() {
-        if (isRefreshTaskIfRunning() || !mSwipeRefreshLayout.isEnabled()) {
+        if (isRefreshTaskRunning() || !mSwipeRefreshLayout.isEnabled()) {
             return;
         }
         mSwipeRefreshLayout.setRefreshing(true);

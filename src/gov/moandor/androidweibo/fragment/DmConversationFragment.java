@@ -117,7 +117,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         GlobalContext.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (isRefreshTaskIfRunning()) {
+                if (isRefreshTaskRunning()) {
                     return;
                 }
                 mRefreshTask = new LoadNewMessagesTask();
@@ -156,6 +156,8 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 mAdapter.updateDataSet(result);
                 mAdapter.notifyDataSetChanged();
                 hideLoadingFooter();
+                mRefreshTask = new LoadNewMessagesTask();
+                mRefreshTask.execute();
             } else {
                 mSwipeRefreshLayout.setRefreshing(true);
                 mRefreshTask = new FetchMessagesTask();
@@ -287,14 +289,6 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             mRefreshTask = null;
             if (result != null) {
                 if (mDao.noEnoughNewMessages()) {
-                    if (mLastResult == null) {
-                        mRefreshTask = new LoadNewMessagesTask(result);
-                    } else {
-                        mLastResult.addAll(result);
-                        mRefreshTask = new LoadNewMessagesTask(mLastResult);
-                    }
-                    mRefreshTask.execute();
-                } else {
                     if (mLastResult != null) {
                         result.addAll(0, mLastResult);
                     }
@@ -313,6 +307,14 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                                     messages.toArray(new DirectMessage[0]));
                         }
                     });
+                } else {
+                    if (mLastResult == null) {
+                        mRefreshTask = new LoadNewMessagesTask(result);
+                    } else {
+                        mLastResult.addAll(result);
+                        mRefreshTask = new LoadNewMessagesTask(mLastResult);
+                    }
+                    mRefreshTask.execute();
                 }
             }
         }
