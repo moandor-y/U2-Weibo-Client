@@ -1,41 +1,44 @@
 package gov.moandor.androidweibo.notification;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Random;
+
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.DraftBoxActivity;
-import gov.moandor.androidweibo.bean.CommentDraft;
+import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
-import gov.moandor.androidweibo.dao.BaseSendCommentDao;
-import gov.moandor.androidweibo.dao.CreateCommentDao;
-import gov.moandor.androidweibo.dao.ReplyCommentDao;
-import gov.moandor.androidweibo.util.DatabaseUtils;
+import gov.moandor.androidweibo.dao.SendDmDao;
+import gov.moandor.androidweibo.fragment.DmConversationFragment;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.Random;
-
-public class SendCommentService extends Service {
+public class SendDmService extends Service {
     public static final String TOKEN;
-    public static final String COMMENT_DRAFT;
+    public static final String TEXT;
+    public static final String USER_ID;
+    public static final String SCREEN_NAME;
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
         TOKEN = packageName + ".TOKEN";
-        COMMENT_DRAFT = packageName + ".COMMENT_DRAFT";
+        TEXT = packageName + ".TEXT";
+        USER_ID = packageName + ".USER_ID";
+        SCREEN_NAME = packageName + ".SCREEN_NAME";
     }
     
+    private long mUserId;
     private NotificationManager mNotificationManager;
     private String mToken;
-    private CommentDraft mDraft;
+    private String mText;
+    private String mScreenName;
+    private String mError;
     
     @Override
     public void onCreate() {
@@ -50,18 +53,14 @@ public class SendCommentService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
-        mDraft = intent.getParcelableExtra(COMMENT_DRAFT);
+        mText = intent.getStringExtra(TEXT);
+        mUserId = intent.getLongExtra(USER_ID, 0);
+        mScreenName = intent.getStringExtra(SCREEN_NAME);
         new SendTask().execute();
         return START_REDELIVER_INTENT;
     }
     
-    private PendingIntent getFailedClickIntent() {
-        Intent intent = new Intent();
-        intent.setClass(getBaseContext(), DraftBoxActivity.class);
-        return PendingIntent.getActivity(getBaseContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-    
-    private class SendTask extends MyAsyncTask<Void, Void, Void> {
+    private class SendTask extends MyAsyncTask<Void, Void, DirectMessage> {
         private int mNotificationId;
         
         @Override
@@ -69,7 +68,7 @@ public class SendCommentService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
             builder.setTicker(getString(R.string.sending));
             builder.setContentTitle(getString(R.string.sending));
-            builder.setContentText(mDraft.content);
+            builder.setContentText(mText);
             builder.setOnlyAlertOnce(true);
             builder.setOngoing(true);
             builder.setSmallIcon(R.drawable.ic_upload);
@@ -80,24 +79,17 @@ public class SendCommentService extends Service {
         }
         
         @Override
-        protected Void doInBackground(Void... v) {
-            BaseSendCommentDao dao;
-            if (mDraft.repliedComment == null) {
-                dao = new CreateCommentDao();
-            } else {
-                dao = new ReplyCommentDao();
-                ((ReplyCommentDao) dao).setCid(mDraft.repliedComment.id);
-            }
+        protected DirectMessage doInBackground(Void... v) {
+            SendDmDao dao = new SendDmDao();
             dao.setToken(mToken);
-            dao.setComment(mDraft.content);
-            dao.setId(mDraft.commentedStatus.id);
-            dao.setCommentOri(mDraft.commentOri);
+            dao.setText(mText);
+            dao.setUid(mUserId);
+            dao.setScreenName(mScreenName);
             try {
-                dao.execute();
+                return dao.execute();
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
-                mDraft.error = e.getMessage();
-                DatabaseUtils.insertDraft(mDraft);
+                mError = e.getMessage();
                 cancel(true);
             }
             return null;
@@ -108,12 +100,12 @@ public class SendCommentService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
             builder.setTicker(getString(R.string.send_failed));
             builder.setContentTitle(getString(R.string.send_failed));
-            builder.setContentText(mDraft.content);
+            builder.setContentText(mText);
             builder.setOnlyAlertOnce(true);
             builder.setAutoCancel(true);
             builder.setSmallIcon(R.drawable.ic_cancel);
             builder.setOngoing(false);
-            builder.setContentIntent(getFailedClickIntent());
+            builder.setContentIntent(Utilities.newEmptyPendingIntent());
             mNotificationManager.notify(mNotificationId, builder.build());
             GlobalContext.runOnUiThread(new Runnable() {
                 @Override
@@ -123,10 +115,16 @@ public class SendCommentService extends Service {
                     stopSelf();
                 }
             }, 3000);
+            Intent intent = new Intent();
+            intent.setAction(DmConversationFragment.SEND_FINISHED);
+            intent.putExtra(DmConversationFragment.SEND_RESULT_CODE, DmConversationFragment.SEND_FAILED);
+            intent.putExtra(DmConversationFragment.SEND_FAILED_TEXT, mText);
+            intent.putExtra(DmConversationFragment.SEND_FAILED_ERROR, mError);
+            sendBroadcast(intent);
         }
         
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(DirectMessage result) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
             builder.setTicker(getString(R.string.sent_successfully));
             builder.setContentTitle(getString(R.string.sent_successfully));
@@ -144,6 +142,11 @@ public class SendCommentService extends Service {
                     stopSelf();
                 }
             }, 3000);
+            Intent intent = new Intent();
+            intent.setAction(DmConversationFragment.SEND_FINISHED);
+            intent.putExtra(DmConversationFragment.SEND_RESULT_CODE, DmConversationFragment.SEND_SUCCESSFUL);
+            intent.putExtra(DmConversationFragment.SEND_SUCCESSFUL_MESSAGE, result);
+            sendBroadcast(intent);
         }
     }
 }

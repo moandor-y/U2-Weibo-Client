@@ -82,6 +82,7 @@
         
         <service android:name=".notification.SendWeiboService"/>
         <service android:name=".notification.SendCommentService"/>
+        <service android:name=".notification.SendDmService"/>
         <service android:name=".notification.FetchUnreadMessageService"/>
         <service android:name=".notification.UnreadCommentNotificationService"/>
         <service android:name=".notification.UnreadMentionWeiboNotificationService"/>

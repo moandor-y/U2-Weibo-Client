@@ -151,8 +151,16 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         return new ArrayList<T>(mBeans);
     }
     
+    public void add(T bean) {
+        mBeans.add(bean);
+    }
+    
     public void addAll(List<T> beans) {
         mBeans.addAll(beans);
+    }
+    
+    public void addFirst(T bean) {
+        mBeans.add(0, bean);
     }
     
     public void addAllFirst(List<T> beans) {

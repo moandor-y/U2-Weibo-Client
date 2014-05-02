@@ -1,5 +1,9 @@
 package gov.moandor.androidweibo.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.view.ActionMode;
@@ -8,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.DmConversationAdapter;
@@ -16,10 +21,12 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.DmConversationDao;
+import gov.moandor.androidweibo.notification.SendDmService;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmConversationActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
@@ -27,17 +34,37 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, DmConversationAdapter> {
+    public static final int SEND_SUCCESSFUL = 0;
+    public static final int SEND_FAILED = 1;
     public static final String USER = "user";
+    public static final String SEND_FINISHED;
+    public static final String SEND_RESULT_CODE;
+    public static final String SEND_SUCCESSFUL_MESSAGE;
+    public static final String SEND_FAILED_TEXT;
+    public static final String SEND_FAILED_ERROR;
     private static final long LOAD_INTERVAL = 3 * 60 * 1000;
     private static final int MAX_DATABASE_MESSAGE_COUNT = 100;
     
+    static {
+        String packageName = GlobalContext.getInstance().getPackageName();
+        SEND_FINISHED = packageName + ".SEND_FINISHED";
+        SEND_RESULT_CODE = packageName + ".SEND_RESULT_CODE";
+        SEND_SUCCESSFUL_MESSAGE = packageName + ".SEND_SUCCESSFUL_MESSAGE";
+        SEND_FAILED_TEXT = packageName + ".SEND_FAILED_TEXT";
+        SEND_FAILED_ERROR = packageName + ".SEND_FAILED_ERROR";
+    }
+    
     private boolean mRunning;
     private WeiboUser mUser;
+    private EditText mEditText;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUser = getArguments().getParcelable(USER);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(SEND_FINISHED);
+        Utilities.registerReceiver(mSendFinishReceiver, intentFilter);
     }
     
     @Override
@@ -48,6 +75,8 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mEditText = (EditText) view.findViewById(R.id.send_dm);
+        view.findViewById(R.id.button_send).setOnClickListener(new OnSendButtonClickListener());
         mListView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_NORMAL);
         stopRefreshTaskIfRunning();
         mRefreshTask = new LoadFromDatabaseTask();
@@ -65,6 +94,12 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     public void onPause() {
         super.onPause();
         mRunning = false;
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Utilities.unregisterReceiver(mSendFinishReceiver);
     }
     
     @Override
@@ -128,6 +163,26 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             }
         });
     }
+    
+    private BroadcastReceiver mSendFinishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int resultCode = intent.getIntExtra(SEND_RESULT_CODE, -1);
+            switch (resultCode) {
+            case SEND_SUCCESSFUL:
+                DirectMessage message = intent.getParcelableExtra(SEND_SUCCESSFUL_MESSAGE);
+                mAdapter.addFirst(message);
+                mAdapter.notifyDataSetChanged();
+                break;
+            case SEND_FAILED:
+                String error = intent.getStringExtra(SEND_FAILED_ERROR);
+                String text = intent.getStringExtra(SEND_FAILED_TEXT);
+                mEditText.setError(error);
+                mEditText.setText(text);
+                break;
+            }
+        }
+    };
     
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
         private long mAccountId;
@@ -323,14 +378,27 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {
-            if (mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED
-                    || !mSwipeRefreshLayout.isEnabled()) {
+            if (isRefreshTaskRunning() || !mSwipeRefreshLayout.isEnabled()) {
                 return;
             }
             mRefreshTask = new LoadEarlierMessagesTask();
             mRefreshTask.execute();
             mAdapter.updateState();
             mAdapter.notifyDataSetChanged();
+        }
+    }
+    
+    private class OnSendButtonClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (!TextUtils.isEmpty(mEditText.getText())) {
+                Intent intent = new Intent();
+                intent.setClass(GlobalContext.getInstance(), SendDmService.class);
+                intent.putExtra(SendDmService.TOKEN, GlobalContext.getCurrentAccount().token);
+                intent.putExtra(SendDmService.TEXT, mEditText.getText().toString());
+                intent.putExtra(SendDmService.USER_ID, mUser.id);
+                getActivity().startService(intent);
+            }
         }
     }
 }

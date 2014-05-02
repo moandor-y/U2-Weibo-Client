@@ -11,16 +11,8 @@ public class WeiboDraft extends AbsDraftBean {
     public boolean commentOriWhenRepost;
     
     @Override
-    public int describeContents() {
-        return 0;
-    }
-    
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(content);
-        dest.writeLong(accountId);
-        dest.writeInt(id);
-        dest.writeString(error);
+        super.writeToParcel(dest, flags);
         dest.writeParcelable(retweetStatus, 0);
         dest.writeString(picPath);
         dest.writeParcelable(location, 0);
@@ -28,14 +20,10 @@ public class WeiboDraft extends AbsDraftBean {
         dest.writeBooleanArray(bools);
     }
     
-    public static final Parcelable.Creator<WeiboDraft> CREATOR = new Parcelable.Creator<WeiboDraft>() {
+    public static final Parcelable.Creator<WeiboDraft> CREATOR = new ParcelableCreator<WeiboDraft>() {
         @Override
         public WeiboDraft createFromParcel(Parcel source) {
-            WeiboDraft result = new WeiboDraft();
-            result.content = source.readString();
-            result.accountId = source.readLong();
-            result.id = source.readInt();
-            result.error = source.readString();
+            WeiboDraft result = super.createFromParcel(source);
             result.retweetStatus = source.readParcelable(WeiboStatus.class.getClassLoader());
             result.picPath = source.readString();
             result.location = source.readParcelable(GpsLocation.class.getClassLoader());
@@ -49,6 +37,11 @@ public class WeiboDraft extends AbsDraftBean {
         @Override
         public WeiboDraft[] newArray(int size) {
             return new WeiboDraft[size];
+        }
+        
+        @Override
+        protected WeiboDraft onCreateObject() {
+            return new WeiboDraft();
         }
     };
 }

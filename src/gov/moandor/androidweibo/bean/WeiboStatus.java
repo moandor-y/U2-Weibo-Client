@@ -3,7 +3,7 @@ package gov.moandor.androidweibo.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class WeiboStatus extends AbsItemBean implements Parcelable {
+public class WeiboStatus extends AbsItemBean {
     public boolean favorited;
     public int picCount;
     public String[] thumbnailPic;
@@ -17,18 +17,8 @@ public class WeiboStatus extends AbsItemBean implements Parcelable {
     public int attitudeCount;
     
     @Override
-    public int describeContents() {
-        return 0;
-    }
-    
-    @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(createdAt);
-        dest.writeLong(id);
-        dest.writeLong(mid);
-        dest.writeString(text);
-        dest.writeString(source);
-        dest.writeParcelable(weiboUser, flags);
+        super.writeToParcel(dest, flags);
         dest.writeBooleanArray(new boolean[]{favorited});
         dest.writeInt(picCount);
         if (picCount > 0) {
@@ -44,16 +34,10 @@ public class WeiboStatus extends AbsItemBean implements Parcelable {
         dest.writeInt(attitudeCount);
     }
     
-    public static final Parcelable.Creator<WeiboStatus> CREATOR = new Parcelable.Creator<WeiboStatus>() {
+    public static final Parcelable.Creator<WeiboStatus> CREATOR = new ParcelableCreator<WeiboStatus>() {
         @Override
         public WeiboStatus createFromParcel(Parcel source) {
-            WeiboStatus result = new WeiboStatus();
-            result.createdAt = source.readString();
-            result.id = source.readLong();
-            result.mid = source.readLong();
-            result.text = source.readString();
-            result.source = source.readString();
-            result.weiboUser = source.readParcelable(WeiboUser.class.getClassLoader());
+            WeiboStatus result = super.createFromParcel(source);
             boolean[] bools = new boolean[1];
             source.readBooleanArray(bools);
             result.favorited = bools[0];
@@ -78,6 +62,11 @@ public class WeiboStatus extends AbsItemBean implements Parcelable {
         @Override
         public WeiboStatus[] newArray(int size) {
             return new WeiboStatus[size];
+        }
+        
+        @Override
+        protected WeiboStatus onCreateObject() {
+            return new WeiboStatus();
         }
     };
 }

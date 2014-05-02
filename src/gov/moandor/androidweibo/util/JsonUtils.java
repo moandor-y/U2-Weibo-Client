@@ -201,7 +201,7 @@ public class JsonUtils {
     
     private static DirectMessagesUser getDmUserFromJson(JSONObject json) throws JSONException {
         WeiboUser user = getWeiboUserFromJson(json.getJSONObject("user"));
-        DirectMessage dm = getDirectMessageFromJson(json.getJSONObject("direct_message"));
+        DirectMessage dm = getDmFromJson(json.getJSONObject("direct_message"));
         DirectMessagesUser result = new DirectMessagesUser();
         result.message = dm;
         result.weiboUser = user;
@@ -209,7 +209,16 @@ public class JsonUtils {
         return result;
     }
     
-    private static DirectMessage getDirectMessageFromJson(JSONObject json) throws JSONException {
+    public static DirectMessage getDmFromJson(String jsonStr) throws WeiboException {
+        try {
+            return getDmFromJson(new JSONObject(jsonStr));
+        } catch (JSONException e) {
+            Logger.logExcpetion(e);
+            throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
+        }
+    }
+    
+    private static DirectMessage getDmFromJson(JSONObject json) throws JSONException {
         DirectMessage result = new DirectMessage();
         result.id = json.getLong("id");
         result.createdAt = json.getString("created_at");
@@ -317,7 +326,7 @@ public class JsonUtils {
             JSONArray array = json.getJSONArray("direct_messages");
             List<DirectMessage> result = new ArrayList<DirectMessage>();
             for (int i = 0; i < array.length(); i++) {
-                result.add(getDirectMessageFromJson(array.getJSONObject(i)));
+                result.add(getDmFromJson(array.getJSONObject(i)));
             }
             return result;
         } catch (JSONException e) {
