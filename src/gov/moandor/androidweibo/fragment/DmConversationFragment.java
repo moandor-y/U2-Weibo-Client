@@ -42,8 +42,11 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     public static final String SEND_SUCCESSFUL_MESSAGE;
     public static final String SEND_FAILED_TEXT;
     public static final String SEND_FAILED_ERROR;
+    public static final String RESULT_USER;
+    public static final String RESULT_LATEST_MESSAGE;
     private static final long LOAD_INTERVAL = 3 * 60 * 1000;
     private static final int MAX_DATABASE_MESSAGE_COUNT = 100;
+    private static final int RESULT_CODE = 0;
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
@@ -52,6 +55,8 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         SEND_SUCCESSFUL_MESSAGE = packageName + ".SEND_SUCCESSFUL_MESSAGE";
         SEND_FAILED_TEXT = packageName + ".SEND_FAILED_TEXT";
         SEND_FAILED_ERROR = packageName + ".SEND_FAILED_ERROR";
+        RESULT_USER = packageName + ".RESULT_USER";
+        RESULT_LATEST_MESSAGE = packageName + ".RESULT_LATEST_MESSAGE";
     }
     
     private boolean mRunning;
@@ -164,6 +169,25 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         });
     }
     
+    private void updateDatabase() {
+        final long accountId = GlobalContext.getCurrentAccount().user.id;
+        final long userId = mUser.id;
+        final List<DirectMessage> messages = mAdapter.getItems();
+        if (messages.size() > MAX_DATABASE_MESSAGE_COUNT) {
+            messages.subList(MAX_DATABASE_MESSAGE_COUNT, messages.size()).clear();
+        }
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseUtils.updateDmConversation(accountId, userId, messages.toArray(new DirectMessage[0]));
+            }
+        });
+        Intent data = new Intent();
+        data.putExtra(RESULT_USER, mUser);
+        data.putExtra(RESULT_LATEST_MESSAGE, mAdapter.getItem(0));
+        getActivity().setResult(RESULT_CODE, data);
+    }
+    
     private BroadcastReceiver mSendFinishReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -173,6 +197,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 DirectMessage message = intent.getParcelableExtra(SEND_SUCCESSFUL_MESSAGE);
                 mAdapter.addFirst(message);
                 mAdapter.notifyDataSetChanged();
+                updateDatabase();
                 break;
             case SEND_FAILED:
                 String error = intent.getStringExtra(SEND_FAILED_ERROR);
@@ -290,15 +315,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             if (result != null && result.size() >= 1) {
                 mAdapter.updateDataSet(result);
                 mAdapter.notifyDataSetChanged();
-                final long accountId = GlobalContext.getCurrentAccount().user.id;
-                final long userId = mUser.id;
-                final DirectMessage[] messages = mAdapter.getItems().toArray(new DirectMessage[0]);
-                MyAsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DatabaseUtils.updateDmConversation(accountId, userId, messages);
-                    }
-                });
+                updateDatabase();
             }
         }
     }
@@ -349,19 +366,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                     }
                     mAdapter.addAllFirst(result);
                     mAdapter.notifyDataSetChanged();
-                    final List<DirectMessage> messages = mAdapter.getItems();
-                    if (messages.size() > MAX_DATABASE_MESSAGE_COUNT) {
-                        messages.subList(MAX_DATABASE_MESSAGE_COUNT, messages.size()).clear();
-                    }
-                    final long accountId = GlobalContext.getCurrentAccount().user.id;
-                    final long userId = mUser.id;
-                    MyAsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            DatabaseUtils.updateDmConversation(accountId, userId, 
-                                    messages.toArray(new DirectMessage[0]));
-                        }
-                    });
+                    updateDatabase();
                 } else {
                     if (mLastResult == null) {
                         mRefreshTask = new LoadNewMessagesTask(result);
@@ -398,6 +403,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 intent.putExtra(SendDmService.TEXT, mEditText.getText().toString());
                 intent.putExtra(SendDmService.USER_ID, mUser.id);
                 getActivity().startService(intent);
+                mEditText.setText(null);
             }
         }
     }

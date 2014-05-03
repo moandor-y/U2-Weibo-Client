@@ -91,6 +91,10 @@ public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdap
         mDmUsers.addAll(Arrays.asList(data));
     }
     
+    public void updateItem(int position, DirectMessagesUser item) {
+        mDmUsers.set(position, item);
+    }
+    
     public void addAll(List<DirectMessagesUser> data) {
         mDmUsers.addAll(data);
     }
@@ -112,6 +116,15 @@ public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdap
     @Override
     public int getSelection() {
         return mSelectedPosition;
+    }
+    
+    public int findPositionByUserId(long id) {
+        for (DirectMessagesUser user : mDmUsers) {
+            if (user.weiboUser.id == id) {
+                return mDmUsers.indexOf(user);
+            }
+        }
+        return -1;
     }
     
     private ViewHolder initViewHolder(View view) {

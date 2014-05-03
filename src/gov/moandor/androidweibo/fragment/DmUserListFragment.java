@@ -7,7 +7,9 @@ import android.view.View;
 
 import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.adapter.DmUserListAdapter;
+import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
+import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
 import gov.moandor.androidweibo.dao.DmUserListDao;
@@ -18,6 +20,8 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import java.util.List;
 
 public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, DirectMessagesUser> {
+    private static final int REQUEST_CODE = 0;
+    
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -41,6 +45,19 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
                 DatabaseUtils.updateDmUsers(dmUsers, accountId);
             }
         });
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            WeiboUser user = data.getParcelableExtra(DmConversationFragment.RESULT_USER);
+            DirectMessage message = data.getParcelableExtra(DmConversationFragment.RESULT_LATEST_MESSAGE);
+            int position = mAdapter.findPositionByUserId(user.id);
+            DirectMessagesUser item = mAdapter.getItem(position);
+            item.message = message;
+            mAdapter.updateItem(position, item);
+            mAdapter.notifyDataSetChanged();
+        }
     }
     
     @Override
@@ -80,7 +97,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), DmActivity.ConversationActivity.class);
         intent.putExtra(DmActivity.ConversationActivity.USER, mAdapter.getItem(position).weiboUser);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
     
     @Override
