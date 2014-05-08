@@ -24,6 +24,7 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
 import android.os.Debug;
+import android.content.Context;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
@@ -392,8 +393,9 @@ public class SettingsActivity extends AbsActivity {
 				Runtime runtime = Runtime.getRuntime();
 				long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
 				long nativeAlloc = Debug.getNativeHeapAllocatedSize();
-				String summary = "VM allocated memory : " + formatMemoryText(vmAlloc) + "\n"
-						+ "Native allocated memory : " + formatMemoryText(nativeAlloc);
+				Context context = GlobalContext.getInstance();
+				String summary = context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc)) + "\n"
+						+ context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
 				preference.setSummary(summary);
 			}
 			

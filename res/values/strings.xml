@@ -204,6 +204,8 @@
     <string name="update_finished">更新完成</string>
 	<string name="about">关于</string>
 	<string name="memory">内存</string>
+	<string name="vm_alloc_mem">VM allocated memory : %s</string>
+	<string name="native_alloc_mem">Native allocated memory : %s</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>
