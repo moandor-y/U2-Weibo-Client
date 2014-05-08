@@ -110,6 +110,16 @@
             
         </Preference>
         
+		<Preference
+            android:title="@string/about"
+            android:persistent="false" >
+			
+            <intent
+                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$AboutActivity"
+                android:targetPackage="gov.moandor.androidweibo" />
+			
+        </Preference>
+		
     </PreferenceCategory>
     
 </PreferenceScreen>

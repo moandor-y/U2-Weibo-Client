@@ -202,6 +202,8 @@
     <string name="update_following">更新关注人</string>
     <string name="updating">正在更新…</string>
     <string name="update_finished">更新完成</string>
+	<string name="about">关于</string>
+	<string name="memory">内存</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>
