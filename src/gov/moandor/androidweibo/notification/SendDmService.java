@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
-import java.util.Random;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -18,6 +16,8 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
+
+import java.util.Random;
 
 public class SendDmService extends Service {
     public static final String TOKEN;

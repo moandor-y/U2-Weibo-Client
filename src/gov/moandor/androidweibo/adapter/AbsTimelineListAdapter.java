@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter implements ISelectableAdapter<T> {
+public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter implements
+        ISelectableAdapter<T> {
     private static final int MAX_COUNT = 500;
     
     List<T> mBeans = new ArrayList<T>();

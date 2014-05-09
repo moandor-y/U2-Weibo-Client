@@ -1,15 +1,18 @@
 package gov.moandor.androidweibo.activity;
 
 import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Debug;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -23,9 +26,6 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
-import android.os.Debug;
-import android.content.Context;
-import android.app.ActivityManager;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
@@ -351,9 +351,9 @@ public class SettingsActivity extends AbsActivity {
             }
         }
     }
-	
-	public static class AboutActivity extends AbsActivity {
-		@Override
+    
+    public static class AboutActivity extends AbsActivity {
+        @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             FragmentManager fm = getFragmentManager();
@@ -368,7 +368,7 @@ public class SettingsActivity extends AbsActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.about);
         }
-		
+        
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
@@ -379,33 +379,35 @@ public class SettingsActivity extends AbsActivity {
                 return super.onOptionsItemSelected(item);
             }
         }
-		
-		public static class AboutFragment extends PreferenceFragment {
-			private static final String KEY_MEMORY = "memory";
-			
-			@Override
+        
+        public static class AboutFragment extends PreferenceFragment {
+            private static final String KEY_MEMORY = "memory";
+            
+            @Override
             public void onCreate(Bundle savedInstanceState) {
-				super.onCreate(savedInstanceState);
+                super.onCreate(savedInstanceState);
                 addPreferencesFromResource(R.xml.prefs_about);
-				buildMemoryInfo(findPreference(KEY_MEMORY));
-			}
-			
-			private static void buildMemoryInfo(Preference preference) {
-				Runtime runtime = Runtime.getRuntime();
-				long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
-				long nativeAlloc = Debug.getNativeHeapAllocatedSize();
-				Context context = GlobalContext.getInstance();
-				ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-				int memoryClass = manager.getMemoryClass();
-				String summary = context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass + " MB") + "\n"
-						+ context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
-				preference.setSummary(summary);
-			}
-			
-			private static String formatMemoryText(long memory) {
-				float memoryInMB = ((float) memory) / (1024 * 1024);
-				return String.format("%.1f MB", memoryInMB);
-			}
-		}
-	}
+                buildMemoryInfo(findPreference(KEY_MEMORY));
+            }
+            
+            private static void buildMemoryInfo(Preference preference) {
+                Runtime runtime = Runtime.getRuntime();
+                long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
+                long nativeAlloc = Debug.getNativeHeapAllocatedSize();
+                Context context = GlobalContext.getInstance();
+                ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+                int memoryClass = manager.getMemoryClass();
+                String summary =
+                        context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass
+                                + " MB")
+                                + "\n" + context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
+                preference.setSummary(summary);
+            }
+            
+            private static String formatMemoryText(long memory) {
+                float memoryInMB = (float) memory / (1024 * 1024);
+                return String.format("%.1f MB", memoryInMB);
+            }
+        }
+    }
 }
