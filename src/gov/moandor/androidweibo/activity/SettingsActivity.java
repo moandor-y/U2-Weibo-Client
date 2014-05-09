@@ -25,6 +25,7 @@ import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
 import android.os.Debug;
 import android.content.Context;
+import android.app.ActivityManager;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
@@ -394,7 +395,9 @@ public class SettingsActivity extends AbsActivity {
 				long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
 				long nativeAlloc = Debug.getNativeHeapAllocatedSize();
 				Context context = GlobalContext.getInstance();
-				String summary = context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc)) + "\n"
+				ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+				int memoryClass = manager.getMemoryClass();
+				String summary = context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass + " MB") + "\n"
 						+ context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
 				preference.setSummary(summary);
 			}
