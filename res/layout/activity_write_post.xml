@@ -50,7 +50,7 @@
             android:layout_alignParentRight="true"
             android:textAppearance="@style/text_appearance_action_bar_menu"
             android:text="@string/send"
-            android:textColor="?action_menu_text_color"
+            android:textColor="@color/action_menu_text_color"
             android:drawableRight="@drawable/ic_send_dark" />
         
     </RelativeLayout>

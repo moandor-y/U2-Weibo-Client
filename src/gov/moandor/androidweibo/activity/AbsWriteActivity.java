@@ -215,14 +215,14 @@ public abstract class AbsWriteActivity extends AbsActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             int len = Utilities.sendLength(mEditText.getText().toString());
             if (len == 0) {
-                mSendButton.setTextColor(Utilities.getColor(R.attr.action_menu_text_color));
+                mSendButton.setTextColor(getResources().getColor(R.color.action_menu_text_color));
                 mSendButton.setText(R.string.send);
             } else {
                 int left = MAX_LENGTH - len;
                 if (left < 0) {
                     mSendButton.setTextColor(Color.RED);
                 } else {
-                    mSendButton.setTextColor(Utilities.getColor(R.attr.action_menu_text_color));
+                    mSendButton.setTextColor(getResources().getColor(R.color.action_menu_text_color));
                 }
                 mSendButton.setText(String.valueOf(left));
             }

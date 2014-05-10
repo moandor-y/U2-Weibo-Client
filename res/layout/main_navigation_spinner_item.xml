@@ -8,5 +8,5 @@
     android:layout_height="50dp"
     android:ellipsize="marquee"
     android:textAlignment="inherit"
-    android:textColor="?action_menu_text_color"
+    android:textColor="@color/action_menu_text_color"
     android:textSize="16sp" />

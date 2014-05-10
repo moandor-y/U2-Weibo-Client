@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -85,19 +84,18 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             finish();
             return;
         }
-        Resources res = getResources();
         setContentView(R.layout.activity_main);
         mWeiboListSpinnerAdapter =
-                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1, res
-                        .getStringArray(R.array.weibo_list_spinner));
+                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
+                        getResources().getStringArray(R.array.weibo_list_spinner));
         mWeiboListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         mAtmeListSpinnerAdapter =
-                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1, res
-                        .getStringArray(R.array.atme_list_spinner));
+                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
+                        getResources().getStringArray(R.array.atme_list_spinner));
         mAtmeListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         mCommentListSpinnerAdapter =
-                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1, res
-                        .getStringArray(R.array.comment_list_spinner));
+                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
+                        getResources().getStringArray(R.array.comment_list_spinner));
         mCommentListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -176,7 +174,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mTabStrip.setDividerColorResource(R.color.tab_divider);
         mTabStrip.setTextColorResource(android.R.color.white);
         mTabStrip.setIndicatorColorResource(R.color.holo_blue_light);
-        mTabStrip.setTabPaddingLeftRight(res.getDimensionPixelSize(R.dimen.tab_padding));
+        mTabStrip.setTabPaddingLeftRight(getResources().getDimensionPixelSize(R.dimen.tab_padding));
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_UNREAD_UPDATED);
         Utilities.registerReceiver(mUnreadUpdateReciever, intentFilter);

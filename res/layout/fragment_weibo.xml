@@ -113,7 +113,7 @@
                 android:textSize="15sp"
                 android:lineSpacingMultiplier="1.2"
                 android:clickable="true"
-                android:background="@drawable/clickable_text" />
+                android:background="@color/clickable_text" />
             
             <gov.moandor.androidweibo.widget.WeiboDetailPicView
                 android:id="@+id/retweet_pic"

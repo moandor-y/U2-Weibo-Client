@@ -16,7 +16,6 @@
     <attr name="settings_divider_color" format="color"/>
     <attr name="settings_divider_wide_color" format="color"/>
     <attr name="item_background" format="reference"/>
-    <attr name="action_menu_text_color" format="color"/>
     <attr name="icon_refresh" format="reference"/>
     <attr name="bottom_background" format="reference"/>
     

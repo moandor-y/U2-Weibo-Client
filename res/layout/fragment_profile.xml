@@ -120,7 +120,7 @@
                     android:paddingLeft="@dimen/margin_horizontal"
                     android:paddingTop="@dimen/margin_vertical"
                     android:paddingBottom="@dimen/margin_vertical"
-                    android:background="@drawable/clickable_text"
+                    android:background="@color/clickable_text"
                     android:clickable="true" >
                     
                     <TextView
@@ -149,7 +149,7 @@
                     android:paddingLeft="@dimen/margin_horizontal"
                     android:paddingTop="@dimen/margin_vertical"
                     android:paddingBottom="@dimen/margin_vertical"
-                    android:background="@drawable/clickable_text"
+                    android:background="@color/clickable_text"
                     android:clickable="true" >
                     
                     <TextView
@@ -178,7 +178,7 @@
                     android:paddingLeft="@dimen/margin_horizontal"
                     android:paddingTop="@dimen/margin_vertical"
                     android:paddingBottom="@dimen/margin_vertical"
-                    android:background="@drawable/clickable_text"
+                    android:background="@color/clickable_text"
                     android:clickable="true" >
                     
                     <TextView
