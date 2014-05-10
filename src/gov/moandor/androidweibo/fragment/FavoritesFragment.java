@@ -118,6 +118,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     private class FavoritesRefreshTask extends RefreshTask {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mNoMore = false;
             mPage = 1;
         }
@@ -132,6 +133,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     private class FavoritesLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPreExecute() {
+            super.onPreExecute();
             mPage += 1;
         }
         
