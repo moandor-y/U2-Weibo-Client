@@ -34,9 +34,13 @@
         
         <activity
             android:name=".activity.WeiboActivity"
-            android:theme="@style/Translucent"
             android:windowSoftInputMode="stateHidden" />
         
+		<activity
+            android:name=".activity.WeiboActivity$Translucent"
+            android:theme="@style/Translucent"
+            android:windowSoftInputMode="stateHidden" />
+		
         <activity android:name=".activity.UserActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />

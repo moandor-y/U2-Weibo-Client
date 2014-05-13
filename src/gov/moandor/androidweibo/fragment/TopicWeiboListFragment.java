@@ -14,6 +14,7 @@ import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.SearchTopicsDao;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
+import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     public static final String TOPIC = "topic";
@@ -66,9 +67,7 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WeiboActivity.class);
-        intent.putExtra(WeiboActivity.WEIBO_STATUS, mAdapter.getItem(position));
+        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
         startActivityForResult(intent, REQUEST_CODE);
     }
     

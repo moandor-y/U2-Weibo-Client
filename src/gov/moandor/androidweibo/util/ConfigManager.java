@@ -41,6 +41,7 @@ public class ConfigManager {
     public static final String ATME_FILTER = "atme_filter";
     public static final String COMMENT_FILTER = "comment_filter";
     public static final String FAST_SCROLL_ENABLED = "fast_scroll_enabled";
+	public static final String SWIPE_BACK_ENABLED = "swipe_back_enabled";
     public static final String FONT_SIZE_MODE = "font_size_mode";
     public static final String AVATAR_QUALITY = "avatar_quality";
     public static final String NO_PICTURE_MODE = "no_picture_mode";
@@ -154,6 +155,10 @@ public class ConfigManager {
         editor.putBoolean(FAST_SCROLL_ENABLED, value);
         apply(editor);
     }
+	
+	public static boolean isSwipeBackEnabled() {
+		return getPreferences().getBoolean(SWIPE_BACK_ENABLED, true);
+	}
     
     public static int getFontSizeMode() {
         return Integer.parseInt(getPreferences().getString(FONT_SIZE_MODE, String.valueOf(FONT_SIZE_MODE_MEDIUM)));

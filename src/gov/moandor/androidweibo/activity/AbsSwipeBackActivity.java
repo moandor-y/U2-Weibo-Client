@@ -6,6 +6,7 @@ import android.view.View;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivityBase;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivityHelper;
+import gov.moandor.androidweibo.util.ConfigManager;
 
 public abstract class AbsSwipeBackActivity extends AbsActivity implements SwipeBackActivityBase {
     private SwipeBackActivityHelper mHelper;
@@ -22,6 +23,12 @@ public abstract class AbsSwipeBackActivity extends AbsActivity implements SwipeB
         super.onPostCreate(savedInstanceState);
         mHelper.onPostCreate();
     }
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		setSwipeBackEnable(ConfigManager.isSwipeBackEnabled());
+	}
     
     @Override
     public View findViewById(int id) {

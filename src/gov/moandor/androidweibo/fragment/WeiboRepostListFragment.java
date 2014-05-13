@@ -17,6 +17,7 @@ import gov.moandor.androidweibo.dao.RepostTimelineDao;
 import gov.moandor.androidweibo.notification.SendWeiboService;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
+import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class WeiboRepostListFragment extends
         AbsWeiboTimelineFragment<WeiboStatus, WeiboTimelineListAdapter<WeiboStatus>> {
@@ -59,9 +60,7 @@ public class WeiboRepostListFragment extends
     
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WeiboActivity.class);
-        intent.putExtra(WeiboActivity.WEIBO_STATUS, mAdapter.getItem(position));
+        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
         startActivity(intent);
     }
     

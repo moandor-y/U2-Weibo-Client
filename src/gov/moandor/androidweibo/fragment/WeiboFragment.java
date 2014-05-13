@@ -32,6 +32,7 @@ import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 import gov.moandor.androidweibo.widget.WeiboDetailPicView;
+import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class WeiboFragment extends Fragment {
     private WeiboStatus mWeiboStatus;
@@ -285,9 +286,7 @@ public class WeiboFragment extends Fragment {
     private View.OnClickListener mTextOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), WeiboActivity.class);
-            intent.putExtra(WeiboActivity.WEIBO_STATUS, mWeiboStatus.retweetStatus);
+            Intent intent = ActivityUtils.weiboActivity(mWeiboStatus.retweetStatus);
             getActivity().startActivity(intent);
         }
     };

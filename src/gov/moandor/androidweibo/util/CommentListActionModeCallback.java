@@ -80,9 +80,7 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
     }
     
     private void viewWeibo() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WeiboActivity.class);
-        intent.putExtra(WeiboActivity.WEIBO_STATUS, mAdapter.getSelectedItem().weiboStatus);
+        Intent intent = ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus);
         mFragment.startActivity(intent);
     }
     
