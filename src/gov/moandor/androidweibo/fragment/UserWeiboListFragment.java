@@ -12,9 +12,8 @@ import gov.moandor.androidweibo.adapter.WeiboListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.UserTimelineDao;
-import gov.moandor.androidweibo.util.GlobalContext;
-import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 import gov.moandor.androidweibo.util.ActivityUtils;
+import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     public static final String USER_ID = "user_id";

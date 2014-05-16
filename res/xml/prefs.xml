@@ -30,11 +30,11 @@
             android:title="@string/fast_scroll"
             android:defaultValue="true" />
         
-		<CheckBoxPreference
+        <CheckBoxPreference
             android:key="swipe_back_enabled"
             android:title="@string/swipe_back"
             android:defaultValue="true" />
-		
+        
     </PreferenceCategory>
     
     <PreferenceCategory android:title="@string/data_control">

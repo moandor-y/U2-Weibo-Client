@@ -12,11 +12,10 @@ import gov.moandor.androidweibo.adapter.WeiboListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.FavoritesDao;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int REQUEST_CODE = 0;

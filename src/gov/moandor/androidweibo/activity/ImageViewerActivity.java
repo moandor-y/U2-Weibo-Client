@@ -42,11 +42,11 @@ public class ImageViewerActivity extends AbsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
-		if (savedInstanceState != null) {
-			mType = (ImageDownloader.ImageType) savedInstanceState.getSerializable(IMAGE_TYPE);
-		} else {
-			mType = (ImageType) getIntent().getSerializableExtra(IMAGE_TYPE);
-		}
+        if (savedInstanceState != null) {
+            mType = (ImageDownloader.ImageType) savedInstanceState.getSerializable(IMAGE_TYPE);
+        } else {
+            mType = (ImageType) getIntent().getSerializableExtra(IMAGE_TYPE);
+        }
         mStatus = getIntent().getParcelableExtra(WEIBO_STATUS);
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ImageViewerPagerAdapter(mType, getUrls(), this);
@@ -64,12 +64,12 @@ public class ImageViewerActivity extends AbsActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.view_pictures);
     }
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable(IMAGE_TYPE, mType);
-	}
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(IMAGE_TYPE, mType);
+    }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

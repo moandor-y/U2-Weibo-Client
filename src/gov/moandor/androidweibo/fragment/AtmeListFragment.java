@@ -16,13 +16,13 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.MentionsWeiboTimelineDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int REQUEST_CODE = 0;

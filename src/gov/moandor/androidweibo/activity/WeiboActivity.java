@@ -253,6 +253,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             Utilities.notice(R.string.unfavorite_failed_reason, e.getMessage());
         }
     }
-	
-	public static class Translucent extends WeiboActivity {}
+    
+    public static class Translucent extends WeiboActivity {}
 }

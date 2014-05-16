@@ -25,6 +25,7 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.WeiboDetailPictureReadTask;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.LongClickableLinkMovementMethod;
 import gov.moandor.androidweibo.util.TextUtils;
@@ -32,7 +33,6 @@ import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 import gov.moandor.androidweibo.widget.WeiboDetailPicView;
-import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class WeiboFragment extends Fragment {
     private WeiboStatus mWeiboStatus;

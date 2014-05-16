@@ -15,9 +15,9 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.RepostTimelineDao;
 import gov.moandor.androidweibo.notification.SendWeiboService;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
-import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class WeiboRepostListFragment extends
         AbsWeiboTimelineFragment<WeiboStatus, WeiboTimelineListAdapter<WeiboStatus>> {

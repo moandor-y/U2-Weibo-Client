@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.activity.WriteCommentActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.WeiboComment;

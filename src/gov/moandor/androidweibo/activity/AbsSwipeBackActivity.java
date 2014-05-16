@@ -23,12 +23,12 @@ public abstract class AbsSwipeBackActivity extends AbsActivity implements SwipeB
         super.onPostCreate(savedInstanceState);
         mHelper.onPostCreate();
     }
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		setSwipeBackEnable(ConfigManager.isSwipeBackEnabled());
-	}
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setSwipeBackEnable(ConfigManager.isSwipeBackEnabled());
+    }
     
     @Override
     public View findViewById(int id) {

@@ -18,13 +18,13 @@ import gov.moandor.androidweibo.concurrency.WifiAutoDownloadPicRunnable;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.BilateralTimelineDao;
 import gov.moandor.androidweibo.dao.FriendsTimelineDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.ActivityUtils;
 
 public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int GROUP_ALL = 0;
