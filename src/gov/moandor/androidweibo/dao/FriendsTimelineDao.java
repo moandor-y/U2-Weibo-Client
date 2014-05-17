@@ -8,6 +8,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
@@ -22,10 +23,12 @@ public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
         if (Utilities.isBmEnabled() && ConfigManager.isIgnoringUnfollowedEnabled()) {
             long[] followingIds = DatabaseUtils.getFollowingIds(GlobalContext.getCurrentAccount().user.id);
             if (followingIds != null) {
-                for (WeiboStatus status : result) {
+                Iterator<WeiboStatus> iterator = result.iterator();
+                while (iterator.hasNext()) {
+                    WeiboStatus status = iterator.next();
                     WeiboUser user = status.weiboUser;
                     if (user != null && !contains(followingIds, user.id)) {
-                        result.remove(status);
+                        iterator.remove();
                     }
                 }
             }

@@ -5,8 +5,8 @@ import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHttpDao<List<T>> {
     private String mToken;
@@ -23,7 +23,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHtt
         addParams(params);
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
-        List<T> result = new CopyOnWriteArrayList<T>(parceJson(response));
+        List<T> result = new ArrayList<T>(parceJson(response));
         if (mSinceMessage != null && result.size() >= 1) {
             T earliestMessage = result.get(result.size() - 1);
             if (mSinceMessage.id == earliestMessage.id) {
