@@ -1,7 +1,5 @@
 package gov.moandor.androidweibo.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -130,16 +128,6 @@ public class ImageViewerActivity extends AbsActivity {
         default:
             return mStatus.originalPic;
         }
-    }
-    
-    public static void start(WeiboStatus status, int position, Activity activity) {
-        ImageDownloader.ImageType type = Utilities.getDetailPictureType();
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), ImageViewerActivity.class);
-        intent.putExtra(IMAGE_TYPE, type);
-        intent.putExtra(POSITION, position);
-        intent.putExtra(WEIBO_STATUS, status);
-        activity.startActivity(intent);
     }
     
     private class OnPageChangeListener implements ViewPager.OnPageChangeListener {

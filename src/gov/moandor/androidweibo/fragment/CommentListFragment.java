@@ -1,13 +1,11 @@
 package gov.moandor.androidweibo.fragment;
 
-import android.content.Intent;
 import android.support.v7.view.ActionMode;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 
 import gov.moandor.androidweibo.activity.MainActivity;
-import gov.moandor.androidweibo.activity.WriteCommentActivity;
 import gov.moandor.androidweibo.adapter.CommentListAdapter;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboComment;
@@ -16,6 +14,7 @@ import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.CommentsByMeDao;
 import gov.moandor.androidweibo.dao.CommentsMentionsDao;
 import gov.moandor.androidweibo.dao.CommentsToMeDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
@@ -90,12 +89,8 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WriteCommentActivity.class);
         WeiboComment comment = mAdapter.getItem(position);
-        intent.putExtra(WriteCommentActivity.COMMENTED_WEIBO_STATUS, comment.weiboStatus);
-        intent.putExtra(WriteCommentActivity.REPLIED_WEIBO_COMMENT, comment);
-        startActivity(intent);
+        startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
     }
     
     @Override

@@ -21,11 +21,14 @@ import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
+
+import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SettingsActivity extends AbsActivity {
@@ -382,12 +385,15 @@ public class SettingsActivity extends AbsActivity {
         
         public static class AboutFragment extends PreferenceFragment {
             private static final String KEY_MEMORY = "memory";
+            private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
+            private static final String OFFICIAL_ACCOUNT = "U2微博客户端";
             
             @Override
             public void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 addPreferencesFromResource(R.xml.prefs_about);
                 buildMemoryInfo(findPreference(KEY_MEMORY));
+                buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
             }
             
             private static void buildMemoryInfo(Preference preference) {
@@ -404,9 +410,20 @@ public class SettingsActivity extends AbsActivity {
                 preference.setSummary(summary);
             }
             
+            private void buildOfficialAccount(Preference preference) {
+                preference.setSummary("@" + OFFICIAL_ACCOUNT);
+                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        startActivity(ActivityUtils.userActivity(OFFICIAL_ACCOUNT));
+                        return true;
+                    }
+                });
+            }
+            
             private static String formatMemoryText(long memory) {
                 float memoryInMB = (float) memory / (1024 * 1024);
-                return String.format("%.1f MB", memoryInMB);
+                return String.format(Locale.ENGLISH, "%.1f MB", memoryInMB);
             }
         }
     }

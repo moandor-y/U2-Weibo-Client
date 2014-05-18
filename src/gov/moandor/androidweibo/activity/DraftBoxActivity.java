@@ -19,6 +19,7 @@ import gov.moandor.androidweibo.bean.WeiboDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.notification.SendCommentService;
 import gov.moandor.androidweibo.notification.SendWeiboService;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 
@@ -209,13 +210,11 @@ public class DraftBoxActivity extends AbsActivity {
                 }
             } else if (mTask == null || mTask.getStatus() == MyAsyncTask.Status.FINISHED) {
                 AbsDraftBean draft = mListAdapter.getItem(position);
-                Intent intent = new Intent();
+                Intent intent;
                 if (draft instanceof WeiboDraft) {
-                    intent.setClass(GlobalContext.getInstance(), WriteWeiboActivity.class);
-                    intent.putExtra(WriteWeiboActivity.DRAFT, draft);
+                    intent = ActivityUtils.writeWeiboActivity(draft);
                 } else {
-                    intent.setClass(GlobalContext.getInstance(), WriteCommentActivity.class);
-                    intent.putExtra(WriteCommentActivity.DRAFT, draft);
+                    intent = ActivityUtils.writeCommentActivity(draft);
                 }
                 startActivity(intent);
                 mTask = new RemoveAndGetDraftsTask(draft.id);

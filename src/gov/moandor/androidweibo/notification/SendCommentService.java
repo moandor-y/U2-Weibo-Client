@@ -9,12 +9,12 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.bean.CommentDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseSendCommentDao;
 import gov.moandor.androidweibo.dao.CreateCommentDao;
 import gov.moandor.androidweibo.dao.ReplyCommentDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
@@ -56,9 +56,8 @@ public class SendCommentService extends Service {
     }
     
     private PendingIntent getFailedClickIntent() {
-        Intent intent = new Intent();
-        intent.setClass(getBaseContext(), DraftBoxActivity.class);
-        return PendingIntent.getActivity(getBaseContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(getBaseContext(), 0, ActivityUtils.draftBoxActivity(),
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
     
     private class SendTask extends MyAsyncTask<Void, Void, Void> {

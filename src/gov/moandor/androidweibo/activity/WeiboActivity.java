@@ -18,6 +18,7 @@ import gov.moandor.androidweibo.dao.WeiboStatusDao;
 import gov.moandor.androidweibo.fragment.WeiboCommentListFragment;
 import gov.moandor.androidweibo.fragment.WeiboFragment;
 import gov.moandor.androidweibo.fragment.WeiboRepostListFragment;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.FavoriteTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
@@ -150,17 +151,11 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     }
     
     private void comment() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WriteCommentActivity.class);
-        intent.putExtra(WriteCommentActivity.COMMENTED_WEIBO_STATUS, mWeiboStatus);
-        startActivity(intent);
+        startActivity(ActivityUtils.writeCommentActivity(mWeiboStatus));
     }
     
     private void repost() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WriteWeiboActivity.class);
-        intent.putExtra(WriteWeiboActivity.RETWEET_WEIBO_STATUS, mWeiboStatus);
-        startActivity(intent);
+        startActivity(ActivityUtils.writeWeiboActivity(mWeiboStatus));
     }
     
     private void setResult() {

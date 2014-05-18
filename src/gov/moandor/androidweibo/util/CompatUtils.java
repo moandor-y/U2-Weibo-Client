@@ -8,7 +8,7 @@ import gov.moandor.androidweibo.activity.SettingsActivity;
 import gov.moandor.androidweibo.activity.SettingsActivityOldApi;
 
 public class CompatUtils {
-    public static Class<?> getSettingsActivity() {
+    static Class<?> getSettingsActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return SettingsActivityOldApi.class;
         } else {
@@ -17,7 +17,7 @@ public class CompatUtils {
     }
     
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    public static void applySharedPreferences(SharedPreferences.Editor editor) {
+    static void applySharedPreferences(SharedPreferences.Editor editor) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
             editor.commit();
         } else {

@@ -18,15 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.ImageViewerActivity;
-import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.WeiboDetailPictureReadTask;
 import gov.moandor.androidweibo.util.ActivityUtils;
-import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.LongClickableLinkMovementMethod;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.TimeUtils;
@@ -302,7 +299,7 @@ public class WeiboFragment extends Fragment {
         
         @Override
         public void onClick(View v) {
-            ImageViewerActivity.start(mStatus, mPosition, getActivity());
+            startActivity(ActivityUtils.imageViewerActivity(mStatus, mPosition));
         }
     }
     
@@ -315,10 +312,7 @@ public class WeiboFragment extends Fragment {
         
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), UserActivity.class);
-            intent.putExtra(UserActivity.USER, mUser);
-            getActivity().startActivity(intent);
+            getActivity().startActivity(ActivityUtils.userActivity(mUser));
         }
     }
 }

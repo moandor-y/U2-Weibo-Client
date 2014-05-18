@@ -7,7 +7,6 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 
-import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
@@ -161,7 +160,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             if (status.retweetStatus != null) {
                 status = status.retweetStatus;
             }
-            ImageViewerActivity.start(status, picIndex, getActivity());
+            startActivity(ActivityUtils.imageViewerActivity(status, picIndex));
         }
     }
     
@@ -172,7 +171,7 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
             if (status.retweetStatus != null) {
                 status = status.retweetStatus;
             }
-            ImageViewerActivity.start(status, 0, getActivity());
+            startActivity(ActivityUtils.imageViewerActivity(status, 0));
         }
     }
 }

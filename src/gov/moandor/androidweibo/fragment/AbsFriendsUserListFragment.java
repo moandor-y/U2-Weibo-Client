@@ -1,16 +1,14 @@
 package gov.moandor.androidweibo.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.view.ActionMode.Callback;
 import android.view.View;
 
-import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.FriendsUserListAdapter;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.FriendsUserListActionModeCallback;
-import gov.moandor.androidweibo.util.GlobalContext;
 
 import java.util.List;
 
@@ -42,10 +40,7 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     @Override
     void onItemClick(int position) {
         WeiboUser user = mAdapter.getItem(position);
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), UserActivity.class);
-        intent.putExtra(UserActivity.USER, user);
-        getActivity().startActivity(intent);
+        getActivity().startActivity(ActivityUtils.userActivity(user));
     }
     
     @Override

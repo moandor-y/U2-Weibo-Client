@@ -1,6 +1,5 @@
 package gov.moandor.androidweibo.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -13,11 +12,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.AuthorizeActivity;
-import gov.moandor.androidweibo.activity.DmActivity;
-import gov.moandor.androidweibo.activity.DraftBoxActivity;
-import gov.moandor.androidweibo.activity.FavoritesActivity;
 import gov.moandor.androidweibo.adapter.MainDrawerListAdapter;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
@@ -39,17 +35,13 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
         view.findViewById(R.id.draft_box).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), DraftBoxActivity.class);
-                startActivity(intent);
+                startActivity(ActivityUtils.draftBoxActivity());
             }
         });
         view.findViewById(R.id.favorite).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), FavoritesActivity.class);
-                startActivity(intent);
+                startActivity(ActivityUtils.favoritesActivity());
             }
         });
         Button directMessages = (Button) view.findViewById(R.id.direct_messages);
@@ -57,9 +49,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
             directMessages.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setClass(GlobalContext.getInstance(), DmActivity.class);
-                    startActivity(intent);
+                    startActivity(ActivityUtils.dmActivity());
                 }
             });
         } else {
@@ -76,9 +66,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
                 mAdapter.notifyDataSetChanged();
             }
         } else {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), AuthorizeActivity.class);
-            getActivity().startActivity(intent);
+            getActivity().startActivity(ActivityUtils.authorizeActivity());
         }
     }
     
@@ -100,9 +88,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
                 mAdapter.notifyDataSetChanged();
                 ((OnAccountClickListener) getActivity()).onAccountClick(ConfigManager.getCurrentAccountIndex());
             } else {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), AuthorizeActivity.class);
-                getActivity().startActivity(intent);
+                getActivity().startActivity(ActivityUtils.authorizeActivity());
                 getActivity().finish();
             }
             return true;

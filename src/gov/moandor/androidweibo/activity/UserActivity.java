@@ -16,17 +16,20 @@ import gov.moandor.androidweibo.fragment.ProgressDialogFragment;
 import gov.moandor.androidweibo.util.FollowTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.UnfollowTask;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class UserActivity extends AbsActivity {
     public static final String USER;
-    public static final String LOADING_DIALOG = "loading_dialog";
+    public static final String USER_NAME;
+    private static final String LOADING_DIALOG = "loading_dialog";
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
         USER = packageName + ".USER";
+        USER_NAME = packageName + ".USER_NAME";
     }
     
     private WeiboUser mUser;
@@ -107,12 +110,15 @@ public class UserActivity extends AbsActivity {
         if (mUser != null) {
             onUserLoadFinished();
         } else {
-            Uri data = getIntent().getData();
-            DialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.loading));
-            dialog.show(getSupportFragmentManager(), LOADING_DIALOG);
-            String userName = data.toString();
-            int index = userName.lastIndexOf("@");
-            userName = userName.substring(index + 1);
+            String userName = getIntent().getStringExtra(USER_NAME);
+            if (TextUtils.isEmpty(userName)) {
+                Uri data = getIntent().getData();
+                DialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.loading));
+                dialog.show(getSupportFragmentManager(), LOADING_DIALOG);
+                userName = data.toString();
+                int index = userName.lastIndexOf("@");
+                userName = userName.substring(index + 1);
+            }
             LoadUserTask task = new LoadUserTask(userName);
             task.execute();
             getSupportActionBar().setTitle(R.string.user);

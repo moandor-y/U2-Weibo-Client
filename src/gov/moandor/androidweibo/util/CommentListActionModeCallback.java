@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.WriteCommentActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
@@ -70,12 +69,8 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
     }
     
     private void reply() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WriteCommentActivity.class);
         WeiboComment comment = mAdapter.getSelectedItem();
-        intent.putExtra(WriteCommentActivity.COMMENTED_WEIBO_STATUS, comment.weiboStatus);
-        intent.putExtra(WriteCommentActivity.REPLIED_WEIBO_COMMENT, comment);
-        mFragment.startActivity(intent);
+        mFragment.startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
     }
     
     private void viewWeibo() {

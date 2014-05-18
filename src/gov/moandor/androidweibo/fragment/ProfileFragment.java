@@ -1,6 +1,5 @@
 package gov.moandor.androidweibo.fragment;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,12 +13,12 @@ import android.widget.TextView;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.UserListActivity;
-import gov.moandor.androidweibo.activity.UserWeiboListActivity;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.UserShowDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
@@ -247,32 +246,21 @@ public class ProfileFragment extends Fragment {
     private class OnWeiboCountLayoutClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), UserWeiboListActivity.class);
-            intent.putExtra(UserWeiboListActivity.USER, mUser);
-            startActivity(intent);
+            startActivity(ActivityUtils.userWeiboListActivity(mUser));
         }
     }
     
     private class OnFollowingCountLayoutClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), UserListActivity.class);
-            intent.putExtra(UserListActivity.USER, mUser);
-            intent.putExtra(UserListActivity.TYPE, UserListActivity.Type.FOLLOWING);
-            startActivity(intent);
+            startActivity(ActivityUtils.userListActivity(mUser, UserListActivity.Type.FOLLOWING));
         }
     }
     
     private class OnFollowerCountLayoutClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), UserListActivity.class);
-            intent.putExtra(UserListActivity.USER, mUser);
-            intent.putExtra(UserListActivity.TYPE, UserListActivity.Type.FOLLOWERS);
-            startActivity(intent);
+            startActivity(ActivityUtils.userListActivity(mUser, UserListActivity.Type.FOLLOWERS));
         }
     }
     

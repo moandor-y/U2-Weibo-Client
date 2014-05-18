@@ -6,7 +6,6 @@ import android.support.v7.view.ActionMode;
 import android.view.View;
 import android.widget.AdapterView;
 
-import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
@@ -95,7 +94,7 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
             if (status.retweetStatus != null) {
                 status = status.retweetStatus;
             }
-            ImageViewerActivity.start(status, picIndex, getActivity());
+            startActivity(ActivityUtils.imageViewerActivity(status, picIndex));
         }
     }
     
@@ -106,7 +105,7 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
             if (status.retweetStatus != null) {
                 status = status.retweetStatus;
             }
-            ImageViewerActivity.start(status, 0, getActivity());
+            startActivity(ActivityUtils.imageViewerActivity(status, 0));
         }
     }
 }

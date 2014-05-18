@@ -21,6 +21,7 @@ import android.webkit.WebViewClient;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.UrlHelper;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
@@ -95,9 +96,7 @@ public class AuthorizeActivity extends AbsActivity {
     }
     
     private void onHackLoginConfirmed() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), HackLoginActivity.class);
-        startActivity(intent);
+        startActivity(ActivityUtils.hackLoginActivity());
         finish();
     }
     

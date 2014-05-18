@@ -1,7 +1,6 @@
 package gov.moandor.androidweibo.fragment;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
 import gov.moandor.androidweibo.bean.AbsItemBean;
@@ -27,6 +25,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
@@ -226,10 +225,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         @Override
         public void onAvatarClick(int position) {
             WeiboUser user = mAdapter.getItem(position).weiboUser;
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), UserActivity.class);
-            intent.putExtra(UserActivity.USER, user);
-            getActivity().startActivity(intent);
+            getActivity().startActivity(ActivityUtils.userActivity(user));
         }
     };
     

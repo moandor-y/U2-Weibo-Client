@@ -1,13 +1,10 @@
 package gov.moandor.androidweibo.util;
 
-import android.content.Intent;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.WriteCommentActivity;
-import gov.moandor.androidweibo.activity.WriteWeiboActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
@@ -92,17 +89,11 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
     }
     
     private void comment(WeiboStatus status) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WriteCommentActivity.class);
-        intent.putExtra(WriteCommentActivity.COMMENTED_WEIBO_STATUS, status);
-        mFragment.startActivity(intent);
+        mFragment.startActivity(ActivityUtils.writeCommentActivity(status));
     }
     
     private void repost(WeiboStatus status) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), WriteWeiboActivity.class);
-        intent.putExtra(WriteWeiboActivity.RETWEET_WEIBO_STATUS, status);
-        mFragment.startActivity(intent);
+        mFragment.startActivity(ActivityUtils.writeWeiboActivity(status));
     }
     
     private void delete() {

@@ -21,6 +21,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
@@ -173,9 +174,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
     }
     
     void atUser() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), AtUserActivity.class);
-        startActivityForResult(intent, REQUEST_AT_USER);
+        startActivityForResult(ActivityUtils.atUserActivity(), REQUEST_AT_USER);
     }
     
     private class OnSmileyClickListener implements AdapterView.OnItemClickListener {

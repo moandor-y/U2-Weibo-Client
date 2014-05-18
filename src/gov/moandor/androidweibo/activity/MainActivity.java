@@ -30,7 +30,7 @@ import gov.moandor.androidweibo.fragment.CommentListFragment;
 import gov.moandor.androidweibo.fragment.MainDrawerFragment;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
-import gov.moandor.androidweibo.util.CompatUtils;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
@@ -78,9 +78,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (GlobalContext.getCurrentAccount() == null) {
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), AuthorizeActivity.class);
-            startActivity(intent);
+            startActivity(ActivityUtils.authorizeActivity());
             finish();
             return;
         }
@@ -384,15 +382,11 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     }
     
     private void writeWeibo() {
-        Intent intent = new Intent();
-        intent.setClass(this, WriteWeiboActivity.class);
-        startActivity(intent);
+        startActivity(ActivityUtils.writeWeiboActivity());
     }
     
     private void settings() {
-        Intent intent = new Intent();
-        intent.setClass(this, CompatUtils.getSettingsActivity());
-        startActivity(intent);
+        startActivity(ActivityUtils.settingsActivity());
     }
     
     private void toggleOrientationLock() {

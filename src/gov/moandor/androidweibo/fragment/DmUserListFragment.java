@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.view.View;
 
-import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.adapter.DmUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
@@ -13,6 +12,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseUserListDao;
 import gov.moandor.androidweibo.dao.DmUserListDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
@@ -94,10 +94,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     
     @Override
     void onItemClick(int position) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), DmActivity.ConversationActivity.class);
-        intent.putExtra(DmActivity.ConversationActivity.USER, mAdapter.getItem(position).weiboUser);
-        startActivityForResult(intent, REQUEST_CODE);
+        startActivityForResult(ActivityUtils.dmConversationActivity(mAdapter.getItem(position).weiboUser), REQUEST_CODE);
     }
     
     @Override

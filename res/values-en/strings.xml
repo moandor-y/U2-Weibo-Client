@@ -206,6 +206,7 @@
     <string name="vm_alloc_mem">VM allocated memory : %s</string>
     <string name="native_alloc_mem">Native allocated memory : %s</string>
     <string name="swipe_back">Swipe back</string>
+    <string name="official_account">Official account</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

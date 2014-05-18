@@ -6,4 +6,9 @@
         android:title="@string/memory"
         android:persistent="false" />
     
+    <Preference
+        android:key="official_account"
+        android:title="@string/official_account"
+        android:persistent="false" />
+    
 </PreferenceScreen>

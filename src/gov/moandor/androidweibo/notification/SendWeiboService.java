@@ -10,13 +10,13 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 
 import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.bean.WeiboDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseSendWeiboDao;
 import gov.moandor.androidweibo.dao.RepostWeiboDao;
 import gov.moandor.androidweibo.dao.UpdateWeiboDao;
 import gov.moandor.androidweibo.dao.UploadWeiboDao;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpUtils;
@@ -60,9 +60,8 @@ public class SendWeiboService extends Service {
     }
     
     private PendingIntent getFailedClickIntent() {
-        Intent intent = new Intent();
-        intent.setClass(getBaseContext(), DraftBoxActivity.class);
-        return PendingIntent.getActivity(getBaseContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getActivity(getBaseContext(), 0, ActivityUtils.draftBoxActivity(),
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
     
     private class SendTask extends MyAsyncTask<Void, Integer, Void> {
