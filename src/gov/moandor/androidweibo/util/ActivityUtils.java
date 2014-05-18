@@ -49,6 +49,7 @@ public class ActivityUtils {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), UserActivity.class);
         intent.putExtra(UserActivity.USER, user);
+        intent.putExtra(UserActivity.USER_NAME, userName);
         return intent;
     }
     
