@@ -45,16 +45,18 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         if (data != null) {
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
             final int position = mAdapter.positionOf(status.id);
-            mAdapter.updatePosition(position, status);
-            mAdapter.notifyDataSetChanged();
-            final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int group = ConfigManager.getWeiboGroup();
-            MyAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    DatabaseUtils.updateWeiboStatus(status, position, accountId, group);
-                }
-            });
+			if (0 <= position && position < mAdapter.getCount()) {
+				mAdapter.updatePosition(position, status);
+				mAdapter.notifyDataSetChanged();
+				final long accountId = GlobalContext.getCurrentAccount().user.id;
+				final int group = ConfigManager.getWeiboGroup();
+				MyAsyncTask.execute(new Runnable() {
+					@Override
+					public void run() {
+						DatabaseUtils.updateWeiboStatus(status, position, accountId, group);
+					}
+				});
+			}
         }
     }
     
