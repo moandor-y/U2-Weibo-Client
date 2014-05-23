@@ -44,6 +44,9 @@ public class ProfileFragment extends Fragment {
     private TextView mSummaryLabel;
     private TextView mAddressLabel;
     private TextView mStatisticsLabel;
+    private View mWeiboCountLayout;
+    private View mFollowingCountLayout;
+    private View mFollowerCountLayout;
     private RefreshTask mRefreshTask;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeiboUser mUser;
@@ -77,9 +80,9 @@ public class ProfileFragment extends Fragment {
         mSummaryLabel = (TextView) view.findViewById(R.id.summary_label);
         mAddressLabel = (TextView) view.findViewById(R.id.address_label);
         mStatisticsLabel = (TextView) view.findViewById(R.id.statistics_label);
-        view.findViewById(R.id.weibo_count_layout).setOnClickListener(new OnWeiboCountLayoutClickListener());
-        view.findViewById(R.id.following_count_layout).setOnClickListener(new OnFollowingCountLayoutClickListener());
-        view.findViewById(R.id.follower_count_layout).setOnClickListener(new OnFollowerCountLayoutClickListener());
+        mWeiboCountLayout = view.findViewById(R.id.weibo_count_layout);
+        mFollowingCountLayout = view.findViewById(R.id.following_count_layout);
+        mFollowerCountLayout = view.findViewById(R.id.follower_count_layout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
         mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
@@ -117,6 +120,15 @@ public class ProfileFragment extends Fragment {
             mName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_male, 0);
         } else if (mUser.gender.equals("f")) {
             mName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_female, 0);
+        }
+        if (Utilities.isBmEnabled() || mUser.id == GlobalContext.getCurrentAccount().user.id) {
+            mWeiboCountLayout.setOnClickListener(new OnWeiboCountLayoutClickListener());
+            mFollowingCountLayout.setOnClickListener(new OnFollowingCountLayoutClickListener());
+            mFollowerCountLayout.setOnClickListener(new OnFollowerCountLayoutClickListener());
+        } else {
+            mWeiboCountLayout.setClickable(false);
+            mFollowingCountLayout.setClickable(false);
+            mFollowerCountLayout.setClickable(false);
         }
     }
     
