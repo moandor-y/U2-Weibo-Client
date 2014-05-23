@@ -43,7 +43,7 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
             reply();
             break;
         case R.id.view_weibo:
-            viewWeibo();
+			mFragment.startActivity(ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus));
             break;
 		case R.id.view_user:
 			mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
@@ -51,8 +51,6 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         case R.id.delete:
             delete();
             break;
-        case R.id.share:
-            return true;
         case R.id.copy:
             Utilities.copyText(mAdapter.getSelectedItem().text);
             break;
@@ -74,11 +72,6 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
     private void reply() {
         WeiboComment comment = mAdapter.getSelectedItem();
         mFragment.startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
-    }
-    
-    private void viewWeibo() {
-        Intent intent = ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus);
-        mFragment.startActivity(intent);
     }
     
     private void delete() {
