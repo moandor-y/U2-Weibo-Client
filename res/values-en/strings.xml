@@ -86,7 +86,7 @@
     <string name="weibo">Weibo</string>
     <string name="loading">Loading…</string>
     <string name="avatar">Avatar</string>
-    <string name="weibo_pic">Weibo Pictures</string>
+    <string name="weibo_pic">Weibo pictures</string>
     <string name="comment">Comment</string>
     <string name="repost">Repost</string>
     <string name="replied_to_my_comment">Replied to my comment : </string>
@@ -102,42 +102,43 @@
     <string name="following_count">Following</string>
     <string name="follower_count">Followers</string>
     <string name="retry">Retry</string>
-    <string name="no_earlier_message">No Earlier Message</string>
+    <string name="no_earlier_message">No earlier message</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="delete">Delete</string>
     <string name="favorites">Favorites</string>
-    <string name="favorited_successfully">Favorited Successfully</string>
-    <string name="unfavorited_successfully">Unfavorited Successfully</string>
-    <string name="favorite_failed_reason">Favorite Failed : %s</string>
-    <string name="unfavorite_failed_reason">Unfavorite Failed : %s</string>
+    <string name="favorited_successfully">Favorited successfully</string>
+    <string name="unfavorited_successfully">Unfavorited successfully</string>
+    <string name="favorite_failed_reason">Favorite failed : %s</string>
+    <string name="unfavorite_failed_reason">Unfavorite failed : %s</string>
     <string name="favorite">Favorite</string>
     <string name="unfavorite">Unfavorite</string>
-    <string name="delete_failed_reason">Delete Failed : %s</string>
+    <string name="delete_failed_reason">Delete failed : %s</string>
     <string name="confirm_delete">Are you sure you want to delete?</string>
-    <string name="reply_to_comment">Reply to Comment</string>
+    <string name="reply_to_comment">Reply to comment</string>
     <string name="notifications">Notifications</string>
-    <string name="write_weibo">Write Weibo</string>
-    <string name="save_picture">Save Picture</string>
-    <string name="saved_successfully">Saved Successfully</string>
-    <string name="save_failed">Save Failed</string>
+    <string name="write_weibo">Write weibo</string>
+    <string name="save_picture">Save picture</string>
+    <string name="saved_successfully">Saved successfully</string>
+    <string name="save_failed">Save failed</string>
     <string name="share">Share</string>
     <string name="copy">Copy</string>
-    <string name="copied_successfully">Copied Successfully</string>
-    <string name="view_weibo">View Weibo</string>
-    <string name="view_pictures">View Pictures</string>
-    <string name="follow_failed_reason">Follow Failed : %s</string>
-    <string name="unfollow_failed_reason">Unfollow Failed : %s</string>
+    <string name="copied_successfully">Copied successfully</string>
+    <string name="view_weibo">View weibo</string>
+    <string name="view_pictures">View pictures</string>
+    <string name="follow_failed_reason">Follow failed : %s</string>
+    <string name="unfollow_failed_reason">Unfollow failed : %s</string>
     <string name="gender">Gender</string>
+	<string name="view_user">View user</string>
     
     <!-- Time -->
-    <string name="just_now">Just Now</string>
-    <string name="min_ago">%d Minutes Ago</string>
+    <string name="just_now">Just now</string>
+    <string name="min_ago">%d minutes ago</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     
     <!-- Authorization -->
-    <string name="auth_success">Authorized Successfully</string>
+    <string name="auth_success">Authorized successfully</string>
     <string name="login">Login</string>
     <string name="username_label">Username:</string>
     <string name="password_label">Password:</string>
@@ -149,22 +150,22 @@
     
     <!-- MainActivity -->
     <string name="refresh">Refresh</string>
-    <string name="current_account">Current Account</string>
+    <string name="current_account">Current account</string>
     <string name="accounts">Accounts</string>
-    <string name="add_account">Add Account</string>
+    <string name="add_account">Add account</string>
     <string name="logout">Logout</string>
-    <string name="new_posts_updated">%d New Posts Updated</string>
-    <string name="no_new_posts">No New Posts</string>
-    <string name="draft_box">Draft Box</string>
-    <string name="open_drawer">Open Drawer</string>
-    <string name="close_drawer">Close Drawer</string>
-    <string name="lock_orientation">Lock Orientation</string>
-    <string name="unlock_orientation">Unlock Orientation</string>
-    <string name="direct_messages">Direct Messages</string>
+    <string name="new_posts_updated">%d new posts updated</string>
+    <string name="no_new_posts">No new posts</string>
+    <string name="draft_box">Draft box</string>
+    <string name="open_drawer">Open drawer</string>
+    <string name="close_drawer">Close drawer</string>
+    <string name="lock_orientation">Lock orientation</string>
+    <string name="unlock_orientation">Unlock orientation</string>
+    <string name="direct_messages">Direct messages</string>
     
     <!-- WeiboActivity -->
-    <string name="quick_comment">Quick Comment</string>
-    <string name="quick_repost">Quick Repost</string>
+    <string name="quick_comment">Quick comment</string>
+    <string name="quick_repost">Quick repost</string>
     
     <!-- SettingsActivity -->
     <string name="general">General</string>
@@ -211,59 +212,59 @@
     <!-- WriteActivity -->
     <string name="send">Send</string>
     <string name="sending">Sending</string>
-    <string name="sent_successfully">Sent Successfully</string>
-    <string name="send_failed">Send Failed</string>
+    <string name="sent_successfully">Sent successfully</string>
+    <string name="send_failed">Send failed</string>
     <string name="mention">Mention</string>
-    <string name="insert_emotion">Insert Emotions</string>
-    <string name="insert_topic">Insert Topics</string>
-    <string name="add_picture">Add Picture</string>
-    <string name="no_camera_app">No Camera App</string>
-    <string name="cannot_add_picture">Cannot Add Picture</string>
-    <string name="share_picture">Share Picture</string>
+    <string name="insert_emotion">Insert emotions</string>
+    <string name="insert_topic">Insert topics</string>
+    <string name="add_picture">Add picture</string>
+    <string name="no_camera_app">No camera apps</string>
+    <string name="cannot_add_picture">Cannot add picture</string>
+    <string name="share_picture">Share picture</string>
     <string name="save_draft">Save draft?</string>
     <string name="search">Search</string>
-    <string name="search_friends">Search Friends</string>
-    <string name="write_comment">Comment on Weibo</string>
-    <string name="repost_weibo">Repost Weibo</string>
-    <string name="open_gps">Please Open GPS</string>
-    <string name="updatind_location">Updating Location…</string>
-    <string name="location_updated">Location Updated</string>
-    <string name="add_location">Add Location</string>
-    <string name="comment_when_repost">Comment When Repost</string>
-    <string name="comment_ori_when_repost">Comment on Original Weibo When Repost</string>
-    <string name="comment_ori">Also Comment on Original Weibo</string>
+    <string name="search_friends">Search friends</string>
+    <string name="write_comment">Comment on weibo</string>
+    <string name="repost_weibo">Repost weibo</string>
+    <string name="open_gps">Please open GPS</string>
+    <string name="updatind_location">Updating location…</string>
+    <string name="location_updated">Location updated</string>
+    <string name="add_location">Add location</string>
+    <string name="comment_when_repost">Comment when repost</string>
+    <string name="comment_ori_when_repost">Comment on original Weibo When Repost</string>
+    <string name="comment_ori">Also comment on original weibo</string>
     <string name="emotion">Emotions</string>
-    <string name="too_many_words">Too Many Words</string>
-    <string name="cannot_be_empty">Cannot be Empty</string>
-    <string name="upload_failed">Upload Failed</string>
+    <string name="too_many_words">Too many words</string>
+    <string name="cannot_be_empty">Cannot be empty</string>
+    <string name="upload_failed">Upload failed</string>
     <string name="write_hint">Write something…</string>
     
     <!-- ImageViewerActivity -->
-    <string name="show_ori">Show Original Pictures</string>
+    <string name="show_ori">Show original pictures</string>
     
     <!-- DmActivity -->
     <string name="send_dm">Send direct messages</string>
     
     <!-- Notification -->
-    <string name="new_comments">%d New Comments</string>
-    <string name="new_mention_weibos">%d New Posts @Me</string>
-    <string name="new_mention_comments">%d New Comments @Me</string>
-    <string name="upload_picture">Upload Picture</string>
-    <string name="waiting_response">Waiting for Response</string>
+    <string name="new_comments">%d new comments</string>
+    <string name="new_mention_weibos">%d new posts @Me</string>
+    <string name="new_mention_comments">%d new comments @Me</string>
+    <string name="upload_picture">Upload picture</string>
+    <string name="waiting_response">Waiting for response</string>
     <string name="uploading">Uploading</string>
     
     <!-- User -->
     <string name="user">User</string>
-    <string name="posts_of">%s\'s Posts</string>
-    <string name="following_of">%s\'s Following</string>
-    <string name="followers_of">%s\'s Followers</string>
+    <string name="posts_of">%s\'s posts</string>
+    <string name="following_of">%s\'s following</string>
+    <string name="followers_of">%s\'s followers</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
-    <string name="followed_each_other">Followed Each Other</string>
+    <string name="followed_each_other">Followed each other</string>
     
     <!-- Error -->
-    <string name="unknown_error">Unknown Error</string>
-    <string name="network_error">Network Error</string>
-    <string name="json_error">JSON Parse Error</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="network_error">Network error</string>
+    <string name="json_error">JSON parse error</string>
     
 </resources>

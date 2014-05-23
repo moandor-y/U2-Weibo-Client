@@ -13,6 +13,10 @@
         android:title="@string/view_weibo"
         android:icon="@drawable/ic_menu_view_weibo" />
     
+	<item
+		android:id="@+id/view_user"
+		android:title="@string/view_user" />
+	
     <item
         android:id="@+id/delete"
         android:title="@string/delete"

@@ -45,6 +45,9 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         case R.id.view_weibo:
             viewWeibo();
             break;
+		case R.id.view_user:
+			mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
+			break;
         case R.id.delete:
             delete();
             break;
