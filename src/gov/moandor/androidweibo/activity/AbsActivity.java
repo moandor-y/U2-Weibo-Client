@@ -3,10 +3,12 @@ package gov.moandor.androidweibo.activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-
+import android.view.ViewConfiguration;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Logger;
+import java.lang.reflect.Field;
 
 public abstract class AbsActivity extends ActionBarActivity {
     @Override
@@ -32,6 +34,7 @@ public abstract class AbsActivity extends ActionBarActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             break;
         }
+		forceShowActionBarOverflowMenu();
     }
     
     @Override
@@ -39,4 +42,17 @@ public abstract class AbsActivity extends ActionBarActivity {
         super.onResume();
         GlobalContext.setActivity(this);
     }
+	
+	private void forceShowActionBarOverflowMenu() {
+		try {
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field field = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			if (field != null) {
+				field.setAccessible(true);
+				field.setBoolean(config, false);
+			}
+		} catch (Exception e) {
+			Logger.logExcpetion(e);
+		}
+	}
 }

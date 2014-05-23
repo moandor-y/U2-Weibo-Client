@@ -29,9 +29,9 @@ public class ConfigManager {
     public static final int ORIENTATION_USER = 0;
     public static final int ORIENTATION_LANDSCAPE = 1;
     public static final int ORIENTATION_PORTRAIT = 2;
-    public static final float FONT_SIZE_SMALL = 10.0F;
+    public static final float FONT_SIZE_SMALL = 13.0F;
     public static final float FONT_SIZE_MEDIUM = 15.0F;
-    public static final float FONT_SIZE_LARGE = 20.0F;
+    public static final float FONT_SIZE_LARGE = 17.0F;
     public static final String PREFERENCE_VERSION_KEY = "preference_version";
     public static final String THEME = "theme";
     public static final String CURRENT_ACCOUNT_INDEX = "current_account_index";

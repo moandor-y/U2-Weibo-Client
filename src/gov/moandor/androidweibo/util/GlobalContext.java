@@ -26,6 +26,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.lang.reflect.Field;
+import android.view.ViewConfiguration;
 
 public class GlobalContext extends Application {
     private static final int MIN_CACHE_SIZE = 1024 * 1024 * 8;
@@ -160,7 +162,7 @@ public class GlobalContext extends Application {
             }
         };
     }
-    
+	
     public static GlobalContext getInstance() {
         return sInstance;
     }

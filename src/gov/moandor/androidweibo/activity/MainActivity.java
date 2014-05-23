@@ -169,8 +169,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mTabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         mTabStrip.setViewPager(mViewPager);
         mTabStrip.setOnPageChangeListener(this);
-        mTabStrip.setDividerColorResource(R.color.tab_divider);
-        mTabStrip.setTextColorResource(android.R.color.white);
         mTabStrip.setIndicatorColorResource(R.color.holo_blue_light);
         mTabStrip.setTabPaddingLeftRight(getResources().getDimensionPixelSize(R.dimen.tab_padding));
         IntentFilter intentFilter = new IntentFilter();
