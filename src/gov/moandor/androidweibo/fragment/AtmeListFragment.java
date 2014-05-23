@@ -38,18 +38,18 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
         if (data != null) {
             final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
             final int position = mAdapter.positionOf(status.id);
-			if (0 <= position && position < mAdapter.getCount()) {
-				mAdapter.updatePosition(position, status);
-				mAdapter.notifyDataSetChanged();
-				final long accountId = GlobalContext.getCurrentAccount().user.id;
-				final int group = ConfigManager.getAtmeFilter();
-				MyAsyncTask.execute(new Runnable() {
-					@Override
-					public void run() {
-						DatabaseUtils.updateAtmeStatus(status, position, accountId, group);
-					}
-				});
-			}
+            if (0 <= position && position < mAdapter.getCount()) {
+                mAdapter.updatePosition(position, status);
+                mAdapter.notifyDataSetChanged();
+                final long accountId = GlobalContext.getCurrentAccount().user.id;
+                final int group = ConfigManager.getAtmeFilter();
+                MyAsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DatabaseUtils.updateAtmeStatus(status, position, accountId, group);
+                    }
+                });
+            }
         }
     }
     

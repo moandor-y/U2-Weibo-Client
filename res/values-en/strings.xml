@@ -129,7 +129,7 @@
     <string name="follow_failed_reason">Follow failed : %s</string>
     <string name="unfollow_failed_reason">Unfollow failed : %s</string>
     <string name="gender">Gender</string>
-	<string name="view_user">View user</string>
+    <string name="view_user">View user</string>
     
     <!-- Time -->
     <string name="just_now">Just now</string>

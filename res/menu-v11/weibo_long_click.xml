@@ -23,10 +23,10 @@
         android:title="@string/unfavorite"
         android:icon="@drawable/ic_unfavorited" />
     
-	<item
-		android:id="@+id/view_user"
-		android:title="@string/view_user" />
-	
+    <item
+        android:id="@+id/view_user"
+        android:title="@string/view_user" />
+    
     <item
         android:id="@+id/delete"
         android:title="@string/delete"

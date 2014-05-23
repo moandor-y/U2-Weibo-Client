@@ -57,9 +57,9 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             new UnfavoriteTask(mAdapter.getSelectedItem(), new OnUnfavoriteFinishedListener(mAdapter.getSelection()))
                     .execute();
             break;
-		case R.id.view_user:
-			mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
-			break;
+        case R.id.view_user:
+            mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
+            break;
         case R.id.delete:
             delete();
             break;

@@ -1,6 +1,5 @@
 package gov.moandor.androidweibo.util;
 
-import android.content.Intent;
 import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,11 +42,11 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
             reply();
             break;
         case R.id.view_weibo:
-			mFragment.startActivity(ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus));
+            mFragment.startActivity(ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus));
             break;
-		case R.id.view_user:
-			mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
-			break;
+        case R.id.view_user:
+            mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
+            break;
         case R.id.delete:
             delete();
             break;
