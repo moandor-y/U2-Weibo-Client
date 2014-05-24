@@ -28,7 +28,7 @@ import java.util.Locale;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 16;
+    private static final int VERSION = 18;
     
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -38,7 +38,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             + Table.Account.USER_INFO_DATA + " text)";
     
     private static final String CREATE_WEIBO_GROUP_TABLE = "create table " + Table.WeiboGroup.TABLE_NAME + "("
-            + Table.WeiboGroup.ID + " integer primary key, " + Table.WeiboGroup.NAME + " text)";
+            + Table.WeiboGroup.ACCOUNT_ID + " integer primary key, " + Table.WeiboGroup.CONTENT_DATA + " text)";
     
     private static final String CREATE_WEIBO_STATUS_TABLE = "create table if not exists %s("
             + Table.WeiboStatus.POSITION + " integer primary key, " + Table.WeiboStatus.CONTENT_DATA + " text)";
@@ -105,6 +105,10 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             db.execSQL(CREATE_DM_CONVERSATION_TABLE);
         case 15:
             db.delete(Table.DmUser.TABLE_NAME, null, null);
+        case 16:
+        case 17:
+            db.execSQL("drop table if exists " + Table.WeiboGroup.TABLE_NAME);
+            db.execSQL(CREATE_WEIBO_GROUP_TABLE);
         }
     }
     
@@ -150,27 +154,6 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized void removeAccount(long id) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.Account.TABLE_NAME, Table.Account.ID + "=" + id, null);
-        database.close();
-    }
-    
-    public static synchronized void insertOrUpdateWeiboGroup(WeiboGroup weiboGroup) {
-        ContentValues cv = new ContentValues();
-        cv.put(Table.WeiboGroup.ID, weiboGroup.id);
-        cv.put(Table.WeiboGroup.NAME, weiboGroup.name);
-        SQLiteDatabase database = sInstance.getReadableDatabase();
-        Cursor cursor =
-                database.query(Table.WeiboGroup.TABLE_NAME, null, Table.WeiboGroup.ID + "=" + weiboGroup.id, null,
-                        null, null, null);
-        if (cursor.getCount() > 0) {
-            database.close();
-            database = sInstance.getWritableDatabase();
-            database.update(Table.WeiboGroup.TABLE_NAME, cv, Table.WeiboGroup.ID + "=" + weiboGroup.id, null);
-        } else {
-            database.close();
-            database = sInstance.getWritableDatabase();
-            database.insert(Table.WeiboGroup.TABLE_NAME, Table.WeiboGroup.ID, cv);
-        }
-        cursor.close();
         database.close();
     }
     
@@ -394,25 +377,30 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         return result;
     }
     
-    public static synchronized List<WeiboGroup> getWeiboGroups() {
-        SQLiteDatabase database = sInstance.getReadableDatabase();
-        Cursor cursor = database.rawQuery("select * from " + Table.WeiboGroup.TABLE_NAME, null);
-        List<WeiboGroup> result = new ArrayList<WeiboGroup>();
-        while (cursor.moveToNext()) {
-            WeiboGroup weiboGroup = new WeiboGroup();
-            weiboGroup.id = cursor.getLong(cursor.getColumnIndex(Table.WeiboGroup.ID));
-            weiboGroup.name = cursor.getString(cursor.getColumnIndex(Table.WeiboGroup.NAME));
-            result.add(weiboGroup);
-        }
-        cursor.close();
+    public static synchronized void updateWeiboGroups(long accountId, WeiboGroup[] groups) {
+        SQLiteDatabase database = sInstance.getWritableDatabase();
+        database.delete(Table.WeiboGroup.TABLE_NAME, Table.WeiboGroup.ACCOUNT_ID + "=" + accountId, null);
+        ContentValues values = new ContentValues();
+        values.put(Table.WeiboGroup.ACCOUNT_ID, accountId);
+        values.put(Table.WeiboGroup.CONTENT_DATA, sGson.toJson(groups));
+        database.insert(Table.WeiboGroup.TABLE_NAME, null, values);
         database.close();
-        return result;
     }
     
-    public static synchronized void removeWeiboGroup(long id) {
-        SQLiteDatabase database = sInstance.getWritableDatabase();
-        database.delete(Table.WeiboGroup.TABLE_NAME, Table.WeiboGroup.ID + "=" + id, null);
-        database.close();
+    public static synchronized WeiboGroup[] getWeiboGroups(long accountId) {
+        SQLiteDatabase database = sInstance.getReadableDatabase();
+        Cursor cursor = database.rawQuery("select * from " + Table.WeiboGroup.TABLE_NAME 
+                + " where " + Table.WeiboGroup.ACCOUNT_ID + "=" + accountId, null);
+        try {
+            if (cursor.moveToNext()) {
+                return sGson.fromJson(cursor.getString(cursor.getColumnIndex(Table.WeiboGroup.CONTENT_DATA)), 
+                        WeiboGroup[].class);
+            }
+        } finally {
+            cursor.close();
+            database.close();
+        }
+        return null;
     }
     
     public static synchronized TimelinePosition getTimelinePosition(int fragmentIndex, int spinnerPosition) {
@@ -556,9 +544,14 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String sql = "select * from " + Table.DmUser.TABLE_NAME + " where " + Table.DmUser.ACCOUNT_ID + "=" + accountId;
         Cursor cursor = database.rawQuery(sql, null);
-        if (cursor.moveToNext()) {
-            String json = cursor.getString(cursor.getColumnIndex(Table.DmUser.CONTENT_DATA));
-            return sGson.fromJson(json, DmUsers.class);
+        try {
+            if (cursor.moveToNext()) {
+                String json = cursor.getString(cursor.getColumnIndex(Table.DmUser.CONTENT_DATA));
+                return sGson.fromJson(json, DmUsers.class);
+            }
+        } finally {
+            cursor.close();
+            database.close();
         }
         return null;
     }
@@ -579,9 +572,14 @@ public class DatabaseUtils extends SQLiteOpenHelper {
                 "select * from " + Table.FollowingId.TABLE_NAME + " where " + Table.FollowingId.ACCOUNT_ID + "="
                         + accountId;
         Cursor cursor = database.rawQuery(sql, null);
-        if (cursor.moveToNext()) {
-            String json = cursor.getString(cursor.getColumnIndex(Table.FollowingId.CONTENT_DATA));
-            return sGson.fromJson(json, long[].class);
+        try {
+            if (cursor.moveToNext()) {
+                String json = cursor.getString(cursor.getColumnIndex(Table.FollowingId.CONTENT_DATA));
+                return sGson.fromJson(json, long[].class);
+            }
+        } finally {
+            cursor.close();
+            database.close();
         }
         return null;
     }
@@ -604,9 +602,14 @@ public class DatabaseUtils extends SQLiteOpenHelper {
                 "select * from " + Table.DmConversation.TABLE_NAME + " where " + Table.DmConversation.ACCOUNT_ID + "="
                         + accountId + " and " + Table.DmConversation.USER_ID + "=" + userId;
         Cursor cursor = database.rawQuery(sql, null);
-        if (cursor.moveToNext()) {
-            String json = cursor.getString(cursor.getColumnIndex(Table.DmConversation.CONTENT_DATA));
-            return sGson.fromJson(json, DirectMessage[].class);
+        try {
+            if (cursor.moveToNext()) {
+                String json = cursor.getString(cursor.getColumnIndex(Table.DmConversation.CONTENT_DATA));
+                return sGson.fromJson(json, DirectMessage[].class);
+            }
+        } finally {
+            cursor.close();
+            database.close();
         }
         return null;
     }
@@ -626,8 +629,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         
         public static final class WeiboGroup {
             public static final String TABLE_NAME = "weibo_group_table";
-            public static final String ID = "id";
-            public static final String NAME = "name";
+            public static final String ACCOUNT_ID = "account_id";
+            public static final String CONTENT_DATA = "content_data";
         }
         
         public static final class WeiboStatus {

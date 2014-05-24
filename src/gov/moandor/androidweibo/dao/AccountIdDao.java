@@ -5,7 +5,7 @@ import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class GetAccountIdDao extends BaseHttpDao<Long> {
+public class AccountIdDao extends BaseHttpDao<Long> {
     private String mToken;
     
     @Override

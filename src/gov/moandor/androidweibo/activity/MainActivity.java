@@ -21,9 +21,14 @@ import android.widget.ArrayAdapter;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.MainPagerAdapter;
 import gov.moandor.androidweibo.bean.UnreadCount;
+import gov.moandor.androidweibo.bean.WeiboGroup;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.GroupsDao;
 import gov.moandor.androidweibo.fragment.AbsMainTimelineFragment;
 import gov.moandor.androidweibo.fragment.AtmeListFragment;
 import gov.moandor.androidweibo.fragment.CommentListFragment;
@@ -32,8 +37,11 @@ import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
+import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.WeiboException;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
@@ -54,7 +62,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         UNREAD_PAGE_POSITION = packageName + ".UNREAD_PAGE_POSITION";
         UNREAD_GROUP = packageName + ".UNREAD_GROUP";
         ACCOUNT_INDEX = packageName + ".ACCOUNT_INDEX";
-        ACTION_UNREAD_UPDATED = packageName + ".action.UNREAD_UPDATED";
+        ACTION_UNREAD_UPDATED = packageName + ".ACTION_UNREAD_UPDATED";
         UNREAD_COUNT = packageName + ".UNREAD_COUNT";
     }
     
@@ -73,6 +81,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private PagerSlidingTabStrip mTabStrip;
     private MainPagerAdapter mPagerAdapter;
+    private WeiboGroup[] mGroups;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +94,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         setContentView(R.layout.activity_main);
         mWeiboListSpinnerAdapter =
                 new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
-                        getResources().getStringArray(R.array.weibo_list_spinner));
+                        new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.weibo_list_spinner))));
         mWeiboListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         mAtmeListSpinnerAdapter =
                 new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
@@ -296,10 +305,16 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         }
         switch (position) {
         case WEIBO_LIST:
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            actionBar.setTitle("");
-            actionBar.setListNavigationCallbacks(mWeiboListSpinnerAdapter, this);
-            actionBar.setSelectedNavigationItem(ConfigManager.getWeiboGroup());
+            if (mGroups == null) {
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                actionBar.setTitle(R.string.loading);
+                new LoadWeiboGroupsTask().execute();
+            } else {
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                actionBar.setTitle("");
+                actionBar.setListNavigationCallbacks(mWeiboListSpinnerAdapter, this);
+                actionBar.setSelectedNavigationItem(ConfigManager.getWeiboGroup());
+            }
             break;
         case ATME_LIST:
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
@@ -422,4 +437,45 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             mTabStrip.notifyDataSetChanged();
         }
     };
+    
+    private class LoadWeiboGroupsTask extends MyAsyncTask<Void, Void, WeiboGroup[]> {
+        private long mAccountId;
+        private String mToken;
+        
+        @Override
+        protected void onPreExecute() {
+            mAccountId = GlobalContext.getCurrentAccount().user.id;
+            mToken = GlobalContext.getCurrentAccount().token;
+        }
+        
+        @Override
+        protected WeiboGroup[] doInBackground(Void... params) {
+            WeiboGroup[] groups = DatabaseUtils.getWeiboGroups(mAccountId);
+            if (groups == null) {
+                GroupsDao dao = new GroupsDao();
+                dao.setToken(mToken);
+                try {
+                    return dao.execute().toArray(new WeiboGroup[0]);
+                } catch (WeiboException e) {
+                    Logger.logExcpetion(e);
+                }
+            } else {
+                return groups;
+            }
+            return null;
+        }
+        
+        @Override
+        protected void onPostExecute(WeiboGroup[] result) {
+            mGroups = result;
+            for (WeiboGroup group : result) {
+                mWeiboListSpinnerAdapter.add(group.name);
+            }
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            actionBar.setTitle("");
+            actionBar.setListNavigationCallbacks(mWeiboListSpinnerAdapter, MainActivity.this);
+            actionBar.setSelectedNavigationItem(ConfigManager.getWeiboGroup());
+        }
+    }
 }

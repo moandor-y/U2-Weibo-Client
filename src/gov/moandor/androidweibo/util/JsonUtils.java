@@ -12,6 +12,7 @@ import gov.moandor.androidweibo.bean.UserIds;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.bean.WeiboGeo;
+import gov.moandor.androidweibo.bean.WeiboGroup;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 
@@ -333,5 +334,27 @@ public class JsonUtils {
             Logger.logExcpetion(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
+    }
+    
+    public static List<WeiboGroup> getGroupsFromJson(String jsonStr) throws WeiboException {
+        try {
+            JSONObject json = new JSONObject(jsonStr);
+            JSONArray array = json.getJSONArray("lists");
+            List<WeiboGroup> result = new ArrayList<WeiboGroup>();
+            for (int i = 0; i < array.length(); i++) {
+                result.add(getGroupFromJson(array.getJSONObject(i)));
+            }
+            return result;
+        } catch (JSONException e) {
+            Logger.logExcpetion(e);
+            throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
+        }
+    }
+    
+    private static WeiboGroup getGroupFromJson(JSONObject json) throws JSONException {
+        WeiboGroup result = new WeiboGroup();
+        result.id = json.getLong("id");
+        result.name = json.getString("name");
+        return result;
     }
 }
