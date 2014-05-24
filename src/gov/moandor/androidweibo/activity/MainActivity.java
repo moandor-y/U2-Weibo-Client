@@ -85,7 +85,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private MainPagerAdapter mPagerAdapter;
     private WeiboGroup[] mGroups;
     private Object mGroupsLoadLock = new Object();
-    private LoadWeiboGroupsTask mLoadWeiboGroupsTask;
+    private MyAsyncTask<Void, Void, WeiboGroup[]> mLoadWeiboGroupsTask;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,9 +291,29 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         for (WeiboGroup group : mGroups) {
             mWeiboListSpinnerAdapter.remove(group.name);
         }
+        mWeiboListSpinnerAdapter.remove(getString(R.string.refresh_groups));
+    }
+    
+    private void setupSpinnerGroups() {
+        for (WeiboGroup group : mGroups) {
+            mWeiboListSpinnerAdapter.add(group.name);
+        }
+        mWeiboListSpinnerAdapter.add(getString(R.string.refresh_groups));
+    }
+    
+    private void saveGroupsToDatabase(final long accountId, final WeiboGroup[] groups) {
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseUtils.updateWeiboGroups(accountId, groups);
+            }
+        });
     }
     
     private void updateWeiboListSpinner() {
+        if (mViewPager.getCurrentItem() != WEIBO_LIST) {
+            return;
+        }
         ActionBar actionBar = getSupportActionBar();
         if (mGroups == null) {
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -389,6 +409,17 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         switch (mViewPager.getCurrentItem()) {
         case WEIBO_LIST:
+            if (itemPosition == mWeiboListSpinnerAdapter.getCount() - 1) {
+                clearSpinnerGroups();
+                mGroups = null;
+                updateWeiboListSpinner();
+                if (mLoadWeiboGroupsTask != null) {
+                    mLoadWeiboGroupsTask.cancel(true);
+                }
+                mLoadWeiboGroupsTask = new RefreshGroupsTask();
+                mLoadWeiboGroupsTask.execute();
+                break;
+            }
             long accountId = GlobalContext.getCurrentAccount().user.id;
             if (itemPosition != ConfigManager.getWeiboGroup(accountId)) {
                 mWeiboListFragment.saveListPosition();
@@ -520,19 +551,57 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         protected void onPostExecute(WeiboGroup[] result) {
             if (result != null) {
                 mGroups = result;
-                for (WeiboGroup group : result) {
-                    mWeiboListSpinnerAdapter.add(group.name);
-                }
+                saveGroupsToDatabase(mAccountId, result);
             } else {
                 mGroups = new WeiboGroup[0];
             }
-            if (mViewPager.getCurrentItem() == WEIBO_LIST) {
-                updateWeiboListSpinner();
-            }
+            setupSpinnerGroups();
+            updateWeiboListSpinner();
             synchronized (mGroupsLoadLock) {
                 mGroupsLoadLock.notifyAll();
             }
             mLoadWeiboGroupsTask = null;
+        }
+    }
+    
+    private class RefreshGroupsTask extends MyAsyncTask<Void, Void, WeiboGroup[]> {
+        private long mAccountId;
+        private String mToken;
+        
+        @Override
+        protected void onPreExecute() {
+            mAccountId = GlobalContext.getCurrentAccount().user.id;
+            mToken = GlobalContext.getCurrentAccount().token;
+        }
+        
+        @Override
+        protected WeiboGroup[] doInBackground(Void... params) {
+            GroupsDao dao = new GroupsDao();
+            dao.setToken(mToken);
+            try {
+                return dao.execute().toArray(new WeiboGroup[0]);
+            } catch (WeiboException e) {
+                Logger.logExcpetion(e);
+                Utilities.notice(e.getMessage());
+            }
+            return null;
+        }
+        
+        @Override
+        protected void onPostExecute(WeiboGroup[] result) {
+            if (result != null) {
+                mGroups = result;
+            } else {
+                mGroups = new WeiboGroup[0];
+            }
+            setupSpinnerGroups();
+            updateWeiboListSpinner();
+            synchronized (mGroupsLoadLock) {
+                mGroupsLoadLock.notifyAll();
+            }
+            mLoadWeiboGroupsTask = null;
+            saveGroupsToDatabase(mAccountId, result);
+            getSupportActionBar().setSelectedNavigationItem(0);
         }
     }
 }

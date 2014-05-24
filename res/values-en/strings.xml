@@ -162,6 +162,7 @@
     <string name="lock_orientation">Lock orientation</string>
     <string name="unlock_orientation">Unlock orientation</string>
     <string name="direct_messages">Direct messages</string>
+    <string name="refresh_groups">REFRESH GROUPS</string>
     
     <!-- WeiboActivity -->
     <string name="quick_comment">Quick comment</string>
