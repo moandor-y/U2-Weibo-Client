@@ -119,7 +119,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             mAdapter.notifyDataSetChanged();
             Utilities.notice(R.string.favorited_successfully);
             long accountId = GlobalContext.getCurrentAccount().user.id;
-            int group = ConfigManager.getWeiboGroup();
+            int group = ConfigManager.getWeiboGroup(accountId);
             updateDatabase(status, mSelection, accountId, group);
         }
         
@@ -142,7 +142,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             mAdapter.notifyDataSetChanged();
             Utilities.notice(R.string.unfavorited_successfully);
             long accountId = GlobalContext.getCurrentAccount().user.id;
-            int group = ConfigManager.getWeiboGroup();
+            int group = ConfigManager.getWeiboGroup(accountId);
             updateDatabase(status, mSelection, accountId, group);
         }
         
@@ -164,7 +164,7 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
             mAdapter.removeItem(mSelection);
             mAdapter.notifyDataSetChanged();
             long accountId = GlobalContext.getCurrentAccount().user.id;
-            int group = ConfigManager.getWeiboGroup();
+            int group = ConfigManager.getWeiboGroup(accountId);
             removeFromDatabase(mSelection, accountId, group);
         }
         

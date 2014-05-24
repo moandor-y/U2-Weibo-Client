@@ -50,7 +50,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
                 mAdapter.updatePosition(position, status);
                 mAdapter.notifyDataSetChanged();
                 final long accountId = GlobalContext.getCurrentAccount().user.id;
-                final int group = ConfigManager.getWeiboGroup();
+                final int group = ConfigManager.getWeiboGroup(accountId);
                 MyAsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -97,7 +97,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        switch (ConfigManager.getWeiboGroup()) {
+        switch (ConfigManager.getWeiboGroup(GlobalContext.getCurrentAccount().user.id)) {
         case GROUP_BILATERAL:
             return new BilateralTimelineDao();
         case GROUP_ALL:
@@ -115,7 +115,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             position.position = mListView.getFirstVisiblePosition();
             position.top = view.getTop();
             final long accountId = GlobalContext.getCurrentAccount().user.id;
-            final int group = ConfigManager.getWeiboGroup();
+            final int group = ConfigManager.getWeiboGroup(accountId);
             MyAsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -178,7 +178,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     
     @Override
     protected int getGroup() {
-        return ConfigManager.getWeiboGroup();
+        return ConfigManager.getWeiboGroup(GlobalContext.getCurrentAccount().user.id);
     }
     
     @Override

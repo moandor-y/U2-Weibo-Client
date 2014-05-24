@@ -3,10 +3,16 @@ package gov.moandor.androidweibo.util;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import gov.moandor.androidweibo.R;
 
 public class ConfigManager {
-    private static final int PREFERENCE_VERSION = 4;
+    private static final int PREFERENCE_VERSION = 5;
     public static final int THEME_LIGHT = 0;
     public static final int THEME_DARK = 1;
     public static final int PICTURE_SMALL = 0;
@@ -96,13 +102,34 @@ public class ConfigManager {
         apply(editor);
     }
     
-    public static int getWeiboGroup() {
-        return getPreferences().getInt(WEIBO_GROUP, 0);
+    public static int getWeiboGroup(long accountId) {
+        String json = getPreferences().getString(WEIBO_GROUP, null);
+        if (!TextUtils.isEmpty(json)) {
+            Gson gson = new Gson();
+            Map<Long, Integer> map = gson.fromJson(json, new TypeToken<Map<Long, Integer>>(){}.getType());
+            if (map != null) {
+                Integer result = map.get(accountId);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return 0;
     }
     
-    public static void setWeiboGroup(int value) {
+    public static void setWeiboGroup(int value, long accountId) {
+        String json = getPreferences().getString(WEIBO_GROUP, null);
+        Map<Long, Integer> map;
+        Gson gson = new Gson();
+        if (json != null) {
+            map = gson.fromJson(json, new TypeToken<Map<Long, Integer>>(){}.getType());
+            map.put(accountId, value);
+        } else {
+            map = new HashMap<Long, Integer>();
+            map.put(accountId, value);
+        }
         SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putInt(WEIBO_GROUP, value);
+        editor.putString(WEIBO_GROUP, gson.toJson(map));
         apply(editor);
     }
     
