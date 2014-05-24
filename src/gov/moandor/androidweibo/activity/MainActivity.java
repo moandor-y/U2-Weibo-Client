@@ -48,6 +48,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
     private static final String STATE_TAB = "state_tab";
     private static final String STATE_UNREAD_COUNT = "state_unread_count";
+    private static final String STATE_GROUPS = "state_groups";
     public static final int WEIBO_LIST = 0;
     public static final int ATME_LIST = 1;
     public static final int COMMENT_LIST = 2;
@@ -152,6 +153,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount() - 1);
         mUnreadPage = getIntent().getIntExtra(UNREAD_PAGE_POSITION, -1);
         if (savedInstanceState != null) {
+            mGroups = (WeiboGroup[]) savedInstanceState.getParcelableArray(STATE_GROUPS);
             int tab = savedInstanceState.getInt(STATE_TAB);
             mViewPager.setCurrentItem(tab);
             onPageSelected(tab);
@@ -187,8 +189,10 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         intentFilter.addAction(ACTION_UNREAD_UPDATED);
         Utilities.registerReceiver(mUnreadUpdateReciever, intentFilter);
         sRunning = true;
-        mLoadWeiboGroupsTask = new LoadWeiboGroupsTask();
-        mLoadWeiboGroupsTask.execute();
+        if (mGroups == null) {
+            mLoadWeiboGroupsTask = new LoadWeiboGroupsTask();
+            mLoadWeiboGroupsTask.execute();
+        }
     }
     
     @Override
@@ -208,6 +212,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_TAB, mViewPager.getCurrentItem());
         outState.putInt(STATE_UNREAD_COUNT, mPagerAdapter.getWeiboUnreadCount());
+        outState.putParcelableArray(STATE_GROUPS, mGroups);
     }
     
     @Override
