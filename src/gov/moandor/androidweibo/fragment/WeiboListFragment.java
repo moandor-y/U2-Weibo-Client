@@ -17,6 +17,7 @@ import gov.moandor.androidweibo.concurrency.WifiAutoDownloadPicRunnable;
 import gov.moandor.androidweibo.dao.BaseTimelineJsonDao;
 import gov.moandor.androidweibo.dao.BilateralTimelineDao;
 import gov.moandor.androidweibo.dao.FriendsTimelineDao;
+import gov.moandor.androidweibo.dao.GroupTimelineDao;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
@@ -100,8 +101,9 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         case GROUP_BILATERAL:
             return new BilateralTimelineDao();
         case GROUP_ALL:
-        default:
             return new FriendsTimelineDao();
+        default:
+            return new GroupTimelineDao();
         }
     }
     
@@ -208,6 +210,24 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     private class WeiboListRefreshTask extends MainRefreshTask {
+        private int mGroup;
+        
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mGroup = getGroup();
+        }
+        
+        @Override
+        protected List<WeiboStatus> doInBackground(Void... v) {
+            if (mDao instanceof GroupTimelineDao) {
+                MainActivity activity = (MainActivity) getActivity();
+                activity.waitForGroupsLoad();
+                ((GroupTimelineDao) mDao).setListId(activity.getGroupId(mGroup));
+            }
+            return super.doInBackground(v);
+        }
+        
         @Override
         protected void onPostExecute(List<WeiboStatus> result) {
             super.onPostExecute(result);

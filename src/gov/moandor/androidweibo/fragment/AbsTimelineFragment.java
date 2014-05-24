@@ -249,7 +249,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
     
     class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
-        private BaseTimelineJsonDao<DataBean> mDao;
+        protected BaseTimelineJsonDao<DataBean> mDao;
         
         @Override
         protected void onPreExecute() {

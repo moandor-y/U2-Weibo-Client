@@ -23,6 +23,7 @@ import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.MainPagerAdapter;
 import gov.moandor.androidweibo.bean.UnreadCount;
@@ -82,6 +83,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private PagerSlidingTabStrip mTabStrip;
     private MainPagerAdapter mPagerAdapter;
     private WeiboGroup[] mGroups;
+    private Object mGroupsLoadLock = new Object();
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -423,6 +425,22 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mTabStrip.notifyDataSetChanged();
     }
     
+    public void waitForGroupsLoad() {
+        synchronized (mGroupsLoadLock) {
+            while (mGroups == null) {
+                try {
+                    mGroupsLoadLock.wait();
+                } catch (InterruptedException e) {
+                    Logger.logExcpetion(e);
+                }
+            }
+        }
+    }
+    
+    public long getGroupId(int group) {
+        return mGroups[group - getResources().getStringArray(R.array.weibo_list_spinner).length].id;
+    }
+    
     public static boolean isRunning() {
         return sRunning;
     }
@@ -476,6 +494,9 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             actionBar.setTitle("");
             actionBar.setListNavigationCallbacks(mWeiboListSpinnerAdapter, MainActivity.this);
             actionBar.setSelectedNavigationItem(ConfigManager.getWeiboGroup());
+            synchronized (mGroupsLoadLock) {
+                mGroupsLoadLock.notifyAll();
+            }
         }
     }
 }
