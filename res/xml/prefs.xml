@@ -92,7 +92,10 @@
         
     </PreferenceCategory>
     
-    <PreferenceCategory android:title="@string/advanced">
+    <PreferenceCategory
+        android:title="@string/advanced"
+        android:key="advanced"
+        android:persistent="false" >
         
         <CheckBoxPreference
             android:key="list_hw_accel_enabled"

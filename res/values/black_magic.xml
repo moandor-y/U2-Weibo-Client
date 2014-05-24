@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <bool name="bm_enabled">false</bool>
+    <bool name="bm_enabled">true</bool>
     
     <string-array name="hack_login_types">
         <item>Weico Android</item>

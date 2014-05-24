@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -80,6 +81,8 @@ public class SettingsActivity extends AbsActivity {
     
     public static class SettingsFragment extends PreferenceFragment implements
             SharedPreferences.OnSharedPreferenceChangeListener {
+        private static final String ADVANCED = "advanced";
+        
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -87,7 +90,8 @@ public class SettingsActivity extends AbsActivity {
             buildSummaries();
             Preference preference = findPreference(KEY_BLACK_MAGIC);
             if (!Utilities.isBmEnabled()) {
-                getPreferenceScreen().removePreference(preference);
+                PreferenceCategory advanced = (PreferenceCategory) findPreference(ADVANCED);
+                advanced.removePreference(preference);
             }
         }
         
