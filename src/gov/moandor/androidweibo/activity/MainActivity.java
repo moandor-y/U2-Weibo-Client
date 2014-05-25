@@ -154,6 +154,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mUnreadPage = getIntent().getIntExtra(UNREAD_PAGE_POSITION, -1);
         if (savedInstanceState != null) {
             mGroups = (WeiboGroup[]) savedInstanceState.getParcelableArray(STATE_GROUPS);
+            setupSpinnerGroups();
             int tab = savedInstanceState.getInt(STATE_TAB);
             mViewPager.setCurrentItem(tab);
             onPageSelected(tab);
