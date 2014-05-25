@@ -2,8 +2,8 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="gov.moandor.androidweibo"
-    android:versionCode="195"
-    android:versionName="0.4.4.195 Alpha" >
+    android:versionCode="212"
+    android:versionName="0.5.0.212 Alpha" >
     
     <uses-sdk
         android:minSdkVersion="8"
