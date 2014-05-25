@@ -20,7 +20,8 @@ public class WriteCommentActivity extends AbsWriteActivity {
     public static final String COMMENTED_WEIBO_STATUS;
     public static final String REPLIED_WEIBO_COMMENT;
     public static final String DRAFT;
-    public static final String STATE_COMMENT_ORI = "state_comment_ori";
+    private static final String STATE_COMMENT_ORI = "state_comment_ori";
+    private static final String STATE_REPOST_WHEN_COMMENT = "state_repost_when_comment";
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
@@ -30,6 +31,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     }
     
     private boolean mCommentOri;
+    private boolean mRepostWhenComment;
     private WeiboStatus mCommentedStatus;
     private WeiboComment mRepliedComment;
     
@@ -63,17 +65,20 @@ public class WriteCommentActivity extends AbsWriteActivity {
         }
         if (savedInstanceState != null) {
             mCommentOri = savedInstanceState.getBoolean(STATE_COMMENT_ORI);
+            mRepostWhenComment = savedInstanceState.getBoolean(STATE_REPOST_WHEN_COMMENT);
         }
     }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mCommentedStatus.retweetStatus != null) {
-            getMenuInflater().inflate(R.menu.activity_write_comment, menu);
-            return true;
+        getMenuInflater().inflate(R.menu.activity_write_comment, menu);
+        if (mCommentedStatus.retweetStatus == null) {
+            menu.findItem(R.id.comment_ori).setVisible(false);
         } else {
-            return super.onCreateOptionsMenu(menu);
+            menu.findItem(R.id.comment_ori).setChecked(mCommentOri);
         }
+        menu.findItem(R.id.repost_when_comment).setChecked(mRepostWhenComment);
+        return true;
     }
     
     @Override
@@ -88,6 +93,15 @@ public class WriteCommentActivity extends AbsWriteActivity {
                 mCommentOri = true;
             }
             return true;
+        case R.id.repost_when_comment:
+            if (item.isChecked()) {
+                item.setChecked(false);
+                mRepostWhenComment = false;
+            } else {
+                item.setChecked(true);
+                mRepostWhenComment = true;
+            }
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -97,6 +111,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(STATE_COMMENT_ORI, mCommentOri);
+        outState.putBoolean(STATE_REPOST_WHEN_COMMENT, mRepostWhenComment);
     }
     
     @Override
@@ -140,6 +155,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
         draft.commentedStatus = mCommentedStatus;
         draft.repliedComment = mRepliedComment;
         draft.commentOri = mCommentOri;
+        draft.repostWhenComment = mRepostWhenComment;
         return draft;
     }
 }

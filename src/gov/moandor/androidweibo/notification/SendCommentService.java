@@ -14,6 +14,7 @@ import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.BaseSendCommentDao;
 import gov.moandor.androidweibo.dao.CreateCommentDao;
 import gov.moandor.androidweibo.dao.ReplyCommentDao;
+import gov.moandor.androidweibo.dao.RepostWeiboDao;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
@@ -93,6 +94,9 @@ public class SendCommentService extends Service {
             dao.setCommentOri(mDraft.commentOri);
             try {
                 dao.execute();
+                if (mDraft.repostWhenComment) {
+                    repost();
+                }
             } catch (WeiboException e) {
                 Logger.logExcpetion(e);
                 mDraft.error = e.getMessage();
@@ -143,6 +147,14 @@ public class SendCommentService extends Service {
                     stopSelf();
                 }
             }, 3000);
+        }
+        
+        private void repost() throws WeiboException {
+            RepostWeiboDao dao = new RepostWeiboDao();
+            dao.setId(mDraft.commentedStatus.id);
+            dao.setToken(mToken);
+            dao.setStatus(mDraft.content);
+            dao.execute();
         }
     }
 }

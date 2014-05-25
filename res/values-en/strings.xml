@@ -239,6 +239,7 @@
     <string name="cannot_be_empty">Cannot be empty</string>
     <string name="upload_failed">Upload failed</string>
     <string name="write_hint">Write something…</string>
+    <string name="repost_when_comment">Repost when comment</string>
     
     <!-- ImageViewerActivity -->
     <string name="show_ori">Show original pictures</string>

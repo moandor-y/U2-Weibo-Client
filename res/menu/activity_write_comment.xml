@@ -7,4 +7,10 @@
         android:checkable="true"
         android:checked="false" />
     
+    <item
+        android:id="@+id/repost_when_comment"
+        android:title="@string/repost_when_comment"
+        android:checkable="true"
+        android:checked="false" />
+    
 </menu>

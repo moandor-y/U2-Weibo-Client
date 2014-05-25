@@ -240,6 +240,7 @@
     <string name="cannot_be_empty">内容不能为空</string>
     <string name="upload_failed">上传失败</string>
     <string name="write_hint">写点什么吧…</string>
+    <string name="repost_when_comment">同时转发微博</string>
     
     <!-- ImageViewerActivity -->
     <string name="show_ori">显示原图</string>
