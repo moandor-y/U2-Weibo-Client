@@ -389,11 +389,12 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     
     public static synchronized WeiboGroup[] getWeiboGroups(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
-        Cursor cursor = database.rawQuery("select * from " + Table.WeiboGroup.TABLE_NAME 
-                + " where " + Table.WeiboGroup.ACCOUNT_ID + "=" + accountId, null);
+        Cursor cursor =
+                database.rawQuery("select * from " + Table.WeiboGroup.TABLE_NAME + " where "
+                        + Table.WeiboGroup.ACCOUNT_ID + "=" + accountId, null);
         try {
             if (cursor.moveToNext()) {
-                return sGson.fromJson(cursor.getString(cursor.getColumnIndex(Table.WeiboGroup.CONTENT_DATA)), 
+                return sGson.fromJson(cursor.getString(cursor.getColumnIndex(Table.WeiboGroup.CONTENT_DATA)),
                         WeiboGroup[].class);
             }
         } finally {

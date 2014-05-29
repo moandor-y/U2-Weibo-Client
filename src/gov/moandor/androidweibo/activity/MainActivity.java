@@ -21,9 +21,6 @@ import android.widget.ArrayAdapter;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.MainPagerAdapter;
 import gov.moandor.androidweibo.bean.UnreadCount;
@@ -43,6 +40,9 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {

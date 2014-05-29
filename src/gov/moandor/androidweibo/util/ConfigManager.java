@@ -6,10 +6,10 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import gov.moandor.androidweibo.R;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import gov.moandor.androidweibo.R;
 
 public class ConfigManager {
     private static final int PREFERENCE_VERSION = 5;
@@ -106,7 +106,7 @@ public class ConfigManager {
         String json = getPreferences().getString(WEIBO_GROUP, null);
         if (!TextUtils.isEmpty(json)) {
             Gson gson = new Gson();
-            Map<Long, Integer> map = gson.fromJson(json, new TypeToken<Map<Long, Integer>>(){}.getType());
+            Map<Long, Integer> map = gson.fromJson(json, new TypeToken<Map<Long, Integer>>() {}.getType());
             if (map != null) {
                 Integer result = map.get(accountId);
                 if (result != null) {
@@ -122,7 +122,7 @@ public class ConfigManager {
         Map<Long, Integer> map;
         Gson gson = new Gson();
         if (json != null) {
-            map = gson.fromJson(json, new TypeToken<Map<Long, Integer>>(){}.getType());
+            map = gson.fromJson(json, new TypeToken<Map<Long, Integer>>() {}.getType());
             map.put(accountId, value);
         } else {
             map = new HashMap<Long, Integer>();
