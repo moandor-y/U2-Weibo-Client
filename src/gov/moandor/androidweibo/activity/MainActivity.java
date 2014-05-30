@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -153,7 +154,11 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount() - 1);
         mUnreadPage = getIntent().getIntExtra(UNREAD_PAGE_POSITION, -1);
         if (savedInstanceState != null) {
-            mGroups = (WeiboGroup[]) savedInstanceState.getParcelableArray(STATE_GROUPS);
+            Parcelable[] parcelables = savedInstanceState.getParcelableArray(STATE_GROUPS);
+            mGroups = new WeiboGroup[parcelables.length];
+            for (int i = 0; i < parcelables.length; i++) {
+                mGroups[i] = (WeiboGroup) parcelables[i];
+            }
             setupSpinnerGroups();
             int tab = savedInstanceState.getInt(STATE_TAB);
             mViewPager.setCurrentItem(tab);
