@@ -32,9 +32,12 @@ import gov.moandor.androidweibo.util.Utilities;
 import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class SettingsActivity extends AbsActivity {
+public class SettingsActivity extends AbsActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String KEY_BLACK_MAGIC = "black_magic";
-    
+    private static final String STATE_NEED_RESTART = "state_need_restart";
+	
+	private boolean mNeedRestart;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,22 @@ public class SettingsActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.settings);
+		if (savedInstanceState != null) {
+			mNeedRestart = savedInstanceState.getBoolean(STATE_NEED_RESTART);
+		}
+        ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
+	}
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
     
     @Override
@@ -64,19 +83,38 @@ public class SettingsActivity extends AbsActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-            exit();
+			exit();
             return true;
         default:
             return super.onOptionsItemSelected(item);
         }
     }
     
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        requestRestart();
+    }
+    
     private void exit() {
+        if (mNeedRestart) {
+            exitAndRestartMainActivity();
+        } else {
+            finish();
+        }
+    }
+    
+    private void exitAndRestartMainActivity() {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
+    }
+    
+    private void requestRestart() {
+        if (!mNeedRestart) {
+            mNeedRestart = true;
+        }
     }
     
     public static class SettingsFragment extends PreferenceFragment implements
