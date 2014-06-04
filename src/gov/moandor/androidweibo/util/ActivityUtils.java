@@ -38,18 +38,23 @@ public class ActivityUtils {
     }
     
     public static Intent userActivity(String userName) {
-        return userActivity(null, userName);
+        return userActivity(null, userName, 0);
     }
     
     public static Intent userActivity(WeiboUser user) {
-        return userActivity(user, null);
+        return userActivity(user, null, 0);
     }
     
-    private static Intent userActivity(WeiboUser user, String userName) {
+	public static Intent userActivity(long userId) {
+        return userActivity(null, null, userId);
+    }
+	
+    private static Intent userActivity(WeiboUser user, String userName, long userId) {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), UserActivity.class);
         intent.putExtra(UserActivity.USER, user);
         intent.putExtra(UserActivity.USER_NAME, userName);
+		intent.putExtra(UserActivity.USER_ID, userId);
         return intent;
     }
     

@@ -24,12 +24,14 @@ import gov.moandor.androidweibo.util.WeiboException;
 public class UserActivity extends AbsActivity {
     public static final String USER;
     public static final String USER_NAME;
+	public static final String USER_ID;
     private static final String LOADING_DIALOG = "loading_dialog";
     
     static {
         String packageName = GlobalContext.getInstance().getPackageName();
         USER = packageName + ".USER";
         USER_NAME = packageName + ".USER_NAME";
+		USER_ID = packageName + ".USER_ID";
     }
     
     private WeiboUser mUser;
@@ -110,17 +112,23 @@ public class UserActivity extends AbsActivity {
         if (mUser != null) {
             onUserLoadFinished();
         } else {
-            String userName = getIntent().getStringExtra(USER_NAME);
-            if (TextUtils.isEmpty(userName)) {
-                Uri data = getIntent().getData();
-                DialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.loading));
-                dialog.show(getSupportFragmentManager(), LOADING_DIALOG);
-                userName = data.toString();
-                int index = userName.lastIndexOf("@");
-                userName = userName.substring(index + 1);
-            }
-            LoadUserTask task = new LoadUserTask(userName);
-            task.execute();
+			long userId = getIntent().getLongExtra(USER_ID, 0);
+			if (userId != 0) {
+				LoadUserTask task = new LoadUserTask(userId);
+				task.execute();
+			} else {
+				String userName = getIntent().getStringExtra(USER_NAME);
+				if (TextUtils.isEmpty(userName)) {
+					Uri data = getIntent().getData();
+					userName = data.toString();
+					int index = userName.lastIndexOf("@");
+					userName = userName.substring(index + 1);
+				}
+				LoadUserTask task = new LoadUserTask(userName);
+				task.execute();
+			}
+			DialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.loading));
+			dialog.show(getSupportFragmentManager(), LOADING_DIALOG);
             getSupportActionBar().setTitle(R.string.user);
         }
     }
@@ -141,17 +149,26 @@ public class UserActivity extends AbsActivity {
     }
     
     private class LoadUserTask extends MyAsyncTask<Void, Void, WeiboUser> {
-        String mUserName;
+        private long mUserId;
+		private String mUserName;
         
-        public LoadUserTask(String userName) {
-            mUserName = userName;
+        public LoadUserTask(long userId) {
+			mUserId = userId;
         }
         
+		public LoadUserTask(String userName) {
+			mUserName = userName;
+        }
+		
         @Override
         protected WeiboUser doInBackground(Void... v) {
             UserShowDao dao = new UserShowDao();
             dao.setToken(GlobalContext.getCurrentAccount().token);
-            dao.setScreenName(mUserName);
+			if (mUserId != 0) {
+				dao.setUid(mUserId);
+			} else {
+				dao.setScreenName(mUserName);
+			}
             try {
                 return dao.execute();
             } catch (WeiboException e) {

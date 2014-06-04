@@ -428,7 +428,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         public static class AboutFragment extends PreferenceFragment {
             private static final String KEY_MEMORY = "memory";
             private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
-            private static final String OFFICIAL_ACCOUNT = "U2微博客户端";
+            private static final long OFFICIAL_ACCOUNT = 3941216030L;
             
             @Override
             public void onCreate(Bundle savedInstanceState) {
@@ -453,7 +453,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             }
             
             private void buildOfficialAccount(Preference preference) {
-                preference.setSummary("@" + OFFICIAL_ACCOUNT);
                 preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {

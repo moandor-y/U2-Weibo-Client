@@ -9,6 +9,7 @@
     <Preference
         android:key="official_account"
         android:title="@string/official_account"
+		android:summary="@string/official_account_summary"
         android:persistent="false" />
     
 </PreferenceScreen>

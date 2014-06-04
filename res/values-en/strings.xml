@@ -130,7 +130,12 @@
     <string name="unfollow_failed_reason">Unfollow failed : %s</string>
     <string name="gender">Gender</string>
     <string name="view_user">View user</string>
-    
+    <string name="find_user">Find user</string>
+	<string name="user_name_is">Name:</string>
+	<string name="enter_user_name">Enter user name</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+	
     <!-- Time -->
     <string name="just_now">Just now</string>
     <string name="min_ago">%d minutes ago</string>
@@ -175,7 +180,6 @@
     <string name="picture">Pictures</string>
     <string name="picture_wifi">Pictures (Wi-Fi)</string>
     <string name="fast_scroll">Fast scroll</string>
-    <string name="cancel">Cancel</string>
     <string name="no_picture_mode">No picture mode</string>
     <string name="font_size">Font size</string>
     <string name="comment_repost_list_avatar">Comment/Repost list avatars</string>

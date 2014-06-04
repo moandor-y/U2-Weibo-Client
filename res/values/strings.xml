@@ -131,6 +131,11 @@
     <string name="unfollow_failed_reason">取消关注失败：%s</string>
     <string name="gender">性别</string>
     <string name="view_user">查看用户</string>
+	<string name="find_user">查找用户</string>
+	<string name="user_name_is">用户名：</string>
+	<string name="enter_user_name">输入用户名</string>
+	<string name="ok">确定</string>
+	<string name="cancel">取消</string>
     
     <!-- Time -->
     <string name="just_now">刚刚</string>
@@ -176,7 +181,6 @@
     <string name="picture">图片</string>
     <string name="picture_wifi">图片 (Wi-Fi)</string>
     <string name="fast_scroll">快速滚动</string>
-    <string name="cancel">取消</string>
     <string name="no_picture_mode">无图模式</string>
     <string name="font_size">字体大小</string>
     <string name="comment_repost_list_avatar">评论/转发列表头像</string>
@@ -210,6 +214,7 @@
     <string name="native_alloc_mem">Native内存占用 : %s</string>
     <string name="swipe_back">滑动返回</string>
     <string name="official_account">官方帐号</string>
+	<string name="official_account_summary">\@U2微博客户端</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

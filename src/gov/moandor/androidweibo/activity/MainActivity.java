@@ -44,12 +44,14 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import gov.moandor.androidweibo.fragment.FindUserDialogFragment;
 
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
     private static final String STATE_TAB = "state_tab";
     private static final String STATE_UNREAD_COUNT = "state_unread_count";
     private static final String STATE_GROUPS = "state_groups";
+	private static final String DIALOG_FIND_USER = "dialog_find_user";
     public static final int WEIBO_LIST = 0;
     public static final int ATME_LIST = 1;
     public static final int COMMENT_LIST = 2;
@@ -271,6 +273,9 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         case R.id.orientation:
             toggleOrientationLock();
             return true;
+		case R.id.find_user:
+			new FindUserDialogFragment().show(getSupportFragmentManager(), DIALOG_FIND_USER);
+			return true;
         default:
             return super.onOptionsItemSelected(item);
         }
