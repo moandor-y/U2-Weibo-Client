@@ -214,7 +214,7 @@
     <string name="native_alloc_mem">Native内存占用 : %s</string>
     <string name="swipe_back">滑动返回</string>
     <string name="official_account">官方帐号</string>
-	<string name="official_account_summary">\@U2微博客户端</string>
+	<string name="developers">开发者</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>
