@@ -135,6 +135,7 @@
 	<string name="enter_user_name">Enter user name</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
+	<string name="direct_messages">Direct messages</string>
 	
     <!-- Time -->
     <string name="just_now">Just now</string>
@@ -166,7 +167,6 @@
     <string name="close_drawer">Close drawer</string>
     <string name="lock_orientation">Lock orientation</string>
     <string name="unlock_orientation">Unlock orientation</string>
-    <string name="direct_messages">Direct messages</string>
     <string name="refresh_groups">REFRESH GROUPS</string>
     
     <!-- WeiboActivity -->

@@ -275,6 +275,7 @@ public class JsonUtils {
             result.comment = json.getInt("cmt");
             result.mentionWeibo = json.getInt("mention_status");
             result.mentionComment = json.getInt("mention_cmt");
+			result.directMessage = json.getInt("dm");
             return result;
         } catch (JSONException e) {
             Logger.logExcpetion(e);

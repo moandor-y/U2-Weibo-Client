@@ -21,6 +21,10 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
+import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.bean.DirectMessage;
+import gov.moandor.androidweibo.dao.DmUserListDao;
+import gov.moandor.androidweibo.bean.DirectMessagesUser;
 
 public class FetchUnreadMessageService extends IntentService {
     public FetchUnreadMessageService() {
@@ -49,28 +53,7 @@ public class FetchUnreadMessageService extends IntentService {
                 intent.putExtra(MainActivity.UNREAD_COUNT, unreadCount);
                 context.sendBroadcast(intent);
             }
-            WeiboComment comment = null;
-            if (unreadCount.comment > 0 && ConfigManager.isNotificationCommentEnabled()) {
-                List<WeiboComment> comments = fetchComments(account);
-                if (comments.size() > 0) {
-                    comment = comments.get(0);
-                }
-            }
-            WeiboStatus mentionStatus = null;
-            if (unreadCount.mentionWeibo > 0 && ConfigManager.isNotificationMentionWeiboEnabled()) {
-                List<WeiboStatus> mentionStatuses = fetchMentionStatuses(account);
-                if (mentionStatuses.size() > 0) {
-                    mentionStatus = mentionStatuses.get(0);
-                }
-            }
-            WeiboComment mentionComment = null;
-            if (unreadCount.mentionComment > 0 && ConfigManager.isNotificationMentionCommentEnabled()) {
-                List<WeiboComment> mentionComments = fetchMentionComments(account);
-                if (mentionComments.size() > 0) {
-                    mentionComment = mentionComments.get(0);
-                }
-            }
-            showNotification(context, comment, mentionStatus, mentionComment, account, unreadCount);
+            showNotification(context, account, unreadCount);
         } catch (WeiboException e) {
             Logger.logExcpetion(e);
         }
@@ -120,9 +103,45 @@ public class FetchUnreadMessageService extends IntentService {
         }
         return dao.execute();
     }
+	
+	private static DirectMessage fetchDm(Account account) throws WeiboException {
+		DmUserListDao dao = new DmUserListDao();
+		dao.setToken(account.token);
+		dao.setCount(1);
+		List<DirectMessagesUser> users = dao.execute();
+		if (users.size() >= 1) {
+			DirectMessagesUser user = users.get(0);
+			return user.message;
+		}
+		return null;
+	}
     
-    private static void showNotification(Context context, WeiboComment comment, WeiboStatus mentionStatus,
-            WeiboComment mentionComment, Account account, UnreadCount unreadCount) {
+    private static void showNotification(Context context, Account account, UnreadCount unreadCount) throws WeiboException {
+		WeiboComment comment = null;
+        if (unreadCount.comment > 0 && ConfigManager.isNotificationCommentEnabled()) {
+            List<WeiboComment> comments = fetchComments(account);
+            if (comments.size() > 0) {
+                comment = comments.get(0);
+            }
+        }
+        WeiboStatus mentionStatus = null;
+        if (unreadCount.mentionWeibo > 0 && ConfigManager.isNotificationMentionWeiboEnabled()) {
+            List<WeiboStatus> mentionStatuses = fetchMentionStatuses(account);
+            if (mentionStatuses.size() > 0) {
+                mentionStatus = mentionStatuses.get(0);
+            }
+        }
+        WeiboComment mentionComment = null;
+        if (unreadCount.mentionComment > 0 && ConfigManager.isNotificationMentionCommentEnabled()) {
+            List<WeiboComment> mentionComments = fetchMentionComments(account);
+            if (mentionComments.size() > 0) {
+                mentionComment = mentionComments.get(0);
+            }
+        }
+		DirectMessage directMessage = null;
+		if (unreadCount.directMessage > 0 && Utilities.isBmEnabled() && ConfigManager.isNotificationDmEnabled()) {
+			directMessage = fetchDm(account);
+		}
         if (comment != null) {
             Intent clickIntent = new Intent();
             clickIntent.setClass(GlobalContext.getInstance(), UnreadCommentReceiver.class);
@@ -165,5 +184,8 @@ public class FetchUnreadMessageService extends IntentService {
             intent.putExtra(AbsUnreadNotificationService.COUNT, unreadCount.mentionComment);
             context.startService(intent);
         }
+		if (directMessage != null) {
+			//TODO
+		}
     }
 }

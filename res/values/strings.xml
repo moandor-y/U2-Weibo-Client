@@ -136,6 +136,7 @@
 	<string name="enter_user_name">输入用户名</string>
 	<string name="ok">确定</string>
 	<string name="cancel">取消</string>
+	<string name="direct_messages">私信</string>
     
     <!-- Time -->
     <string name="just_now">刚刚</string>
@@ -167,7 +168,6 @@
     <string name="close_drawer">关闭侧边栏</string>
     <string name="lock_orientation">锁定屏幕方向</string>
     <string name="unlock_orientation">解锁屏幕方向</string>
-    <string name="direct_messages">私信</string>
     <string name="refresh_groups">刷新分组</string>
     
     <!-- WeiboActivity -->

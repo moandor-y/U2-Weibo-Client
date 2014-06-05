@@ -34,7 +34,6 @@ public abstract class AbsFriendsUserListFragment extends AbsUserListFragment<Fri
     @Override
     protected void onDaoCreated(BaseUserListDao<WeiboUser> dao) {
         dao.setUid(mUserId);
-        dao.setTrimStatus(1);
     }
     
     @Override

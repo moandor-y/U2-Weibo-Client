@@ -6,7 +6,10 @@
         android:title="@string/enabled"
         android:defaultValue="false" />
     
-    <PreferenceCategory android:title="@string/unread_messages">
+    <PreferenceCategory
+		android:title="@string/unread_messages"
+		android:key="unread_messages"
+		android:persistent="false" >
         
         <ListPreference
             android:key="notification_frequency"
@@ -42,6 +45,12 @@
             android:title="@string/notification_mention_comment"
             android:defaultValue="true" />
         
+		<CheckBoxPreference
+            android:key="notification_dm_enabled"
+            android:dependency="notification_enabled"
+            android:title="@string/direct_messages"
+            android:defaultValue="true" />
+		
     </PreferenceCategory>
     
     <PreferenceCategory android:title="@string/notification_method">

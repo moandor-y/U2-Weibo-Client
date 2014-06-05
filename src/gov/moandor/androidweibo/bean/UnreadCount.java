@@ -8,6 +8,7 @@ public class UnreadCount implements Parcelable {
     public int comment;
     public int mentionWeibo;
     public int mentionComment;
+	public int directMessage;
     
     @Override
     public int describeContents() {
@@ -20,6 +21,7 @@ public class UnreadCount implements Parcelable {
         dest.writeInt(comment);
         dest.writeInt(mentionWeibo);
         dest.writeInt(mentionComment);
+		dest.writeInt(directMessage);
     }
     
     public static final Parcelable.Creator<UnreadCount> CREATOR = new Parcelable.Creator<UnreadCount>() {
@@ -30,6 +32,7 @@ public class UnreadCount implements Parcelable {
             result.comment = source.readInt();
             result.mentionWeibo = source.readInt();
             result.mentionComment = source.readInt();
+			result.directMessage = source.readInt();
             return result;
         }
         

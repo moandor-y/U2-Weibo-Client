@@ -243,6 +243,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         public static class NotificationsFragment extends PreferenceFragment implements
                 SharedPreferences.OnSharedPreferenceChangeListener {
             private static final int REQUEST_RINGTONE = 0;
+			private static final String KEY_UNREAD_MESSAGES = "unread_messages";
             
             private Uri mRingtoneUri;
             
@@ -257,6 +258,10 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 if (!TextUtils.isEmpty(ringtone)) {
                     mRingtoneUri = Uri.parse(ringtone);
                 }
+				if (!Utilities.isBmEnabled()) {
+					PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
+					unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
+				}
             }
             
             @Override
