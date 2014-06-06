@@ -2,7 +2,6 @@
 <resources>
     
     <color name="holo_blue_light">#33b5e5</color>
-    <color name="tab_divider">#3c3c3c</color>
     <color name="steel_blue">#4682b4</color>
     <color name="dark_blue">#7874b8</color>
     <color name="ics_blue_semi">#6633b5e5</color>
