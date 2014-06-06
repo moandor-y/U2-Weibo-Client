@@ -35,9 +35,9 @@ import java.util.Locale;
 public class SettingsActivity extends AbsActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String KEY_BLACK_MAGIC = "black_magic";
     private static final String STATE_NEED_RESTART = "state_need_restart";
-	
-	private boolean mNeedRestart;
-	
+    
+    private boolean mNeedRestart;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +52,17 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.settings);
-		if (savedInstanceState != null) {
-			mNeedRestart = savedInstanceState.getBoolean(STATE_NEED_RESTART);
-		}
+        if (savedInstanceState != null) {
+            mNeedRestart = savedInstanceState.getBoolean(STATE_NEED_RESTART);
+        }
         ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
     }
-	
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
-	}
+    }
     
     @Override
     protected void onDestroy() {
@@ -83,7 +83,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-			exit();
+            exit();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -243,7 +243,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         public static class NotificationsFragment extends PreferenceFragment implements
                 SharedPreferences.OnSharedPreferenceChangeListener {
             private static final int REQUEST_RINGTONE = 0;
-			private static final String KEY_UNREAD_MESSAGES = "unread_messages";
+            private static final String KEY_UNREAD_MESSAGES = "unread_messages";
             
             private Uri mRingtoneUri;
             
@@ -258,10 +258,10 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 if (!TextUtils.isEmpty(ringtone)) {
                     mRingtoneUri = Uri.parse(ringtone);
                 }
-				if (!Utilities.isBmEnabled()) {
-					PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
-					unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
-				}
+                if (!Utilities.isBmEnabled()) {
+                    PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
+                    unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
+                }
             }
             
             @Override
@@ -433,11 +433,11 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         public static class AboutFragment extends PreferenceFragment {
             private static final String KEY_MEMORY = "memory";
             private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
-			private static final String KEY_DEVELOPER_1 = "developer_1";
-			private static final String KEY_DEVELOPER_2 = "developer_2";
+            private static final String KEY_DEVELOPER_1 = "developer_1";
+            private static final String KEY_DEVELOPER_2 = "developer_2";
             private static final long OFFICIAL_ACCOUNT = 3941216030L;
-			private static final long DEVELOPER_1 = 1732168142L;
-			private static final long DEVELOPER_2 = 2936096844L;
+            private static final long DEVELOPER_1 = 1732168142L;
+            private static final long DEVELOPER_2 = 2936096844L;
             
             @Override
             public void onCreate(Bundle savedInstanceState) {
@@ -445,7 +445,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 addPreferencesFromResource(R.xml.prefs_about);
                 buildMemoryInfo(findPreference(KEY_MEMORY));
                 buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
-				buildDevelopers();
+                buildDevelopers();
             }
             
             private static void buildMemoryInfo(Preference preference) {
@@ -471,23 +471,25 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                     }
                 });
             }
-			
-			private void buildDevelopers() {
-				findPreference(KEY_DEVELOPER_1).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-					@Override
-					public boolean onPreferenceClick(Preference preference) {
-						startActivity(ActivityUtils.userActivity(DEVELOPER_1));
-						return true;
-					}
-				});
-				findPreference(KEY_DEVELOPER_2).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-					@Override
-					public boolean onPreferenceClick(Preference preference) {
-						startActivity(ActivityUtils.userActivity(DEVELOPER_2));
-						return true;
-					}
-				});
-			}
+            
+            private void buildDevelopers() {
+                findPreference(KEY_DEVELOPER_1).setOnPreferenceClickListener(
+                        new Preference.OnPreferenceClickListener() {
+                            @Override
+                            public boolean onPreferenceClick(Preference preference) {
+                                startActivity(ActivityUtils.userActivity(DEVELOPER_1));
+                                return true;
+                            }
+                        });
+                findPreference(KEY_DEVELOPER_2).setOnPreferenceClickListener(
+                        new Preference.OnPreferenceClickListener() {
+                            @Override
+                            public boolean onPreferenceClick(Preference preference) {
+                                startActivity(ActivityUtils.userActivity(DEVELOPER_2));
+                                return true;
+                            }
+                        });
+            }
             
             private static String formatMemoryText(long memory) {
                 float memoryInMB = (float) memory / (1024 * 1024);

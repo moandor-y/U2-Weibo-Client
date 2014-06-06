@@ -131,12 +131,12 @@
     <string name="gender">Gender</string>
     <string name="view_user">View user</string>
     <string name="find_user">Find user</string>
-	<string name="user_name_is">Name:</string>
-	<string name="enter_user_name">Enter user name</string>
-	<string name="ok">OK</string>
-	<string name="cancel">Cancel</string>
-	<string name="direct_messages">Direct messages</string>
-	
+    <string name="user_name_is">Name:</string>
+    <string name="enter_user_name">Enter user name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="direct_messages">Direct messages</string>
+    
     <!-- Time -->
     <string name="just_now">Just now</string>
     <string name="min_ago">%d minutes ago</string>
@@ -213,7 +213,7 @@
     <string name="native_alloc_mem">Native allocated memory : %s</string>
     <string name="swipe_back">Swipe back</string>
     <string name="official_account">Official account</string>
-	<string name="developers">Developers</string>
+    <string name="developers">Developers</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

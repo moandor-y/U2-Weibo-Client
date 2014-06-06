@@ -169,7 +169,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         @Override
         protected void onPreExecute() {
             mDao = onCreateDao();
-			mDao.setTrimStatus(1);
+            mDao.setTrimStatus(1);
             onDaoCreated(mDao);
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
@@ -208,7 +208,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         protected void onPreExecute() {
             showLoadingFooter();
             mDao = onCreateDao();
-			mDao.setTrimStatus(1);
+            mDao.setTrimStatus(1);
             onDaoCreated(mDao);
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());

@@ -59,7 +59,7 @@ public class ConfigManager {
     public static final String NOTIFICATION_MENTION_WEIBO_ENABLED = "notification_mention_weibo_enabled";
     public static final String NOTIFICATION_COMMENT_ENABLED = "notification_comment_enabled";
     public static final String NOTIFICATION_MENTION_COMMENT_ENABLED = "notification_mention_comment_enabled";
-	public static final String NOTIFICATION_DM_ENABLED = "notification_dm_enabled";
+    public static final String NOTIFICATION_DM_ENABLED = "notification_dm_enabled";
     public static final String NOTIFICATION_VIBRATE_ENABLED = "notification_vibrate_enabled";
     public static final String NOTIFICATION_LED_ENABLED = "notification_led_enabled";
     public static final String NOTIFICATION_RINGTONE = "notification_ringtone";
@@ -292,10 +292,10 @@ public class ConfigManager {
         editor.putBoolean(NOTIFICATION_MENTION_COMMENT_ENABLED, value);
         apply(editor);
     }
-	
-	public static boolean isNotificationDmEnabled() {
-		return getPreferences().getBoolean(NOTIFICATION_DM_ENABLED, true);
-	}
+    
+    public static boolean isNotificationDmEnabled() {
+        return getPreferences().getBoolean(NOTIFICATION_DM_ENABLED, true);
+    }
     
     public static boolean isNotificationVibrateEnabled() {
         return getPreferences().getBoolean(NOTIFICATION_VIBRATE_ENABLED, true);

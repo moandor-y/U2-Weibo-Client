@@ -45,16 +45,16 @@ public class ActivityUtils {
         return userActivity(user, null, 0);
     }
     
-	public static Intent userActivity(long userId) {
+    public static Intent userActivity(long userId) {
         return userActivity(null, null, userId);
     }
-	
+    
     private static Intent userActivity(WeiboUser user, String userName, long userId) {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), UserActivity.class);
         intent.putExtra(UserActivity.USER, user);
         intent.putExtra(UserActivity.USER_NAME, userName);
-		intent.putExtra(UserActivity.USER_ID, userId);
+        intent.putExtra(UserActivity.USER_ID, userId);
         return intent;
     }
     

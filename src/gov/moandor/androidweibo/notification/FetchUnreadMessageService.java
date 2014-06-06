@@ -6,11 +6,14 @@ import android.content.Intent;
 
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.bean.DirectMessage;
+import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.dao.CommentsMentionsDao;
 import gov.moandor.androidweibo.dao.CommentsToMeDao;
+import gov.moandor.androidweibo.dao.DmUserListDao;
 import gov.moandor.androidweibo.dao.MentionsWeiboTimelineDao;
 import gov.moandor.androidweibo.dao.UnreadCountDao;
 import gov.moandor.androidweibo.fragment.CommentListFragment;
@@ -18,13 +21,10 @@ import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
-import gov.moandor.androidweibo.util.Utilities;
-import gov.moandor.androidweibo.bean.DirectMessage;
-import gov.moandor.androidweibo.dao.DmUserListDao;
-import gov.moandor.androidweibo.bean.DirectMessagesUser;
 
 public class FetchUnreadMessageService extends IntentService {
     public FetchUnreadMessageService() {
@@ -103,21 +103,22 @@ public class FetchUnreadMessageService extends IntentService {
         }
         return dao.execute();
     }
-	
-	private static DirectMessage fetchDm(Account account) throws WeiboException {
-		DmUserListDao dao = new DmUserListDao();
-		dao.setToken(account.token);
-		dao.setCount(1);
-		List<DirectMessagesUser> users = dao.execute();
-		if (users.size() >= 1) {
-			DirectMessagesUser user = users.get(0);
-			return user.message;
-		}
-		return null;
-	}
     
-    private static void showNotification(Context context, Account account, UnreadCount unreadCount) throws WeiboException {
-		WeiboComment comment = null;
+    private static DirectMessage fetchDm(Account account) throws WeiboException {
+        DmUserListDao dao = new DmUserListDao();
+        dao.setToken(account.token);
+        dao.setCount(1);
+        List<DirectMessagesUser> users = dao.execute();
+        if (users.size() >= 1) {
+            DirectMessagesUser user = users.get(0);
+            return user.message;
+        }
+        return null;
+    }
+    
+    private static void showNotification(Context context, Account account, UnreadCount unreadCount)
+            throws WeiboException {
+        WeiboComment comment = null;
         if (unreadCount.comment > 0 && ConfigManager.isNotificationCommentEnabled()) {
             List<WeiboComment> comments = fetchComments(account);
             if (comments.size() > 0) {
@@ -138,10 +139,10 @@ public class FetchUnreadMessageService extends IntentService {
                 mentionComment = mentionComments.get(0);
             }
         }
-		DirectMessage directMessage = null;
-		if (unreadCount.directMessage > 0 && Utilities.isBmEnabled() && ConfigManager.isNotificationDmEnabled()) {
-			directMessage = fetchDm(account);
-		}
+        DirectMessage directMessage = null;
+        if (unreadCount.directMessage > 0 && Utilities.isBmEnabled() && ConfigManager.isNotificationDmEnabled()) {
+            directMessage = fetchDm(account);
+        }
         if (comment != null) {
             Intent clickIntent = new Intent();
             clickIntent.setClass(GlobalContext.getInstance(), UnreadCommentReceiver.class);
@@ -184,8 +185,8 @@ public class FetchUnreadMessageService extends IntentService {
             intent.putExtra(AbsUnreadNotificationService.COUNT, unreadCount.mentionComment);
             context.startService(intent);
         }
-		if (directMessage != null) {
-			//TODO
-		}
+        if (directMessage != null) {
+            // TODO
+        }
     }
 }

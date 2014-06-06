@@ -9,21 +9,21 @@
     <Preference
         android:key="official_account"
         android:title="@string/official_account"
-		android:summary="\@U2微博客户端"
+        android:summary="\@U2微博客户端"
         android:persistent="false" />
     
-	<PreferenceCategory android:title="@string/developers">
-		
-		<Preference
-			android:key="developer_1"
-			android:title="\@Moandor"
-			android:persistent="false" />
-		
-		<Preference
-			android:key="developer_2"
-			android:title="\@沙丁鱼PP菌"
-			android:persistent="false" />
-		
-	</PreferenceCategory>
-	
+    <PreferenceCategory android:title="@string/developers">
+        
+        <Preference
+            android:key="developer_1"
+            android:title="\@Moandor"
+            android:persistent="false" />
+        
+        <Preference
+            android:key="developer_2"
+            android:title="\@沙丁鱼PP菌"
+            android:persistent="false" />
+        
+    </PreferenceCategory>
+    
 </PreferenceScreen>
