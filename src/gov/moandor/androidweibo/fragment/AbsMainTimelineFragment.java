@@ -9,6 +9,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.AbsItemBean;
+import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
@@ -40,7 +41,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     @Override
     public void onPause() {
         super.onPause();
-        saveListPosition();
+        saveListPosition(GlobalContext.getCurrentAccount());
     }
     
     private boolean isThisCurrentFragment() {
@@ -178,7 +179,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     
     abstract void saveLoadMoreResultToDatabase(SparseArray<DataBean> beans, long accountId, int group);
     
-    public abstract void saveListPosition();
+    public abstract void saveListPosition(Account account);
     
     abstract TimelinePosition onRestoreListPosition(int group);
     

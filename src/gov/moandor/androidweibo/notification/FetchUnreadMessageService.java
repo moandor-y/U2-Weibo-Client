@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.DirectMessage;
@@ -191,8 +192,15 @@ public class FetchUnreadMessageService extends IntentService {
         if (directMessage != null) {
             Intent clickIntent = new Intent();
             clickIntent.setClass(GlobalContext.getInstance(), UnreadDmReceiver.class);
-            
-            // TODO
+            clickIntent.putExtra(DmActivity.FROM_UNREAD, true);
+            clickIntent.putExtra(ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
+            Intent intent = new Intent();
+            intent.setClass(context, UnreadDmNotificationService.class);
+            intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
+            intent.putExtra(AbsUnreadNotificationService.MESSAGE, directMessage);
+            intent.putExtra(AbsUnreadNotificationService.CLICK_INTENT, clickIntent);
+            intent.putExtra(AbsUnreadNotificationService.COUNT, unreadCount.directMessage);
+            context.startService(intent);
         }
     }
     
@@ -234,7 +242,7 @@ public class FetchUnreadMessageService extends IntentService {
     public static class UnreadDmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            intent.setClass(context, DirectMessage.class);
+            intent.setClass(context, DmActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             Account account = GlobalContext.getAccount(intent.getIntExtra(ACCOUNT_INDEX, 0));

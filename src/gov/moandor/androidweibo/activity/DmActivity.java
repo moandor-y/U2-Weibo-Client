@@ -1,5 +1,6 @@
 package gov.moandor.androidweibo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,8 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.DmConversationFragment;
 import gov.moandor.androidweibo.fragment.DmUserListFragment;
+import gov.moandor.androidweibo.notification.FetchUnreadMessageService;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
 
 public class DmActivity extends AbsActivity {
@@ -27,6 +30,16 @@ public class DmActivity extends AbsActivity {
             mFragment = new DmUserListFragment();
             boolean fromUnread = getIntent().getBooleanExtra(FROM_UNREAD, false);
             if (fromUnread) {
+                int newAccountIndex = getIntent().getIntExtra(FetchUnreadMessageService.ACCOUNT_INDEX, -1);
+                if (newAccountIndex >= 0) {
+                    int oldAccountIndex = ConfigManager.getCurrentAccountIndex();
+                    Intent intent = new Intent();
+                    intent.setAction(MainActivity.ACTION_ACCOUNT_CHANGED);
+                    intent.putExtra(MainActivity.OLD_ACCOUNT_INDEX, oldAccountIndex);
+                    intent.putExtra(MainActivity.NEW_ACCOUNT_INDEX, newAccountIndex);
+                    sendBroadcast(intent);
+                    ConfigManager.setCurrentAccountIndex(newAccountIndex);
+                }
                 Bundle args = new Bundle();
                 args.putBoolean(DmUserListFragment.FROM_UNREAD, true);
                 mFragment.setArguments(args);

@@ -24,6 +24,7 @@ import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.MainPagerAdapter;
+import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.UnreadCount;
 import gov.moandor.androidweibo.bean.WeiboGroup;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -61,6 +62,9 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     public static final String UNREAD_GROUP = Utilities.buildIntentExtraName("UNREAD_GROUP");
     public static final String ACTION_UNREAD_UPDATED = Utilities.buildIntentExtraName("ACTION_UNREAD_UPDATED");
     public static final String UNREAD_COUNT = Utilities.buildIntentExtraName("UNREAD_COUNT");
+    public static final String ACTION_ACCOUNT_CHANGED = Utilities.buildIntentExtraName("ACTION_ACCOUNT_CHANGED");
+    public static final String NEW_ACCOUNT_INDEX = Utilities.buildIntentExtraName("CHANGED_ACCOUNT_INDEX");
+    public static final String OLD_ACCOUNT_INDEX = Utilities.buildIntentExtraName("PREVIOUS_ACCOUNT_INDEX");
     
     private static boolean sRunning;
     private int mUnreadPage = -1;
@@ -71,6 +75,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private CommentListFragment mCommentListFragment;
     private ProfileFragment mProfileFragment;
     private DrawerLayout mDrawerLayout;
+    private MainDrawerFragment mDrawerFragment;
     private ArrayAdapter<String> mWeiboListSpinnerAdapter;
     private ArrayAdapter<String> mAtmeListSpinnerAdapter;
     private ArrayAdapter<String> mCommentListSpinnerAdapter;
@@ -109,13 +114,13 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                         R.string.close_drawer);
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment drawer = fragmentManager.findFragmentById(R.id.left_drawer);
-        if (drawer == null) {
-            drawer = new MainDrawerFragment();
+        mDrawerFragment = (MainDrawerFragment) fragmentManager.findFragmentById(R.id.left_drawer);
+        if (mDrawerFragment == null) {
+            mDrawerFragment = new MainDrawerFragment();
         }
-        if (!drawer.isAdded()) {
+        if (!mDrawerFragment.isAdded()) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.left_drawer, drawer);
+            fragmentTransaction.add(R.id.left_drawer, mDrawerFragment);
             fragmentTransaction.commit();
             fragmentManager.executePendingTransactions();
         }
@@ -184,9 +189,8 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mTabStrip.setOnPageChangeListener(this);
         mTabStrip.setIndicatorColorResource(R.color.holo_blue_light);
         mTabStrip.setTabPaddingLeftRight(getResources().getDimensionPixelSize(R.dimen.tab_padding));
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_UNREAD_UPDATED);
-        Utilities.registerReceiver(mUnreadUpdateReciever, intentFilter);
+        Utilities.registerReceiver(mUnreadUpdateReciever, new IntentFilter(ACTION_UNREAD_UPDATED));
+        Utilities.registerReceiver(mOnAccountChangedReciever, new IntentFilter(ACTION_ACCOUNT_CHANGED));
         sRunning = true;
         if (mGroups == null) {
             mLoadWeiboGroupsTask = new LoadWeiboGroupsTask();
@@ -219,6 +223,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         super.onDestroy();
         sRunning = false;
         Utilities.unregisterReceiver(mUnreadUpdateReciever);
+        Utilities.unregisterReceiver(mOnAccountChangedReciever);
     }
     
     @Override
@@ -384,13 +389,16 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     }
     
     @Override
-    public void onAccountClick(int position) {
+    public void onAccountClick(int oldPosition, int newPosition) {
         mDrawerLayout.closeDrawer(Gravity.LEFT);
-        mWeiboListFragment.saveListPosition();
-        mAtmeListFragment.saveListPosition();
-        mCommentListFragment.saveListPosition();
+        if (oldPosition >= 0) {
+            Account oldAccount = GlobalContext.getAccount(oldPosition);
+            mWeiboListFragment.saveListPosition(oldAccount);
+            mAtmeListFragment.saveListPosition(oldAccount);
+            mCommentListFragment.saveListPosition(oldAccount);
+        }
         clearSpinnerGroups();
-        ConfigManager.setCurrentAccountIndex(position);
+        ConfigManager.setCurrentAccountIndex(newPosition);
         mGroups = null;
         updateWeiboListSpinner();
         if (mLoadWeiboGroupsTask != null) {
@@ -405,6 +413,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         if (mViewPager.getCurrentItem() == PROFILE) {
             getSupportActionBar().setTitle(GlobalContext.getCurrentAccount().user.name);
         }
+        mDrawerFragment.notifyDataSetChanged();
     }
     
     @Override
@@ -424,21 +433,21 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             }
             long accountId = GlobalContext.getCurrentAccount().user.id;
             if (itemPosition != ConfigManager.getWeiboGroup(accountId)) {
-                mWeiboListFragment.saveListPosition();
+                mWeiboListFragment.saveListPosition(GlobalContext.getCurrentAccount());
                 ConfigManager.setWeiboGroup(itemPosition, accountId);
                 mWeiboListFragment.notifyAccountOrGroupChanged();
             }
             break;
         case ATME_LIST:
             if (itemPosition != ConfigManager.getAtmeFilter()) {
-                mAtmeListFragment.saveListPosition();
+                mAtmeListFragment.saveListPosition(GlobalContext.getCurrentAccount());
                 ConfigManager.setAtmeFilter(itemPosition);
                 mAtmeListFragment.notifyAccountOrGroupChanged();
             }
             break;
         case COMMENT_LIST:
             if (itemPosition != ConfigManager.getCommentFilter()) {
-                mCommentListFragment.saveListPosition();
+                mCommentListFragment.saveListPosition(GlobalContext.getCurrentAccount());
                 ConfigManager.setCommentFilter(itemPosition);
                 mCommentListFragment.notifyAccountOrGroupChanged();
             }
@@ -519,6 +528,16 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 mPagerAdapter.setWeiboUnreadCount(count.weiboStatus);
             }
             mTabStrip.notifyDataSetChanged();
+        }
+    };
+    
+    private BroadcastReceiver mOnAccountChangedReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int index = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
+            if (index != -1) {
+                onAccountClick(intent.getIntExtra(OLD_ACCOUNT_INDEX, -1), index);
+            }
         }
     };
     

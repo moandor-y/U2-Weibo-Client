@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
+import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -82,13 +83,13 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
     
     @Override
-    public void saveListPosition() {
+    public void saveListPosition(Account account) {
         View view = mListView.getChildAt(0);
         if (view != null) {
             final TimelinePosition position = new TimelinePosition();
             position.position = mListView.getFirstVisiblePosition();
             position.top = mListView.getChildAt(0).getTop();
-            final long accountId = GlobalContext.getCurrentAccount().user.id;
+            final long accountId = account.user.id;
             final int filter = ConfigManager.getAtmeFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override

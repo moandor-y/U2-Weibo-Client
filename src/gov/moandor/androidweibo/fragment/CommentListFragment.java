@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.adapter.CommentListAdapter;
+import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -18,7 +19,6 @@ import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
-import gov.moandor.androidweibo.util.GlobalContext;
 
 import java.util.List;
 
@@ -68,13 +68,13 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
     
     @Override
-    public void saveListPosition() {
+    public void saveListPosition(Account account) {
         View view = mListView.getChildAt(0);
         if (view != null) {
             final TimelinePosition position = new TimelinePosition();
             position.position = mListView.getFirstVisiblePosition();
             position.top = mListView.getChildAt(0).getTop();
-            final long accountId = GlobalContext.getCurrentAccount().user.id;
+            final long accountId = account.user.id;
             final int filter = ConfigManager.getCommentFilter();
             MyAsyncTask.execute(new Runnable() {
                 @Override
