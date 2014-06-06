@@ -122,8 +122,8 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
     
     @Override
-    TimelinePosition onRestoreListPosition(int group) {
-        return DatabaseUtils.getTimelinePosition(MainActivity.COMMENT_LIST, group);
+    TimelinePosition onRestoreListPosition(long accountId, int group) {
+        return DatabaseUtils.getTimelinePosition(accountId, MainActivity.COMMENT_LIST, group);
     }
     
     @Override

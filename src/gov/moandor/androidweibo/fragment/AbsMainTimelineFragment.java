@@ -70,10 +70,11 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     private void restoreListPosition() {
         mListView.setVisibility(View.INVISIBLE);
         final int group = getGroup();
+        final long accountId = GlobalContext.getCurrentAccount().user.id;
         new MyAsyncTask<Void, Void, TimelinePosition>() {
             @Override
             protected TimelinePosition doInBackground(Void... params) {
-                return onRestoreListPosition(group);
+                return onRestoreListPosition(accountId, group);
             }
             
             @Override
@@ -181,7 +182,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     
     public abstract void saveListPosition(Account account);
     
-    abstract TimelinePosition onRestoreListPosition(int group);
+    abstract TimelinePosition onRestoreListPosition(long accountId, int group);
     
     protected abstract int getGroup();
 }

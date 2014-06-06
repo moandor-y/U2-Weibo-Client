@@ -173,8 +173,8 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
     }
     
     @Override
-    TimelinePosition onRestoreListPosition(int group) {
-        return DatabaseUtils.getTimelinePosition(MainActivity.WEIBO_LIST, group);
+    TimelinePosition onRestoreListPosition(long accountId, int group) {
+        return DatabaseUtils.getTimelinePosition(accountId, MainActivity.WEIBO_LIST, group);
     }
     
     @Override

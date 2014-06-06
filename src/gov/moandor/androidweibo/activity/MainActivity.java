@@ -534,9 +534,10 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private BroadcastReceiver mOnAccountChangedReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int index = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
-            if (index != -1) {
-                onAccountClick(intent.getIntExtra(OLD_ACCOUNT_INDEX, -1), index);
+            int newIndex = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
+            int oldIndex = intent.getIntExtra(OLD_ACCOUNT_INDEX, -1);
+            if (newIndex != -1 && newIndex != oldIndex) {
+                onAccountClick(oldIndex, newIndex);
             }
         }
     };

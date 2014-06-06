@@ -147,8 +147,8 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
     
     @Override
-    TimelinePosition onRestoreListPosition(int group) {
-        return DatabaseUtils.getTimelinePosition(MainActivity.ATME_LIST, group);
+    TimelinePosition onRestoreListPosition(long accountId, int group) {
+        return DatabaseUtils.getTimelinePosition(accountId, MainActivity.ATME_LIST, group);
     }
     
     @Override

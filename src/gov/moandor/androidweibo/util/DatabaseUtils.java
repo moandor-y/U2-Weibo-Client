@@ -404,15 +404,15 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         return null;
     }
     
-    public static synchronized TimelinePosition getTimelinePosition(int fragmentIndex, int spinnerPosition) {
+    public static synchronized TimelinePosition getTimelinePosition(long accountId, int fragmentIndex,
+            int spinnerPosition) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor =
                 database.rawQuery("select " + Table.TimelinePosition.POSITION + ", " + Table.TimelinePosition.TOP
                         + " from " + Table.TimelinePosition.TABLE_NAME + " where " + Table.TimelinePosition.ACCOUNT_ID
                         + "=? and " + Table.TimelinePosition.FRAGMENT_INDEX + "=? and "
-                        + Table.TimelinePosition.SPINNER_POSITION + "=?", new String[]{
-                        String.valueOf(GlobalContext.getCurrentAccount().user.id), String.valueOf(fragmentIndex),
-                        String.valueOf(spinnerPosition)});
+                        + Table.TimelinePosition.SPINNER_POSITION + "=?", new String[]{String.valueOf(accountId),
+                        String.valueOf(fragmentIndex), String.valueOf(spinnerPosition)});
         TimelinePosition result = new TimelinePosition();
         if (cursor.moveToNext()) {
             result.position = cursor.getInt(cursor.getColumnIndex(Table.TimelinePosition.POSITION));
