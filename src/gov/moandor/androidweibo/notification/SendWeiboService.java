@@ -28,14 +28,8 @@ import gov.moandor.androidweibo.util.WeiboException;
 import java.util.Random;
 
 public class SendWeiboService extends Service {
-    public static final String TOKEN;
-    public static final String WEIBO_DRAFT;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        TOKEN = packageName + ".TOKEN";
-        WEIBO_DRAFT = packageName + ".WEIBO_DRAFT";
-    }
+    public static final String TOKEN = Utilities.buildIntentExtraName("TOKEN");
+    public static final String WEIBO_DRAFT = Utilities.buildIntentExtraName("WEIBO_DRAFT");
     
     private NotificationManager mNotificationManager;
     private String mToken;

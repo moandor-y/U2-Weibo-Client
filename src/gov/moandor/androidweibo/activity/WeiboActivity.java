@@ -27,12 +27,7 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnPageChangeListener {
-    public static final String WEIBO_STATUS;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        WEIBO_STATUS = packageName + ".weibo.status";
-    }
+    public static final String WEIBO_STATUS = Utilities.buildIntentExtraName("WEIBO_STATUS");
     
     private WeiboStatus mWeiboStatus;
     private ViewPager mViewPager;

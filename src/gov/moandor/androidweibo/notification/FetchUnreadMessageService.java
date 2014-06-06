@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.notification;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
@@ -27,6 +28,8 @@ import gov.moandor.androidweibo.util.WeiboException;
 import java.util.List;
 
 public class FetchUnreadMessageService extends IntentService {
+    public static final String ACCOUNT_INDEX = Utilities.buildIntentExtraName("ACCOUNT_INDEX");
+    
     public FetchUnreadMessageService() {
         super(FetchUnreadMessageService.class.getSimpleName());
     }
@@ -148,7 +151,7 @@ public class FetchUnreadMessageService extends IntentService {
             clickIntent.setClass(GlobalContext.getInstance(), UnreadCommentReceiver.class);
             clickIntent.putExtra(MainActivity.UNREAD_PAGE_POSITION, MainActivity.COMMENT_LIST);
             clickIntent.putExtra(MainActivity.UNREAD_GROUP, CommentListFragment.ALL);
-            clickIntent.putExtra(MainActivity.ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
+            clickIntent.putExtra(ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
             Intent intent = new Intent();
             intent.setClass(context, UnreadCommentNotificationService.class);
             intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
@@ -162,7 +165,7 @@ public class FetchUnreadMessageService extends IntentService {
             clickIntent.setClass(GlobalContext.getInstance(), UnreadMentionWeiboReceiver.class);
             clickIntent.putExtra(MainActivity.UNREAD_PAGE_POSITION, MainActivity.ATME_LIST);
             clickIntent.putExtra(MainActivity.UNREAD_GROUP, 0);
-            clickIntent.putExtra(MainActivity.ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
+            clickIntent.putExtra(ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
             Intent intent = new Intent();
             intent.setClass(context, UnreadMentionWeiboNotificationService.class);
             intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
@@ -176,7 +179,7 @@ public class FetchUnreadMessageService extends IntentService {
             clickIntent.setClass(GlobalContext.getInstance(), UnreadMentionCommentReceiver.class);
             clickIntent.putExtra(MainActivity.UNREAD_PAGE_POSITION, MainActivity.COMMENT_LIST);
             clickIntent.putExtra(MainActivity.UNREAD_GROUP, CommentListFragment.ATME);
-            clickIntent.putExtra(MainActivity.ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
+            clickIntent.putExtra(ACCOUNT_INDEX, GlobalContext.indexOfAccount(account));
             Intent intent = new Intent();
             intent.setClass(context, UnreadMentionCommentNotificationService.class);
             intent.putExtra(AbsUnreadNotificationService.ACCOUNT, account);
@@ -186,7 +189,56 @@ public class FetchUnreadMessageService extends IntentService {
             context.startService(intent);
         }
         if (directMessage != null) {
+            Intent clickIntent = new Intent();
+            clickIntent.setClass(GlobalContext.getInstance(), UnreadDmReceiver.class);
+            
             // TODO
+        }
+    }
+    
+    public static class UnreadCommentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            intent.setClass(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            Account account = GlobalContext.getAccount(intent.getIntExtra(ACCOUNT_INDEX, 0));
+            AbsUnreadNotificationService.clearUnreadCount(account.token, UnreadCommentNotificationService.COUNT_TYPE);
+        }
+    }
+    
+    public static class UnreadMentionWeiboReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            intent.setClass(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            Account account = GlobalContext.getAccount(intent.getIntExtra(ACCOUNT_INDEX, 0));
+            AbsUnreadNotificationService.clearUnreadCount(account.token,
+                    UnreadMentionWeiboNotificationService.COUNT_TYPE);
+        }
+    }
+    
+    public static class UnreadMentionCommentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            intent.setClass(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            Account account = GlobalContext.getAccount(intent.getIntExtra(ACCOUNT_INDEX, 0));
+            AbsUnreadNotificationService.clearUnreadCount(account.token,
+                    UnreadMentionCommentNotificationService.COUNT_TYPE);
+        }
+    }
+    
+    public static class UnreadDmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            intent.setClass(context, DirectMessage.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            Account account = GlobalContext.getAccount(intent.getIntExtra(ACCOUNT_INDEX, 0));
+            AbsUnreadNotificationService.clearUnreadCount(account.token, UnreadDmNotificationService.COUNT_TYPE);
         }
     }
 }

@@ -15,20 +15,14 @@ import gov.moandor.androidweibo.notification.SendCommentService;
 import gov.moandor.androidweibo.util.CheatSheet;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.Utilities;
 
 public class WriteCommentActivity extends AbsWriteActivity {
-    public static final String COMMENTED_WEIBO_STATUS;
-    public static final String REPLIED_WEIBO_COMMENT;
-    public static final String DRAFT;
+    public static final String COMMENTED_WEIBO_STATUS = Utilities.buildIntentExtraName("COMMENTED_WEIBO_STATUS");
+    public static final String REPLIED_WEIBO_COMMENT = Utilities.buildIntentExtraName("REPLIED_WEIBO_COMMENT");
+    public static final String DRAFT = Utilities.buildIntentExtraName("DRAFT");
     private static final String STATE_COMMENT_ORI = "state_comment_ori";
     private static final String STATE_REPOST_WHEN_COMMENT = "state_repost_when_comment";
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        COMMENTED_WEIBO_STATUS = packageName + ".COMMENTED_WEIBO_STATUS";
-        REPLIED_WEIBO_COMMENT = packageName + ".REPLIED_WEIBO_COMMENT";
-        DRAFT = packageName + ".DRAFT";
-    }
     
     private boolean mCommentOri;
     private boolean mRepostWhenComment;

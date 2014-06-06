@@ -20,7 +20,19 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import java.util.List;
 
 public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, DirectMessagesUser> {
+    public static final String FROM_UNREAD = "from_unread";
     private static final int REQUEST_CODE = 0;
+    
+    private boolean mFromUnread;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            mFromUnread = args.getBoolean(FROM_UNREAD);
+        }
+    }
     
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -62,6 +74,10 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     
     @Override
     void initContent() {
+        if (mFromUnread) {
+            refresh();
+            return;
+        }
         final long accountId = GlobalContext.getCurrentAccount().user.id;
         mRefreshTask = new MyAsyncTask<Void, Void, DatabaseUtils.DmUsers>() {
             @Override

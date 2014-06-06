@@ -37,27 +37,16 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     public static final int SEND_SUCCESSFUL = 0;
     public static final int SEND_FAILED = 1;
     public static final String USER = "user";
-    public static final String SEND_FINISHED;
-    public static final String SEND_RESULT_CODE;
-    public static final String SEND_SUCCESSFUL_MESSAGE;
-    public static final String SEND_FAILED_TEXT;
-    public static final String SEND_FAILED_ERROR;
-    public static final String RESULT_USER;
-    public static final String RESULT_LATEST_MESSAGE;
+    public static final String SEND_FINISHED = Utilities.buildIntentExtraName("SEND_FINISHED");
+    public static final String SEND_RESULT_CODE = Utilities.buildIntentExtraName("SEND_RESULT_CODE");
+    public static final String SEND_SUCCESSFUL_MESSAGE = Utilities.buildIntentExtraName("SEND_SUCCESSFUL_MESSAGE");
+    public static final String SEND_FAILED_TEXT = Utilities.buildIntentExtraName("SEND_FAILED_TEXT");
+    public static final String SEND_FAILED_ERROR = Utilities.buildIntentExtraName("SEND_FAILED_ERROR");
+    public static final String RESULT_USER = Utilities.buildIntentExtraName("RESULT_USER");
+    public static final String RESULT_LATEST_MESSAGE = Utilities.buildIntentExtraName("RESULT_LATEST_MESSAGE");
     private static final long LOAD_INTERVAL = 3 * 60 * 1000;
     private static final int MAX_DATABASE_MESSAGE_COUNT = 100;
     private static final int RESULT_CODE = 0;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        SEND_FINISHED = packageName + ".SEND_FINISHED";
-        SEND_RESULT_CODE = packageName + ".SEND_RESULT_CODE";
-        SEND_SUCCESSFUL_MESSAGE = packageName + ".SEND_SUCCESSFUL_MESSAGE";
-        SEND_FAILED_TEXT = packageName + ".SEND_FAILED_TEXT";
-        SEND_FAILED_ERROR = packageName + ".SEND_FAILED_ERROR";
-        RESULT_USER = packageName + ".RESULT_USER";
-        RESULT_LATEST_MESSAGE = packageName + ".RESULT_LATEST_MESSAGE";
-    }
     
     private boolean mRunning;
     private WeiboUser mUser;

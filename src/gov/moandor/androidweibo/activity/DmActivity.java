@@ -10,9 +10,11 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.DmConversationFragment;
 import gov.moandor.androidweibo.fragment.DmUserListFragment;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Utilities;
 
 public class DmActivity extends AbsActivity {
+    public static final String FROM_UNREAD = Utilities.buildIntentExtraName("FROM_UNREAD");
+    
     private DmUserListFragment mFragment;
     
     @Override
@@ -23,6 +25,12 @@ public class DmActivity extends AbsActivity {
         if (mFragment == null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             mFragment = new DmUserListFragment();
+            boolean fromUnread = getIntent().getBooleanExtra(FROM_UNREAD, false);
+            if (fromUnread) {
+                Bundle args = new Bundle();
+                args.putBoolean(DmUserListFragment.FROM_UNREAD, true);
+                mFragment.setArguments(args);
+            }
             fragmentTransaction.add(android.R.id.content, mFragment);
             fragmentTransaction.commit();
         }
@@ -52,12 +60,7 @@ public class DmActivity extends AbsActivity {
     }
     
     public static class ConversationActivity extends AbsActivity {
-        public static final String USER;
-        
-        static {
-            String packageName = GlobalContext.getInstance().getPackageName();
-            USER = packageName + ".USER";
-        }
+        public static final String USER = Utilities.buildIntentExtraName("USER");
         
         @Override
         protected void onCreate(Bundle savedInstanceState) {

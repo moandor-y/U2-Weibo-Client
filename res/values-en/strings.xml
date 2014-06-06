@@ -256,6 +256,7 @@
     <string name="new_comments">%d new comments</string>
     <string name="new_mention_weibos">%d new posts @Me</string>
     <string name="new_mention_comments">%d new comments @Me</string>
+    <string name="new_dms">%d new direct messages</string>
     <string name="upload_picture">Upload picture</string>
     <string name="waiting_response">Waiting for response</string>
     <string name="uploading">Uploading</string>

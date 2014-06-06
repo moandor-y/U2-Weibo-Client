@@ -22,17 +22,10 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class UserActivity extends AbsActivity {
-    public static final String USER;
-    public static final String USER_NAME;
-    public static final String USER_ID;
+    public static final String USER = Utilities.buildIntentExtraName("USER");
+    public static final String USER_NAME = Utilities.buildIntentExtraName("USER_NAME");
+    public static final String USER_ID = Utilities.buildIntentExtraName("USER_ID");
     private static final String LOADING_DIALOG = "loading_dialog";
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        USER = packageName + ".USER";
-        USER_NAME = packageName + ".USER_NAME";
-        USER_ID = packageName + ".USER_ID";
-    }
     
     private WeiboUser mUser;
     private ProfileFragment mFragment;

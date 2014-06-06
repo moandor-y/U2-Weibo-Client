@@ -20,18 +20,10 @@ import gov.moandor.androidweibo.util.WeiboException;
 import java.util.Random;
 
 public class SendDmService extends Service {
-    public static final String TOKEN;
-    public static final String TEXT;
-    public static final String USER_ID;
-    public static final String SCREEN_NAME;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        TOKEN = packageName + ".TOKEN";
-        TEXT = packageName + ".TEXT";
-        USER_ID = packageName + ".USER_ID";
-        SCREEN_NAME = packageName + ".SCREEN_NAME";
-    }
+    public static final String TOKEN = Utilities.buildIntentExtraName("TOKEN");
+    public static final String TEXT = Utilities.buildIntentExtraName("TEXT");
+    public static final String USER_ID = Utilities.buildIntentExtraName("USER_ID");
+    public static final String SCREEN_NAME = Utilities.buildIntentExtraName("SCREEN_NAME");
     
     private long mUserId;
     private NotificationManager mNotificationManager;

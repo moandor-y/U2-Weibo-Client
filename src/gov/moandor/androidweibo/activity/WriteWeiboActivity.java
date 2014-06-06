@@ -34,20 +34,14 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 
 public class WriteWeiboActivity extends AbsWriteActivity {
-    public static final String RETWEET_WEIBO_STATUS;
-    public static final String DRAFT;
+    public static final String RETWEET_WEIBO_STATUS = Utilities.buildIntentExtraName("RETWEET_WEIBO_STATUS");
+    public static final String DRAFT = Utilities.buildIntentExtraName("DRAFT");
     public static final String ADD_PIC_DIALOG = "add_pic_dialog";
     public static final String STATE_PIC_PATH = "state_pic_path";
     public static final String STATE_COMMENT_WHEN_REPOST = "state_comment_when_repost";
     public static final String STATE_COMMENT_ORI_WHEN_REPOST = "state_comment_ori_when_repost";
     public static final int CAMERA_REQUEST_CODE = 0;
     public static final int GALLERY_REQUEST_CODE = 1;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        RETWEET_WEIBO_STATUS = packageName + ".RETWEET_WEIBO_STATUS";
-        DRAFT = packageName + ".DRAFT";
-    }
     
     private boolean mCommentWhenRepost;
     private boolean mCommentOriWhenRepost;

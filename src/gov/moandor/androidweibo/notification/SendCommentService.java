@@ -25,14 +25,8 @@ import gov.moandor.androidweibo.util.WeiboException;
 import java.util.Random;
 
 public class SendCommentService extends Service {
-    public static final String TOKEN;
-    public static final String COMMENT_DRAFT;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        TOKEN = packageName + ".TOKEN";
-        COMMENT_DRAFT = packageName + ".COMMENT_DRAFT";
-    }
+    public static final String TOKEN = Utilities.buildIntentExtraName("TOKEN");
+    public static final String COMMENT_DRAFT = Utilities.buildIntentExtraName("COMMENT_DRAFT");
     
     private NotificationManager mNotificationManager;
     private String mToken;

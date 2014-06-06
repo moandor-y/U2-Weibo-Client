@@ -257,6 +257,7 @@
     <string name="new_comments">%d条评论</string>
     <string name="new_mention_weibos">%d条@微博</string>
     <string name="new_mention_comments">%d条@评论</string>
+    <string name="new_dms">%d条私信</string>
     <string name="upload_picture">上传图片</string>
     <string name="waiting_response">等待服务器响应</string>
     <string name="uploading">正在上传</string>

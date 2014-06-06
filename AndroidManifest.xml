@@ -92,6 +92,7 @@
         <service android:name=".notification.UnreadCommentNotificationService"/>
         <service android:name=".notification.UnreadMentionWeiboNotificationService"/>
         <service android:name=".notification.UnreadMentionCommentNotificationService"/>
+        <service android:name=".notification.UnreadDmNotificationService"/>
         
         <receiver android:name=".notification.ConnectivityChangeReceiver">
             <intent-filter>
@@ -99,9 +100,10 @@
             </intent-filter>
         </receiver>
         
-        <receiver android:name=".notification.UnreadCommentReceiver"/>
-        <receiver android:name=".notification.UnreadMentionWeiboReceiver"/>
-        <receiver android:name=".notification.UnreadMentionCommentReceiver"/>
+        <receiver android:name=".notification.FetchUnreadMessageService$UnreadCommentReceiver"/>
+        <receiver android:name=".notification.FetchUnreadMessageService$UnreadMentionWeiboReceiver"/>
+        <receiver android:name=".notification.FetchUnreadMessageService$UnreadMentionCommentReceiver"/>
+        <receiver android:name=".notification.FetchUnreadMessageService$UnreadDmReceiver"/>
         
     </application>
     

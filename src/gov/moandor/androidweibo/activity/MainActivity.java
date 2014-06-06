@@ -35,6 +35,7 @@ import gov.moandor.androidweibo.fragment.FindUserDialogFragment;
 import gov.moandor.androidweibo.fragment.MainDrawerFragment;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.WeiboListFragment;
+import gov.moandor.androidweibo.notification.FetchUnreadMessageService;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
@@ -56,20 +57,10 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     public static final int ATME_LIST = 1;
     public static final int COMMENT_LIST = 2;
     private static final int PROFILE = 3;
-    public static final String UNREAD_PAGE_POSITION;
-    public static final String UNREAD_GROUP;
-    public static final String ACCOUNT_INDEX;
-    public static final String ACTION_UNREAD_UPDATED;
-    public static final String UNREAD_COUNT;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        UNREAD_PAGE_POSITION = packageName + ".UNREAD_PAGE_POSITION";
-        UNREAD_GROUP = packageName + ".UNREAD_GROUP";
-        ACCOUNT_INDEX = packageName + ".ACCOUNT_INDEX";
-        ACTION_UNREAD_UPDATED = packageName + ".ACTION_UNREAD_UPDATED";
-        UNREAD_COUNT = packageName + ".UNREAD_COUNT";
-    }
+    public static final String UNREAD_PAGE_POSITION = Utilities.buildIntentExtraName("UNREAD_PAGE_POSITION");
+    public static final String UNREAD_GROUP = Utilities.buildIntentExtraName("UNREAD_GROUP");
+    public static final String ACTION_UNREAD_UPDATED = Utilities.buildIntentExtraName("ACTION_UNREAD_UPDATED");
+    public static final String UNREAD_COUNT = Utilities.buildIntentExtraName("UNREAD_COUNT");
     
     private static boolean sRunning;
     private int mUnreadPage = -1;
@@ -168,7 +159,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             int unreadCount = savedInstanceState.getInt(STATE_UNREAD_COUNT);
             mPagerAdapter.setWeiboUnreadCount(unreadCount);
         } else if (mUnreadPage != -1) {
-            int accountIndex = getIntent().getIntExtra(ACCOUNT_INDEX, -1);
+            int accountIndex = getIntent().getIntExtra(FetchUnreadMessageService.ACCOUNT_INDEX, -1);
             ConfigManager.setCurrentAccountIndex(accountIndex);
             mUnreadGroup = getIntent().getIntExtra(UNREAD_GROUP, -1);
             Bundle args = new Bundle();

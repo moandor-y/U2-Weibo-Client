@@ -394,4 +394,9 @@ public class Utilities {
             return AlarmManager.INTERVAL_HALF_HOUR;
         }
     }
+    
+    public static String buildIntentExtraName(String name) {
+        String packageName = GlobalContext.getInstance().getPackageName();
+        return packageName + "." + name;
+    }
 }

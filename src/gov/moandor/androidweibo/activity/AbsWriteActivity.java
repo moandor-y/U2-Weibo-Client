@@ -33,12 +33,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
     private static final int REQUEST_AT_USER = 2;
     private static final long SMILEY_PICKER_DELAY = 100;
     private static final String SAVE_DRAFT_DIALOG = "save_draft_dialog";
-    public static final String AT_USER_RESULT_NAME;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        AT_USER_RESULT_NAME = packageName + ".AT_USER_RESULT_NAME";
-    }
+    public static final String AT_USER_RESULT_NAME = Utilities.buildIntentExtraName("AT_USER_RESULT_NAME");
     
     EditText mEditText;
     private SmileyPicker mSmileyPicker;

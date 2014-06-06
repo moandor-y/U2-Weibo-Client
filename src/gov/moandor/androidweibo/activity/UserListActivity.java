@@ -12,17 +12,11 @@ import gov.moandor.androidweibo.fragment.AbsFriendsUserListFragment;
 import gov.moandor.androidweibo.fragment.AbsUserListFragment;
 import gov.moandor.androidweibo.fragment.FollowerListFragment;
 import gov.moandor.androidweibo.fragment.FollowingListFragment;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Utilities;
 
 public class UserListActivity extends AbsActivity {
-    public static final String TYPE;
-    public static final String USER;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        TYPE = packageName + ".type";
-        USER = packageName + ".user";
-    }
+    public static final String TYPE = Utilities.buildIntentExtraName("TYPE");
+    public static final String USER = Utilities.buildIntentExtraName("USER");
     
     private AbsFriendsUserListFragment mFragment;
     

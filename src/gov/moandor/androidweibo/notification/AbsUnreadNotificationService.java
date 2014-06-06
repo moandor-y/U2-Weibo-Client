@@ -19,7 +19,6 @@ import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.ResetUnreadCountDao;
 import gov.moandor.androidweibo.util.ConfigManager;
-import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
@@ -27,20 +26,11 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extends Service {
     private static final long[] VIBRATE_PATTERN = {0, 200, 300, 200, 300};
-    public static final String ACCOUNT;
-    public static final String MESSAGE;
-    public static final String CLICK_INTENT;
-    public static final String COUNT;
-    private static final String CLEAR_NOTIFICATION;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        ACCOUNT = packageName + ".ACCOUNT";
-        MESSAGE = packageName + ".MESSAGE";
-        CLICK_INTENT = packageName + ".CLICK_INTENT";
-        COUNT = packageName + ".COUNT";
-        CLEAR_NOTIFICATION = packageName + ".CLEAR_NOTIFICATION";
-    }
+    public static final String ACCOUNT = Utilities.buildIntentExtraName("ACCOUNT");
+    public static final String MESSAGE = Utilities.buildIntentExtraName("MESSAGE");
+    public static final String CLICK_INTENT = Utilities.buildIntentExtraName("CLICK_INTENT");
+    public static final String COUNT = Utilities.buildIntentExtraName("COUNT");
+    private static final String CLEAR_NOTIFICATION = Utilities.buildIntentExtraName("CLEAR_NOTIFICATION");
     
     private Account mAccount;
     private T mMessage;

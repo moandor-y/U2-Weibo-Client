@@ -14,21 +14,13 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.ImageDownloader.ImageType;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.FileUtils;
-import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.ZoomOutPageTransformer;
 
 public class ImageViewerActivity extends AbsActivity {
-    public static final String IMAGE_TYPE;
-    public static final String POSITION;
-    public static final String WEIBO_STATUS;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        IMAGE_TYPE = packageName + ".IMAGE_TYPE";
-        POSITION = packageName + ".POSITION";
-        WEIBO_STATUS = packageName + ".WEIBO_STATUS";
-    }
+    public static final String IMAGE_TYPE = Utilities.buildIntentExtraName("IMAGE_TYPE");
+    public static final String POSITION = Utilities.buildIntentExtraName("POSITION");
+    public static final String WEIBO_STATUS = Utilities.buildIntentExtraName("WEIBO_STATUS");
     
     private TextView mCountView;
     private ViewPager mPager;

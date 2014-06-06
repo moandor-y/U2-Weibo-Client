@@ -8,15 +8,10 @@ import android.view.MenuItem;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.UserWeiboListFragment;
-import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Utilities;
 
 public class UserWeiboListActivity extends AbsActivity {
-    public static final String USER;
-    
-    static {
-        String packageName = GlobalContext.getInstance().getPackageName();
-        USER = packageName + ".user";
-    }
+    public static final String USER = Utilities.buildIntentExtraName("USER");
     
     private UserWeiboListFragment mFragment;
     
