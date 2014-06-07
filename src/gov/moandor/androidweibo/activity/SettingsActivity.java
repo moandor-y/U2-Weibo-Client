@@ -24,6 +24,7 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
+import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
@@ -435,6 +436,9 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
             private static final String KEY_DEVELOPER_1 = "developer_1";
             private static final String KEY_DEVELOPER_2 = "developer_2";
+            private static final String KEY_DIR_PIC = "dir_pic";
+            private static final String KEY_DIR_AVATAR = "dir_avatar";
+            private static final String KEY_DIR_LOGS = "dir_logs";
             private static final long OFFICIAL_ACCOUNT = 3941216030L;
             private static final long DEVELOPER_1 = 1732168142L;
             private static final long DEVELOPER_2 = 2936096844L;
@@ -446,6 +450,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 buildMemoryInfo(findPreference(KEY_MEMORY));
                 buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
                 buildDevelopers();
+                buildDirectories();
             }
             
             private static void buildMemoryInfo(Preference preference) {
@@ -489,6 +494,12 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                                 return true;
                             }
                         });
+            }
+            
+            private void buildDirectories() {
+                findPreference(KEY_DIR_PIC).setSummary(FileUtils.WEIBO_PICTURE_CACHE);
+                findPreference(KEY_DIR_AVATAR).setSummary(FileUtils.WEIBO_AVATAR_CACHE);
+                findPreference(KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
             }
             
             private static String formatMemoryText(long memory) {

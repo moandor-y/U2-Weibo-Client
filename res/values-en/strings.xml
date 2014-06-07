@@ -214,6 +214,10 @@
     <string name="swipe_back">Swipe back</string>
     <string name="official_account">Official account</string>
     <string name="developers">Developers</string>
+    <string name="directories">Directories</string>
+    <string name="dir_pic">Picture cache</string>
+    <string name="dir_avatar">Avatar cache</string>
+    <string name="dir_logs">Crash logs</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

@@ -215,6 +215,10 @@
     <string name="swipe_back">滑动返回</string>
     <string name="official_account">官方帐号</string>
     <string name="developers">开发者</string>
+    <string name="directories">路径</string>
+    <string name="dir_pic">图片缓存</string>
+    <string name="dir_avatar">头像缓存</string>
+    <string name="dir_logs">崩溃日志</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

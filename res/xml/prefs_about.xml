@@ -26,4 +26,23 @@
         
     </PreferenceCategory>
     
+    <PreferenceCategory android:title="@string/directories">
+        
+        <Preference
+            android:key="dir_pic"
+            android:title="@string/dir_pic"
+            android:persistent="false" />
+        
+        <Preference
+            android:key="dir_avatar"
+            android:title="@string/dir_avatar"
+            android:persistent="false" />
+        
+        <Preference
+            android:key="dir_logs"
+            android:title="@string/dir_logs"
+            android:persistent="false" />
+        
+    </PreferenceCategory>
+    
 </PreferenceScreen>
