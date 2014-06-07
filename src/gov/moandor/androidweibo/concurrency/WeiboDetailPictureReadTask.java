@@ -41,7 +41,7 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     @Override
     protected Boolean doInBackground(Void... params) {
         mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
-        return ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mPath, mType);
+        return ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mType);
     }
     
     @Override

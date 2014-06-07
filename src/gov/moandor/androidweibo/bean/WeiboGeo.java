@@ -4,9 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class WeiboGeo implements Parcelable {
-    public String cityName;
-    public String provinceName;
-    public String address;
+    public double[] coordinate = new double[2];
     
     @Override
     public int describeContents() {
@@ -15,18 +13,14 @@ public class WeiboGeo implements Parcelable {
     
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(cityName);
-        dest.writeString(provinceName);
-        dest.writeString(address);
+        dest.writeDoubleArray(coordinate);
     }
     
     public static final Parcelable.Creator<WeiboGeo> CREATOR = new Parcelable.Creator<WeiboGeo>() {
         @Override
         public WeiboGeo createFromParcel(Parcel source) {
             WeiboGeo result = new WeiboGeo();
-            result.cityName = source.readString();
-            result.provinceName = source.readString();
-            result.address = source.readString();
+            source.readDoubleArray(result.coordinate);
             return result;
         }
         

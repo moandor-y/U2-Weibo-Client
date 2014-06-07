@@ -172,6 +172,7 @@
     <!-- WeiboActivity -->
     <string name="quick_comment">Quick comment</string>
     <string name="quick_repost">Quick repost</string>
+    <string name="map">Map</string>
     
     <!-- SettingsActivity -->
     <string name="general">General</string>

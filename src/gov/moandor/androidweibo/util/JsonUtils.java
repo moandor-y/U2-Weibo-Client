@@ -77,7 +77,7 @@ public class JsonUtils {
         }
     }
     
-    public static WeiboStatus getWeiboStatusFromJson(JSONObject json) {
+    public static WeiboStatus getWeiboStatusFromJson(JSONObject json) throws JSONException {
         WeiboStatus weiboStatus = new WeiboStatus();
         weiboStatus.createdAt = json.optString("created_at", null);
         weiboStatus.id = json.optLong("id");
@@ -164,12 +164,16 @@ public class JsonUtils {
         return result;
     }
     
-    private static WeiboGeo getWeiboGeoFromJson(JSONObject json) {
-        WeiboGeo weiboGeo = new WeiboGeo();
-        weiboGeo.cityName = json.optString("city_name", null);
-        weiboGeo.provinceName = json.optString("province_name", null);
-        weiboGeo.address = json.optString("address", null);
-        return weiboGeo;
+    private static WeiboGeo getWeiboGeoFromJson(JSONObject json) throws JSONException {
+        JSONArray array = json.optJSONArray("coordinates");
+        if (array != null) {
+            WeiboGeo weiboGeo = new WeiboGeo();
+            weiboGeo.coordinate[0] = array.getDouble(0);
+            weiboGeo.coordinate[1] = array.getDouble(1);
+            return weiboGeo;
+        } else {
+            return null;
+        }
     }
     
     public static long getWeiboAccountIdFromJson(String jsonStr) throws WeiboException {
@@ -245,7 +249,7 @@ public class JsonUtils {
         }
     }
     
-    private static WeiboComment getWeiboCommentFromJson(JSONObject json) {
+    private static WeiboComment getWeiboCommentFromJson(JSONObject json) throws JSONException {
         WeiboComment weiboComment = new WeiboComment();
         weiboComment.createdAt = json.optString("created_at", null);
         weiboComment.id = json.optLong("id");

@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import java.io.File;
+
 public class ImageUtils {
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 2000;
@@ -24,11 +26,18 @@ public class ImageUtils {
             final BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             BitmapFactory.decodeFile(path, options);
-            options.inSampleSize = calculateInSampleSize(options, width, height);
+            if (width > 0 && height > 0) {
+                options.inSampleSize = calculateInSampleSize(options, width, height);
+            }
             options.inJustDecodeBounds = false;
             options.inPurgeable = true;
             options.inInputShareable = true;
-            return BitmapFactory.decodeFile(path, options);
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            if (bitmap == null) {
+                new File(path).delete();
+                return null;
+            }
+            return bitmap;
         } catch (OutOfMemoryError e) {
             Logger.logExcpetion(e);
             return null;

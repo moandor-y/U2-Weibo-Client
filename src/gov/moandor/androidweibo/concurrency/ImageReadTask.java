@@ -40,8 +40,7 @@ public class ImageReadTask extends MyAsyncTask<Void, Integer, Bitmap> {
         if (isCancelled()) {
             return null;
         }
-        String path = FileUtils.getImagePathFromUrl(mUrl, mType);
-        boolean downloaded = ImageDownloadTaskCache.waitForPictureDownload(mUrl, null, path, mType);
+        boolean downloaded = ImageDownloadTaskCache.waitForPictureDownload(mUrl, null, mType);
         if (!downloaded) {
             return null;
         }
@@ -77,6 +76,7 @@ public class ImageReadTask extends MyAsyncTask<Void, Integer, Bitmap> {
         if (isCancelled()) {
             return null;
         }
+        String path = FileUtils.getImagePathFromUrl(mUrl, mType);
         return ImageUtils.getBitmapFromFile(path, width, height);
     }
     

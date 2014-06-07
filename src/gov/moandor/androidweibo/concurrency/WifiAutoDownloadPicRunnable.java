@@ -1,7 +1,6 @@
 package gov.moandor.androidweibo.concurrency;
 
 import gov.moandor.androidweibo.bean.WeiboStatus;
-import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 
@@ -137,8 +136,7 @@ public class WifiAutoDownloadPicRunnable implements Runnable {
                 }
             }
             ImageDownloader.ImageType type = types.get(url);
-            String path = FileUtils.getImagePathFromUrl(url, type);
-            ImageDownloadTaskCache.waitForPictureDownload(url, null, path, type);
+            ImageDownloadTaskCache.waitForPictureDownload(url, null, type);
         }
     }
 }

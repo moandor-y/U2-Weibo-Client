@@ -51,7 +51,7 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     
     @Override
     protected Boolean doInBackground(Void... params) {
-        boolean result = ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mPath, mType);
+        boolean result = ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mType);
         if (mPath.endsWith(".gif") || ImageUtils.isTooLargeToDisplay(mPath)) {
             mUseWebView = true;
         } else {

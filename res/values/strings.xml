@@ -173,6 +173,7 @@
     <!-- WeiboActivity -->
     <string name="quick_comment">快速评论</string>
     <string name="quick_repost">快速转发</string>
+    <string name="map">地图</string>
     
     <!-- SettingsActivity -->
     <string name="general">常规</string>

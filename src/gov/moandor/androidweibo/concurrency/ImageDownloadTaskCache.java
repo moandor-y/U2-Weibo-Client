@@ -1,5 +1,6 @@
 package gov.moandor.androidweibo.concurrency;
 
+import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 
@@ -15,11 +16,11 @@ public class ImageDownloadTaskCache {
             new ConcurrentHashMap<String, ImageDownloadTask>();
     static final Object backgroundWifiDownloadLock = new Object();
     
-    public static boolean waitForPictureDownload(String url, HttpUtils.DownloadListener downloadListener, String path,
+    public static boolean waitForPictureDownload(String url, HttpUtils.DownloadListener downloadListener,
             ImageDownloader.ImageType type) {
         while (true) {
             ImageDownloadTask task = mTasks.get(url);
-            boolean fileExists = new File(path).exists();
+            boolean fileExists = new File(FileUtils.getImagePathFromUrl(url, type)).exists();
             if (task == null) {
                 if (!fileExists) {
                     ImageDownloadTask newTask = new ImageDownloadTask(url, type);

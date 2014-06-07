@@ -93,6 +93,24 @@
             
         </android.support.v7.widget.GridLayout>
         
+        <TextView
+            android:id="@+id/coordinate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:visibility="gone" />
+        
+        <ImageView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/coordinate"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:contentDescription="@string/map" />
+        
         <RelativeLayout
             android:id="@+id/retweet"
             android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayout;
@@ -19,15 +20,21 @@ import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.WeiboActivity;
+import gov.moandor.androidweibo.bean.WeiboGeo;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.concurrency.WeiboDetailPictureReadTask;
+import gov.moandor.androidweibo.dao.MapImageDao;
 import gov.moandor.androidweibo.util.ActivityUtils;
+import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.LongClickableLinkMovementMethod;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
+import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 import gov.moandor.androidweibo.widget.WeiboDetailPicView;
 
@@ -36,6 +43,7 @@ public class WeiboFragment extends Fragment {
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private ImageDownloader.ImageType mPictureType = Utilities.getDetailPictureType();
     private ImageView mAvatar;
+    private ImageView mMap;
     private WeiboDetailPicView mPicture;
     private WeiboDetailPicView mRetweetPicture;
     private GridLayout mPictureMulti;
@@ -46,6 +54,7 @@ public class WeiboFragment extends Fragment {
     private TextView mSource;
     private TextView mText;
     private TextView mRetweetText;
+    private TextView mCoordinate;
     private float mFontSize = Utilities.getFontSize();;
     private float mSmallFontSize = mFontSize - 3;
     
@@ -65,11 +74,13 @@ public class WeiboFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mAvatar = (ImageView) view.findViewById(R.id.avatar);
+        mMap = (ImageView) view.findViewById(R.id.map);
         mUserName = (TextView) view.findViewById(R.id.user_name);
         mTime = (TextView) view.findViewById(R.id.time);
         mSource = (TextView) view.findViewById(R.id.source);
         mText = (TextView) view.findViewById(R.id.text);
         mRetweetText = (TextView) view.findViewById(R.id.retweet_text);
+        mCoordinate = (TextView) view.findViewById(R.id.coordinate);
         mPicture = (WeiboDetailPicView) view.findViewById(R.id.pic);
         mRetweetPicture = (WeiboDetailPicView) view.findViewById(R.id.retweet_pic);
         mPictureMulti = (GridLayout) view.findViewById(R.id.pic_multi);
@@ -137,6 +148,34 @@ public class WeiboFragment extends Fragment {
                     }
                 }
             }
+        }
+        if (mWeiboStatus.weiboGeo != null) {
+            mCoordinate.setVisibility(View.VISIBLE);
+            mCoordinate.setText(buildCoordinate(mWeiboStatus.weiboGeo));
+            final String token = GlobalContext.getCurrentAccount().token;
+            MyAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    MapImageDao dao = new MapImageDao();
+                    dao.setToken(token);
+                    dao.setLatitude(mWeiboStatus.weiboGeo.coordinate[0]);
+                    dao.setLongitude(mWeiboStatus.weiboGeo.coordinate[1]);
+                    try {
+                        final Bitmap bitmap = dao.execute();
+                        if (bitmap != null) {
+                            GlobalContext.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mMap.setVisibility(View.VISIBLE);
+                                    mMap.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+                    } catch (WeiboException e) {
+                        Logger.logExcpetion(e);
+                    }
+                }
+            });
         }
     }
     
@@ -216,6 +255,36 @@ public class WeiboFragment extends Fragment {
                 break;
             }
         }
+    }
+    
+    private String buildCoordinate(WeiboGeo geo) {
+        double latitude = geo.coordinate[0];
+        double longitude = geo.coordinate[1];
+        StringBuilder builder = new StringBuilder();
+        builder.append(decimalToSexagesimal(latitude));
+        if (latitude > 0) {
+            builder.append("N");
+        } else if (latitude < 0) {
+            builder.append("S");
+        }
+        builder.append(", ");
+        builder.append(decimalToSexagesimal(longitude));
+        if (longitude > 0) {
+            builder.append("E");
+        } else if (latitude < 0) {
+            builder.append("W");
+        }
+        return builder.toString();
+    }
+    
+    private String decimalToSexagesimal(double decimal) {
+        int degrees = (int) Math.floor(decimal);
+        decimal -= degrees;
+        decimal *= 60;
+        int minutes = (int) Math.floor(decimal);
+        decimal -= minutes;
+        double seconds = decimal * 60;
+        return degrees + "°" + minutes + "′" + String.format("%.1f", seconds) + "″";
     }
     
     private View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {

@@ -72,8 +72,8 @@ public class FileUtils {
     }
     
     public static boolean savePicture(String url, ImageDownloader.ImageType type) {
+        ImageDownloadTaskCache.waitForPictureDownload(url, null, type);
         String sourcePath = getImagePathFromUrl(url, type);
-        ImageDownloadTaskCache.waitForPictureDownload(url, null, sourcePath, type);
         File sourceFile = new File(sourcePath);
         String sourceName = sourceFile.getName();
         String extension = sourceName.substring(sourceName.lastIndexOf("."));
