@@ -284,7 +284,7 @@ public class WeiboFragment extends Fragment {
         int minutes = (int) Math.floor(decimal);
         decimal -= minutes;
         double seconds = decimal * 60;
-        return degrees + "°" + minutes + "′" + String.format("%.1f", seconds) + "″";
+        return degrees + "°" + String.format("%02d", minutes) + "′" + String.format("%.1f", seconds) + "″";
     }
     
     private View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
