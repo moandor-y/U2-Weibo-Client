@@ -1,6 +1,10 @@
 package gov.moandor.androidweibo.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -21,7 +25,20 @@ public class IncomingUrlActivity extends AbsActivity {
             String mid = Utilities.getMidFromUrl(url);
             new RedirectToWeiboActivityTask(mid).execute();
         } else {
-            finish();
+            WebView web = new WebView(this);
+            setContentView(web);
+            web.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                    finish();
+                    return true;
+                }
+            });
+            web.loadUrl(url);
         }
     }
     
