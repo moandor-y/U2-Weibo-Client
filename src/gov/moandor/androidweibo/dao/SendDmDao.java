@@ -4,6 +4,7 @@ import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class SendDmDao extends BaseHttpDao<DirectMessage> {
@@ -15,10 +16,10 @@ public class SendDmDao extends BaseHttpDao<DirectMessage> {
     @Override
     public DirectMessage execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("text", mText);
-        params.putParam("uid", mUid);
-        params.putParam("screen_name", mScreenName);
+        params.put("access_token", mToken);
+        params.put("text", mText);
+        params.put("uid", mUid);
+        params.put("screen_name", mScreenName);
         HttpUtils.Method method = HttpUtils.Method.POST;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getDmFromJson(response);

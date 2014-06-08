@@ -5,6 +5,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 

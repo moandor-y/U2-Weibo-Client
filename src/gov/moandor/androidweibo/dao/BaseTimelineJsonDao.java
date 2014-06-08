@@ -63,14 +63,14 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHtt
     }
     
     protected void addParams(HttpParams params) {
-        params.putParam("access_token", mToken);
+        params.put("access_token", mToken);
         if (mSinceMessage != null) {
-            params.putParam("since_id", mSinceMessage.id - 1);
+            params.put("since_id", mSinceMessage.id - 1);
         } else {
-            params.putParam("since_id", mSinceId);
+            params.put("since_id", mSinceId);
         }
-        params.putParam("max_id", mMaxId);
-        params.putParam("count", mCount);
+        params.put("max_id", mMaxId);
+        params.put("count", mCount);
     }
     
     protected abstract List<T> parceJson(String json) throws WeiboException;

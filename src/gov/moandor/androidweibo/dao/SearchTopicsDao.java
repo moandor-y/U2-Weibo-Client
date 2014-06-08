@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.UrlHelper;
 
 public class SearchTopicsDao extends BaseWeiboStatusTimelineDao {
     private String mTopic;
@@ -13,7 +14,7 @@ public class SearchTopicsDao extends BaseWeiboStatusTimelineDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("q", mTopic);
+        params.put("q", mTopic);
     }
     
     public void setTopic(String topic) {

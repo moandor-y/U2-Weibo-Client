@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.util.JsonUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;

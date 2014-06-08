@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.HttpUtils.Method;
 import gov.moandor.androidweibo.util.WeiboException;
 

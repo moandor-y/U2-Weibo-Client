@@ -15,6 +15,7 @@ import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class MapImageDao extends BaseHttpDao<Bitmap> {
@@ -25,10 +26,10 @@ public class MapImageDao extends BaseHttpDao<Bitmap> {
     @Override
     public Bitmap execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("center_coordinate", mLongitude + "," + mLatitude);
-        params.putParam("size", "600x380");
-        params.putParam("zoom", 14);
+        params.put("access_token", mToken);
+        params.put("center_coordinate", mLongitude + "," + mLatitude);
+        params.put("size", "600x380");
+        params.put("zoom", 14);
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         try {

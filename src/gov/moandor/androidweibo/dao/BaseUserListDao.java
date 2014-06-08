@@ -24,11 +24,11 @@ public abstract class BaseUserListDao<T> extends BaseHttpDao<List<T>> {
     @Override
     public List<T> execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("count", mCount);
-        params.putParam("cursor", mCursor);
-        params.putParam("uid", mUid);
-        params.putParam("trim_status", mTrimStatus);
+        params.put("access_token", mToken);
+        params.put("count", mCount);
+        params.put("cursor", mCursor);
+        params.put("uid", mUid);
+        params.put("trim_status", mTrimStatus);
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         JSONObject json;

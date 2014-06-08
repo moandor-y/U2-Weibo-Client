@@ -5,6 +5,7 @@ import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class UserShowDao extends BaseHttpDao<WeiboUser> {
@@ -15,11 +16,11 @@ public class UserShowDao extends BaseHttpDao<WeiboUser> {
     @Override
     public WeiboUser execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
+        params.put("access_token", mToken);
         if (mUid != 0) {
-            params.putParam("uid", mUid);
+            params.put("uid", mUid);
         } else if (!TextUtils.isEmpty(mScreenName)) {
-            params.putParam("screen_name", mScreenName);
+            params.put("screen_name", mScreenName);
         }
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, mUrl, params);
         return JsonUtils.getWeiboUserFromJson(response);

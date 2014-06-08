@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.UrlHelper;
 
 public class RepostWeiboDao extends BaseSendWeiboDao<Void> {
     private long mId;
@@ -14,8 +15,8 @@ public class RepostWeiboDao extends BaseSendWeiboDao<Void> {
     @Override
     protected void initParams(HttpParams params) {
         super.initParams(params);
-        params.putParam("id", mId);
-        params.putParam("is_comment", mIsComment);
+        params.put("id", mId);
+        params.put("is_comment", mIsComment);
     }
     
     public void setId(long id) {

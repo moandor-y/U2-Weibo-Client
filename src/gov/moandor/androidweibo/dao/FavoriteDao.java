@@ -10,6 +10,7 @@ import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class FavoriteDao extends BaseHttpDao<WeiboStatus> {
@@ -19,8 +20,8 @@ public class FavoriteDao extends BaseHttpDao<WeiboStatus> {
     @Override
     public WeiboStatus execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("id", mId);
+        params.put("access_token", mToken);
+        params.put("id", mId);
         HttpUtils.Method method = HttpUtils.Method.POST;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         try {

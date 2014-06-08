@@ -36,11 +36,11 @@ public abstract class BaseSendCommentDao extends BaseHttpDao<Void> {
     }
     
     protected void initParams(HttpParams params) {
-        params.putParam("access_token", mToken);
-        params.putParam("comment", mComment);
-        params.putParam("id", mId);
+        params.put("access_token", mToken);
+        params.put("comment", mComment);
+        params.put("id", mId);
         if (mCommentOri) {
-            params.putParam("comment_ori", 1);
+            params.put("comment_ori", 1);
         }
     }
 }

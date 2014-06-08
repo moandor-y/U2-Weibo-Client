@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.UrlHelper;
 
 public class GroupTimelineDao extends FriendsTimelineDao {
     private long mListId;
@@ -13,7 +14,7 @@ public class GroupTimelineDao extends FriendsTimelineDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("list_id", mListId);
+        params.put("list_id", mListId);
     }
     
     public void setListId(long listId) {

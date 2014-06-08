@@ -19,11 +19,11 @@ public abstract class BaseSendWeiboDao<T> extends BaseHttpDao<T> {
     }
     
     protected void initParams(HttpParams params) {
-        params.putParam("access_token", mToken);
-        params.putParam("status", mStatus);
+        params.put("access_token", mToken);
+        params.put("status", mStatus);
         if (mLocation != null) {
-            params.putParam("lat", mLocation.latitude);
-            params.putParam("long", mLocation.longitude);
+            params.put("lat", mLocation.latitude);
+            params.put("long", mLocation.longitude);
         }
     }
     

@@ -4,6 +4,7 @@ import gov.moandor.androidweibo.bean.WeiboGroup;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class GroupsDao extends BaseHttpDao<List<WeiboGroup>> {
     @Override
     public List<WeiboGroup> execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
+        params.put("access_token", mToken);
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getGroupsFromJson(response);

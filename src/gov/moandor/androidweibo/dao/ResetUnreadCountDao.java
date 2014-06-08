@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class ResetUnreadCountDao extends BaseHttpDao<Void> {
@@ -11,8 +12,8 @@ public class ResetUnreadCountDao extends BaseHttpDao<Void> {
     @Override
     public Void execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("type", mCountType);
+        params.put("access_token", mToken);
+        params.put("type", mCountType);
         HttpUtils.Method method = HttpUtils.Method.POST;
         HttpUtils.executeNormalTask(method, mUrl, params);
         return null;

@@ -69,6 +69,31 @@
             android:name=".activity.DraftBoxActivity"
             android:uiOptions="splitActionBarWhenNarrow" />
         
+        <activity
+            android:name=".activity.IncomingUrlActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:scheme="http"
+                    android:host="e.weibo.com" />
+                <data
+                    android:scheme="http"
+                    android:host="weibo.com" />
+                <data
+                    android:scheme="http"
+                    android:host="www.weibo.com" />
+                <data
+                    android:scheme="http"
+                    android:host="www.weibo.cn" />
+                <data
+                    android:scheme="http"
+                    android:host="weibo.cn" />
+            </intent-filter>
+        </activity>
+        
         <activity android:name=".activity.AuthorizeActivity"/>
         <activity android:name=".activity.HackLoginActivity"/>
         <activity android:name=".activity.SettingsActivity"/>

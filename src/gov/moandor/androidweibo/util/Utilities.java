@@ -399,4 +399,54 @@ public class Utilities {
         String packageName = GlobalContext.getInstance().getPackageName();
         return packageName + "." + name;
     }
+    
+    public static boolean isWeiboMidUrl(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return false;
+        }
+        url = convertWeiboCnToCom(url);
+        if (!(url.startsWith(UrlHelper.WEIBO_COM) || url.startsWith(UrlHelper.E_WEIBO_COM))) {
+            return false;
+        }
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+        if (url.contains(UrlHelper.WEIBO_COM + "/")) {
+            url = url.substring(UrlHelper.WEIBO_COM.length() + 1, url.length());
+        } else if (url.contains(UrlHelper.E_WEIBO_COM + "/")) {
+            url = url.substring(UrlHelper.E_WEIBO_COM.length() + 1, url.length());
+        }
+        String[] result = url.split("/");
+        return result != null && result.length == 2;
+    }
+    
+    public static String getMidFromUrl(String url) {
+        url = convertWeiboCnToCom(url);
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
+        int end = url.length();
+        if (url.contains("?")) {
+            end = url.indexOf("?");
+        }
+        if (url.contains(UrlHelper.WEIBO_COM + "/")) {
+            url = url.substring(UrlHelper.WEIBO_COM.length() + 1, end);
+        } else {
+            url = url.substring(UrlHelper.E_WEIBO_COM.length() + 1, end);
+        }
+        return url.split("/")[1];
+    }
+    
+    private static String convertWeiboCnToCom(String url) {
+        if (!TextUtils.isEmpty(url)) {
+            if (url.startsWith(UrlHelper.WEIBO_CN)) {
+                return url.replace(UrlHelper.WEIBO_CN, UrlHelper.WEIBO_COM);
+            } else if (url.startsWith(UrlHelper.WWW_WEIBO_COM)) {
+                return url.replace(UrlHelper.WWW_WEIBO_COM, UrlHelper.WEIBO_COM);
+            } else if (url.startsWith(UrlHelper.WWW_WEIBO_CN)) {
+                return url.replace(UrlHelper.WWW_WEIBO_CN, UrlHelper.WEIBO_COM);
+            }
+        }
+        return url;
+    }
 }

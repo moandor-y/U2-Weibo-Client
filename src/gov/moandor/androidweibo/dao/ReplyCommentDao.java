@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.UrlHelper;
 
 public class ReplyCommentDao extends BaseSendCommentDao {
     private long mCid;
@@ -13,7 +14,7 @@ public class ReplyCommentDao extends BaseSendCommentDao {
     @Override
     protected void initParams(HttpParams params) {
         super.initParams(params);
-        params.putParam("cid", mCid);
+        params.put("cid", mCid);
     }
     
     public void setCid(long cid) {

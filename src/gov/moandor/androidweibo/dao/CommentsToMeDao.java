@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.UrlHelper;
 
 public class CommentsToMeDao extends BaseWeiboCommentTimelineDao {
     private int mFilter;
@@ -13,7 +14,7 @@ public class CommentsToMeDao extends BaseWeiboCommentTimelineDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("filter_by_author", mFilter);
+        params.put("filter_by_author", mFilter);
     }
     
     public void setFilter(int filter) {

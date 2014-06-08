@@ -20,10 +20,10 @@ import android.webkit.WebViewClient;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
-import gov.moandor.androidweibo.dao.UrlHelper;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 

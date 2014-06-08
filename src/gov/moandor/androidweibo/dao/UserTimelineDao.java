@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.dao;
 
 import gov.moandor.androidweibo.util.HttpParams;
+import gov.moandor.androidweibo.util.UrlHelper;
 
 public class UserTimelineDao extends BaseWeiboStatusTimelineDao {
     private long mUserId;
@@ -13,7 +14,7 @@ public class UserTimelineDao extends BaseWeiboStatusTimelineDao {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("uid", mUserId);
+        params.put("uid", mUserId);
     }
     
     public void setUserId(long userId) {

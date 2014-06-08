@@ -4,6 +4,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class FollowDao extends BaseHttpDao<WeiboUser> {
@@ -13,8 +14,8 @@ public class FollowDao extends BaseHttpDao<WeiboUser> {
     @Override
     public WeiboUser execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("access_token", mToken);
-        params.putParam("uid", mUid);
+        params.put("access_token", mToken);
+        params.put("uid", mUid);
         HttpUtils.Method method = HttpUtils.Method.POST;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getWeiboUserFromJson(response);

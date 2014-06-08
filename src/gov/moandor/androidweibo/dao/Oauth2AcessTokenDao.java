@@ -8,6 +8,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
@@ -20,11 +21,11 @@ public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
     @Override
     public String execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.putParam("username", mUsername);
-        params.putParam("password", mPassword);
-        params.putParam("client_id", mClientId);
-        params.putParam("client_secret", mClientSecret);
-        params.putParam("grant_type", mGrantType);
+        params.put("username", mUsername);
+        params.put("password", mPassword);
+        params.put("client_id", mClientId);
+        params.put("client_secret", mClientSecret);
+        params.put("grant_type", mGrantType);
         HttpUtils.Method method = HttpUtils.Method.POST;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         JSONObject json;

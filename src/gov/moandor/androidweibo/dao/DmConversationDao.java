@@ -3,6 +3,7 @@ package gov.moandor.androidweibo.dao;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.JsonUtils;
+import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class DmConversationDao extends BaseTimelineJsonDao<DirectMessage> {
     @Override
     protected void addParams(HttpParams params) {
         super.addParams(params);
-        params.putParam("uid", mUid);
+        params.put("uid", mUid);
     }
     
     public void setUid(long uid) {
