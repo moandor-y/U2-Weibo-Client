@@ -189,9 +189,9 @@
     <string name="unread_messages">Unread messages</string>
     <string name="interval">Interval</string>
     <string name="interval_wifi">Interval (Wi-Fi)</string>
-    <string name="notification_mention_weibo">Weibo @Me</string>
+    <string name="notification_mention_weibo">Weibo @me</string>
     <string name="notification_comment">Comments</string>
-    <string name="notification_mention_comment">Comments @Me</string>
+    <string name="notification_mention_comment">Comments @me</string>
     <string name="notification_method">Notification Methods</string>
     <string name="vibrate">Vibrate</string>
     <string name="notification_led">Notification LED</string>
@@ -259,8 +259,8 @@
     
     <!-- Notification -->
     <string name="new_comments">%d new comments</string>
-    <string name="new_mention_weibos">%d new posts @Me</string>
-    <string name="new_mention_comments">%d new comments @Me</string>
+    <string name="new_mention_weibos">%d new posts @me</string>
+    <string name="new_mention_comments">%d new comments @me</string>
     <string name="new_dms">%d new direct messages</string>
     <string name="upload_picture">Upload picture</string>
     <string name="waiting_response">Waiting for response</string>
