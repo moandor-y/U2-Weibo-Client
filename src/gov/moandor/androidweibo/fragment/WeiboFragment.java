@@ -150,32 +150,7 @@ public class WeiboFragment extends Fragment {
             }
         }
         if (mWeiboStatus.weiboGeo != null) {
-            mCoordinate.setVisibility(View.VISIBLE);
-            mCoordinate.setText(buildCoordinate(mWeiboStatus.weiboGeo));
-            final String token = GlobalContext.getCurrentAccount().token;
-            MyAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    MapImageDao dao = new MapImageDao();
-                    dao.setToken(token);
-                    dao.setLatitude(mWeiboStatus.weiboGeo.coordinate[0]);
-                    dao.setLongitude(mWeiboStatus.weiboGeo.coordinate[1]);
-                    try {
-                        final Bitmap bitmap = dao.execute();
-                        if (bitmap != null) {
-                            GlobalContext.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mMap.setVisibility(View.VISIBLE);
-                                    mMap.setImageBitmap(bitmap);
-                                }
-                            });
-                        }
-                    } catch (WeiboException e) {
-                        Logger.logExcpetion(e);
-                    }
-                }
-            });
+            buildCoordinate();
         }
     }
     
@@ -257,7 +232,36 @@ public class WeiboFragment extends Fragment {
         }
     }
     
-    private String buildCoordinate(WeiboGeo geo) {
+	private void buildCoordinate() {
+		mCoordinate.setVisibility(View.VISIBLE);
+		mCoordinate.setText(getCoordinate(mWeiboStatus.weiboGeo));
+		final String token = GlobalContext.getCurrentAccount().token;
+		MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                MapImageDao dao = new MapImageDao();
+                dao.setToken(token);
+                dao.setLatitude(mWeiboStatus.weiboGeo.coordinate[0]);
+                dao.setLongitude(mWeiboStatus.weiboGeo.coordinate[1]);
+                try {
+                    final Bitmap bitmap = dao.execute();
+                    if (bitmap != null) {
+                        GlobalContext.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								mMap.setVisibility(View.VISIBLE);
+								mMap.setImageBitmap(bitmap);
+							}
+						});
+                    }
+                } catch (WeiboException e) {
+                    Logger.logExcpetion(e);
+                }
+            }
+        });
+	}
+	
+    private String getCoordinate(WeiboGeo geo) {
         double latitude = geo.coordinate[0];
         double longitude = geo.coordinate[1];
         StringBuilder builder = new StringBuilder();
