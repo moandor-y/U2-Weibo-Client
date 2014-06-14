@@ -58,6 +58,13 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        Bundle args = getArguments();
+        if (args != null) {
+            mUser = args.getParcelable(USER);
+        }
+        if (mUser == null) {
+            mUser = GlobalContext.getCurrentAccount().user;
+        }
     }
     
     @Override
@@ -100,13 +107,6 @@ public class ProfileFragment extends Fragment {
     }
     
     private void buildLayout() {
-        Bundle args = getArguments();
-        if (args != null) {
-            mUser = args.getParcelable(USER);
-        }
-        if (mUser == null) {
-            mUser = GlobalContext.getCurrentAccount().user;
-        }
         AvatarDownloadTask task = new AvatarDownloadTask();
         task.execute();
         mName.setText(mUser.name);
