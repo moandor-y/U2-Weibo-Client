@@ -24,8 +24,7 @@
         android:singleLine="true"
         android:ellipsize="end"
         android:layout_toRightOf="@+id/avatar"
-        android:layout_alignParentRight="true"
-        android:textStyle="bold" />
+        android:layout_alignParentRight="true" />
     
     <TextView
         android:id="@+id/time"

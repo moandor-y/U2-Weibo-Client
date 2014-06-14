@@ -29,8 +29,7 @@
             android:layout_toRightOf="@+id/avatar"
             android:layout_marginLeft="@dimen/margin_horizontal"
             android:singleLine="true" 
-            android:ellipsize="end"
-            android:textStyle="bold" />
+            android:ellipsize="end" />
         
         <TextView
             android:id="@+id/time"

@@ -68,8 +68,7 @@
         android:layout_toRightOf="@+id/avatar"
         android:layout_toLeftOf="@+id/count_layout"
         android:singleLine="true"
-        android:ellipsize="end"
-        android:textStyle="bold" />
+        android:ellipsize="end" />
     
     <TextView
         android:id="@+id/time"
