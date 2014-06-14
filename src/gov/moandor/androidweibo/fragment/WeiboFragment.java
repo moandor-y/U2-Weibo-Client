@@ -149,7 +149,7 @@ public class WeiboFragment extends Fragment {
                 }
             }
         }
-        if (mWeiboStatus.weiboGeo != null) {
+        if (mWeiboStatus.weiboGeo != null && GlobalContext.isInWifi()) {
             buildCoordinate();
         }
     }
