@@ -37,12 +37,14 @@ import java.util.Locale;
 public class SettingsActivity extends AbsActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String KEY_BLACK_MAGIC = "black_magic";
     private static final String STATE_NEED_RESTART = "state_need_restart";
+    private static final String NEED_RESTART = Utilities.buildIntentExtraName("NEED_RESTART");
     
     private boolean mNeedRestart;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mNeedRestart = getIntent().getBooleanExtra(NEED_RESTART, false);
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(android.R.id.content);
         if (fragment == null) {
@@ -155,6 +157,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 getActivity().finish();
                 getActivity().overridePendingTransition(0, 0);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(NEED_RESTART, true);
                 getActivity().startActivity(intent);
                 getActivity().overridePendingTransition(R.anim.stay, R.anim.activity_fade_out);
             } else {
