@@ -220,6 +220,7 @@
     <string name="dir_pic">图片缓存</string>
     <string name="dir_avatar">头像缓存</string>
     <string name="dir_logs">崩溃日志</string>
+    <string name="open_source_licenses">开源协议</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

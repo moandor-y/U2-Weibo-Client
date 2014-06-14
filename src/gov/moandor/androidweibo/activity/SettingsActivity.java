@@ -19,6 +19,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
@@ -506,6 +507,19 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 float memoryInMB = (float) memory / (1024 * 1024);
                 return String.format(Locale.ENGLISH, "%.1f MB", memoryInMB);
             }
+        }
+    }
+    
+    public static class LicensesActivity extends AbsActivity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            WebView web = new WebView(this);
+            setContentView(web);
+            web.loadUrl("file:///android_asset/licenses.html");
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setTitle(null);
+            getSupportActionBar().hide();
         }
     }
 }

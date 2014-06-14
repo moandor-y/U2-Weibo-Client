@@ -4,11 +4,9 @@
     <PreferenceCategory android:title="@string/general">
         
         <Preference android:title="@string/notifications">
-            
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$NotificationsActivity"
                 android:targetPackage="gov.moandor.androidweibo" />
-            
         </Preference>
         
         <ListPreference
@@ -111,21 +109,15 @@
             android:key="black_magic"
             android:title="@string/black_magic"
             android:persistent="false" >
-            
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$BlackMagicActivity"
                 android:targetPackage="gov.moandor.androidweibo" />
-            
         </Preference>
         
-        <Preference
-            android:title="@string/about"
-            android:persistent="false" >
-            
+        <Preference android:title="@string/about">
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$AboutActivity"
                 android:targetPackage="gov.moandor.androidweibo" />
-            
         </Preference>
         
     </PreferenceCategory>
