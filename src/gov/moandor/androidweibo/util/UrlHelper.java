@@ -50,7 +50,8 @@ public class UrlHelper {
     public static final String FAVORITES_DESTROY = "https://api.weibo.com/2/favorites/destroy.json";
     
     public static final String DIRECT_MESSAGES_USER_LIST = "https://api.weibo.com/2/direct_messages/user_list.json";
-    public static final String DIRECT_MESSAGES_CONVERSATION = "https://api.weibo.com/2/direct_messages/conversation.json";
+    public static final String DIRECT_MESSAGES_CONVERSATION =
+            "https://api.weibo.com/2/direct_messages/conversation.json";
     public static final String DIRECT_MESSAGES_NEW = "https://api.weibo.com/2/direct_messages/new.json";
     
     public static final String LOCATION_BASE_GET_MAP_IMAGE = "https://api.weibo.com/2/location/base/get_map_image.json";

@@ -153,13 +153,13 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mUnreadPage = getIntent().getIntExtra(UNREAD_PAGE_POSITION, -1);
         if (savedInstanceState != null) {
             Parcelable[] parcelables = savedInstanceState.getParcelableArray(STATE_GROUPS);
-			if (parcelables != null) {
-				mGroups = new WeiboGroup[parcelables.length];
-				for (int i = 0; i < parcelables.length; i++) {
-					mGroups[i] = (WeiboGroup) parcelables[i];
-				}
-				setupSpinnerGroups();
-			}
+            if (parcelables != null) {
+                mGroups = new WeiboGroup[parcelables.length];
+                for (int i = 0; i < parcelables.length; i++) {
+                    mGroups[i] = (WeiboGroup) parcelables[i];
+                }
+                setupSpinnerGroups();
+            }
             int tab = savedInstanceState.getInt(STATE_TAB);
             mViewPager.setCurrentItem(tab);
             onPageSelected(tab);

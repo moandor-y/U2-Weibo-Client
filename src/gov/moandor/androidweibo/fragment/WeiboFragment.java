@@ -232,11 +232,11 @@ public class WeiboFragment extends Fragment {
         }
     }
     
-	private void buildCoordinate() {
-		mCoordinate.setVisibility(View.VISIBLE);
-		mCoordinate.setText(getCoordinate(mWeiboStatus.weiboGeo));
-		final String token = GlobalContext.getCurrentAccount().token;
-		MyAsyncTask.execute(new Runnable() {
+    private void buildCoordinate() {
+        mCoordinate.setVisibility(View.VISIBLE);
+        mCoordinate.setText(getCoordinate(mWeiboStatus.weiboGeo));
+        final String token = GlobalContext.getCurrentAccount().token;
+        MyAsyncTask.execute(new Runnable() {
             @Override
             public void run() {
                 MapImageDao dao = new MapImageDao();
@@ -247,20 +247,20 @@ public class WeiboFragment extends Fragment {
                     final Bitmap bitmap = dao.execute();
                     if (bitmap != null) {
                         GlobalContext.runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								mMap.setVisibility(View.VISIBLE);
-								mMap.setImageBitmap(bitmap);
-							}
-						});
+                            @Override
+                            public void run() {
+                                mMap.setVisibility(View.VISIBLE);
+                                mMap.setImageBitmap(bitmap);
+                            }
+                        });
                     }
                 } catch (WeiboException e) {
                     Logger.logExcpetion(e);
                 }
             }
         });
-	}
-	
+    }
+    
     private String getCoordinate(WeiboGeo geo) {
         double latitude = geo.coordinate[0];
         double longitude = geo.coordinate[1];
