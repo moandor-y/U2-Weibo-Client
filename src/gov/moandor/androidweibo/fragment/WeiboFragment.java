@@ -233,8 +233,6 @@ public class WeiboFragment extends Fragment {
     }
     
     private void buildCoordinate() {
-        mCoordinate.setVisibility(View.VISIBLE);
-        mCoordinate.setText(getCoordinate(mWeiboStatus.weiboGeo));
         final String token = GlobalContext.getCurrentAccount().token;
         MyAsyncTask.execute(new Runnable() {
             @Override
@@ -249,8 +247,7 @@ public class WeiboFragment extends Fragment {
                         GlobalContext.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mMap.setVisibility(View.VISIBLE);
-                                mMap.setImageBitmap(bitmap);
+                                displayMap(bitmap);
                             }
                         });
                     }
@@ -259,6 +256,21 @@ public class WeiboFragment extends Fragment {
                 }
             }
         });
+    }
+    
+    private void displayMap(Bitmap map) {
+        mMap.setVisibility(View.VISIBLE);
+        mMap.setImageBitmap(map);
+        mCoordinate.setVisibility(View.VISIBLE);
+        mCoordinate.setText(getCoordinate(mWeiboStatus.weiboGeo));
+        int margin = getResources().getDimensionPixelSize(R.dimen.margin_vertical);
+        if (mPicture.getVisibility() == View.VISIBLE) {
+            margin += mPicture.getHeight();
+            ((ViewGroup.MarginLayoutParams) mCoordinate.getLayoutParams()).topMargin += margin;
+        } else if (mPictureMulti.getVisibility() == View.VISIBLE) {
+            margin += mPictureMulti.getHeight();
+            ((ViewGroup.MarginLayoutParams) mCoordinate.getLayoutParams()).topMargin += margin;
+        }
     }
     
     private String getCoordinate(WeiboGeo geo) {
