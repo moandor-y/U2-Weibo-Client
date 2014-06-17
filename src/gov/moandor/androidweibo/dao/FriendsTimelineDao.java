@@ -11,6 +11,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 import java.util.Iterator;
 import java.util.List;
+import gov.moandor.androidweibo.bean.WeiboFilter;
 
 public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
     @Override
@@ -34,6 +35,17 @@ public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
                 }
             }
         }
+		WeiboFilter[] filters = DatabaseUtils.getWeiboFilters();
+		Iterator<WeiboStatus> iterator = result.iterator();
+		while (iterator.hasNext()) {
+			WeiboStatus status = iterator.next();
+			for (WeiboFilter filter : filters) {
+				if (filter.shouldBeRemoved(status)) {
+					iterator.remove();
+					break;
+				}
+			}
+		}
         return result;
     }
     
