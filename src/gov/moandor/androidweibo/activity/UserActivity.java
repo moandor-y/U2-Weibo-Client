@@ -134,7 +134,7 @@ public class UserActivity extends AbsActivity {
         mFragment.setArguments(args);
         FragmentManager fm = getSupportFragmentManager();
         try {
-            fm.beginTransaction().add(android.R.id.content, mFragment).commit();
+            fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
         } catch (IllegalStateException e) {
             Logger.logExcpetion(e);
         }
