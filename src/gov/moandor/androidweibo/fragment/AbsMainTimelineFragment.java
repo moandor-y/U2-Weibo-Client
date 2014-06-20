@@ -41,10 +41,10 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     @Override
     public void onPause() {
         super.onPause();
-		Account account = GlobalContext.getCurrentAccount();
-		if (account != null) {
-			saveListPosition(account);
-		}
+        Account account = GlobalContext.getCurrentAccount();
+        if (account != null) {
+            saveListPosition(account);
+        }
     }
     
     private boolean isThisCurrentFragment() {
