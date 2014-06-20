@@ -199,9 +199,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * </p>
  */
 public abstract class MyAsyncTask<Params, Progress, Result> {
-    private static final int CORE_POOL_SIZE = 5;
+    private static final int CORE_POOL_SIZE = 128;
     private static final int MAXIMUM_POOL_SIZE = 128;
-    private static final int DOWNLOAD_CORE_POOL_SIZE = 4;
+    private static final int DOWNLOAD_CORE_POOL_SIZE = 20;
     private static final int DOWNLOAD_MAXIMUM_POOL_SIZE = 20;
     private static final int KEEP_ALIVE = 1;
     
@@ -223,8 +223,8 @@ public abstract class MyAsyncTask<Params, Progress, Result> {
         }
     };
     
-    private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(10);
-    private static final BlockingQueue<Runnable> sDownloadPoolWorkQueue = new LinkedBlockingQueue<Runnable>(5);
+    private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(128);
+    private static final BlockingQueue<Runnable> sDownloadPoolWorkQueue = new LinkedBlockingQueue<Runnable>(50);
     
     public static final Executor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
             KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory, new ThreadPoolExecutor.DiscardOldestPolicy());
