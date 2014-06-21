@@ -101,6 +101,7 @@
         <activity android:name=".activity.SettingsActivity$BlackMagicActivity"/>
         <activity android:name=".activity.SettingsActivity$AboutActivity"/>
         <activity android:name=".activity.SettingsActivity$LicensesActivity"/>
+        <activity android:name=".activity.SettingsActivity$IgnoreActivity"/>
         <activity android:name=".activity.SettingsActivityOldApi"/>
         <activity android:name=".activity.NotificationSettingsActivity"/>
         <activity android:name=".activity.ImageViewerActivity"/>

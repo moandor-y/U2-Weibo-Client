@@ -220,6 +220,7 @@
     <string name="dir_avatar">Avatar cache</string>
     <string name="dir_logs">Crash logs</string>
     <string name="open_source_licenses">Open source licenses</string>
+    <string name="ignore">Ignore</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

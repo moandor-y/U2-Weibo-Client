@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,12 +20,19 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.bean.WeiboFilter;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
+import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
@@ -244,107 +252,106 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 return super.onOptionsItemSelected(item);
             }
         }
+    }
+    
+    public static class NotificationsFragment extends PreferenceFragment implements
+            SharedPreferences.OnSharedPreferenceChangeListener {
+        private static final int REQUEST_RINGTONE = 0;
+        private static final String KEY_UNREAD_MESSAGES = "unread_messages";
         
-        public static class NotificationsFragment extends PreferenceFragment implements
-                SharedPreferences.OnSharedPreferenceChangeListener {
-            private static final int REQUEST_RINGTONE = 0;
-            private static final String KEY_UNREAD_MESSAGES = "unread_messages";
-            
-            private Uri mRingtoneUri;
-            
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                addPreferencesFromResource(R.xml.prefs_notifications);
-                buildSummaries();
-                findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(
-                        new OnRingtoneClickListener());
-                String ringtone = ConfigManager.getNotificationRingtone();
-                if (!TextUtils.isEmpty(ringtone)) {
-                    mRingtoneUri = Uri.parse(ringtone);
+        private Uri mRingtoneUri;
+        
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_notifications);
+            buildSummaries();
+            findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(
+                    new OnRingtoneClickListener());
+            String ringtone = ConfigManager.getNotificationRingtone();
+            if (!TextUtils.isEmpty(ringtone)) {
+                mRingtoneUri = Uri.parse(ringtone);
+            }
+            if (!Utilities.isBmEnabled()) {
+                PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
+                unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
+            }
+        }
+        
+        @Override
+        public void onResume() {
+            super.onResume();
+            ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+        
+        @Override
+        public void onPause() {
+            super.onPause();
+            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+        
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode != RESULT_OK) {
+                return;
+            }
+            switch (requestCode) {
+            case REQUEST_RINGTONE:
+                mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (mRingtoneUri != null) {
+                    ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
+                } else {
+                    ConfigManager.setNotificationRingtone(null);
                 }
-                if (!Utilities.isBmEnabled()) {
-                    PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
-                    unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
-                }
-            }
-            
-            @Override
-            public void onResume() {
-                super.onResume();
-                ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
-            }
-            
-            @Override
-            public void onPause() {
-                super.onPause();
-                ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
-            }
-            
-            @Override
-            public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                super.onActivityResult(requestCode, resultCode, data);
-                if (resultCode != RESULT_OK) {
-                    return;
-                }
-                switch (requestCode) {
-                case REQUEST_RINGTONE:
-                    mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    if (mRingtoneUri != null) {
-                        ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
-                    } else {
-                        ConfigManager.setNotificationRingtone(null);
-                    }
-                    buildRingtoneSummary();
-                }
-            }
-            
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                buildSummaries();
-            }
-            
-            private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent();
-                    intent.setAction(RingtoneManager.ACTION_RINGTONE_PICKER);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone));
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
-                    startActivityForResult(intent, REQUEST_RINGTONE);
-                    return true;
-                }
-            }
-            
-            private void buildSummaries() {
-                buildIntervalSummary();
-                buildWifiIntervalSummary();
                 buildRingtoneSummary();
             }
-            
-            private void buildIntervalSummary() {
-                ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY);
-                preference.setSummary(preference.getEntry());
+        }
+        
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            buildSummaries();
+        }
+        
+        private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
+                startActivityForResult(intent, REQUEST_RINGTONE);
+                return true;
             }
-            
-            private void buildWifiIntervalSummary() {
-                ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY_WIFI);
-                preference.setSummary(preference.getEntry());
-            }
-            
-            private void buildRingtoneSummary() {
-                Preference preference = findPreference(ConfigManager.NOTIFICATION_RINGTONE);
-                String ringtone = ConfigManager.getNotificationRingtone();
-                if (!TextUtils.isEmpty(ringtone)) {
-                    Uri ringtoneUri = Uri.parse(ringtone);
-                    preference.setSummary(RingtoneManager.getRingtone(getActivity(), ringtoneUri).getTitle(
-                            getActivity()));
-                } else {
-                    preference.setSummary(R.string.mute);
-                }
+        }
+        
+        private void buildSummaries() {
+            buildIntervalSummary();
+            buildWifiIntervalSummary();
+            buildRingtoneSummary();
+        }
+        
+        private void buildIntervalSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY);
+            preference.setSummary(preference.getEntry());
+        }
+        
+        private void buildWifiIntervalSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY_WIFI);
+            preference.setSummary(preference.getEntry());
+        }
+        
+        private void buildRingtoneSummary() {
+            Preference preference = findPreference(ConfigManager.NOTIFICATION_RINGTONE);
+            String ringtone = ConfigManager.getNotificationRingtone();
+            if (!TextUtils.isEmpty(ringtone)) {
+                Uri ringtoneUri = Uri.parse(ringtone);
+                preference.setSummary(RingtoneManager.getRingtone(getActivity(), ringtoneUri).getTitle(getActivity()));
+            } else {
+                preference.setSummary(R.string.mute);
             }
         }
     }
@@ -376,33 +383,33 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 return super.onOptionsItemSelected(item);
             }
         }
+    }
+    
+    public static class BlackMagicFragment extends PreferenceFragment {
+        private static final String KEY_UPDATE_FOLLOWING = "update_following";
         
-        public static class BlackMagicFragment extends PreferenceFragment {
-            private static final String KEY_UPDATE_FOLLOWING = "update_following";
-            
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_bm);
+            findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
+        }
+        
+        private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
             @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                addPreferencesFromResource(R.xml.prefs_bm);
-                findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
+            public boolean onPreferenceClick(Preference preference) {
+                UpdateFollowingIdsTask task = new UpdateFollowingIdsTask();
+                task.setOnUpdateFinishedListener(new OnUpdateFollowingFinishedListener());
+                task.execute();
+                Utilities.notice(R.string.updating);
+                return true;
             }
-            
-            private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    UpdateFollowingIdsTask task = new UpdateFollowingIdsTask();
-                    task.setOnUpdateFinishedListener(new OnUpdateFollowingFinishedListener());
-                    task.execute();
-                    Utilities.notice(R.string.updating);
-                    return true;
-                }
-            }
-            
-            private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
-                @Override
-                public void onUpdateFinidhed() {
-                    Utilities.notice(R.string.update_finished);
-                }
+        }
+        
+        private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
+            @Override
+            public void onUpdateFinidhed() {
+                Utilities.notice(R.string.update_finished);
             }
         }
     }
@@ -434,82 +441,79 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 return super.onOptionsItemSelected(item);
             }
         }
+    }
+    
+    public static class AboutFragment extends PreferenceFragment {
+        private static final String KEY_MEMORY = "memory";
+        private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
+        private static final String KEY_DEVELOPER_1 = "developer_1";
+        private static final String KEY_DEVELOPER_2 = "developer_2";
+        private static final String KEY_DIR_PIC = "dir_pic";
+        private static final String KEY_DIR_AVATAR = "dir_avatar";
+        private static final String KEY_DIR_LOGS = "dir_logs";
+        private static final long OFFICIAL_ACCOUNT = 3941216030L;
+        private static final long DEVELOPER_1 = 1732168142L;
+        private static final long DEVELOPER_2 = 2936096844L;
         
-        public static class AboutFragment extends PreferenceFragment {
-            private static final String KEY_MEMORY = "memory";
-            private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
-            private static final String KEY_DEVELOPER_1 = "developer_1";
-            private static final String KEY_DEVELOPER_2 = "developer_2";
-            private static final String KEY_DIR_PIC = "dir_pic";
-            private static final String KEY_DIR_AVATAR = "dir_avatar";
-            private static final String KEY_DIR_LOGS = "dir_logs";
-            private static final long OFFICIAL_ACCOUNT = 3941216030L;
-            private static final long DEVELOPER_1 = 1732168142L;
-            private static final long DEVELOPER_2 = 2936096844L;
-            
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                addPreferencesFromResource(R.xml.prefs_about);
-                buildMemoryInfo(findPreference(KEY_MEMORY));
-                buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
-                buildDevelopers();
-                buildDirectories();
-            }
-            
-            private static void buildMemoryInfo(Preference preference) {
-                Runtime runtime = Runtime.getRuntime();
-                long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
-                long nativeAlloc = Debug.getNativeHeapAllocatedSize();
-                Context context = GlobalContext.getInstance();
-                ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-                int memoryClass = manager.getMemoryClass();
-                String summary =
-                        context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass
-                                + " MB")
-                                + "\n" + context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
-                preference.setSummary(summary);
-            }
-            
-            private void buildOfficialAccount(Preference preference) {
-                preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        startActivity(ActivityUtils.userActivity(OFFICIAL_ACCOUNT));
-                        return true;
-                    }
-                });
-            }
-            
-            private void buildDevelopers() {
-                findPreference(KEY_DEVELOPER_1).setOnPreferenceClickListener(
-                        new Preference.OnPreferenceClickListener() {
-                            @Override
-                            public boolean onPreferenceClick(Preference preference) {
-                                startActivity(ActivityUtils.userActivity(DEVELOPER_1));
-                                return true;
-                            }
-                        });
-                findPreference(KEY_DEVELOPER_2).setOnPreferenceClickListener(
-                        new Preference.OnPreferenceClickListener() {
-                            @Override
-                            public boolean onPreferenceClick(Preference preference) {
-                                startActivity(ActivityUtils.userActivity(DEVELOPER_2));
-                                return true;
-                            }
-                        });
-            }
-            
-            private void buildDirectories() {
-                findPreference(KEY_DIR_PIC).setSummary(FileUtils.WEIBO_PICTURE_CACHE);
-                findPreference(KEY_DIR_AVATAR).setSummary(FileUtils.WEIBO_AVATAR_CACHE);
-                findPreference(KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
-            }
-            
-            private static String formatMemoryText(long memory) {
-                float memoryInMB = (float) memory / (1024 * 1024);
-                return String.format(Locale.ENGLISH, "%.1f MB", memoryInMB);
-            }
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_about);
+            buildMemoryInfo(findPreference(KEY_MEMORY));
+            buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
+            buildDevelopers();
+            buildDirectories();
+        }
+        
+        private static void buildMemoryInfo(Preference preference) {
+            Runtime runtime = Runtime.getRuntime();
+            long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
+            long nativeAlloc = Debug.getNativeHeapAllocatedSize();
+            Context context = GlobalContext.getInstance();
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            int memoryClass = manager.getMemoryClass();
+            String summary =
+                    context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass + " MB")
+                            + "\n" + context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
+            preference.setSummary(summary);
+        }
+        
+        private void buildOfficialAccount(Preference preference) {
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(ActivityUtils.userActivity(OFFICIAL_ACCOUNT));
+                    return true;
+                }
+            });
+        }
+        
+        private void buildDevelopers() {
+            findPreference(KEY_DEVELOPER_1).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(ActivityUtils.userActivity(DEVELOPER_1));
+                    return true;
+                }
+            });
+            findPreference(KEY_DEVELOPER_2).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(ActivityUtils.userActivity(DEVELOPER_2));
+                    return true;
+                }
+            });
+        }
+        
+        private void buildDirectories() {
+            findPreference(KEY_DIR_PIC).setSummary(FileUtils.WEIBO_PICTURE_CACHE);
+            findPreference(KEY_DIR_AVATAR).setSummary(FileUtils.WEIBO_AVATAR_CACHE);
+            findPreference(KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
+        }
+        
+        private static String formatMemoryText(long memory) {
+            float memoryInMB = (float) memory / (1024 * 1024);
+            return String.format(Locale.ENGLISH, "%.1f MB", memoryInMB);
         }
     }
     
@@ -523,6 +527,79 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setTitle(null);
             getSupportActionBar().hide();
+        }
+    }
+    
+    public static class IgnoreActivity extends AbsActivity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            FragmentManager fm = getFragmentManager();
+            Fragment fragment = fm.findFragmentById(android.R.id.content);
+            if (fragment == null) {
+                fragment = new IgnoreFragment();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(android.R.id.content, fragment);
+                ft.commit();
+            }
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.ignore);
+        }
+    }
+    
+    public static class IgnoreFragment extends ListFragment {
+        private WeiboFilter[] mFilters = new WeiboFilter[0];
+        
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setRetainInstance(true);
+            setListAdapter(new ListAdapter());
+            new RefreshTask().execute();
+        }
+        
+        private class RefreshTask extends MyAsyncTask<Void, Void, WeiboFilter[]> {
+            @Override
+            protected WeiboFilter[] doInBackground(Void... params) {
+                return DatabaseUtils.getWeiboFilters();
+            }
+            
+            @Override
+            protected void onPostExecute(WeiboFilter[] result) {
+                mFilters = result;
+                ((BaseAdapter) getListAdapter()).notifyDataSetChanged();
+            }
+        }
+        
+        private class ListAdapter extends BaseAdapter {
+            @Override
+            public int getCount() {
+                return mFilters.length;
+            }
+            
+            @Override
+            public WeiboFilter getItem(int position) {
+                return mFilters[position];
+            }
+            
+            @Override
+            public long getItemId(int position) {
+                return mFilters[position].getId();
+            }
+            
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView textView = null;
+                if (convertView != null) {
+                    textView = (TextView) convertView;
+                } else {
+                    textView = (TextView) getActivity().getLayoutInflater().inflate(
+                            android.R.layout.simple_list_item_1, parent, false);
+                }
+                textView.setText(mFilters[position].toString());
+                return textView;
+            }
         }
     }
 }

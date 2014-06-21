@@ -33,6 +33,12 @@
             android:title="@string/swipe_back"
             android:defaultValue="true" />
         
+        <Preference android:title="@string/ignore">
+            <intent
+                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$IgnoreActivity"
+                android:targetPackage="gov.moandor.androidweibo" />
+        </Preference>
+        
     </PreferenceCategory>
     
     <PreferenceCategory android:title="@string/data_control">
