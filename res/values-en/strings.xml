@@ -221,6 +221,9 @@
     <string name="dir_logs">Crash logs</string>
     <string name="open_source_licenses">Open source licenses</string>
     <string name="ignore">Ignore</string>
+    <string name="regex">Regex</string>
+    <string name="check_reposted">Also check reposted message</string>
+    <string name="keywords">Keywords</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

@@ -222,6 +222,9 @@
     <string name="dir_logs">崩溃日志</string>
     <string name="open_source_licenses">开源协议</string>
     <string name="ignore">屏蔽</string>
+    <string name="regex">正则</string>
+    <string name="check_reposted">包括被转发的内容</string>
+    <string name="keywords">关键词</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>
