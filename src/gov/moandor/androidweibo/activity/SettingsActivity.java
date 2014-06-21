@@ -2,11 +2,15 @@ package gov.moandor.androidweibo.activity;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
@@ -527,79 +531,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             getSupportActionBar().setDisplayShowHomeEnabled(false);
             getSupportActionBar().setTitle(null);
             getSupportActionBar().hide();
-        }
-    }
-    
-    public static class IgnoreActivity extends AbsActivity {
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            FragmentManager fm = getFragmentManager();
-            Fragment fragment = fm.findFragmentById(android.R.id.content);
-            if (fragment == null) {
-                fragment = new IgnoreFragment();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(android.R.id.content, fragment);
-                ft.commit();
-            }
-            getSupportActionBar().setDisplayShowHomeEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.ignore);
-        }
-    }
-    
-    public static class IgnoreFragment extends ListFragment {
-        private WeiboFilter[] mFilters = new WeiboFilter[0];
-        
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setRetainInstance(true);
-            setListAdapter(new ListAdapter());
-            new RefreshTask().execute();
-        }
-        
-        private class RefreshTask extends MyAsyncTask<Void, Void, WeiboFilter[]> {
-            @Override
-            protected WeiboFilter[] doInBackground(Void... params) {
-                return DatabaseUtils.getWeiboFilters();
-            }
-            
-            @Override
-            protected void onPostExecute(WeiboFilter[] result) {
-                mFilters = result;
-                ((BaseAdapter) getListAdapter()).notifyDataSetChanged();
-            }
-        }
-        
-        private class ListAdapter extends BaseAdapter {
-            @Override
-            public int getCount() {
-                return mFilters.length;
-            }
-            
-            @Override
-            public WeiboFilter getItem(int position) {
-                return mFilters[position];
-            }
-            
-            @Override
-            public long getItemId(int position) {
-                return mFilters[position].getId();
-            }
-            
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = null;
-                if (convertView != null) {
-                    textView = (TextView) convertView;
-                } else {
-                    textView = (TextView) getActivity().getLayoutInflater().inflate(
-                            android.R.layout.simple_list_item_1, parent, false);
-                }
-                textView.setText(mFilters[position].toString());
-                return textView;
-            }
         }
     }
 }

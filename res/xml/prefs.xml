@@ -35,7 +35,7 @@
         
         <Preference android:title="@string/ignore">
             <intent
-                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$IgnoreActivity"
+                android:targetClass="gov.moandor.androidweibo.activity.IgnoreActivity"
                 android:targetPackage="gov.moandor.androidweibo" />
         </Preference>
         

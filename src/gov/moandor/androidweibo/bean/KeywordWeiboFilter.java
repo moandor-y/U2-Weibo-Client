@@ -3,7 +3,7 @@ package gov.moandor.androidweibo.bean;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.GlobalContext;
 
-public class KeyWordWeiboFilter extends AbsWeiboFilter {
+public class KeywordWeiboFilter extends AbsWeiboFilter {
     @Override
     public boolean shouldBeRemoved(WeiboStatus status) {
         if (status.retweetStatus != null && mCheckReposted) {
