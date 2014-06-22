@@ -1,5 +1,8 @@
 bin/
 gen/
+build/
+.gradle
+.idea
 CompileCount.bat
 CompileCount.py
 CompileCount.txt
@@ -11,6 +14,5 @@ proguard/
 lint.xml
 proguard-project.txt
 project.properties
-build.gradle
 pom.xml
 git_commit_count.bat
