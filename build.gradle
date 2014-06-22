@@ -1,0 +1,51 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.11.+'
+    }
+}
+
+apply plugin: 'android'
+
+dependencies {
+    compile files('libs/gson-2.2.4.jar')
+    compile project(':libs:android-support-v7-appcompat')
+    compile project(':libs:android-support-v7-gridlayout')
+    compile project(':libs:PagerSlidingTabStrip')
+    compile project(':libs:PhotoView')
+    compile project(':libs:SwipeBackLayout')
+}
+
+android {
+    signingConfigs {
+    }
+    compileSdkVersion 19
+    buildToolsVersion '19.1.0'
+    sourceSets {
+        main {
+            manifest {
+                srcFile 'AndroidManifest.xml'
+            }
+            java {
+                srcDir 'src'
+            }
+            res {
+                srcDir 'res'
+            }
+            assets {
+                srcDir 'assets'
+            }
+            resources {
+                srcDir 'src'
+            }
+        }
+    }
+    defaultConfig {}
+    productFlavors {
+    }
+    buildTypes {
+    }
+}

@@ -1,0 +1,6 @@
+include ':libs:android-support-v7-appcompat'
+include ':libs:SwipeBackLayout'
+include ':libs:android-support-v7-gridlayout'
+include ':libs:PhotoView'
+include ':libs:PagerSlidingTabStrip'
+include ':'
