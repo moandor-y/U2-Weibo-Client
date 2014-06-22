@@ -241,15 +241,15 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         case ConfigManager.ORIENTATION_USER:
             orientation.setTitle(R.string.lock_orientation);
             if (Utilities.isScreenLandscape()) {
-                orientation.setIcon(R.drawable.ic_menu_lock_orientation_land);
+                orientation.setIcon(R.drawable.ic_lock_orientation_land);
             } else {
-                orientation.setIcon(R.drawable.ic_menu_lock_orientation_port);
+                orientation.setIcon(R.drawable.ic_lock_orientation_port);
             }
             break;
         case ConfigManager.ORIENTATION_LANDSCAPE:
         case ConfigManager.ORIENTATION_PORTRAIT:
             orientation.setTitle(R.string.unlock_orientation);
-            orientation.setIcon(R.drawable.ic_menu_unlock_orientation);
+            orientation.setIcon(R.drawable.ic_unlock_orientation);
             break;
         }
         return true;

@@ -83,6 +83,12 @@
         <item>Open</item>
     </string-array>
     
+    <string-array name="filter_types">
+        <item>Keywords</item>
+        <item>User</item>
+        <item>Source</item>
+    </string-array>
+    
     <string name="weibo">Weibo</string>
     <string name="loading">Loading…</string>
     <string name="avatar">Avatar</string>
@@ -220,10 +226,13 @@
     <string name="dir_avatar">Avatar cache</string>
     <string name="dir_logs">Crash logs</string>
     <string name="open_source_licenses">Open source licenses</string>
+    
+    <!-- IgnoreActivity -->
     <string name="ignore">Ignore</string>
     <string name="regex">Regex</string>
     <string name="check_reposted">Also check reposted message</string>
     <string name="keywords">Keywords</string>
+    <string name="add_filter">Add filter</string>
     
     <!-- WriteActivity -->
     <string name="send">Send</string>

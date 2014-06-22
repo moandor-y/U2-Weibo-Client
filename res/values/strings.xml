@@ -83,6 +83,12 @@
         <item>打开</item>
     </string-array>
     
+    <string-array name="filter_types">
+        <item>关键词</item>
+        <item>用户</item>
+        <item>来源</item>
+    </string-array>
+    
     <string name="app_name">U二</string>
     <string name="weibo">微博</string>
     <string name="loading">载入中…</string>
@@ -221,10 +227,13 @@
     <string name="dir_avatar">头像缓存</string>
     <string name="dir_logs">崩溃日志</string>
     <string name="open_source_licenses">开源协议</string>
+    
+    <!-- IgnoreActivity -->
     <string name="ignore">屏蔽</string>
     <string name="regex">正则</string>
     <string name="check_reposted">包括被转发的内容</string>
     <string name="keywords">关键词</string>
+    <string name="add_filter">添加过滤器</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

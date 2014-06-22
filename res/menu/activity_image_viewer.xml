@@ -6,13 +6,13 @@
     <item
         android:id="@+id/save"
         android:title="@string/save_picture"
-        android:icon="@drawable/ic_menu_save_dark"
+        android:icon="@drawable/ic_save_dark"
         androidweibo:showAsAction="ifRoom" />
     
     <item
         android:id="@+id/show_ori"
         android:title="@string/show_ori"
-        android:icon="@drawable/ic_menu_picture"
+        android:icon="@drawable/ic_picture"
         androidweibo:showAsAction="ifRoom" />
     
 </menu>

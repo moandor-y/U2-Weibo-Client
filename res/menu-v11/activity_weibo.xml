@@ -36,13 +36,13 @@
     <item
         android:id="@+id/share"
         android:title="@string/share"
-        android:icon="@drawable/ic_menu_share_dark"
+        android:icon="@drawable/ic_share_dark"
         androidweibo:showAsAction="ifRoom|withText"
         androidweibo:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
     
     <item
         android:id="@+id/copy"
         android:title="@string/copy"
-        android:icon="@drawable/ic_menu_copy_dark" />
+        android:icon="@drawable/ic_copy_dark" />
     
 </menu>

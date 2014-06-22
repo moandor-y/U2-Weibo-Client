@@ -28,7 +28,7 @@
     <item
         android:id="@+id/find_user"
         android:title="@string/find_user"
-        android:icon="@drawable/ic_menu_user"
+        android:icon="@drawable/ic_user"
         androidweibo:showAsAction="ifRoom|withText" />
     
 </menu>

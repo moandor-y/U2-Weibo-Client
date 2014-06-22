@@ -34,6 +34,18 @@ abstract class AbsWeiboFilter implements WeiboFilter {
         return sb.toString();
     }
     
+    public void setPattern(String pattern) {
+        mPattern = pattern;
+    }
+    
+    public void setCheckReposted(boolean checkReposted) {
+        mCheckReposted = checkReposted;
+    }
+    
+    public void setIsRegex(boolean isRegex) {
+        mIsRegex = isRegex;
+    }
+    
     protected boolean matches(String text) {
         if (mIsRegex) {
             return text.matches(mPattern);
