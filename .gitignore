@@ -5,6 +5,8 @@ build/
 .idea
 *.iml
 /local.properties
+gradlew
+gradlew.bat
 CompileCount.bat
 CompileCount.py
 CompileCount.txt
