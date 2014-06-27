@@ -5,8 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.SparseArray;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.CommentDraft;
@@ -19,6 +21,7 @@ import gov.moandor.androidweibo.bean.WeiboGroup;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.filter.WeiboFilter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -625,24 +628,25 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(Table.WeiboFilter.CLASS_NAME, filter.getClass().getName());
         values.put(Table.WeiboFilter.CONTENT_DATA, sGson.toJson(filter));
-		Cursor cursor = database.rawQuery("select " + Table.WeiboFilter.ID + " from " + Table.WeiboFilter.TABLE_NAME
-				+ " where " + Table.WeiboFilter.ID + "=" + filter.getId(), null);
-		if (cursor.moveToNext()) {
-			values.put(Table.WeiboFilter.ID, filter.getId());
-			database.update(Table.WeiboFilter.TABLE_NAME, values, Table.WeiboFilter.ID + "=" + filter.getId(), null);
-		} else {
-			database.insert(Table.WeiboFilter.TABLE_NAME, null, values);
-		}
-		cursor.close();
+        Cursor cursor =
+                database.rawQuery("select " + Table.WeiboFilter.ID + " from " + Table.WeiboFilter.TABLE_NAME
+                        + " where " + Table.WeiboFilter.ID + "=" + filter.getId(), null);
+        if (cursor.moveToNext()) {
+            values.put(Table.WeiboFilter.ID, filter.getId());
+            database.update(Table.WeiboFilter.TABLE_NAME, values, Table.WeiboFilter.ID + "=" + filter.getId(), null);
+        } else {
+            database.insert(Table.WeiboFilter.TABLE_NAME, null, values);
+        }
+        cursor.close();
         database.close();
     }
     
-	public static synchronized void removeWeiboFilter(int id) {
-		SQLiteDatabase database = sInstance.getWritableDatabase();
-		database.delete(Table.WeiboFilter.TABLE_NAME, Table.WeiboFilter.ID + "=" + id, null);
-		database.close();
-	}
-	
+    public static synchronized void removeWeiboFilter(int id) {
+        SQLiteDatabase database = sInstance.getWritableDatabase();
+        database.delete(Table.WeiboFilter.TABLE_NAME, Table.WeiboFilter.ID + "=" + id, null);
+        database.close();
+    }
+    
     public static synchronized WeiboFilter[] getWeiboFilters() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.WeiboFilter.TABLE_NAME, null);

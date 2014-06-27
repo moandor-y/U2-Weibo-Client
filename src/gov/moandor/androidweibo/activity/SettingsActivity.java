@@ -20,6 +20,7 @@ import android.preference.PreferenceFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.webkit.WebView;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
 import gov.moandor.androidweibo.util.ActivityUtils;

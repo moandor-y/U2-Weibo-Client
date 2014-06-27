@@ -143,8 +143,8 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="direct_messages">私信</string>
-	<string name="username">用户名</string>
-	<string name="user">用户</string>
+    <string name="username">用户名</string>
+    <string name="user">用户</string>
     
     <!-- Time -->
     <string name="just_now">刚刚</string>
@@ -235,8 +235,8 @@
     <string name="check_reposted">包括被转发的内容</string>
     <string name="keywords">关键词</string>
     <string name="add_filter">添加过滤器</string>
-	<string name="user_id">用户ID</string>
-	<string name="source">来源</string>
+    <string name="user_id">用户ID</string>
+    <string name="source">来源</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>

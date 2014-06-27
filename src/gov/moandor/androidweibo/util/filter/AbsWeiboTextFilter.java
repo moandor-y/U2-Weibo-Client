@@ -3,14 +3,16 @@ package gov.moandor.androidweibo.util.filter;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
+
 import java.util.regex.PatternSyntaxException;
-import gov.moandor.androidweibo.util.Utilities;
 
 public abstract class AbsWeiboTextFilter extends BaseWeiboFilter {
+    private static final long serialVersionUID = 1L;
+    
     protected boolean mCheckReposted;
     protected boolean mIsRegex;
     protected String mPattern;
-	
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -25,43 +27,43 @@ public abstract class AbsWeiboTextFilter extends BaseWeiboFilter {
         sb.append("\"");
         return sb.toString();
     }
-	
+    
     public void setPattern(String pattern) {
         mPattern = pattern;
     }
-	
-	public String getPattern() {
-		return mPattern;
-	}
-	
+    
+    public String getPattern() {
+        return mPattern;
+    }
+    
     public void setCheckReposted(boolean checkReposted) {
         mCheckReposted = checkReposted;
     }
-	
-	public boolean getCheckReposted() {
-		return mCheckReposted;
-	}
-	
+    
+    public boolean getCheckReposted() {
+        return mCheckReposted;
+    }
+    
     public void setIsRegex(boolean isRegex) {
         mIsRegex = isRegex;
     }
-	
-	public boolean isRegex() {
-		return mIsRegex;
-	}
-	
+    
+    public boolean isRegex() {
+        return mIsRegex;
+    }
+    
     protected boolean matches(String text) {
         if (mIsRegex) {
-			try {
-				return text.matches(mPattern);
-			} catch (PatternSyntaxException e) {
-				Logger.logException(e);
-				return false;
-			}
+            try {
+                return text.matches(mPattern);
+            } catch (PatternSyntaxException e) {
+                Logger.logException(e);
+                return false;
+            }
         } else {
             return text.contains(mPattern);
         }
     }
-	
+    
     protected abstract String getType();
 }
