@@ -36,7 +36,7 @@ public class FileUtils {
                 return file;
             }
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
         return null;
     }
@@ -111,7 +111,7 @@ public class FileUtils {
             out.flush();
             return true;
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             return false;
         } finally {
             Utilities.closeSilently(out);

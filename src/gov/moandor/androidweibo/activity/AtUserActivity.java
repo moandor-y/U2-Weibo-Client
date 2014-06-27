@@ -127,7 +127,7 @@ public class AtUserActivity extends AbsActivity {
             try {
                 return dao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 cancel(true);
             }

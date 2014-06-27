@@ -1,6 +1,5 @@
 package gov.moandor.androidweibo.dao;
 
-import gov.moandor.androidweibo.bean.WeiboFilter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.ConfigManager;
@@ -9,7 +8,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
-
+import gov.moandor.androidweibo.util.filter.WeiboFilter;
 import java.util.Iterator;
 import java.util.List;
 

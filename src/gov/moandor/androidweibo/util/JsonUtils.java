@@ -31,7 +31,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -47,7 +47,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -63,7 +63,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -72,7 +72,7 @@ public class JsonUtils {
         try {
             return getWeiboStatusFromJson(new JSONObject(jsonStr));
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -127,7 +127,7 @@ public class JsonUtils {
             }
             return weiboUsers;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -136,7 +136,7 @@ public class JsonUtils {
         try {
             return getWeiboUserFromJson(new JSONObject(jsonStr));
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -182,7 +182,7 @@ public class JsonUtils {
             json = new JSONObject(jsonStr);
             return json.getLong("uid");
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
         
@@ -199,7 +199,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -218,7 +218,7 @@ public class JsonUtils {
         try {
             return getDmFromJson(new JSONObject(jsonStr));
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -244,7 +244,7 @@ public class JsonUtils {
             }
             return weiboComments;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -282,7 +282,7 @@ public class JsonUtils {
             result.directMessage = json.getInt("dm");
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -302,7 +302,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -321,7 +321,7 @@ public class JsonUtils {
             result.totalNumber = json.getInt("total_number");
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -336,7 +336,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
@@ -351,7 +351,7 @@ public class JsonUtils {
             }
             return result;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }

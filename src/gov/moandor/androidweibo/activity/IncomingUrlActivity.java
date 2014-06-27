@@ -67,7 +67,7 @@ public class IncomingUrlActivity extends AbsActivity {
                 statusDao.setId(id);
                 return statusDao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 cancel(true);
                 return null;

@@ -30,7 +30,7 @@ public class UnfavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
         try {
             return dao.execute();
         } catch (WeiboException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             mException = e;
         }
         cancel(true);

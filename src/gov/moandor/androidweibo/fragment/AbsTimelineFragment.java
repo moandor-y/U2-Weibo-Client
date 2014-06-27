@@ -268,7 +268,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             try {
                 return mDao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }
@@ -315,7 +315,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             try {
                 return mDao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }

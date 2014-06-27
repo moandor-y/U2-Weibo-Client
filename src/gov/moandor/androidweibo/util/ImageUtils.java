@@ -39,7 +39,7 @@ public class ImageUtils {
             }
             return bitmap;
         } catch (OutOfMemoryError e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             return null;
         }
     }

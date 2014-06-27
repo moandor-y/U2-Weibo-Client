@@ -59,7 +59,7 @@ public class FetchUnreadMessageService extends IntentService {
             }
             showNotification(context, account, unreadCount);
         } catch (WeiboException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
     }
     

@@ -49,7 +49,7 @@ public class Utilities {
         try {
             closeable.close();
         } catch (Exception e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
     }
     
@@ -63,7 +63,7 @@ public class Utilities {
             }
             return map;
         } catch (MalformedURLException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             return null;
         }
     }
@@ -77,7 +77,7 @@ public class Utilities {
                 try {
                     params.put(URLDecoder.decode(v[0], "UTF-8"), URLDecoder.decode(v[1], "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                 }
             }
         }
@@ -108,7 +108,7 @@ public class Utilities {
         try {
             return URLEncoder.encode(string, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
         return null;
     }
@@ -341,7 +341,7 @@ public class Utilities {
         try {
             GlobalContext.getInstance().unregisterReceiver(receiver);
         } catch (IllegalArgumentException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
     }
     

@@ -143,6 +143,8 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="direct_messages">私信</string>
+	<string name="username">用户名</string>
+	<string name="user">用户</string>
     
     <!-- Time -->
     <string name="just_now">刚刚</string>
@@ -158,7 +160,6 @@
     <string name="hack_login">黑魔法登录？</string>
     <string name="username_empty">请输入用户名</string>
     <string name="password_empty">请输入密码</string>
-    <string name="username">用户名</string>
     <string name="password">密码</string>
     
     <!-- MainActivity -->
@@ -234,6 +235,8 @@
     <string name="check_reposted">包括被转发的内容</string>
     <string name="keywords">关键词</string>
     <string name="add_filter">添加过滤器</string>
+	<string name="user_id">用户ID</string>
+	<string name="source">来源</string>
     
     <!-- WriteActivity -->
     <string name="send">发送</string>
@@ -282,7 +285,6 @@
     <string name="uploading">正在上传</string>
     
     <!-- User -->
-    <string name="user">用户</string>
     <string name="posts_of">%s的微博</string>
     <string name="following_of">%s的关注</string>
     <string name="followers_of">%s的粉丝</string>

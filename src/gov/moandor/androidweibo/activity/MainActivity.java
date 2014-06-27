@@ -508,7 +508,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 try {
                     mGroupsLoadLock.wait();
                 } catch (InterruptedException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                 }
             }
         }
@@ -563,7 +563,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 try {
                     return dao.execute().toArray(new WeiboGroup[0]);
                 } catch (WeiboException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                 }
             } else {
                 return groups;
@@ -605,7 +605,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             try {
                 return dao.execute().toArray(new WeiboGroup[0]);
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
             }
             return null;

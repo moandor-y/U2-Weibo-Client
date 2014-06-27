@@ -192,7 +192,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
                 WeiboStatus status = dao.execute();
                 return new Integer[]{status.commentCount, status.repostCount};
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
             }
             return null;
         }

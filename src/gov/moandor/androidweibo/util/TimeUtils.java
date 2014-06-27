@@ -25,7 +25,7 @@ public class TimeUtils {
             long timeMillis = parseSinaTime(bean);
             return getListTime(timeMillis);
         } catch (ParseException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             return "";
         }
     }

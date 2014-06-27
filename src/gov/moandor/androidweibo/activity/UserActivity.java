@@ -136,7 +136,7 @@ public class UserActivity extends AbsActivity {
         try {
             fm.beginTransaction().replace(android.R.id.content, mFragment).commit();
         } catch (IllegalStateException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
         supportInvalidateOptionsMenu();
     }

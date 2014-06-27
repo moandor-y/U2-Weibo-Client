@@ -36,7 +36,7 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
                 mUser.following = true;
                 return mUser;
             } else {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 mException = e;
             }
         }

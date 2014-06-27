@@ -114,7 +114,7 @@ public class SendWeiboService extends Service {
                         cancel(true);
                     }
                 } catch (WeiboException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                     mDraft.error = e.getMessage();
                     DatabaseUtils.insertDraft(mDraft);
                     cancel(true);
@@ -123,7 +123,7 @@ public class SendWeiboService extends Service {
                 try {
                     dao.execute();
                 } catch (WeiboException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                     mDraft.error = e.getMessage();
                     DatabaseUtils.insertDraft(mDraft);
                     cancel(true);

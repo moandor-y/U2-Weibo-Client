@@ -28,7 +28,7 @@ public class WeiboMidToIdDao extends BaseHttpDao<Long> {
             JSONObject json = new JSONObject(response);
             return Long.valueOf(json.getString("id"));
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }

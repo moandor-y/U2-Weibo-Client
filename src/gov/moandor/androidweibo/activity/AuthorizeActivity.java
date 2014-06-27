@@ -162,7 +162,7 @@ public class AuthorizeActivity extends AbsActivity {
             try {
                 code = Integer.parseInt(errorCode);
             } catch (Exception e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
             }
             Utilities.notice(WeiboException.getError(code, error));
         }
@@ -186,7 +186,7 @@ public class AuthorizeActivity extends AbsActivity {
                 startActivity(intent);
                 finish();
             } catch (final WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
             }
         }

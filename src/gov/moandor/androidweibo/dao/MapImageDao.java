@@ -43,7 +43,7 @@ public class MapImageDao extends BaseHttpDao<Bitmap> {
                 return ImageUtils.getBitmapFromFile(path, -1, -1);
             }
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
         return null;

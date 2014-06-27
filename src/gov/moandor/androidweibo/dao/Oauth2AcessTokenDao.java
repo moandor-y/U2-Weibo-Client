@@ -33,7 +33,7 @@ public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
             json = new JSONObject(response);
             return json.getString("access_token");
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }

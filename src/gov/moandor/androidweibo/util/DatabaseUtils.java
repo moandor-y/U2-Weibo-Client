@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.SparseArray;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.CommentDraft;
@@ -17,11 +15,10 @@ import gov.moandor.androidweibo.bean.DirectMessagesUser;
 import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.bean.WeiboComment;
 import gov.moandor.androidweibo.bean.WeiboDraft;
-import gov.moandor.androidweibo.bean.WeiboFilter;
 import gov.moandor.androidweibo.bean.WeiboGroup;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
-
+import gov.moandor.androidweibo.util.filter.WeiboFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -623,25 +620,29 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         return null;
     }
     
-    public static synchronized void insertWeiboFilter(WeiboFilter filter) {
+    public static synchronized void insertOrUpdateWeiboFilter(WeiboFilter filter) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(Table.WeiboFilter.CLASS_NAME, filter.getClass().getName());
         values.put(Table.WeiboFilter.CONTENT_DATA, sGson.toJson(filter));
-        database.insert(Table.WeiboFilter.TABLE_NAME, null, values);
+		Cursor cursor = database.rawQuery("select " + Table.WeiboFilter.ID + " from " + Table.WeiboFilter.TABLE_NAME
+				+ " where " + Table.WeiboFilter.ID + "=" + filter.getId(), null);
+		if (cursor.moveToNext()) {
+			values.put(Table.WeiboFilter.ID, filter.getId());
+			database.update(Table.WeiboFilter.TABLE_NAME, values, Table.WeiboFilter.ID + "=" + filter.getId(), null);
+		} else {
+			database.insert(Table.WeiboFilter.TABLE_NAME, null, values);
+		}
+		cursor.close();
         database.close();
     }
     
-    public static synchronized void updateWeiboFilter(WeiboFilter filter) {
-        SQLiteDatabase database = sInstance.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(Table.WeiboFilter.ID, filter.getId());
-        values.put(Table.WeiboFilter.CLASS_NAME, filter.getClass().getName());
-        values.put(Table.WeiboFilter.CONTENT_DATA, sGson.toJson(filter));
-        database.update(Table.WeiboFilter.TABLE_NAME, values, Table.WeiboFilter.ID + "=" + filter.getId(), null);
-        database.close();
-    }
-    
+	public static synchronized void removeWeiboFilter(int id) {
+		SQLiteDatabase database = sInstance.getWritableDatabase();
+		database.delete(Table.WeiboFilter.TABLE_NAME, Table.WeiboFilter.ID + "=" + id, null);
+		database.close();
+	}
+	
     public static synchronized WeiboFilter[] getWeiboFilters() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.WeiboFilter.TABLE_NAME, null);
@@ -654,7 +655,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
                 filter.setId(cursor.getInt(cursor.getColumnIndex(Table.WeiboFilter.ID)));
                 result.add(filter);
             } catch (ClassNotFoundException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
             }
         }
         cursor.close();

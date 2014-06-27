@@ -67,7 +67,7 @@ public class HttpUtils {
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
     }
     
@@ -156,7 +156,7 @@ public class HttpUtils {
             }
             return true;
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             cacheFile.delete();
         } finally {
             Utilities.closeSilently(in);
@@ -184,7 +184,7 @@ public class HttpUtils {
             }
             return sb.toString();
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         } finally {
             Utilities.closeSilently(buffer);
@@ -217,7 +217,7 @@ public class HttpUtils {
             connection.connect();
             return handleResponse(connection);
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         }
     }
@@ -249,7 +249,7 @@ public class HttpUtils {
             out.close();
             return handleResponse(connection);
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         }
     }
@@ -259,7 +259,7 @@ public class HttpUtils {
         try {
             responseCode = connection.getResponseCode();
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             connection.disconnect();
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         }
@@ -282,7 +282,7 @@ public class HttpUtils {
             e.mOriError = err;
             throw e;
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.unknown_error));
         }
     }
@@ -306,7 +306,7 @@ public class HttpUtils {
             }
             return sb.toString();
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         } finally {
             Utilities.closeSilently(buffer);
@@ -398,7 +398,7 @@ public class HttpUtils {
                 handleError(connection);
             }
         } catch (IOException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         } finally {
             Utilities.closeSilently(in);

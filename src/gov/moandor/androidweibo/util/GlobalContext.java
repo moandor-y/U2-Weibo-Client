@@ -265,7 +265,7 @@ public class GlobalContext extends Application {
                     sEmotionMap.put(index, bitmap);
                 }
             } catch (IOException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
             } finally {
                 Utilities.closeSilently(is);
             }

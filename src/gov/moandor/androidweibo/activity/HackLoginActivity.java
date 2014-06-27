@@ -61,7 +61,7 @@ public class HackLoginActivity extends AbsActivity {
                             startActivity(intent);
                             finish();
                         } catch (WeiboException e) {
-                            Logger.logExcpetion(e);
+                            Logger.logException(e);
                             Utilities.notice(e.getMessage());
                         }
                     }

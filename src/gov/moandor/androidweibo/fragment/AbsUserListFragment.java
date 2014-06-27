@@ -182,7 +182,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 mNextCursor = mDao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }
@@ -222,7 +222,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 mNextCursor = mDao.getNextCursor();
                 return beans;
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }

@@ -15,7 +15,7 @@ public class Logger {
     private static final String DEBUG_LOG_FILE = FileUtils.LOGS + File.separator + "debug.log";
     private static final boolean ENABLED = BuildConfig.DEBUG;
     
-    public static void logExcpetion(Throwable throwable) {
+    public static void logException(Throwable throwable) {
         if (ENABLED) {
             throwable.printStackTrace();
         }
@@ -50,7 +50,7 @@ public class Logger {
                 out.write("\n\n\n\n");
                 out.flush();
             } catch (IOException e) {
-                logExcpetion(e);
+                logException(e);
             } finally {
                 Utilities.closeSilently(out);
                 Utilities.closeSilently(fileWriter);

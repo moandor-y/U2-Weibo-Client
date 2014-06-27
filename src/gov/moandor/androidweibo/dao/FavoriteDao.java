@@ -28,7 +28,7 @@ public class FavoriteDao extends BaseHttpDao<WeiboStatus> {
             JSONObject json = new JSONObject(response);
             return JsonUtils.getWeiboStatusFromJson(json.getJSONObject("status"));
         } catch (JSONException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }

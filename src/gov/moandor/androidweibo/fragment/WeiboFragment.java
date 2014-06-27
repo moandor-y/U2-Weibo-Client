@@ -252,7 +252,7 @@ public class WeiboFragment extends Fragment {
                         });
                     }
                 } catch (WeiboException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                 }
             }
         });

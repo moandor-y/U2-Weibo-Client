@@ -41,14 +41,14 @@ public class ImageDownloadTaskCache {
             try {
                 return task.get(30, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Thread.currentThread().interrupt();
                 return false;
             } catch (ExecutionException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 return false;
             } catch (TimeoutException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 return false;
             } catch (CancellationException e) {
                 removeImageDownloadTask(url, task);

@@ -257,7 +257,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             try {
                 return mDao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }
@@ -290,7 +290,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             try {
                 return mDao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }
@@ -339,7 +339,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             try {
                 return mDao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 Utilities.notice(e.getMessage());
                 return null;
             }

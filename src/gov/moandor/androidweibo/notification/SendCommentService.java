@@ -92,7 +92,7 @@ public class SendCommentService extends Service {
                     repost();
                 }
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 mDraft.error = e.getMessage();
                 DatabaseUtils.insertDraft(mDraft);
                 cancel(true);

@@ -53,9 +53,9 @@ public class ClearCacheRunnable implements Runnable {
                 DatabaseUtils.updateFollowingAvatarPaths(paths);
                 return paths;
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
             } catch (JSONException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
             }
             return null;
         } else {

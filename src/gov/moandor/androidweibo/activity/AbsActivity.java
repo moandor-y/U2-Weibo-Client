@@ -54,7 +54,7 @@ public abstract class AbsActivity extends ActionBarActivity {
                 field.setBoolean(config, false);
             }
         } catch (Exception e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
     }
 }

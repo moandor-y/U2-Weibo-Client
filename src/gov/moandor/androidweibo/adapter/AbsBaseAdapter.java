@@ -7,6 +7,6 @@ import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Utilities;
 
 public abstract class AbsBaseAdapter extends BaseAdapter {
-    LayoutInflater mInflater = GlobalContext.getActivity().getLayoutInflater();
-    float mFontSize = Utilities.getFontSize();
+    protected LayoutInflater mInflater = GlobalContext.getActivity().getLayoutInflater();
+    protected float mFontSize = Utilities.getFontSize();
 }

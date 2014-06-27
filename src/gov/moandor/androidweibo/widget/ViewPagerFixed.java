@@ -21,7 +21,7 @@ public class ViewPagerFixed extends ViewPager {
         try {
             return super.onInterceptTouchEvent(ev);
         } catch (IllegalArgumentException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
         return false;
     }
@@ -31,7 +31,7 @@ public class ViewPagerFixed extends ViewPager {
         try {
             return super.onTouchEvent(ev);
         } catch (IllegalArgumentException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
         return false;
     }

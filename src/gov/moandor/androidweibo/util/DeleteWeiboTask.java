@@ -29,7 +29,7 @@ public class DeleteWeiboTask extends MyAsyncTask<Void, Void, Void> {
         try {
             dao.execute();
         } catch (WeiboException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             if (e.getCode() != CODE_ALREADY_DELETED) {
                 mException = e;
                 cancel(true);

@@ -54,7 +54,7 @@ public class UpdateFollowingIdsTask extends MyAsyncTask<Void, Void, Void> {
             }
             DatabaseUtils.updateFollowingIds(result, account.user.id);
         } catch (WeiboException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
         }
     }
     

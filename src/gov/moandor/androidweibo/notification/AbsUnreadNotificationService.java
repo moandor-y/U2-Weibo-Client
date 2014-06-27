@@ -114,7 +114,7 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
                 try {
                     dao.execute();
                 } catch (WeiboException e) {
-                    Logger.logExcpetion(e);
+                    Logger.logException(e);
                 }
             }
         });

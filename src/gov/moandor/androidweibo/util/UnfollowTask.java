@@ -34,7 +34,7 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
                 mUser.following = false;
                 return mUser;
             } else {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 mException = e;
             }
         }

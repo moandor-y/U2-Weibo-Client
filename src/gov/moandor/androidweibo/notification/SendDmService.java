@@ -80,7 +80,7 @@ public class SendDmService extends Service {
             try {
                 return dao.execute();
             } catch (WeiboException e) {
-                Logger.logExcpetion(e);
+                Logger.logException(e);
                 mError = e.getMessage();
                 cancel(true);
             }

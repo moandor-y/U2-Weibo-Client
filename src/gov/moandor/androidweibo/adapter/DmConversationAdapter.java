@@ -114,7 +114,7 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
             long prevTime = TimeUtils.parseSinaTime(prevMessage);
             return time - prevTime > MIN_TIME_TO_DISPLAY;
         } catch (ParseException e) {
-            Logger.logExcpetion(e);
+            Logger.logException(e);
             return false;
         }
     }

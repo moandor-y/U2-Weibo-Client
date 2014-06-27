@@ -42,7 +42,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             out.write(stacktrace.toString());
             out.flush();
         } catch (Exception another) {
-            Logger.logExcpetion(another);
+            Logger.logException(another);
         } finally {
             Utilities.closeSilently(out);
             Utilities.closeSilently(fileWriter);
