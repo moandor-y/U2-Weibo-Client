@@ -13,11 +13,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.util.LruCache;
 
-import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.activity.AbsActivity;
-import gov.moandor.androidweibo.bean.Account;
-import gov.moandor.androidweibo.concurrency.MyAsyncTask;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,15 +22,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.activity.AbsActivity;
+import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+
 public class GlobalContext extends Application {
     private static final int MIN_CACHE_SIZE = 1024 * 1024 * 8;
-    
-    private static volatile GlobalContext sInstance;
-    private static volatile AbsActivity sActivity;
-    private static Handler sHandler;
-    private static volatile List<Account> sAccounts;
-    private static volatile LruCache<String, Bitmap> sBitmapCache;
-    
     private static final Map<String, Bitmap> sEmotionMap = new LinkedHashMap<String, Bitmap>();
     private static final Map<String, String> sWeiboEmotionNameMap = new LinkedHashMap<String, String>();
     static {
@@ -117,66 +110,28 @@ public class GlobalContext extends Application {
         sWeiboEmotionNameMap.put("[转发]", "e77.png");
         sWeiboEmotionNameMap.put("[浮云]", "e78.png");
     }
-    
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sInstance = this;
-        sHandler = new Handler();
-        PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
-        PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
-        PreferenceManager.setDefaultValues(this, R.xml.prefs_bm, false);
-        CrashHandler.register();
-        switch (ConfigManager.getAppTheme()) {
-        case ConfigManager.THEME_LIGHT:
-            setTheme(R.style.Theme_Weibo_Light);
-            break;
-        case ConfigManager.THEME_DARK:
-            setTheme(R.style.Theme_Weibo_Dark);
-            break;
-        }
-        sAccounts = new CopyOnWriteArrayList<Account>(DatabaseUtils.getAccounts());
-        HttpUtils.trustAllHosts();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
-        buildEmotionMap();
-        buildCache();
-        Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
-        thread.setPriority(Thread.MIN_PRIORITY);
-        thread.start();
-        if (Utilities.isBmEnabled() && GlobalContext.isInWifi()) {
-            new UpdateFollowingIdsTask().execute();
-        }
-    }
-    
-    private void buildCache() {
-        int memoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
-        int cacheSize = Math.max(MIN_CACHE_SIZE, 1024 * 1024 * memoryClass / 5);
-        sBitmapCache = new LruCache<String, Bitmap>(cacheSize) {
-            @Override
-            protected int sizeOf(String key, Bitmap value) {
-                return value.getRowBytes() * value.getHeight();
-            }
-        };
-    }
-    
+    private static volatile GlobalContext sInstance;
+    private static volatile AbsActivity sActivity;
+    private static Handler sHandler;
+    private static volatile List<Account> sAccounts;
+    private static volatile LruCache<String, Bitmap> sBitmapCache;
+
     public static GlobalContext getInstance() {
         return sInstance;
     }
-    
+
     public static AbsActivity getActivity() {
         return sActivity;
     }
-    
+
     public static synchronized void setActivity(AbsActivity activity) {
         sActivity = activity;
     }
-    
+
     public static synchronized Account getAccount(int index) {
         return sAccounts.get(index);
     }
-    
+
     public static synchronized Account getCurrentAccount() {
         int index = ConfigManager.getCurrentAccountIndex();
         if (index < sAccounts.size() && index > -1) {
@@ -185,15 +140,15 @@ public class GlobalContext extends Application {
             return null;
         }
     }
-    
+
     public static synchronized int getAccountCount() {
         return sAccounts.size();
     }
-    
+
     public static synchronized Account[] getAccounts() {
         return sAccounts.toArray(new Account[0]);
     }
-    
+
     public static synchronized void addOrUpdateAccount(final Account account) {
         MyAsyncTask.execute(new Runnable() {
             @Override
@@ -210,7 +165,7 @@ public class GlobalContext extends Application {
         sAccounts.add(account);
         ConfigManager.setCurrentAccountIndex(sAccounts.indexOf(account));
     }
-    
+
     public static synchronized void removeAccount(int index) {
         Account account = sAccounts.remove(index);
         if (ConfigManager.getCurrentAccountIndex() >= sAccounts.size() && sAccounts.size() > 0) {
@@ -218,33 +173,33 @@ public class GlobalContext extends Application {
         }
         DatabaseUtils.removeAccount(account.user.id);
     }
-    
+
     public static synchronized int indexOfAccount(Account account) {
         return sAccounts.indexOf(account);
     }
-    
+
     public static void runOnUiThread(Runnable runnable) {
         sHandler.post(runnable);
     }
-    
+
     public static void runOnUiThread(Runnable runnable, long delayMillis) {
         sHandler.postDelayed(runnable, delayMillis);
     }
-    
+
     public static boolean isInWifi() {
         return ((ConnectivityManager) sInstance.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(
                 ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED;
     }
-    
+
     public static String getSdCacheDir() {
         File file = sInstance.getExternalCacheDir();
         return file.getAbsolutePath();
     }
-    
+
     public static LruCache<String, Bitmap> getBitmapCache() {
         return sBitmapCache;
     }
-    
+
     private static void buildEmotionMap() {
         List<String> indexes = new ArrayList<String>();
         indexes.addAll(sWeiboEmotionNameMap.keySet());
@@ -271,12 +226,55 @@ public class GlobalContext extends Application {
             }
         }
     }
-    
+
     public static Bitmap getEmotion(String index) {
         return sEmotionMap.get(index);
     }
-    
+
     public static Map<String, String> getEmotionNameMap() {
         return sWeiboEmotionNameMap;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sInstance = this;
+        sHandler = new Handler();
+        PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs_notifications, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs_bm, false);
+        CrashHandler.register();
+        switch (ConfigManager.getAppTheme()) {
+            case ConfigManager.THEME_LIGHT:
+                setTheme(R.style.Theme_Weibo_Light);
+                break;
+            case ConfigManager.THEME_DARK:
+                setTheme(R.style.Theme_Weibo_Dark);
+                break;
+        }
+        sAccounts = new CopyOnWriteArrayList<Account>(DatabaseUtils.getAccounts());
+        HttpUtils.trustAllHosts();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
+        }
+        buildEmotionMap();
+        buildCache();
+        Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
+        thread.setPriority(Thread.MIN_PRIORITY);
+        thread.start();
+        if (Utilities.isBmEnabled() && GlobalContext.isInWifi()) {
+            new UpdateFollowingIdsTask().execute();
+        }
+    }
+
+    private void buildCache() {
+        int memoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        int cacheSize = Math.max(MIN_CACHE_SIZE, 1024 * 1024 * memoryClass / 5);
+        sBitmapCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap value) {
+                return value.getRowBytes() * value.getHeight();
+            }
+        };
     }
 }

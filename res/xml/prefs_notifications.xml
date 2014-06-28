@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    
+
     <CheckBoxPreference
+        android:defaultValue="false"
         android:key="notification_enabled"
-        android:title="@string/enabled"
-        android:defaultValue="false" />
-    
+        android:title="@string/enabled"/>
+
     <PreferenceCategory
-        android:title="@string/unread_messages"
         android:key="unread_messages"
-        android:persistent="false" >
-        
+        android:persistent="false"
+        android:title="@string/unread_messages">
+
         <ListPreference
+            android:defaultValue="1"
+            android:dependency="notification_enabled"
+            android:entries="@array/notification_intervals"
+            android:entryValues="@array/notification_interval_values"
             android:key="notification_frequency"
-            android:dependency="notification_enabled"
-            android:title="@string/interval"
-            android:entries="@array/notification_intervals"
-            android:entryValues="@array/notification_interval_values"
-            android:defaultValue="1" />
-        
+            android:title="@string/interval"/>
+
         <ListPreference
-            android:key="notification_frequency_wifi"
+            android:defaultValue="0"
             android:dependency="notification_enabled"
-            android:title="@string/interval_wifi"
             android:entries="@array/notification_intervals"
             android:entryValues="@array/notification_interval_values"
-            android:defaultValue="0" />
-        
+            android:key="notification_frequency_wifi"
+            android:title="@string/interval_wifi"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="notification_enabled"
             android:key="notification_mention_weibo_enabled"
-            android:dependency="notification_enabled"
-            android:title="@string/notification_mention_weibo"
-            android:defaultValue="true" />
-        
+            android:title="@string/notification_mention_weibo"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="notification_enabled"
             android:key="notification_comment_enabled"
-            android:dependency="notification_enabled"
-            android:title="@string/notification_comment"
-            android:defaultValue="true" />
-        
+            android:title="@string/notification_comment"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="notification_enabled"
             android:key="notification_mention_comment_enabled"
-            android:dependency="notification_enabled"
-            android:title="@string/notification_mention_comment"
-            android:defaultValue="true" />
-        
+            android:title="@string/notification_mention_comment"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="notification_enabled"
             android:key="notification_dm_enabled"
-            android:dependency="notification_enabled"
-            android:title="@string/direct_messages"
-            android:defaultValue="true" />
-        
+            android:title="@string/direct_messages"/>
+
     </PreferenceCategory>
-    
+
     <PreferenceCategory android:title="@string/notification_method">
-        
+
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="notification_enabled"
             android:key="notification_vibrate_enabled"
-            android:dependency="notification_enabled"
-            android:title="@string/vibrate"
-            android:defaultValue="true" />
-        
+            android:title="@string/vibrate"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
+            android:dependency="notification_enabled"
             android:key="notification_led_enabled"
-            android:dependency="notification_enabled"
-            android:title="@string/notification_led"
-            android:defaultValue="true" />
-        
+            android:title="@string/notification_led"/>
+
         <Preference
+            android:defaultValue=""
+            android:dependency="notification_enabled"
             android:key="notification_ringtone"
-            android:dependency="notification_enabled"
-            android:title="@string/ringtone"
-            android:defaultValue="" />
-        
+            android:title="@string/ringtone"/>
+
         <CheckBoxPreference
-            android:key="notification_enabled_after_exit"
+            android:defaultValue="true"
             android:dependency="notification_enabled"
-            android:title="@string/notification_enabled_after_exit"
-            android:defaultValue="true" />
-        
+            android:key="notification_enabled_after_exit"
+            android:title="@string/notification_enabled_after_exit"/>
+
     </PreferenceCategory>
-    
+
 </PreferenceScreen>

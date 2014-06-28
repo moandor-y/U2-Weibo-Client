@@ -19,7 +19,21 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     private ImageWebView mImageWebView;
     private Button mRetryButton;
     private ProgressBar mProgressBar;
-    
+    private HttpUtils.DownloadListener mDownloadListener = new HttpUtils.DownloadListener() {
+        @Override
+        public void onPushProgress(int progress, int max) {
+            publishProgress(progress, max);
+        }
+
+        @Override
+        public void onComplete() {
+        }
+
+        @Override
+        public void onCancelled() {
+        }
+    };
+
     public WeiboDetailPictureReadTask(String url, ImageDownloader.ImageType type, WeiboDetailPicView view) {
         mUrl = url;
         mType = type;
@@ -29,7 +43,7 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mRetryButton = view.getRetryButton();
         mProgressBar = view.getProgressBar();
     }
-    
+
     @Override
     protected void onPreExecute() {
         mImageView.setVisibility(View.GONE);
@@ -37,19 +51,19 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mProgressBar.setVisibility(View.VISIBLE);
         mRetryButton.setVisibility(View.GONE);
     }
-    
+
     @Override
     protected Boolean doInBackground(Void... params) {
         mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
         return ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mType);
     }
-    
+
     @Override
     protected void onProgressUpdate(Integer... values) {
         mProgressBar.setProgress(values[0]);
         mProgressBar.setMax(values[1]);
     }
-    
+
     @Override
     protected void onPostExecute(Boolean result) {
         mProgressBar.setVisibility(View.GONE);
@@ -65,17 +79,4 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
             });
         }
     }
-    
-    private HttpUtils.DownloadListener mDownloadListener = new HttpUtils.DownloadListener() {
-        @Override
-        public void onPushProgress(int progress, int max) {
-            publishProgress(progress, max);
-        }
-        
-        @Override
-        public void onComplete() {}
-        
-        @Override
-        public void onCancelled() {}
-    };
 }

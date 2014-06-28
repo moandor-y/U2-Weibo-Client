@@ -70,10 +70,26 @@ public interface IPhotoView {
     float getMinScale();
 
     /**
+     * Use {@link #setMinimumScale(float minimumScale)} instead, this will be removed in future
+     * release
+     * <p/>
+     * Sets the minimum scale level. What this value represents depends on the current {@link
+     * android.widget.ImageView.ScaleType}.
+     */
+    @Deprecated
+    void setMinScale(float minScale);
+
+    /**
      * @return The current minimum scale level. What this value represents depends on the current
      * {@link android.widget.ImageView.ScaleType}.
      */
     float getMinimumScale();
+
+    /**
+     * Sets the minimum scale level. What this value represents depends on the current {@link
+     * android.widget.ImageView.ScaleType}.
+     */
+    void setMinimumScale(float minimumScale);
 
     /**
      * Use {@link #getMediumScale()} instead, this will be removed in future release
@@ -85,61 +101,6 @@ public interface IPhotoView {
     float getMidScale();
 
     /**
-     * @return The current medium scale level. What this value represents depends on the current
-     * {@link android.widget.ImageView.ScaleType}.
-     */
-    float getMediumScale();
-
-    /**
-     * Use {@link #getMaximumScale()} instead, this will be removed in future release
-     *
-     * @return The current maximum scale level. What this value represents depends on the current
-     * {@link android.widget.ImageView.ScaleType}.
-     */
-    @Deprecated
-    float getMaxScale();
-
-    /**
-     * @return The current maximum scale level. What this value represents depends on the current
-     * {@link android.widget.ImageView.ScaleType}.
-     */
-    float getMaximumScale();
-
-    /**
-     * Returns the current scale value
-     *
-     * @return float - current scale value
-     */
-    float getScale();
-
-    /**
-     * Return the current scale type in use by the ImageView.
-     */
-    ImageView.ScaleType getScaleType();
-
-    /**
-     * Whether to allow the ImageView's parent to intercept the touch event when the photo is scroll
-     * to it's horizontal edge.
-     */
-    void setAllowParentInterceptOnEdge(boolean allow);
-
-    /**
-     * Use {@link #setMinimumScale(float minimumScale)} instead, this will be removed in future
-     * release
-     * <p/>
-     * Sets the minimum scale level. What this value represents depends on the current {@link
-     * android.widget.ImageView.ScaleType}.
-     */
-    @Deprecated
-    void setMinScale(float minScale);
-
-    /**
-     * Sets the minimum scale level. What this value represents depends on the current {@link
-     * android.widget.ImageView.ScaleType}.
-     */
-    void setMinimumScale(float minimumScale);
-
-    /**
      * Use {@link #setMediumScale(float mediumScale)} instead, this will be removed in future
      * release
      * <p/>
@@ -149,10 +110,25 @@ public interface IPhotoView {
     @Deprecated
     void setMidScale(float midScale);
 
+    /**
+     * @return The current medium scale level. What this value represents depends on the current
+     * {@link android.widget.ImageView.ScaleType}.
+     */
+    float getMediumScale();
+
     /*
      * Sets the medium scale level. What this value represents depends on the current {@link android.widget.ImageView.ScaleType}.
      */
     void setMediumScale(float mediumScale);
+
+    /**
+     * Use {@link #getMaximumScale()} instead, this will be removed in future release
+     *
+     * @return The current maximum scale level. What this value represents depends on the current
+     * {@link android.widget.ImageView.ScaleType}.
+     */
+    @Deprecated
+    float getMaxScale();
 
     /**
      * Use {@link #setMaximumScale(float maximumScale)} instead, this will be removed in future
@@ -165,10 +141,50 @@ public interface IPhotoView {
     void setMaxScale(float maxScale);
 
     /**
+     * @return The current maximum scale level. What this value represents depends on the current
+     * {@link android.widget.ImageView.ScaleType}.
+     */
+    float getMaximumScale();
+
+    /**
      * Sets the maximum scale level. What this value represents depends on the current {@link
      * android.widget.ImageView.ScaleType}.
      */
     void setMaximumScale(float maximumScale);
+
+    /**
+     * Returns the current scale value
+     *
+     * @return float - current scale value
+     */
+    float getScale();
+
+    /**
+     * Changes the current scale to the specified value.
+     *
+     * @param scale - Value to scale to
+     */
+    void setScale(float scale);
+
+    /**
+     * Return the current scale type in use by the ImageView.
+     */
+    ImageView.ScaleType getScaleType();
+
+    /**
+     * Controls how the image should be resized or moved to match the size of the ImageView. Any
+     * scaling or panning will happen within the confines of this {@link
+     * android.widget.ImageView.ScaleType}.
+     *
+     * @param scaleType - The desired scaling mode.
+     */
+    void setScaleType(ImageView.ScaleType scaleType);
+
+    /**
+     * Whether to allow the ImageView's parent to intercept the touch event when the photo is scroll
+     * to it's horizontal edge.
+     */
+    void setAllowParentInterceptOnEdge(boolean allow);
 
     /**
      * Register a callback to be invoked when the Photo displayed by this view is long-pressed.
@@ -186,14 +202,6 @@ public interface IPhotoView {
     void setOnMatrixChangeListener(PhotoViewAttacher.OnMatrixChangedListener listener);
 
     /**
-     * Register a callback to be invoked when the Photo displayed by this View is tapped with a
-     * single tap.
-     *
-     * @param listener - Listener to be registered.
-     */
-    void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener listener);
-
-    /**
      * Returns a listener to be invoked when the Photo displayed by this View is tapped with a
      * single tap.
      *
@@ -202,25 +210,26 @@ public interface IPhotoView {
     PhotoViewAttacher.OnPhotoTapListener getOnPhotoTapListener();
 
     /**
-     * Register a callback to be invoked when the View is tapped with a single tap.
+     * Register a callback to be invoked when the Photo displayed by this View is tapped with a
+     * single tap.
      *
      * @param listener - Listener to be registered.
      */
-    void setOnViewTapListener(PhotoViewAttacher.OnViewTapListener listener);
-    
+    void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener listener);
+
     /**
      * Enables rotation via PhotoView internal functions.
      *
      * @param rotationDegree - Degree to rotate PhotoView to, should be in range 0 to 360
      */
     void setRotationTo(float rotationDegree);
-    
+
     /**
      * Enables rotation via PhotoView internal functions.
      *
      * @param rotationDegree - Degree to rotate PhotoView by, should be in range 0 to 360
      */
-     void setRotationBy(float rotationDegree);
+    void setRotationBy(float rotationDegree);
 
     /**
      * Returns a callback listener to be invoked when the View is tapped with a single tap.
@@ -230,11 +239,11 @@ public interface IPhotoView {
     PhotoViewAttacher.OnViewTapListener getOnViewTapListener();
 
     /**
-     * Changes the current scale to the specified value.
+     * Register a callback to be invoked when the View is tapped with a single tap.
      *
-     * @param scale - Value to scale to
+     * @param listener - Listener to be registered.
      */
-    void setScale(float scale);
+    void setOnViewTapListener(PhotoViewAttacher.OnViewTapListener listener);
 
     /**
      * Changes the current scale to the specified value.
@@ -253,15 +262,6 @@ public interface IPhotoView {
      * @param animate - Whether to animate the scale
      */
     void setScale(float scale, float focalX, float focalY, boolean animate);
-
-    /**
-     * Controls how the image should be resized or moved to match the size of the ImageView. Any
-     * scaling or panning will happen within the confines of this {@link
-     * android.widget.ImageView.ScaleType}.
-     *
-     * @param scaleType - The desired scaling mode.
-     */
-    void setScaleType(ImageView.ScaleType scaleType);
 
     /**
      * Allows you to enable/disable the zoom functionality on the ImageView. When disable the

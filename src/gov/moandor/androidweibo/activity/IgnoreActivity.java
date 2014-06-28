@@ -40,9 +40,9 @@ import gov.moandor.androidweibo.util.filter.WeiboFilter;
 public class IgnoreActivity extends AbsActivity {
     private static final String TAG_FILTER_TYPE_DIALOG = "filter_type_dialog";
     private static final String TAG_EDIT_FILTER_DIALOG = "edit_filter_dialog";
-    
+
     private IgnoreFragment mFragment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +58,7 @@ public class IgnoreActivity extends AbsActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.ignore);
     }
-    
+
     private void onEditFilterFinished(final WeiboFilter filter) {
         if (filter == null) {
             return;
@@ -76,13 +76,13 @@ public class IgnoreActivity extends AbsActivity {
             }
         });
     }
-    
+
     public static class IgnoreFragment extends Fragment implements AdapterView.OnItemClickListener,
             AdapterView.OnItemLongClickListener {
         private WeiboFilter[] mFilters = new WeiboFilter[0];
         private ActionMode mActionMode;
         private FilterListAdapter mAdapter = new FilterListAdapter();
-        
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -90,7 +90,7 @@ public class IgnoreActivity extends AbsActivity {
             setHasOptionsMenu(true);
             refresh();
         }
-        
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             ListView list = new ListView(getActivity());
@@ -99,25 +99,25 @@ public class IgnoreActivity extends AbsActivity {
             list.setOnItemLongClickListener(this);
             return list;
         }
-        
+
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
             super.onCreateOptionsMenu(menu, inflater);
             inflater.inflate(R.menu.fragment_filter, menu);
         }
-        
+
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
-            case R.id.add:
-                FilterTypeDialogFragment dialog = new FilterTypeDialogFragment();
-                dialog.show(getFragmentManager(), TAG_FILTER_TYPE_DIALOG);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                case R.id.add:
+                    FilterTypeDialogFragment dialog = new FilterTypeDialogFragment();
+                    dialog.show(getFragmentManager(), TAG_FILTER_TYPE_DIALOG);
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
             }
         }
-        
+
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Bundle args = new Bundle();
@@ -136,7 +136,7 @@ public class IgnoreActivity extends AbsActivity {
             dialog.setArguments(args);
             dialog.show(getFragmentManager(), TAG_EDIT_FILTER_DIALOG);
         }
-        
+
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             if (mActionMode != null || position < 0 || mAdapter.getCount() <= position) {
@@ -147,61 +147,61 @@ public class IgnoreActivity extends AbsActivity {
             mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(new ActionModeCallback());
             return true;
         }
-        
+
         private void refresh() {
             new RefreshTask().execute();
         }
-        
+
         private class RefreshTask extends MyAsyncTask<Void, Void, WeiboFilter[]> {
             @Override
             protected WeiboFilter[] doInBackground(Void... params) {
                 return DatabaseUtils.getWeiboFilters();
             }
-            
+
             @Override
             protected void onPostExecute(WeiboFilter[] result) {
                 mFilters = result;
                 mAdapter.notifyDataSetChanged();
             }
         }
-        
+
         private class DeleteTask extends MyAsyncTask<Void, Void, Void> {
             private int mId;
-            
+
             private DeleteTask(int id) {
                 mId = id;
             }
-            
+
             @Override
             protected Void doInBackground(Void... params) {
                 DatabaseUtils.removeWeiboFilter(mId);
                 return null;
             }
-            
+
             @Override
             protected void onPostExecute(Void result) {
                 refresh();
             }
         }
-        
+
         private class FilterListAdapter extends AbsBaseAdapter implements ISelectableAdapter<WeiboFilter> {
             private int mSelectedPosition = -1;
-            
+
             @Override
             public int getCount() {
                 return mFilters.length;
             }
-            
+
             @Override
             public WeiboFilter getItem(int position) {
                 return mFilters[position];
             }
-            
+
             @Override
             public long getItemId(int position) {
                 return mFilters[position].getId();
             }
-            
+
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = null;
@@ -219,59 +219,59 @@ public class IgnoreActivity extends AbsActivity {
                 }
                 return textView;
             }
-            
+
             @Override
             public void setSelectedPosition(int position) {
                 mSelectedPosition = position;
             }
-            
+
             @Override
             public WeiboFilter getSelectedItem() {
                 return mFilters[mSelectedPosition];
             }
-            
+
             @Override
             public int getSelection() {
                 return mSelectedPosition;
             }
         }
-        
+
         private class ActionModeCallback implements ActionMode.Callback {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.long_click_filter, menu);
                 return true;
             }
-            
+
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 return false;
             }
-            
+
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
-                case R.id.delete:
-                    delete();
-                    break;
+                    case R.id.delete:
+                        delete();
+                        break;
                 }
                 mode.finish();
                 return true;
             }
-            
+
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 mActionMode = null;
                 mAdapter.setSelectedPosition(-1);
                 mAdapter.notifyDataSetChanged();
             }
-            
+
             private void delete() {
                 new DeleteTask(mAdapter.getSelectedItem().getId()).execute();
             }
         }
     }
-    
+
     public static class FilterTypeDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -281,15 +281,15 @@ public class IgnoreActivity extends AbsActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     FilterDialogFragment.Type type = null;
                     switch (which) {
-                    case 0:
-                        type = FilterDialogFragment.Type.KEYWORD;
-                        break;
-                    case 1:
-                        type = FilterDialogFragment.Type.USER;
-                        break;
-                    case 2:
-                        type = FilterDialogFragment.Type.SOURCE;
-                        break;
+                        case 0:
+                            type = FilterDialogFragment.Type.KEYWORD;
+                            break;
+                        case 1:
+                            type = FilterDialogFragment.Type.USER;
+                            break;
+                        case 2:
+                            type = FilterDialogFragment.Type.SOURCE;
+                            break;
                     }
                     assert type != null;
                     Bundle args = new Bundle();
@@ -302,15 +302,11 @@ public class IgnoreActivity extends AbsActivity {
             return builder.create();
         }
     }
-    
+
     public static class FilterDialogFragment extends DialogFragment {
         public static final String TYPE = "type";
         public static final String FILTER = "filter";
-        
-        private static enum Type {
-            KEYWORD, USER, SOURCE
-        }
-        
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -318,29 +314,29 @@ public class IgnoreActivity extends AbsActivity {
             int titleResId = 0;
             int layoutResId = 0;
             switch (type) {
-            case KEYWORD:
-                titleResId = R.string.keywords;
-                layoutResId = R.layout.dialog_filter_keyword;
-                break;
-            case USER:
-                titleResId = R.string.user;
-                layoutResId = R.layout.dialog_filter_user;
-                break;
-            case SOURCE:
-                titleResId = R.string.source;
-                layoutResId = R.layout.dialog_filter_keyword;
-                break;
+                case KEYWORD:
+                    titleResId = R.string.keywords;
+                    layoutResId = R.layout.dialog_filter_keyword;
+                    break;
+                case USER:
+                    titleResId = R.string.user;
+                    layoutResId = R.layout.dialog_filter_user;
+                    break;
+                case SOURCE:
+                    titleResId = R.string.source;
+                    layoutResId = R.layout.dialog_filter_keyword;
+                    break;
             }
             builder.setTitle(titleResId);
             final View view = getActivity().getLayoutInflater().inflate(layoutResId, null);
             switch (type) {
-            case KEYWORD:
-            case SOURCE:
-                buildView(view, (AbsWeiboTextFilter) getArguments().getSerializable(FILTER));
-                break;
-            case USER:
-                buildView(view, (UserWeiboFilter) getArguments().getSerializable(FILTER));
-                break;
+                case KEYWORD:
+                case SOURCE:
+                    buildView(view, (AbsWeiboTextFilter) getArguments().getSerializable(FILTER));
+                    break;
+                case USER:
+                    buildView(view, (UserWeiboFilter) getArguments().getSerializable(FILTER));
+                    break;
             }
             builder.setView(view);
             builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -348,17 +344,17 @@ public class IgnoreActivity extends AbsActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     WeiboFilter filter = null;
                     switch (type) {
-                    case KEYWORD:
-                        filter = new KeywordWeiboFilter();
-                        filter = buildTextWeiboFilter(view, (AbsWeiboTextFilter) filter);
-                        break;
-                    case USER:
-                        filter = new UserWeiboFilter();
-                        filter = buildUserWeiboFilter(view, (UserWeiboFilter) filter);
-                        break;
-                    case SOURCE:
-                        filter = new SourceFilter();
-                        filter = buildTextWeiboFilter(view, (AbsWeiboTextFilter) filter);
+                        case KEYWORD:
+                            filter = new KeywordWeiboFilter();
+                            filter = buildTextWeiboFilter(view, (AbsWeiboTextFilter) filter);
+                            break;
+                        case USER:
+                            filter = new UserWeiboFilter();
+                            filter = buildUserWeiboFilter(view, (UserWeiboFilter) filter);
+                            break;
+                        case SOURCE:
+                            filter = new SourceFilter();
+                            filter = buildTextWeiboFilter(view, (AbsWeiboTextFilter) filter);
                     }
                     ((IgnoreActivity) getActivity()).onEditFilterFinished(filter);
                 }
@@ -366,7 +362,7 @@ public class IgnoreActivity extends AbsActivity {
             builder.setNegativeButton(R.string.cancel, null);
             return builder.create();
         }
-        
+
         private void buildView(View view, AbsWeiboTextFilter filter) {
             if (filter != null) {
                 CheckBox checkReposted = (CheckBox) view.findViewById(R.id.check_reposted);
@@ -380,7 +376,7 @@ public class IgnoreActivity extends AbsActivity {
                 }
             }
         }
-        
+
         private void buildView(View view, UserWeiboFilter filter) {
             if (filter != null) {
                 RadioButton userName = (RadioButton) view.findViewById(R.id.user_name);
@@ -400,7 +396,7 @@ public class IgnoreActivity extends AbsActivity {
                 }
             }
         }
-        
+
         private AbsWeiboTextFilter buildTextWeiboFilter(View view, AbsWeiboTextFilter filter) {
             CheckBox checkReposted = (CheckBox) view.findViewById(R.id.check_reposted);
             CheckBox isRegex = (CheckBox) view.findViewById(R.id.is_regex);
@@ -418,7 +414,7 @@ public class IgnoreActivity extends AbsActivity {
                 return null;
             }
         }
-        
+
         private UserWeiboFilter buildUserWeiboFilter(View view, UserWeiboFilter filter) {
             RadioButton userName = (RadioButton) view.findViewById(R.id.user_name);
             RadioButton userId = (RadioButton) view.findViewById(R.id.user_id);
@@ -441,6 +437,10 @@ public class IgnoreActivity extends AbsActivity {
                 }
             }
             return null;
+        }
+
+        private static enum Type {
+            KEYWORD, USER, SOURCE
         }
     }
 }

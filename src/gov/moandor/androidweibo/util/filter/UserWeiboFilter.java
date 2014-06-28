@@ -8,11 +8,11 @@ import gov.moandor.androidweibo.util.TextUtils;
 
 public class UserWeiboFilter extends BaseWeiboFilter {
     private static final long serialVersionUID = 1L;
-    
+
     private WeiboUser mUser;
     private String mUserName;
     private long mUserId;
-    
+
     @Override
     public boolean shouldBeRemoved(WeiboStatus status) {
         WeiboUser user = status.weiboUser;
@@ -27,7 +27,7 @@ public class UserWeiboFilter extends BaseWeiboFilter {
             return user.id == mUserId;
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -42,28 +42,28 @@ public class UserWeiboFilter extends BaseWeiboFilter {
         }
         return sb.toString();
     }
-    
-    public void setUser(WeiboUser user) {
-        mUser = user;
-    }
-    
+
     public WeiboUser getUser() {
         return mUser;
     }
-    
-    public void setUserId(long id) {
-        mUserId = id;
+
+    public void setUser(WeiboUser user) {
+        mUser = user;
     }
-    
+
     public long getUserId() {
         return mUserId;
     }
-    
-    public void setUserName(String name) {
-        mUserName = name;
+
+    public void setUserId(long id) {
+        mUserId = id;
     }
-    
+
     public String getUserName() {
         return mUserName;
+    }
+
+    public void setUserName(String name) {
+        mUserName = name;
     }
 }

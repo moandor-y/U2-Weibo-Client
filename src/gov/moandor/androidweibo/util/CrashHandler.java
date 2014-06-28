@@ -13,11 +13,16 @@ import java.util.Date;
 
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private Thread.UncaughtExceptionHandler mDefaultHandler;
-    
+
     private CrashHandler(Thread.UncaughtExceptionHandler defaultHandler) {
         mDefaultHandler = defaultHandler;
     }
-    
+
+    public static void register() {
+        Thread.UncaughtExceptionHandler currHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(currHandler));
+    }
+
     @Override
     public void uncaughtException(Thread thread, Throwable e) {
         Writer stacktrace = new StringWriter();
@@ -49,14 +54,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             mDefaultHandler.uncaughtException(thread, e);
         }
     }
-    
+
     private String getLogPath(Date date) {
         String fileName = "crash_" + date.getTime() + ".log";
         return FileUtils.LOGS + File.separator + fileName;
-    }
-    
-    public static void register() {
-        Thread.UncaughtExceptionHandler currHandler = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(currHandler));
     }
 }

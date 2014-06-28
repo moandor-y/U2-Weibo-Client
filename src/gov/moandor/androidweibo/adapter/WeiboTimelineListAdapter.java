@@ -15,12 +15,12 @@ public class WeiboTimelineListAdapter<T extends AbsItemBean> extends AbsTimeline
         super();
         mNoPictureModeEnabled = mNoPictureModeEnabled || !Utilities.isCommentRepostListAvatarEnabled();
     }
-    
+
     @Override
     View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
         return inflater.inflate(R.layout.weibo_timeline_list_item, parent, false);
     }
-    
+
     @Override
     ViewHolder initViewHolder(View view) {
         ViewHolder holder = new ViewHolder();

@@ -7,44 +7,44 @@
     android:paddingBottom="@dimen/margin_vertical"
     android:paddingLeft="@dimen/margin_horizontal"
     android:paddingRight="@dimen/margin_horizontal"
-    android:paddingTop="@dimen/margin_vertical" >
-    
+    android:paddingTop="@dimen/margin_vertical">
+
     <TextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/margin_vertical"
-        android:gravity="center_horizontal" />
-    
+        android:gravity="center_horizontal"/>
+
     <ImageView
         android:id="@+id/avatar_oppo"
         android:layout_width="@dimen/list_avatar_width"
         android:layout_height="@dimen/list_avatar_height"
-        android:layout_marginRight="@dimen/margin_horizontal"
-        android:layout_below="@+id/time"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/time"
+        android:layout_marginRight="@dimen/margin_horizontal"
         android:clickable="true"
-        android:contentDescription="@string/avatar" />
-    
+        android:contentDescription="@string/avatar"/>
+
     <ImageView
         android:id="@+id/avatar_self"
         android:layout_width="@dimen/list_avatar_width"
         android:layout_height="@dimen/list_avatar_height"
-        android:layout_marginLeft="@dimen/margin_horizontal"
-        android:layout_below="@+id/time"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/time"
+        android:layout_marginLeft="@dimen/margin_horizontal"
         android:clickable="true"
-        android:contentDescription="@string/avatar" />
-    
+        android:contentDescription="@string/avatar"/>
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/avatar_oppo"
-        android:layout_toLeftOf="@+id/avatar_self"
         android:layout_below="@+id/time"
-        android:textSize="15sp"
-        android:lineSpacingMultiplier="1.2" />
-    
+        android:layout_toLeftOf="@+id/avatar_self"
+        android:layout_toRightOf="@+id/avatar_oppo"
+        android:lineSpacingMultiplier="1.2"
+        android:textSize="15sp"/>
+
 </RelativeLayout>

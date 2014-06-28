@@ -25,23 +25,46 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extends Service {
-    private static final long[] VIBRATE_PATTERN = {0, 200, 300, 200, 300};
     public static final String ACCOUNT = Utilities.buildIntentExtraName("ACCOUNT");
     public static final String MESSAGE = Utilities.buildIntentExtraName("MESSAGE");
     public static final String CLICK_INTENT = Utilities.buildIntentExtraName("CLICK_INTENT");
     public static final String COUNT = Utilities.buildIntentExtraName("COUNT");
+    private static final long[] VIBRATE_PATTERN = {0, 200, 300, 200, 300};
     private static final String CLEAR_NOTIFICATION = Utilities.buildIntentExtraName("CLEAR_NOTIFICATION");
-    
+
     private Account mAccount;
     private T mMessage;
     private Intent mClickIntent;
     private int mCount;
-    
+    private BroadcastReceiver mClearNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Utilities.unregisterReceiver(this);
+            clearUnreadCount(mAccount.token, getCountType());
+        }
+    };
+
+    static void clearUnreadCount(final String token, final String countType) {
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                ResetUnreadCountDao dao = new ResetUnreadCountDao();
+                dao.setToken(token);
+                dao.setCountType(countType);
+                try {
+                    dao.execute();
+                } catch (WeiboException e) {
+                    Logger.logException(e);
+                }
+            }
+        });
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mAccount = intent.getParcelableExtra(ACCOUNT);
@@ -54,7 +77,7 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         stopSelf();
         return super.onStartCommand(intent, flags, startId);
     }
-    
+
     private Notification buildNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
         String title = getTextTitle(mCount);
@@ -90,11 +113,11 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         builder.setStyle(style);
         return builder.build();
     }
-    
+
     private PendingIntent getClickPendingIntent(Intent clickIntent) {
         return PendingIntent.getBroadcast(getBaseContext(), 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
-    
+
     private PendingIntent getDeletePendingIntent() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(CLEAR_NOTIFICATION);
@@ -103,32 +126,8 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         clearIntent.setAction(CLEAR_NOTIFICATION);
         return PendingIntent.getBroadcast(getBaseContext(), 0, clearIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
-    
-    static void clearUnreadCount(final String token, final String countType) {
-        MyAsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                ResetUnreadCountDao dao = new ResetUnreadCountDao();
-                dao.setToken(token);
-                dao.setCountType(countType);
-                try {
-                    dao.execute();
-                } catch (WeiboException e) {
-                    Logger.logException(e);
-                }
-            }
-        });
-    }
-    
-    private BroadcastReceiver mClearNotificationReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Utilities.unregisterReceiver(this);
-            clearUnreadCount(mAccount.token, getCountType());
-        }
-    };
-    
+
     abstract String getTextTitle(int count);
-    
+
     abstract String getCountType();
 }

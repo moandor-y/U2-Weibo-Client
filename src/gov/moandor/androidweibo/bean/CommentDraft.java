@@ -8,15 +8,6 @@ public class CommentDraft extends AbsDraftBean {
     public WeiboComment repliedComment;
     public boolean commentOri;
     public boolean repostWhenComment;
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeParcelable(commentedStatus, 0);
-        dest.writeParcelable(repliedComment, 0);
-        dest.writeBooleanArray(new boolean[]{commentOri, repostWhenComment});
-    }
-    
     public static final Parcelable.Creator<CommentDraft> CREATOR = new ParcelableCreator<CommentDraft>() {
         @Override
         public CommentDraft createFromParcel(Parcel source) {
@@ -29,15 +20,23 @@ public class CommentDraft extends AbsDraftBean {
             result.repostWhenComment = bools[1];
             return result;
         }
-        
+
         @Override
         public CommentDraft[] newArray(int size) {
             return new CommentDraft[size];
         }
-        
+
         @Override
         protected CommentDraft onCreateObject() {
             return new CommentDraft();
         }
     };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeParcelable(commentedStatus, 0);
+        dest.writeParcelable(repliedComment, 0);
+        dest.writeBooleanArray(new boolean[]{commentOri, repostWhenComment});
+    }
 }

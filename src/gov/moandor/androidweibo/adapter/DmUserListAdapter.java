@@ -5,6 +5,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
@@ -14,36 +18,32 @@ import gov.moandor.androidweibo.fragment.DmUserListFragment;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdapter<DirectMessagesUser> {
     private List<DirectMessagesUser> mDmUsers = new ArrayList<DirectMessagesUser>();
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private DmUserListFragment mFragment;
     private boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     private int mSelectedPosition = -1;
-    
+
     public DmUserListAdapter(DmUserListFragment fragment) {
         mFragment = fragment;
     }
-    
+
     @Override
     public int getCount() {
         return mDmUsers.size();
     }
-    
+
     @Override
     public DirectMessagesUser getItem(int position) {
         return mDmUsers.get(position);
     }
-    
+
     @Override
     public long getItemId(int position) {
         return mDmUsers.get(position).weiboUser.id;
     }
-    
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -80,44 +80,44 @@ public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdap
         }
         return convertView;
     }
-    
+
     public void updateDataSet(List<DirectMessagesUser> data) {
         mDmUsers.clear();
         mDmUsers.addAll(data);
     }
-    
+
     public void updateDataSet(DirectMessagesUser[] data) {
         mDmUsers.clear();
         mDmUsers.addAll(Arrays.asList(data));
     }
-    
+
     public void updateItem(int position, DirectMessagesUser item) {
         mDmUsers.set(position, item);
     }
-    
+
     public void addAll(List<DirectMessagesUser> data) {
         mDmUsers.addAll(data);
     }
-    
+
     public DirectMessagesUser[] getItems() {
         return mDmUsers.toArray(new DirectMessagesUser[mDmUsers.size()]);
     }
-    
+
     @Override
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
     }
-    
+
     @Override
     public DirectMessagesUser getSelectedItem() {
         return getItem(mSelectedPosition);
     }
-    
+
     @Override
     public int getSelection() {
         return mSelectedPosition;
     }
-    
+
     public int findPositionByUserId(long id) {
         for (DirectMessagesUser user : mDmUsers) {
             if (user.weiboUser.id == id) {
@@ -126,7 +126,7 @@ public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdap
         }
         return -1;
     }
-    
+
     private ViewHolder initViewHolder(View view) {
         ViewHolder holder = new ViewHolder();
         holder.avatar = (ImageView) view.findViewById(R.id.avatar);
@@ -134,7 +134,7 @@ public class DmUserListAdapter extends AbsBaseAdapter implements ISelectableAdap
         holder.message = (TextView) view.findViewById(R.id.message);
         return holder;
     }
-    
+
     private static class ViewHolder {
         public ImageView avatar;
         public TextView userName;

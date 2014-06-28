@@ -18,17 +18,21 @@ public class MainPagerAdapter extends PagerAdapter {
     private Fragment mCurrentPrimaryItem;
     private Fragment[] mFragments;
     private String[] mTitles = GlobalContext.getInstance().getResources().getStringArray(R.array.main_tabs);
-    
+
     public MainPagerAdapter(FragmentManager fm, Fragment[] fragments) {
         mFragmentManager = fm;
         mFragments = fragments;
     }
-    
+
+    public static String makeFragmentName(int position) {
+        return "MainPagerAdapter:" + ":" + position;
+    }
+
     @Override
     public int getCount() {
         return mFragments.length;
     }
-    
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         if (mCurTransaction == null) {
@@ -47,7 +51,7 @@ public class MainPagerAdapter extends PagerAdapter {
         }
         return fragment;
     }
-    
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         if (mCurTransaction == null) {
@@ -55,7 +59,7 @@ public class MainPagerAdapter extends PagerAdapter {
         }
         mCurTransaction.detach((Fragment) object);
     }
-    
+
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         Fragment fragment = (Fragment) object;
@@ -71,7 +75,7 @@ public class MainPagerAdapter extends PagerAdapter {
             mCurrentPrimaryItem = fragment;
         }
     }
-    
+
     @Override
     public void finishUpdate(ViewGroup container) {
         if (mCurTransaction != null) {
@@ -80,12 +84,12 @@ public class MainPagerAdapter extends PagerAdapter {
             mFragmentManager.executePendingTransactions();
         }
     }
-    
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return ((Fragment) object).getView() == view;
     }
-    
+
     @Override
     public CharSequence getPageTitle(int position) {
         String title = mTitles[position];
@@ -94,16 +98,12 @@ public class MainPagerAdapter extends PagerAdapter {
         }
         return title;
     }
-    
+
     public int getWeiboUnreadCount() {
         return mWeiboUnreadCount;
     }
-    
+
     public void setWeiboUnreadCount(int count) {
         mWeiboUnreadCount = count;
-    }
-    
-    public static String makeFragmentName(int position) {
-        return "MainPagerAdapter:" + ":" + position;
     }
 }

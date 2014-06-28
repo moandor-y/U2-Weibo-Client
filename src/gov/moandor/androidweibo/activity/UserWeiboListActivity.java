@@ -12,9 +12,9 @@ import gov.moandor.androidweibo.util.Utilities;
 
 public class UserWeiboListActivity extends AbsActivity {
     public static final String USER = Utilities.buildIntentExtraName("USER");
-    
+
     private UserWeiboListFragment mFragment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,24 +31,24 @@ public class UserWeiboListActivity extends AbsActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getString(R.string.posts_of, user.name));
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_user_weibo_list, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.refresh:
-            mFragment.refresh();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.refresh:
+                mFragment.refresh();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

@@ -22,30 +22,6 @@ public class WeiboUser implements Parcelable {
     public String verifiedReason;
     public boolean followMe;
     public int onlineStatus;
-    
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeString(location);
-        dest.writeString(description);
-        dest.writeString(profileImageUrl);
-        dest.writeString(gender);
-        dest.writeInt(followersCount);
-        dest.writeInt(friendsCount);
-        dest.writeInt(statusesCount);
-        dest.writeString(remark);
-        dest.writeString(avatarLargeUrl);
-        dest.writeString(verifiedReason);
-        dest.writeInt(onlineStatus);
-        dest.writeBooleanArray(new boolean[]{following, allowAllActMsg, verified, allowAllComment, followMe});
-    }
-    
     public static final Parcelable.Creator<WeiboUser> CREATOR = new Parcelable.Creator<WeiboUser>() {
         @Override
         public WeiboUser createFromParcel(Parcel source) {
@@ -72,10 +48,33 @@ public class WeiboUser implements Parcelable {
             result.followMe = bools[4];
             return result;
         }
-        
+
         @Override
         public WeiboUser[] newArray(int size) {
             return new WeiboUser[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(location);
+        dest.writeString(description);
+        dest.writeString(profileImageUrl);
+        dest.writeString(gender);
+        dest.writeInt(followersCount);
+        dest.writeInt(friendsCount);
+        dest.writeInt(statusesCount);
+        dest.writeString(remark);
+        dest.writeString(avatarLargeUrl);
+        dest.writeString(verifiedReason);
+        dest.writeInt(onlineStatus);
+        dest.writeBooleanArray(new boolean[]{following, allowAllActMsg, verified, allowAllComment, followMe});
+    }
 }

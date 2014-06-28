@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string-array name="weibo_list_spinner">
         <item>ALL</item>
         <item>FOLLOWED EACH OTHER</item>
     </string-array>
-    
+
     <string-array name="atme_list_spinner">
         <item>ALL</item>
         <item>FOLLOWING</item>
     </string-array>
-    
+
     <string-array name="comment_list_spinner">
         <item>ALL</item>
         <item>FOLLOWING</item>
         <item>COMMENT @ME</item>
         <item>SENT</item>
     </string-array>
-    
+
     <string-array name="main_tabs">
         <item>HOME</item>
         <item>\@ME</item>
         <item>COMMENTS</item>
         <item>PROFILE</item>
     </string-array>
-    
+
     <string-array name="weibo_tabs">
         <item>WEIBO</item>
         <item>COMMENTS</item>
         <item>REPOSTS</item>
     </string-array>
-    
+
     <string-array name="themes">
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    
+
     <string-array name="avatar_modes">
         <item>Auto</item>
         <item>Small</item>
         <item>Large</item>
     </string-array>
-    
+
     <string-array name="picture_modes">
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    
+
     <string-array name="font_sizes">
         <item>Small</item>
         <item>Medium</item>
         <item>Large</item>
     </string-array>
-    
+
     <string-array name="comment_repost_list_avatar_modes">
         <item>Auto</item>
         <item>Enabled</item>
         <item>Disabled</item>
     </string-array>
-    
+
     <string-array name="load_weibo_counts">
         <item>Auto</item>
         <item>25</item>
@@ -67,28 +67,28 @@
         <item>75</item>
         <item>100</item>
     </string-array>
-    
+
     <string-array name="notification_intervals">
         <item>3 Minutes</item>
         <item>15 Minutes</item>
         <item>Half Hour</item>
     </string-array>
-    
+
     <string-array name="add_picture_dialog_items">
         <item>Take Picture</item>
         <item>Gallery</item>
     </string-array>
-    
+
     <string-array name="span_long_click">
         <item>Open</item>
     </string-array>
-    
+
     <string-array name="filter_types">
         <item>Keywords</item>
         <item>User</item>
         <item>Source</item>
     </string-array>
-    
+
     <string name="weibo">Weibo</string>
     <string name="loading">Loading…</string>
     <string name="avatar">Avatar</string>
@@ -144,13 +144,13 @@
     <string name="direct_messages">Direct messages</string>
     <string name="username">Username</string>
     <string name="user">User</string>
-    
+
     <!-- Time -->
     <string name="just_now">Just now</string>
     <string name="min_ago">%d minutes ago</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
-    
+
     <!-- Authorization -->
     <string name="auth_success">Authorized successfully</string>
     <string name="login">Login</string>
@@ -160,7 +160,7 @@
     <string name="username_empty">Enter username please</string>
     <string name="password_empty">Enter password please</string>
     <string name="password">Password</string>
-    
+
     <!-- MainActivity -->
     <string name="refresh">Refresh</string>
     <string name="current_account">Current account</string>
@@ -175,12 +175,12 @@
     <string name="lock_orientation">Lock orientation</string>
     <string name="unlock_orientation">Unlock orientation</string>
     <string name="refresh_groups">REFRESH GROUPS</string>
-    
+
     <!-- WeiboActivity -->
     <string name="quick_comment">Quick comment</string>
     <string name="quick_repost">Quick repost</string>
     <string name="map">Map</string>
-    
+
     <!-- SettingsActivity -->
     <string name="general">General</string>
     <string name="theme">Themes</string>
@@ -227,7 +227,7 @@
     <string name="dir_avatar">Avatar cache</string>
     <string name="dir_logs">Crash logs</string>
     <string name="open_source_licenses">Open source licenses</string>
-    
+
     <!-- IgnoreActivity -->
     <string name="ignore">Ignore</string>
     <string name="regex">Regex</string>
@@ -236,7 +236,7 @@
     <string name="add_filter">Add filter</string>
     <string name="user_id">User ID</string>
     <string name="source">Source</string>
-    
+
     <!-- WriteActivity -->
     <string name="send">Send</string>
     <string name="sending">Sending</string>
@@ -267,13 +267,13 @@
     <string name="upload_failed">Upload failed</string>
     <string name="write_hint">Write something…</string>
     <string name="repost_when_comment">Repost when comment</string>
-    
+
     <!-- ImageViewerActivity -->
     <string name="show_ori">Show original pictures</string>
-    
+
     <!-- DmActivity -->
     <string name="send_dm">Send direct messages</string>
-    
+
     <!-- Notification -->
     <string name="new_comments">%d new comments</string>
     <string name="new_mention_weibos">%d new posts @me</string>
@@ -282,7 +282,7 @@
     <string name="upload_picture">Upload picture</string>
     <string name="waiting_response">Waiting for response</string>
     <string name="uploading">Uploading</string>
-    
+
     <!-- User -->
     <string name="posts_of">%s\'s posts</string>
     <string name="following_of">%s\'s following</string>
@@ -290,10 +290,10 @@
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="followed_each_other">Followed each other</string>
-    
+
     <!-- Error -->
     <string name="unknown_error">Unknown error</string>
     <string name="network_error">Network error</string>
     <string name="json_error">JSON parse error</string>
-    
+
 </resources>

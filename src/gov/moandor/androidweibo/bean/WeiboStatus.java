@@ -15,25 +15,6 @@ public class WeiboStatus extends AbsItemBean {
     public int repostCount;
     public int commentCount;
     public int attitudeCount;
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeBooleanArray(new boolean[]{favorited});
-        dest.writeInt(picCount);
-        if (picCount > 0) {
-            dest.writeStringArray(thumbnailPic);
-            dest.writeStringArray(bmiddlePic);
-            dest.writeStringArray(originalPic);
-        }
-        dest.writeParcelable(weiboGeo, flags);
-        dest.writeInt(userOnlineStatus);
-        dest.writeParcelable(retweetStatus, flags);
-        dest.writeInt(repostCount);
-        dest.writeInt(commentCount);
-        dest.writeInt(attitudeCount);
-    }
-    
     public static final Parcelable.Creator<WeiboStatus> CREATOR = new ParcelableCreator<WeiboStatus>() {
         @Override
         public WeiboStatus createFromParcel(Parcel source) {
@@ -58,15 +39,33 @@ public class WeiboStatus extends AbsItemBean {
             result.attitudeCount = source.readInt();
             return result;
         }
-        
+
         @Override
         public WeiboStatus[] newArray(int size) {
             return new WeiboStatus[size];
         }
-        
+
         @Override
         protected WeiboStatus onCreateObject() {
             return new WeiboStatus();
         }
     };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeBooleanArray(new boolean[]{favorited});
+        dest.writeInt(picCount);
+        if (picCount > 0) {
+            dest.writeStringArray(thumbnailPic);
+            dest.writeStringArray(bmiddlePic);
+            dest.writeStringArray(originalPic);
+        }
+        dest.writeParcelable(weiboGeo, flags);
+        dest.writeInt(userOnlineStatus);
+        dest.writeParcelable(retweetStatus, flags);
+        dest.writeInt(repostCount);
+        dest.writeInt(commentCount);
+        dest.writeInt(attitudeCount);
+    }
 }

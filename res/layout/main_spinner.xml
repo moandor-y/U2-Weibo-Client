@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="fill_horizontal" >
-    
+    android:gravity="fill_horizontal">
+
     <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
@@ -12,6 +12,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:textColor="@color/action_menu_text_color"
-        android:textSize="16sp" />
-    
+        android:textSize="16sp"/>
+
 </RelativeLayout>

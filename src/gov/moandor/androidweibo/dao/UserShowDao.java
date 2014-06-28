@@ -12,7 +12,7 @@ public class UserShowDao extends BaseHttpDao<WeiboUser> {
     private String mToken;
     private String mScreenName;
     private long mUid;
-    
+
     @Override
     public WeiboUser execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -25,20 +25,20 @@ public class UserShowDao extends BaseHttpDao<WeiboUser> {
         String response = HttpUtils.executeNormalTask(HttpUtils.Method.GET, mUrl, params);
         return JsonUtils.getWeiboUserFromJson(response);
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.USERS_SHOW;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setScreenName(String screenName) {
         mScreenName = screenName;
     }
-    
+
     public void setUid(long uid) {
         mUid = uid;
     }

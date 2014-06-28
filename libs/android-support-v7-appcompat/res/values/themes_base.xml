@@ -188,13 +188,15 @@
     <!-- Menu/item attributes -->
     <style name="Theme.AppCompat.Base.CompactMenu" parent="">
         <item name="android:itemTextAppearance">
-            @style/TextAppearance.Widget.AppCompat.ExpandedMenu.Item</item>
+            @style/TextAppearance.Widget.AppCompat.ExpandedMenu.Item
+        </item>
         <item name="android:listViewStyle">@style/Widget.AppCompat.ListView.Menu</item>
     </style>
 
     <style name="Theme.AppCompat.Base.CompactMenu.Dialog" parent="">
         <item name="android:itemTextAppearance">
-            @style/TextAppearance.AppCompat.Base.CompactMenu.Dialog</item>
+            @style/TextAppearance.AppCompat.Base.CompactMenu.Dialog
+        </item>
         <item name="android:listViewStyle">@android:style/Widget.ListView.Menu</item>
     </style>
 

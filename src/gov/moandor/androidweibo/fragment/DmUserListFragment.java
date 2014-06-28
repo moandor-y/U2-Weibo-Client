@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.view.ActionMode;
 import android.view.View;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.adapter.DmUserListAdapter;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
@@ -17,14 +19,12 @@ import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.DmUserListActionModeCallback;
 import gov.moandor.androidweibo.util.GlobalContext;
 
-import java.util.List;
-
 public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, DirectMessagesUser> {
     public static final String FROM_UNREAD = "from_unread";
     private static final int REQUEST_CODE = 0;
-    
+
     private boolean mFromUnread;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             mFromUnread = args.getBoolean(FROM_UNREAD);
         }
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -42,7 +42,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
         }
         mListView.setAdapter(mAdapter);
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -58,7 +58,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             }
         });
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
@@ -71,7 +71,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             mAdapter.notifyDataSetChanged();
         }
     }
-    
+
     @Override
     void initContent() {
         if (mFromUnread) {
@@ -84,7 +84,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             protected DatabaseUtils.DmUsers doInBackground(Void... params) {
                 return DatabaseUtils.getDmUsers(accountId);
             }
-            
+
             @Override
             protected void onPostExecute(DatabaseUtils.DmUsers result) {
                 mRefreshTask = null;
@@ -102,27 +102,27 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             }
         }.execute();
     }
-    
+
     @Override
     protected BaseUserListDao<DirectMessagesUser> onCreateDao() {
         return new DmUserListDao();
     }
-    
+
     @Override
     void onItemClick(int position) {
         startActivityForResult(ActivityUtils.dmConversationActivity(mAdapter.getItem(position).weiboUser), REQUEST_CODE);
     }
-    
+
     @Override
     MyAsyncTask<Void, ?, ?> onCreateRefreshTask() {
         return new DmUserListRefreshTask();
     }
-    
+
     @Override
     MyAsyncTask<Void, ?, ?> onCreateloLoadMoreTask() {
         return new DmUserListLoadMoreTask();
     }
-    
+
     @Override
     protected ActionMode.Callback getActionModeCallback() {
         DmUserListActionModeCallback callback = new DmUserListActionModeCallback();
@@ -130,7 +130,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
         callback.setAdapter(mAdapter);
         return callback;
     }
-    
+
     private class DmUserListRefreshTask extends RefreshTask {
         @Override
         protected void onPostExecute(List<DirectMessagesUser> result) {
@@ -141,7 +141,7 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
             }
         }
     }
-    
+
     private class DmUserListLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPostExecute(List<DirectMessagesUser> result) {

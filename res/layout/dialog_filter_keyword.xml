@@ -7,24 +7,24 @@
     android:paddingBottom="@dimen/margin_vertical"
     android:paddingLeft="@dimen/margin_horizontal"
     android:paddingRight="@dimen/margin_horizontal"
-    android:paddingTop="@dimen/margin_vertical" >
-    
+    android:paddingTop="@dimen/margin_vertical">
+
     <CheckBox
         android:id="@+id/check_reposted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/check_reposted" />
-    
+        android:text="@string/check_reposted"/>
+
     <CheckBox
         android:id="@+id/is_regex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/regex" />
-    
+        android:text="@string/regex"/>
+
     <EditText
         android:id="@+id/pattern"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text|textFilter" />
-    
+        android:inputType="text|textFilter"/>
+
 </LinearLayout>

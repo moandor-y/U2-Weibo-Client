@@ -28,14 +28,14 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnPageChangeListener {
     public static final String WEIBO_STATUS = Utilities.buildIntentExtraName("WEIBO_STATUS");
-    
+
     private WeiboStatus mWeiboStatus;
     private ViewPager mViewPager;
     private WeiboCommentListFragment mWeiboCommentListFragment;
     private WeiboRepostListFragment mWeiboRepostListFragment;
     private WeiboPagerAdapter mPagerAdapter;
     private PagerSlidingTabStrip mTabStrip;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             new RefreshWeiboInfoTask().execute();
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_weibo, menu);
@@ -68,7 +68,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         Utilities.registerShareActionMenu(shareItem, mWeiboStatus);
         return true;
     }
-    
+
     @Override
     protected boolean onPrepareOptionsPanel(View view, Menu menu) {
         if (mWeiboStatus.favorited) {
@@ -83,105 +83,110 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         }
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.comment:
-            comment();
-            return true;
-        case R.id.repost:
-            repost();
-            return true;
-        case R.id.refresh:
-            refresh();
-            return true;
-        case R.id.favorite:
-            new FavoriteTask(mWeiboStatus, new OnFavoriteFinishedListener()).execute();
-            return true;
-        case R.id.unfavorite:
-            new UnfavoriteTask(mWeiboStatus, new OnUnfavoriteFinishedListener()).execute();
-            return true;
-        case R.id.copy:
-            Utilities.copyText(mWeiboStatus.text);
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.comment:
+                comment();
+                return true;
+            case R.id.repost:
+                repost();
+                return true;
+            case R.id.refresh:
+                refresh();
+                return true;
+            case R.id.favorite:
+                new FavoriteTask(mWeiboStatus, new OnFavoriteFinishedListener()).execute();
+                return true;
+            case R.id.unfavorite:
+                new UnfavoriteTask(mWeiboStatus, new OnUnfavoriteFinishedListener()).execute();
+                return true;
+            case R.id.copy:
+                Utilities.copyText(mWeiboStatus.text);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
-    public void onPageScrollStateChanged(int state) {}
-    
+    public void onPageScrollStateChanged(int state) {
+    }
+
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-    
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
     @Override
     public void onPageSelected(int position) {
         supportInvalidateOptionsMenu();
         switch (position) {
-        case WeiboPagerAdapter.COMMENT_LIST:
-            mWeiboCommentListFragment.onShown();
-            break;
-        case WeiboPagerAdapter.REPOST_LIST:
-            mWeiboRepostListFragment.onShown();
-            break;
+            case WeiboPagerAdapter.COMMENT_LIST:
+                mWeiboCommentListFragment.onShown();
+                break;
+            case WeiboPagerAdapter.REPOST_LIST:
+                mWeiboRepostListFragment.onShown();
+                break;
         }
     }
-    
+
     private void refresh() {
         switch (mViewPager.getCurrentItem()) {
-        case WeiboPagerAdapter.COMMENT_LIST:
-            mWeiboCommentListFragment.refresh();
-            break;
-        case WeiboPagerAdapter.REPOST_LIST:
-            mWeiboRepostListFragment.refresh();
-            break;
+            case WeiboPagerAdapter.COMMENT_LIST:
+                mWeiboCommentListFragment.refresh();
+                break;
+            case WeiboPagerAdapter.REPOST_LIST:
+                mWeiboRepostListFragment.refresh();
+                break;
         }
     }
-    
+
     private void comment() {
         startActivity(ActivityUtils.writeCommentActivity(mWeiboStatus));
     }
-    
+
     private void repost() {
         startActivity(ActivityUtils.writeWeiboActivity(mWeiboStatus));
     }
-    
+
     private void setResult() {
         Intent data = new Intent();
         data.putExtra(WEIBO_STATUS, mWeiboStatus);
         setResult(RESULT_OK, data);
     }
-    
+
     public WeiboStatus getWeiboStatus() {
         return mWeiboStatus;
     }
-    
+
     public boolean isCurrentFragment(Fragment fragment) {
         switch (mViewPager.getCurrentItem()) {
-        case WeiboPagerAdapter.WEIBO:
-            return fragment instanceof WeiboFragment;
-        case WeiboPagerAdapter.COMMENT_LIST:
-            return fragment instanceof WeiboCommentListFragment;
-        case WeiboPagerAdapter.REPOST_LIST:
-            return fragment instanceof WeiboRepostListFragment;
-        default:
-            return false;
+            case WeiboPagerAdapter.WEIBO:
+                return fragment instanceof WeiboFragment;
+            case WeiboPagerAdapter.COMMENT_LIST:
+                return fragment instanceof WeiboCommentListFragment;
+            case WeiboPagerAdapter.REPOST_LIST:
+                return fragment instanceof WeiboRepostListFragment;
+            default:
+                return false;
         }
     }
-    
+
     public void setWeiboCommentListFragment(WeiboCommentListFragment fragment) {
         mWeiboCommentListFragment = fragment;
     }
-    
+
     public void setWeiboRepostListFragment(WeiboRepostListFragment fragment) {
         mWeiboRepostListFragment = fragment;
     }
-    
+
+    public static class Translucent extends WeiboActivity {
+    }
+
     private class RefreshWeiboInfoTask extends MyAsyncTask<Void, Void, Integer[]> {
         @Override
         protected Integer[] doInBackground(Void... v) {
@@ -196,7 +201,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(Integer[] result) {
             if (result != null) {
@@ -211,7 +216,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             }
         }
     }
-    
+
     private class OnFavoriteFinishedListener implements FavoriteTask.OnFavoriteFinishedListener {
         @Override
         public void onFavoriteFinished(final WeiboStatus status) {
@@ -220,13 +225,13 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             setResult();
             supportInvalidateOptionsMenu();
         }
-        
+
         @Override
         public void onFavoriteFailed(WeiboException e) {
             Utilities.notice(R.string.favorite_failed_reason, e.getMessage());
         }
     }
-    
+
     private class OnUnfavoriteFinishedListener implements UnfavoriteTask.OnUnfavoriteFinishedListener {
         @Override
         public void onUnfavoriteFinished(final WeiboStatus status) {
@@ -235,12 +240,10 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
             setResult();
             supportInvalidateOptionsMenu();
         }
-        
+
         @Override
         public void onUnfavoriteFailed(WeiboException e) {
             Utilities.notice(R.string.unfavorite_failed_reason, e.getMessage());
         }
     }
-    
-    public static class Translucent extends WeiboActivity {}
 }

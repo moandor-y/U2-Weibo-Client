@@ -26,14 +26,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.bean.AbsItemBean;
-import gov.moandor.androidweibo.bean.Account;
-import gov.moandor.androidweibo.bean.WeiboUser;
-import gov.moandor.androidweibo.concurrency.ImageDownloader;
-import gov.moandor.androidweibo.dao.AccountIdDao;
-import gov.moandor.androidweibo.dao.UserShowDao;
-
 import java.io.Closeable;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -44,6 +36,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.bean.AbsItemBean;
+import gov.moandor.androidweibo.bean.Account;
+import gov.moandor.androidweibo.bean.WeiboUser;
+import gov.moandor.androidweibo.concurrency.ImageDownloader;
+import gov.moandor.androidweibo.dao.AccountIdDao;
+import gov.moandor.androidweibo.dao.UserShowDao;
+
 public class Utilities {
     public static void closeSilently(Closeable closeable) {
         try {
@@ -52,7 +52,7 @@ public class Utilities {
             Logger.logException(e);
         }
     }
-    
+
     public static Map<String, String> parseUrl(String urlAddress) {
         try {
             URL url = new URL(urlAddress);
@@ -67,7 +67,7 @@ public class Utilities {
             return null;
         }
     }
-    
+
     private static Map<String, String> decodeUrl(String s) {
         Map<String, String> params = new HashMap<String, String>();
         if (s != null) {
@@ -83,7 +83,7 @@ public class Utilities {
         }
         return params;
     }
-    
+
     public static String encodeUrl(Map<String, String> param) {
         if (param == null) {
             return null;
@@ -103,7 +103,7 @@ public class Utilities {
         }
         return stringBuilder.toString();
     }
-    
+
     public static String encodeUrl(String string) {
         try {
             return URLEncoder.encode(string, "UTF-8");
@@ -112,17 +112,17 @@ public class Utilities {
         }
         return null;
     }
-    
+
     public static float spToPx(int sp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, GlobalContext.getInstance().getResources()
                 .getDisplayMetrics());
     }
-    
+
     public static int dpToPx(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, GlobalContext.getInstance()
                 .getResources().getDisplayMetrics());
     }
-    
+
     public static void openUri(Context context, Uri uri) {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.putExtra(Browser.EXTRA_APPLICATION_ID, context.getPackageName());
@@ -130,7 +130,7 @@ public class Utilities {
             context.startActivity(intent);
         }
     }
-    
+
     public static int getColor(int attrId) {
         int[] attr = new int[]{attrId};
         Context context = GlobalContext.getActivity();
@@ -139,7 +139,7 @@ public class Utilities {
         typedArray.recycle();
         return color;
     }
-    
+
     public static int getResourceId(int attrId) {
         int[] attr = new int[]{attrId};
         Context context = GlobalContext.getActivity();
@@ -148,24 +148,24 @@ public class Utilities {
         typedArray.recycle();
         return resId;
     }
-    
+
     public static ImageDownloader.ImageType getAvatarType() {
         switch (ConfigManager.getAvatarQuality()) {
-        case ConfigManager.AVATAR_AUTO:
-            if (GlobalContext.isInWifi()) {
+            case ConfigManager.AVATAR_AUTO:
+                if (GlobalContext.isInWifi()) {
+                    return ImageDownloader.ImageType.AVATAR_LARGE;
+                } else {
+                    return ImageDownloader.ImageType.AVATAR_SMALL;
+                }
+            case ConfigManager.AVATAR_LARGE:
                 return ImageDownloader.ImageType.AVATAR_LARGE;
-            } else {
+            case ConfigManager.AVATAR_SMALL:
                 return ImageDownloader.ImageType.AVATAR_SMALL;
-            }
-        case ConfigManager.AVATAR_LARGE:
-            return ImageDownloader.ImageType.AVATAR_LARGE;
-        case ConfigManager.AVATAR_SMALL:
-            return ImageDownloader.ImageType.AVATAR_SMALL;
-        default:
-            return null;
+            default:
+                return null;
         }
     }
-    
+
     public static ImageDownloader.ImageType getListPictureType() {
         int imageQuality;
         if (GlobalContext.isInWifi()) {
@@ -174,29 +174,29 @@ public class Utilities {
             imageQuality = ConfigManager.getPictureQuality();
         }
         switch (imageQuality) {
-        case ConfigManager.PICTURE_LARGE:
-            return ImageDownloader.ImageType.PICTURE_LARGE;
-        case ConfigManager.PICTURE_MEDIUM:
-            return ImageDownloader.ImageType.PICTURE_MEDIUM;
-        case ConfigManager.PICTURE_SMALL:
-            return ImageDownloader.ImageType.PICTURE_SMALL;
-        default:
-            return null;
+            case ConfigManager.PICTURE_LARGE:
+                return ImageDownloader.ImageType.PICTURE_LARGE;
+            case ConfigManager.PICTURE_MEDIUM:
+                return ImageDownloader.ImageType.PICTURE_MEDIUM;
+            case ConfigManager.PICTURE_SMALL:
+                return ImageDownloader.ImageType.PICTURE_SMALL;
+            default:
+                return null;
         }
     }
-    
+
     public static ImageDownloader.ImageType getDetailPictureType() {
         switch (getListPictureType()) {
-        case PICTURE_MEDIUM:
-        case PICTURE_SMALL:
-            return ImageDownloader.ImageType.PICTURE_MEDIUM;
-        case PICTURE_LARGE:
-            return ImageDownloader.ImageType.PICTURE_LARGE;
-        default:
-            return null;
+            case PICTURE_MEDIUM:
+            case PICTURE_SMALL:
+                return ImageDownloader.ImageType.PICTURE_MEDIUM;
+            case PICTURE_LARGE:
+                return ImageDownloader.ImageType.PICTURE_LARGE;
+            default:
+                return null;
         }
     }
-    
+
     public static int getLoadWeiboCount() {
         int loadWeiboCountMode = ConfigManager.getLoadWeiboCountMode();
         if (loadWeiboCountMode > 0) {
@@ -209,15 +209,15 @@ public class Utilities {
             }
         }
     }
-    
+
     public static int getScreenWidth() {
         return GlobalContext.getInstance().getResources().getDisplayMetrics().widthPixels;
     }
-    
+
     public static int getScreenHeight() {
         return GlobalContext.getInstance().getResources().getDisplayMetrics().heightPixels;
     }
-    
+
     public static void notice(final CharSequence message) {
         GlobalContext.runOnUiThread(new Runnable() {
             @Override
@@ -226,7 +226,7 @@ public class Utilities {
             }
         });
     }
-    
+
     public static void notice(final int resId) {
         GlobalContext.runOnUiThread(new Runnable() {
             @Override
@@ -235,7 +235,7 @@ public class Utilities {
             }
         });
     }
-    
+
     public static void notice(final int resId, final Object... formatArgs) {
         GlobalContext.runOnUiThread(new Runnable() {
             @Override
@@ -245,7 +245,7 @@ public class Utilities {
             }
         });
     }
-    
+
     public static <T> SparseArray<T> toSparseArray(List<T> in) {
         SparseArray<T> result = new SparseArray<T>();
         int size = in.size();
@@ -254,43 +254,43 @@ public class Utilities {
         }
         return result;
     }
-    
+
     public static float getFontSize() {
         switch (ConfigManager.getFontSizeMode()) {
-        case ConfigManager.FONT_SIZE_MODE_SMALL:
-            return ConfigManager.FONT_SIZE_SMALL;
-        default:
-        case ConfigManager.FONT_SIZE_MODE_MEDIUM:
-            return ConfigManager.FONT_SIZE_MEDIUM;
-        case ConfigManager.FONT_SIZE_MODE_LARGE:
-            return ConfigManager.FONT_SIZE_LARGE;
+            case ConfigManager.FONT_SIZE_MODE_SMALL:
+                return ConfigManager.FONT_SIZE_SMALL;
+            default:
+            case ConfigManager.FONT_SIZE_MODE_MEDIUM:
+                return ConfigManager.FONT_SIZE_MEDIUM;
+            case ConfigManager.FONT_SIZE_MODE_LARGE:
+                return ConfigManager.FONT_SIZE_LARGE;
         }
     }
-    
+
     public static boolean isCommentRepostListAvatarEnabled() {
         switch (ConfigManager.getCommentRepostListAvatarMode()) {
-        default:
-        case ConfigManager.COMMENT_REPOST_LIST_AVATAR_AUTO:
-            return GlobalContext.isInWifi();
-        case ConfigManager.COMMENT_REPOST_LIST_AVATAR_ENABLED:
-            return true;
-        case ConfigManager.COMMENT_REPOST_LIST_AVATAR_DISABLED:
-            return false;
+            default:
+            case ConfigManager.COMMENT_REPOST_LIST_AVATAR_AUTO:
+                return GlobalContext.isInWifi();
+            case ConfigManager.COMMENT_REPOST_LIST_AVATAR_ENABLED:
+                return true;
+            case ConfigManager.COMMENT_REPOST_LIST_AVATAR_DISABLED:
+                return false;
         }
     }
-    
+
     public static void hideKeyboard(IBinder windowToken) {
         InputMethodManager imm =
                 (InputMethodManager) GlobalContext.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(windowToken, 0);
     }
-    
+
     public static void showKeyboard(View view) {
         InputMethodManager imm =
                 (InputMethodManager) GlobalContext.getInstance().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, 0);
     }
-    
+
     public static int sendLength(String string) {
         int len = 0;
         for (int i = 0; i < string.length(); i++) {
@@ -307,19 +307,19 @@ public class Utilities {
         }
         return len;
     }
-    
+
     public static boolean isIntentAvailable(Intent intent) {
         PackageManager packageManager = GlobalContext.getInstance().getPackageManager();
         List<ResolveInfo> resolveInfos =
                 packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         return resolveInfos.size() > 0;
     }
-    
+
     public static PendingIntent newEmptyPendingIntent() {
         return PendingIntent.getActivity(GlobalContext.getInstance(), 0, new Intent(),
                 PendingIntent.FLAG_CANCEL_CURRENT);
     }
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static void copyText(String text) {
         ClipboardManager clipboardManager =
@@ -327,16 +327,16 @@ public class Utilities {
         clipboardManager.setPrimaryClip(ClipData.newPlainText("sinaweibo", text));
         Utilities.notice(R.string.copied_successfully);
     }
-    
+
     public static boolean isScreenLandscape() {
         int orientation = GlobalContext.getInstance().getResources().getConfiguration().orientation;
         return orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
-    
+
     public static Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
         return GlobalContext.getInstance().registerReceiver(receiver, filter);
     }
-    
+
     public static void unregisterReceiver(BroadcastReceiver receiver) {
         try {
             GlobalContext.getInstance().unregisterReceiver(receiver);
@@ -344,7 +344,7 @@ public class Utilities {
             Logger.logException(e);
         }
     }
-    
+
     public static void fetchAndSaveAccountInfo(String token) throws WeiboException {
         AccountIdDao getAccountIdDao = new AccountIdDao();
         getAccountIdDao.setToken(token);
@@ -357,11 +357,11 @@ public class Utilities {
         account.user = userShowDao.execute();
         GlobalContext.addOrUpdateAccount(account);
     }
-    
+
     public static boolean isBmEnabled() {
         return GlobalContext.getInstance().getResources().getBoolean(R.bool.bm_enabled);
     }
-    
+
     public static void registerShareActionMenu(MenuItem item, AbsItemBean bean) {
         WeiboUser user = bean.weiboUser;
         if (user == null) {
@@ -376,7 +376,7 @@ public class Utilities {
             provider.setShareIntent(intent);
         }
     }
-    
+
     public static long getNotificationInterval() {
         int mode;
         if (GlobalContext.isInWifi()) {
@@ -385,21 +385,21 @@ public class Utilities {
             mode = ConfigManager.getNotificationFrequency();
         }
         switch (mode) {
-        case ConfigManager.THREE_MINUTES:
-            return 3 * 60 * 1000;
-        case ConfigManager.FIFTEEN_MINUTES:
-        default:
-            return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-        case ConfigManager.HALF_HOUR:
-            return AlarmManager.INTERVAL_HALF_HOUR;
+            case ConfigManager.THREE_MINUTES:
+                return 3 * 60 * 1000;
+            case ConfigManager.FIFTEEN_MINUTES:
+            default:
+                return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+            case ConfigManager.HALF_HOUR:
+                return AlarmManager.INTERVAL_HALF_HOUR;
         }
     }
-    
+
     public static String buildIntentExtraName(String name) {
         String packageName = GlobalContext.getInstance().getPackageName();
         return packageName + "." + name;
     }
-    
+
     public static boolean isWeiboMidUrl(String url) {
         if (TextUtils.isEmpty(url)) {
             return false;
@@ -419,7 +419,7 @@ public class Utilities {
         String[] result = url.split("/");
         return result != null && result.length == 2;
     }
-    
+
     public static String getMidFromUrl(String url) {
         url = convertWeiboCnToCom(url);
         if (url.endsWith("/")) {
@@ -436,7 +436,7 @@ public class Utilities {
         }
         return url.split("/")[1];
     }
-    
+
     private static String convertWeiboCnToCom(String url) {
         if (!TextUtils.isEmpty(url)) {
             if (url.startsWith(UrlHelper.WEIBO_CN)) {

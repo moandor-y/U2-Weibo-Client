@@ -10,25 +10,25 @@ import gov.moandor.androidweibo.fragment.DmConversationFragment;
 public class DmConversationActionModeCallback implements ActionMode.Callback {
     private DmConversationFragment mFragment;
     private DmConversationAdapter mAdapter;
-    
+
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         // TODO Auto-generated method stub
         return true;
     }
-    
+
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
         // TODO Auto-generated method stub
         return false;
     }
-    
+
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         // TODO Auto-generated method stub
         return false;
     }
-    
+
     @Override
     public void onDestroyActionMode(ActionMode mode) {
         mFragment.onActionModeFinished();
@@ -36,11 +36,11 @@ public class DmConversationActionModeCallback implements ActionMode.Callback {
         mAdapter.notifyDataSetChanged();
         mFragment.setPullToRefreshEnabled(true);
     }
-    
+
     public void setFragment(DmConversationFragment fragment) {
         mFragment = fragment;
     }
-    
+
     public void setAdapter(DmConversationAdapter adapter) {
         mAdapter = adapter;
     }

@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
-    
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/write_weibo" 
-        android:title="@string/write_weibo" 
+        android:id="@+id/write_weibo"
         android:icon="@drawable/ic_edit"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/write_weibo"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
-        android:id="@+id/refresh" 
-        android:title="@string/refresh" 
+        android:id="@+id/refresh"
         android:icon="@drawable/ic_refresh_dark"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/refresh"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/settings"
-        android:title="@string/settings"
         android:icon="@drawable/ic_settings"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/settings"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/orientation"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/find_user"
-        android:title="@string/find_user"
         android:icon="@drawable/ic_user"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/find_user"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
 </menu>

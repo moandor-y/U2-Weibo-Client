@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
-    
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/save"
-        android:title="@string/save_picture"
         android:icon="@drawable/ic_save_dark"
-        androidweibo:showAsAction="ifRoom" />
-    
+        android:title="@string/save_picture"
+        androidweibo:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/show_ori"
-        android:title="@string/show_ori"
         android:icon="@drawable/ic_picture"
-        androidweibo:showAsAction="ifRoom" />
-    
+        android:title="@string/show_ori"
+        androidweibo:showAsAction="ifRoom"/>
+
 </menu>

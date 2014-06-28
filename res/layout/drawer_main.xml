@@ -2,58 +2,58 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="200dp"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/drawer_shadow"
-        android:orientation="vertical"
-        android:background="?drawer_background" >
-        
+        android:background="?drawer_background"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/accounts"
             android:gravity="center"
-            android:textSize="18sp"
-            android:textColor="@android:color/white"
             android:shadowColor="@android:color/black"
             android:shadowDx="0"
             android:shadowDy="0"
-            android:shadowRadius="3" />
-        
+            android:shadowRadius="3"
+            android:text="@string/accounts"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"/>
+
         <ListView
             android:id="@+id/account_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:divider="@android:color/transparent"
-            android:dividerHeight="0dp" />
-        
+            android:dividerHeight="0dp"/>
+
         <Button
             android:id="@+id/direct_messages"
             style="@style/drawer_button"
-            android:text="@string/direct_messages" />
-        
+            android:text="@string/direct_messages"/>
+
         <Button
             android:id="@+id/favorite"
             style="@style/drawer_button"
-            android:text="@string/favorites" />
-        
+            android:text="@string/favorites"/>
+
         <Button
             android:id="@+id/draft_box"
             style="@style/drawer_button"
-            android:text="@string/draft_box" />
-        
+            android:text="@string/draft_box"/>
+
     </LinearLayout>
-    
+
     <View
         android:id="@+id/drawer_shadow"
         android:layout_width="5dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@drawable/drawer_shadow" />
-    
+        android:background="@drawable/drawer_shadow"/>
+
 </RelativeLayout>

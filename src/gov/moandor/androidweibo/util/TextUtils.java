@@ -19,11 +19,11 @@ public class TextUtils {
     private static final String URL_SCHEME = "http://";
     private static final String TOPIC_SCHEME = "androidweibo.topic://";
     private static final String MENTION_SCHEME = "androidweibo.user://";
-    
+
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
-    
+
     public static SpannableString addWeiboLinks(String text) {
         if (text.startsWith("[") && text.endsWith("]")) {
             text += " ";
@@ -44,7 +44,7 @@ public class TextUtils {
         addEmotions(result);
         return result;
     }
-    
+
     private static void addEmotions(SpannableString value) {
         Matcher matcher = EMOTION.matcher(value);
         while (matcher.find()) {

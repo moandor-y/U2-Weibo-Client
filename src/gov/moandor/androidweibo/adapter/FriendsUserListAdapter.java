@@ -5,15 +5,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.fragment.AbsUserListFragment;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.Utilities;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectableAdapter<WeiboUser> {
     private List<WeiboUser> mUsers = new ArrayList<WeiboUser>();
@@ -22,22 +22,22 @@ public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectabl
     private float mFontSizeSmall = mFontSize - 3;
     private boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     private int mSelectedPosition = -1;
-    
+
     @Override
     public int getCount() {
         return mUsers.size();
     }
-    
+
     @Override
     public WeiboUser getItem(int position) {
         return mUsers.get(position);
     }
-    
+
     @Override
     public long getItemId(int position) {
         return mUsers.get(position).id;
     }
-    
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
@@ -72,39 +72,39 @@ public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectabl
         }
         return convertView;
     }
-    
+
     public void setFragment(AbsUserListFragment<FriendsUserListAdapter, WeiboUser> fragment) {
         mFragment = fragment;
     }
-    
+
     @Override
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
     }
-    
+
     @Override
     public WeiboUser getSelectedItem() {
         return getItem(mSelectedPosition);
     }
-    
+
     public void updateDataSet(List<WeiboUser> users) {
         mUsers.clear();
         mUsers.addAll(users);
     }
-    
+
     public void addAll(List<WeiboUser> users) {
         mUsers.addAll(users);
     }
-    
+
     public void updatePosition(int position, WeiboUser user) {
         mUsers.set(position, user);
     }
-    
+
     @Override
     public int getSelection() {
         return mSelectedPosition;
     }
-    
+
     private ViewHolder initViewHolder(View view) {
         ViewHolder holder = new ViewHolder();
         holder.avatar = (ImageView) view.findViewById(R.id.avatar);
@@ -112,7 +112,7 @@ public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectabl
         holder.description = (TextView) view.findViewById(R.id.description);
         return holder;
     }
-    
+
     private static class ViewHolder {
         public ImageView avatar;
         public TextView userName;

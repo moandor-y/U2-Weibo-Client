@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <dimen name="margin_horizontal">10dp</dimen>
     <dimen name="margin_vertical">10dp</dimen>
-    
+
 </resources>

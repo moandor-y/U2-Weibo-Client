@@ -18,7 +18,7 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
     View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
         return inflater.inflate(R.layout.comment_list_item, parent, false);
     }
-    
+
     @Override
     ViewHolder initViewHolder(View view) {
         CommentListViewHolder holder = new CommentListViewHolder();
@@ -29,7 +29,7 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
         holder.repliedText = (TextView) view.findViewById(R.id.replied_text);
         return holder;
     }
-    
+
     @Override
     void initLayout(ViewHolder vh) {
         super.initLayout(vh);
@@ -37,7 +37,7 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
         holder.repliedText.setOnTouchListener(mTextOnTouchListener);
         holder.repliedText.setTextSize(mFontSize);
     }
-    
+
     @Override
     void buildContent(ViewHolder vh, WeiboComment comment, int position) {
         super.buildContent(vh, comment, position);
@@ -74,7 +74,7 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
             }
         }
     }
-    
+
     private static class CommentListViewHolder extends ViewHolder {
         public TextView repliedText;
     }

@@ -3,14 +3,14 @@ package gov.moandor.androidweibo.dao;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.WeiboException;
-
-import java.util.List;
 
 public abstract class BaseUserListDao<T> extends BaseHttpDao<List<T>> {
     private String mToken;
@@ -20,7 +20,7 @@ public abstract class BaseUserListDao<T> extends BaseHttpDao<List<T>> {
     private int mTrimStatus;
     private long mUid;
     private boolean mDataFetched;
-    
+
     @Override
     public List<T> execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -44,33 +44,33 @@ public abstract class BaseUserListDao<T> extends BaseHttpDao<List<T>> {
             mDataFetched = true;
         }
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setCount(int count) {
         mCount = count;
     }
-    
+
     public void setCursor(int cursor) {
         mCursor = cursor;
     }
-    
+
     public void setUid(long uid) {
         mUid = uid;
     }
-    
+
     public void setTrimStatus(int trimStatus) {
         mTrimStatus = trimStatus;
     }
-    
+
     public int getNextCursor() {
         if (!mDataFetched) {
             throw new IllegalStateException("You must call execute() before call getNextCursor().");
         }
         return mNextCursor;
     }
-    
+
     protected abstract List<T> getDataFromJson(JSONObject json) throws WeiboException;
 }

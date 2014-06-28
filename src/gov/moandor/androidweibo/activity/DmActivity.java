@@ -17,9 +17,9 @@ import gov.moandor.androidweibo.util.Utilities;
 
 public class DmActivity extends AbsActivity {
     public static final String FROM_UNREAD = Utilities.buildIntentExtraName("FROM_UNREAD");
-    
+
     private DmUserListFragment mFragment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,30 +51,30 @@ public class DmActivity extends AbsActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.direct_messages);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_dm_user_list, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.refresh:
-            mFragment.refresh();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.refresh:
+                mFragment.refresh();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     public static class ConversationActivity extends AbsActivity {
         public static final String USER = Utilities.buildIntentExtraName("USER");
-        
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

@@ -14,6 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.UserSuggestion;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -24,13 +27,10 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AtUserActivity extends AbsActivity {
     private ListAdapter mAdapter;
     private List<UserSuggestion> mSuggestions = new ArrayList<UserSuggestion>();
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +40,7 @@ public class AtUserActivity extends AbsActivity {
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new OnItemClickListener());
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_at_user, menu);
@@ -53,23 +53,23 @@ public class AtUserActivity extends AbsActivity {
         searchView.requestFocus();
         return true;
     }
-    
+
     private class ListAdapter extends BaseAdapter {
         @Override
         public int getCount() {
             return mSuggestions.size();
         }
-        
+
         @Override
         public Object getItem(int position) {
             return mSuggestions.get(position);
         }
-        
+
         @Override
         public long getItemId(int position) {
             return mSuggestions.get(position).id;
         }
-        
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -87,10 +87,10 @@ public class AtUserActivity extends AbsActivity {
             return convertView;
         }
     }
-    
+
     private class OnQueryTextListener implements SearchView.OnQueryTextListener {
         private SearchTask mSearchTask;
-        
+
         @Override
         public boolean onQueryTextChange(String newText) {
             if (!TextUtils.isEmpty(newText)) {
@@ -105,20 +105,20 @@ public class AtUserActivity extends AbsActivity {
             }
             return false;
         }
-        
+
         @Override
         public boolean onQueryTextSubmit(String query) {
             return false;
         }
     }
-    
+
     private class SearchTask extends MyAsyncTask<Void, Void, List<UserSuggestion>> {
         private String mKeyword;
-        
+
         public SearchTask(String keyword) {
             mKeyword = keyword;
         }
-        
+
         @Override
         protected List<UserSuggestion> doInBackground(Void... v) {
             AtUserSuggestionsDao dao = new AtUserSuggestionsDao();
@@ -133,7 +133,7 @@ public class AtUserActivity extends AbsActivity {
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(List<UserSuggestion> result) {
             mSuggestions.clear();
@@ -141,7 +141,7 @@ public class AtUserActivity extends AbsActivity {
             mAdapter.notifyDataSetChanged();
         }
     }
-    
+
     private class OnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

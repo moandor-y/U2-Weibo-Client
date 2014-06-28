@@ -12,6 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.CommentDraft;
@@ -23,18 +28,64 @@ import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class DraftBoxActivity extends AbsActivity {
     private ListView mListView;
     private ListAdapter mListAdapter;
     private List<AbsDraftBean> mBeans = new ArrayList<AbsDraftBean>();
     private MyAsyncTask<Void, Void, List<AbsDraftBean>> mTask;
     private ActionMode mActionMode;
-    
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (mTask != null && mTask.getStatus() != MyAsyncTask.Status.FINISHED) {
+                return true;
+            }
+            switch (item.getItemId()) {
+                case R.id.send:
+                    for (AbsDraftBean draft : mListAdapter.getCheckedItems()) {
+                        Intent intent = new Intent();
+                        if (draft instanceof WeiboDraft) {
+                            intent.setClass(GlobalContext.getInstance(), SendWeiboService.class);
+                            intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
+                            intent.putExtra(SendWeiboService.WEIBO_DRAFT, draft);
+                        } else if (draft instanceof CommentDraft) {
+                            intent.setClass(GlobalContext.getInstance(), SendCommentService.class);
+                            intent.putExtra(SendCommentService.TOKEN, GlobalContext.getCurrentAccount().token);
+                            intent.putExtra(SendCommentService.COMMENT_DRAFT, draft);
+                        }
+                        startService(intent);
+                    }
+                    mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
+                    mTask.execute();
+                    break;
+                case R.id.delete:
+                    mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
+                    mTask.execute();
+                    break;
+            }
+            mode.finish();
+            return true;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.draft_long_click, menu);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+            mListAdapter.clearCheck();
+            mListAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +99,7 @@ public class DraftBoxActivity extends AbsActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.draft_box);
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -58,35 +109,35 @@ public class DraftBoxActivity extends AbsActivity {
         mTask = new GetDraftsTask();
         mTask.execute();
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     private class ListAdapter extends BaseAdapter {
         private Set<Integer> mCheckedPositions = new HashSet<Integer>();
-        
+
         @Override
         public int getCount() {
             return mBeans.size();
         }
-        
+
         @Override
         public AbsDraftBean getItem(int position) {
             return mBeans.get(position);
         }
-        
+
         @Override
         public long getItemId(int position) {
             return mBeans.get(position).id;
         }
-        
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
@@ -101,27 +152,27 @@ public class DraftBoxActivity extends AbsActivity {
             }
             return convertView;
         }
-        
+
         public void check(int position) {
             mCheckedPositions.add(position);
         }
-        
+
         public void uncheck(int position) {
             mCheckedPositions.remove(position);
         }
-        
+
         public void clearCheck() {
             mCheckedPositions.clear();
         }
-        
+
         public boolean isChecked(int position) {
             return mCheckedPositions.contains(position);
         }
-        
+
         public int getCheckedCount() {
             return mCheckedPositions.size();
         }
-        
+
         public int[] getCheckedIds() {
             int count = mCheckedPositions.size();
             Integer[] positions = mCheckedPositions.toArray(new Integer[0]);
@@ -131,7 +182,7 @@ public class DraftBoxActivity extends AbsActivity {
             }
             return result;
         }
-        
+
         public AbsDraftBean[] getCheckedItems() {
             int count = mCheckedPositions.size();
             Integer[] positions = mCheckedPositions.toArray(new Integer[0]);
@@ -142,59 +193,7 @@ public class DraftBoxActivity extends AbsActivity {
             return result;
         }
     }
-    
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (mTask != null && mTask.getStatus() != MyAsyncTask.Status.FINISHED) {
-                return true;
-            }
-            switch (item.getItemId()) {
-            case R.id.send:
-                for (AbsDraftBean draft : mListAdapter.getCheckedItems()) {
-                    Intent intent = new Intent();
-                    if (draft instanceof WeiboDraft) {
-                        intent.setClass(GlobalContext.getInstance(), SendWeiboService.class);
-                        intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
-                        intent.putExtra(SendWeiboService.WEIBO_DRAFT, draft);
-                    } else if (draft instanceof CommentDraft) {
-                        intent.setClass(GlobalContext.getInstance(), SendCommentService.class);
-                        intent.putExtra(SendCommentService.TOKEN, GlobalContext.getCurrentAccount().token);
-                        intent.putExtra(SendCommentService.COMMENT_DRAFT, draft);
-                    }
-                    startService(intent);
-                }
-                mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
-                mTask.execute();
-                break;
-            case R.id.delete:
-                mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
-                mTask.execute();
-                break;
-            }
-            mode.finish();
-            return true;
-        }
-        
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.draft_long_click, menu);
-            return true;
-        }
-        
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-            mListAdapter.clearCheck();
-            mListAdapter.notifyDataSetChanged();
-        }
-        
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-    };
-    
+
     private class OnItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -222,7 +221,7 @@ public class DraftBoxActivity extends AbsActivity {
             }
         }
     }
-    
+
     private class OnItemLongClickListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -232,13 +231,13 @@ public class DraftBoxActivity extends AbsActivity {
             return true;
         }
     }
-    
+
     private class GetDraftsTask extends MyAsyncTask<Void, Void, List<AbsDraftBean>> {
         @Override
         protected List<AbsDraftBean> doInBackground(Void... params) {
             return DatabaseUtils.getDrafts(GlobalContext.getCurrentAccount().user.id);
         }
-        
+
         @Override
         protected void onPostExecute(List<AbsDraftBean> result) {
             mBeans.clear();
@@ -246,24 +245,24 @@ public class DraftBoxActivity extends AbsActivity {
             mListAdapter.notifyDataSetChanged();
         }
     }
-    
+
     private class RemoveAndGetDraftsTask extends MyAsyncTask<Void, Void, List<AbsDraftBean>> {
         private int[] mIds;
-        
+
         public RemoveAndGetDraftsTask(int[] ids) {
             mIds = ids;
         }
-        
+
         public RemoveAndGetDraftsTask(int id) {
             this(new int[]{id});
         }
-        
+
         @Override
         protected List<AbsDraftBean> doInBackground(Void... params) {
             DatabaseUtils.removeDrafts(mIds);
             return DatabaseUtils.getDrafts(GlobalContext.getCurrentAccount().user.id);
         }
-        
+
         @Override
         protected void onPostExecute(List<AbsDraftBean> result) {
             mBeans.clear();

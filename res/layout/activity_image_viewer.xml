@@ -2,20 +2,20 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="match_parent">
+
     <gov.moandor.androidweibo.widget.ViewPagerFixed
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    
+        android:layout_height="match_parent"/>
+
     <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|bottom"
-        android:layout_marginLeft="@dimen/margin_horizontal"
         android:layout_marginBottom="@dimen/margin_vertical"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+        android:layout_marginLeft="@dimen/margin_horizontal"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
 </FrameLayout>

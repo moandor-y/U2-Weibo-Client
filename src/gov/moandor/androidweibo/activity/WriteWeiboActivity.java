@@ -42,7 +42,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     public static final String STATE_COMMENT_ORI_WHEN_REPOST = "state_comment_ori_when_repost";
     public static final int CAMERA_REQUEST_CODE = 0;
     public static final int GALLERY_REQUEST_CODE = 1;
-    
+
     private boolean mCommentWhenRepost;
     private boolean mCommentOriWhenRepost;
     private WeiboStatus mRetweetWeiboStatus;
@@ -51,7 +51,27 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     private GpsLocation mLocation;
     private ImageButton mAddPicButton;
     private ImageView mPreview;
-    
+    private OnAddPicDialogClickListener mOnAddPicDialogClickListener = new OnAddPicDialogClickListener();
+    private LocationListener mLocationListener = new LocationListener() {
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+        }
+
+        @Override
+        public void onLocationChanged(Location location) {
+            ((LocationManager) getSystemService(LOCATION_SERVICE)).removeUpdates(this);
+            onLocationUpdated(location);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +115,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
         loadPicPreview();
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -103,25 +123,25 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             return;
         }
         switch (requestCode) {
-        case CAMERA_REQUEST_CODE:
-            if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.setText(R.string.share_picture);
-                mEditText.setSelection(mEditText.getText().length());
-            }
-            mPicPath = getPath(mImageFileUri);
-            loadPicPreview();
-            break;
-        case GALLERY_REQUEST_CODE:
-            if (TextUtils.isEmpty(mEditText.getText())) {
-                mEditText.setText(R.string.share_picture);
-                mEditText.setSelection(mEditText.getText().length());
-            }
-            mPicPath = getPath(data.getData());
-            loadPicPreview();
-            break;
+            case CAMERA_REQUEST_CODE:
+                if (TextUtils.isEmpty(mEditText.getText())) {
+                    mEditText.setText(R.string.share_picture);
+                    mEditText.setSelection(mEditText.getText().length());
+                }
+                mPicPath = getPath(mImageFileUri);
+                loadPicPreview();
+                break;
+            case GALLERY_REQUEST_CODE:
+                if (TextUtils.isEmpty(mEditText.getText())) {
+                    mEditText.setText(R.string.share_picture);
+                    mEditText.setSelection(mEditText.getText().length());
+                }
+                mPicPath = getPath(data.getData());
+                loadPicPreview();
+                break;
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_write_weibo, menu);
@@ -139,38 +159,38 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.add_location:
-            addLocation();
-            return true;
-        case R.id.insert_topic:
-            insertTopic();
-            return true;
-        case R.id.comment_when_repost:
-            if (item.isChecked()) {
-                item.setChecked(false);
-                mCommentWhenRepost = false;
-            } else {
-                item.setChecked(true);
-                mCommentWhenRepost = true;
-            }
-            return true;
-        case R.id.comment_ori_when_repost:
-            if (item.isChecked()) {
-                item.setChecked(false);
-                mCommentOriWhenRepost = false;
-            } else {
-                item.setChecked(true);
-                mCommentOriWhenRepost = true;
-            }
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.add_location:
+                addLocation();
+                return true;
+            case R.id.insert_topic:
+                insertTopic();
+                return true;
+            case R.id.comment_when_repost:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    mCommentWhenRepost = false;
+                } else {
+                    item.setChecked(true);
+                    mCommentWhenRepost = true;
+                }
+                return true;
+            case R.id.comment_ori_when_repost:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    mCommentOriWhenRepost = false;
+                } else {
+                    item.setChecked(true);
+                    mCommentOriWhenRepost = true;
+                }
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -178,7 +198,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         outState.putBoolean(STATE_COMMENT_WHEN_REPOST, mCommentWhenRepost);
         outState.putBoolean(STATE_COMMENT_ORI_WHEN_REPOST, mCommentOriWhenRepost);
     }
-    
+
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -188,7 +208,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         mPicPath = savedInstanceState.getString(STATE_PIC_PATH);
         loadPicPreview();
     }
-    
+
     @Override
     void onSend(String content) {
         Intent intent = new Intent();
@@ -198,7 +218,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         startService(intent);
         finish();
     }
-    
+
     @Override
     void onCreateBottomMenu(ViewGroup container) {
         if (mRetweetWeiboStatus == null) {
@@ -212,31 +232,31 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         CheatSheet.setup(container.findViewById(R.id.at), R.string.mention);
         CheatSheet.setup(container.findViewById(R.id.emotion), R.string.insert_emotion);
     }
-    
+
     @Override
     void onBottomMenuItemSelected(View view) {
         switch (view.getId()) {
-        case R.id.add_picture:
-            addPicture();
-            break;
-        case R.id.at:
-            atUser();
-            break;
-        case R.id.emotion:
-            toggleEmotionPanel();
-            break;
-        case R.id.insert_topic:
-            insertTopic();
-            break;
+            case R.id.add_picture:
+                addPicture();
+                break;
+            case R.id.at:
+                atUser();
+                break;
+            case R.id.emotion:
+                toggleEmotionPanel();
+                break;
+            case R.id.insert_topic:
+                insertTopic();
+                break;
         }
     }
-    
+
     private void addPicture() {
         AddPictureDialogFragment dialog = new AddPictureDialogFragment();
         dialog.setOnClickListener(mOnAddPicDialogClickListener);
         dialog.show(getSupportFragmentManager(), ADD_PIC_DIALOG);
     }
-    
+
     private String getPath(Uri uri) {
         String path = uri.getPath();
         if (path.startsWith("/external")) {
@@ -248,7 +268,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
         return path;
     }
-    
+
     @Override
     WeiboDraft onCreateDraft(String content) {
         WeiboDraft draft = new WeiboDraft();
@@ -261,7 +281,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         draft.commentOriWhenRepost = mCommentOriWhenRepost;
         return draft;
     }
-    
+
     private void addLocation() {
         LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -276,14 +296,14 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10, mLocationListener);
         }
     }
-    
+
     private void onLocationUpdated(Location location) {
         Utilities.notice(R.string.location_updated);
         mLocation = new GpsLocation();
         mLocation.latitude = location.getLatitude();
         mLocation.longitude = location.getLongitude();
     }
-    
+
     private void loadPicPreview() {
         if (!TextUtils.isEmpty(mPicPath)) {
             Bitmap thumb = ImageUtils.getBitmapFromFile(mPicPath, Utilities.dpToPx(30), Utilities.dpToPx(30));
@@ -298,53 +318,34 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             mPreview.setImageBitmap(null);
         }
     }
-    
-    private OnAddPicDialogClickListener mOnAddPicDialogClickListener = new OnAddPicDialogClickListener();
-    
+
     private class OnAddPicDialogClickListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
-            case 0:
-                mImageFileUri =
-                        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
-                if (mImageFileUri != null) {
-                    Intent intent = new Intent();
-                    intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageFileUri);
-                    if (Utilities.isIntentAvailable(intent)) {
-                        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                case 0:
+                    mImageFileUri =
+                            getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new ContentValues());
+                    if (mImageFileUri != null) {
+                        Intent intent = new Intent();
+                        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageFileUri);
+                        if (Utilities.isIntentAvailable(intent)) {
+                            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+                        } else {
+                            Utilities.notice(R.string.no_camera_app);
+                        }
                     } else {
-                        Utilities.notice(R.string.no_camera_app);
+                        Utilities.notice(R.string.cannot_add_picture);
                     }
-                } else {
-                    Utilities.notice(R.string.cannot_add_picture);
-                }
-                break;
-            case 1:
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_PICK);
-                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, GALLERY_REQUEST_CODE);
-                break;
+                    break;
+                case 1:
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_PICK);
+                    intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, GALLERY_REQUEST_CODE);
+                    break;
             }
         }
     }
-    
-    private LocationListener mLocationListener = new LocationListener() {
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-        
-        @Override
-        public void onProviderEnabled(String provider) {}
-        
-        @Override
-        public void onProviderDisabled(String provider) {}
-        
-        @Override
-        public void onLocationChanged(Location location) {
-            ((LocationManager) getSystemService(LOCATION_SERVICE)).removeUpdates(this);
-            onLocationUpdated(location);
-        }
-    };
 }

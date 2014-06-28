@@ -7,6 +7,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
@@ -25,23 +27,21 @@ import gov.moandor.androidweibo.util.DatabaseUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
-import java.util.List;
-
 public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int GROUP_ALL = 0;
     private static final int GROUP_BILATERAL = 1;
     private static final int REQUEST_CODE = 0;
     private static final int WIFI_AUTO_DOWNLOAD_PRIORITY = 2;
-    
+
     private Thread mWifiAutoDownloadThread;
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter.setOnPictureClickListener(new OnPictureClickListener());
         mAdapter.setOnMultiPictureClickListener(new OnMultiPictureClickListener());
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
@@ -61,7 +61,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             }
         }
     }
-    
+
     private void startWifiAutoDownloadPic(int position) {
         if (!ConfigManager.isWifiAutoDownloadPicEnabled() || !GlobalContext.isInWifi()
                 || ConfigManager.isNoPictureMode()) {
@@ -74,40 +74,40 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         mWifiAutoDownloadThread.setPriority(WIFI_AUTO_DOWNLOAD_PRIORITY);
         mWifiAutoDownloadThread.start();
     }
-    
+
     @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
     }
-    
+
     @Override
     List<WeiboStatus> getBeansFromDatabase(long accountId, int group) {
         return DatabaseUtils.getWeiboStatuses(accountId, group);
     }
-    
+
     @Override
     void saveRefreshResultToDatabase(final List<WeiboStatus> statuses, long accountId, int group) {
         DatabaseUtils.removeWeiboStatuses(accountId, group);
         DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
-    
+
     @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses, long accountId, int group) {
         DatabaseUtils.insertWeiboStatuses(statuses, accountId, group);
     }
-    
+
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         switch (ConfigManager.getWeiboGroup(GlobalContext.getCurrentAccount().user.id)) {
-        case GROUP_BILATERAL:
-            return new BilateralTimelineDao();
-        case GROUP_ALL:
-            return new FriendsTimelineDao();
-        default:
-            return new GroupTimelineDao();
+            case GROUP_BILATERAL:
+                return new BilateralTimelineDao();
+            case GROUP_ALL:
+                return new FriendsTimelineDao();
+            default:
+                return new GroupTimelineDao();
         }
     }
-    
+
     @Override
     public void saveListPosition(Account account) {
         View view = mListView.getChildAt(0);
@@ -123,16 +123,16 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
                     DatabaseUtils.insertOrUpdateTimelinePosition(position, MainActivity.WEIBO_LIST, group, accountId);
                 }
             });
-            
+
         }
     }
-    
+
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
         startActivityForResult(intent, REQUEST_CODE);
     }
-    
+
     @Override
     ActionMode.Callback getActionModeCallback() {
         WeiboListActionModeCallback callback = new WeiboListActionModeCallback() {
@@ -145,10 +145,10 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
                     }
                 });
             }
-            
+
             @Override
             protected void updateDatabase(final WeiboStatus status, final int position, final long accountId,
-                    final int group) {
+                                          final int group) {
                 MyAsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -161,33 +161,33 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
         callback.setFragment(this);
         return callback;
     }
-    
+
     @Override
     RefreshTask createRefreshTask() {
         return new WeiboListRefreshTask();
     }
-    
+
     @Override
     LoadMoreTask createLoadMoreTask() {
         return new WeiboListLoadMoreTask();
     }
-    
+
     @Override
     TimelinePosition onRestoreListPosition(long accountId, int group) {
         return DatabaseUtils.getTimelinePosition(accountId, MainActivity.WEIBO_LIST, group);
     }
-    
+
     @Override
     protected int getGroup() {
         return ConfigManager.getWeiboGroup(GlobalContext.getCurrentAccount().user.id);
     }
-    
+
     @Override
     public void notifyAccountOrGroupChanged() {
         super.notifyAccountOrGroupChanged();
         ((MainActivity) getActivity()).resetWeiboUnreadCount();
     }
-    
+
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {
         @Override
         public void onMultiPictureClick(int position, int picIndex) {
@@ -198,7 +198,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             startActivity(ActivityUtils.imageViewerActivity(status, picIndex));
         }
     }
-    
+
     private class OnPictureClickListener implements WeiboListAdapter.OnPictureClickListener {
         @Override
         public void onPictureClick(int position) {
@@ -209,16 +209,16 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             startActivity(ActivityUtils.imageViewerActivity(status, 0));
         }
     }
-    
+
     private class WeiboListRefreshTask extends MainRefreshTask {
         private int mGroup;
-        
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mGroup = getGroup();
         }
-        
+
         @Override
         protected List<WeiboStatus> doInBackground(Void... v) {
             if (mDao instanceof GroupTimelineDao) {
@@ -228,7 +228,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             }
             return super.doInBackground(v);
         }
-        
+
         @Override
         protected void onPostExecute(List<WeiboStatus> result) {
             super.onPostExecute(result);
@@ -238,7 +238,7 @@ public class WeiboListFragment extends AbsMainTimelineFragment<WeiboStatus, Weib
             }
         }
     }
-    
+
     private class WeiboListLoadMoreTask extends MainLoadMoreTask {
         @Override
         protected void onPostExecute(List<WeiboStatus> result) {

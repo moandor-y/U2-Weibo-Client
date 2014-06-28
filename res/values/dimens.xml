@@ -17,5 +17,5 @@
     <dimen name="tab_padding">30dp</dimen>
     <dimen name="settings_item_margin">10dp</dimen>
     <dimen name="action_button_min_width">56dip</dimen>
-    
+
 </resources>

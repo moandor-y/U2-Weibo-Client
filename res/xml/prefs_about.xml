@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
     <Preference android:title="@string/open_source_licenses">
         <intent
             android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$LicensesActivity"
-            android:targetPackage="gov.moandor.androidweibo" />
+            android:targetPackage="gov.moandor.androidweibo"/>
     </Preference>
-    
+
     <Preference
         android:key="memory"
-        android:title="@string/memory"
-        android:persistent="false" />
-    
+        android:persistent="false"
+        android:title="@string/memory"/>
+
     <Preference
         android:key="official_account"
-        android:title="@string/official_account"
+        android:persistent="false"
         android:summary="\@U2微博客户端"
-        android:persistent="false" />
-    
+        android:title="@string/official_account"/>
+
     <PreferenceCategory android:title="@string/developers">
-        
+
         <Preference
             android:key="developer_1"
-            android:title="\@Moandor"
-            android:persistent="false" />
-        
+            android:persistent="false"
+            android:title="\@Moandor"/>
+
         <Preference
             android:key="developer_2"
-            android:title="\@沙丁鱼PP菌"
-            android:persistent="false" />
-        
+            android:persistent="false"
+            android:title="\@沙丁鱼PP菌"/>
+
     </PreferenceCategory>
-    
+
     <PreferenceCategory android:title="@string/directories">
-        
+
         <Preference
             android:key="dir_pic"
-            android:title="@string/dir_pic"
-            android:persistent="false" />
-        
+            android:persistent="false"
+            android:title="@string/dir_pic"/>
+
         <Preference
             android:key="dir_avatar"
-            android:title="@string/dir_avatar"
-            android:persistent="false" />
-        
+            android:persistent="false"
+            android:title="@string/dir_avatar"/>
+
         <Preference
             android:key="dir_logs"
-            android:title="@string/dir_logs"
-            android:persistent="false" />
-        
+            android:persistent="false"
+            android:title="@string/dir_logs"/>
+
     </PreferenceCategory>
-    
+
 </PreferenceScreen>

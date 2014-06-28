@@ -161,6 +161,7 @@
     <style name="Widget.AppCompat.DropDownItem.Spinner"
            parent="Widget.AppCompat.Base.DropDownItem.Spinner">
     </style>
+
     <style name="Widget.AppCompat.Light.DropDownItem.Spinner"
            parent="Widget.AppCompat.Light.Base.DropDownItem.Spinner">
     </style>

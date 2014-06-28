@@ -156,11 +156,11 @@
     <style name="Widget.AppCompat.Light.Base.DropDownItem.Spinner"
            parent="android:Widget.Holo.Light.DropDownItem.Spinner"/>
 
-    <style name="Widget.AppCompat.Base.Spinner" parent="android:Widget.Holo.Spinner" />
+    <style name="Widget.AppCompat.Base.Spinner" parent="android:Widget.Holo.Spinner"/>
 
     <style name="Widget.AppCompat.Light.Base.Spinner" parent="android:Widget.Holo.Light.Spinner"/>
 
-    <style name="Widget.AppCompat.Base.ListView.Menu" parent="android:Widget.ListView.Menu" />
+    <style name="Widget.AppCompat.Base.ListView.Menu" parent="android:Widget.ListView.Menu"/>
 
     <!-- Popup Menu -->
 
@@ -176,23 +176,23 @@
     </style>
 
     <style name="Widget.AppCompat.Light.Base.PopupMenu"
-        parent="android:Widget.Holo.Light.PopupMenu">
+           parent="android:Widget.Holo.Light.PopupMenu">
     </style>
 
     <style name="TextAppearance.AppCompat.Base.Widget.PopupMenu.Large"
-        parent="android:TextAppearance.Holo.Widget.PopupMenu.Large">
+           parent="android:TextAppearance.Holo.Widget.PopupMenu.Large">
     </style>
 
     <style name="TextAppearance.AppCompat.Base.Widget.PopupMenu.Small"
-        parent="android:TextAppearance.Holo.Widget.PopupMenu.Small">
+           parent="android:TextAppearance.Holo.Widget.PopupMenu.Small">
     </style>
 
     <style name="TextAppearance.AppCompat.Light.Base.Widget.PopupMenu.Large"
-        parent="android:TextAppearance.Holo.Widget.PopupMenu.Large">
+           parent="android:TextAppearance.Holo.Widget.PopupMenu.Large">
     </style>
 
     <style name="TextAppearance.AppCompat.Light.Base.Widget.PopupMenu.Small"
-        parent="android:TextAppearance.Holo.Widget.PopupMenu.Small">
+           parent="android:TextAppearance.Holo.Widget.PopupMenu.Small">
     </style>
 
     <!-- Search View result styles -->
@@ -202,7 +202,7 @@
     </style>
 
     <style name="TextAppearance.AppCompat.Base.SearchResult.Subtitle"
-            parent="@android:TextAppearance.Holo.SearchResult.Subtitle">
+           parent="@android:TextAppearance.Holo.SearchResult.Subtitle">
     </style>
 
     <!--

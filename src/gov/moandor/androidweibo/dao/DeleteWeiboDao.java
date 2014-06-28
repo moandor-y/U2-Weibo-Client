@@ -8,7 +8,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 public class DeleteWeiboDao extends BaseHttpDao<Void> {
     private String mToken;
     private long mId;
-    
+
     @Override
     public Void execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -18,16 +18,16 @@ public class DeleteWeiboDao extends BaseHttpDao<Void> {
         HttpUtils.executeNormalTask(method, mUrl, params);
         return null;
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.STATUSES_DESTROY;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setId(long id) {
         mId = id;
     }

@@ -2,37 +2,37 @@ package gov.moandor.androidweibo.util;
 
 import android.util.Log;
 
-import gov.moandor.androidweibo.BuildConfig;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
+import gov.moandor.androidweibo.BuildConfig;
+
 public class Logger {
     private static final String DEFAULT_TAG = Logger.class.getSimpleName();
     private static final String DEBUG_LOG_FILE = FileUtils.LOGS + File.separator + "debug.log";
     private static final boolean ENABLED = BuildConfig.DEBUG;
-    
+
     public static void logException(Throwable throwable) {
         if (ENABLED) {
             throwable.printStackTrace();
         }
     }
-    
+
     public static void debug(String message) {
         if (ENABLED) {
             Log.d(DEFAULT_TAG, message);
         }
     }
-    
+
     public static void debug(String tag, String message) {
         if (ENABLED) {
             Log.d(tag, message);
         }
     }
-    
+
     public static void logToFile(String message) {
         if (ENABLED) {
             String path = DEBUG_LOG_FILE;
@@ -55,7 +55,7 @@ public class Logger {
                 Utilities.closeSilently(out);
                 Utilities.closeSilently(fileWriter);
             }
-            
+
         }
     }
 }

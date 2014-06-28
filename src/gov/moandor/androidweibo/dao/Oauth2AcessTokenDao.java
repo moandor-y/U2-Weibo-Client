@@ -17,7 +17,7 @@ public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
     private String mClientId;
     private String mClientSecret;
     private String mGrantType;
-    
+
     @Override
     public String execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -37,28 +37,28 @@ public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.OAUTH2_ACCESS_TOKEN;
     }
-    
+
     public void setUsername(String username) {
         mUsername = username;
     }
-    
+
     public void setPassword(String password) {
         mPassword = password;
     }
-    
+
     public void setClientId(String clientId) {
         mClientId = clientId;
     }
-    
+
     public void setClientSecret(String clientSecret) {
         mClientSecret = clientSecret;
     }
-    
+
     public void setGrantType(String grantType) {
         mGrantType = grantType;
     }

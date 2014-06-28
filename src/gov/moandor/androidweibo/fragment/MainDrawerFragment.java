@@ -21,7 +21,7 @@ import gov.moandor.androidweibo.util.Utilities;
 public class MainDrawerFragment extends Fragment implements AdapterView.OnItemClickListener {
     private MainDrawerListAdapter mAdapter;
     private View mFooterView;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.drawer_main, container, false);
@@ -57,7 +57,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
         }
         return view;
     }
-    
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (view != mFooterView) {
@@ -70,7 +70,7 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
             getActivity().startActivity(ActivityUtils.authorizeActivity());
         }
     }
-    
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         int position = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
@@ -79,28 +79,28 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
             menu.setHeaderTitle(GlobalContext.getAccount(((AdapterView.AdapterContextMenuInfo) menuInfo).position).user.name);
         }
     }
-    
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.logout:
-            GlobalContext.removeAccount(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
-            if (GlobalContext.getCurrentAccount() != null) {
-                mAdapter.notifyDataSetChanged();
-                ((OnAccountClickListener) getActivity()).onAccountClick(-1, ConfigManager.getCurrentAccountIndex());
-            } else {
-                getActivity().startActivity(ActivityUtils.authorizeActivity());
-                getActivity().finish();
-            }
-            return true;
+            case R.id.logout:
+                GlobalContext.removeAccount(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).position);
+                if (GlobalContext.getCurrentAccount() != null) {
+                    mAdapter.notifyDataSetChanged();
+                    ((OnAccountClickListener) getActivity()).onAccountClick(-1, ConfigManager.getCurrentAccountIndex());
+                } else {
+                    getActivity().startActivity(ActivityUtils.authorizeActivity());
+                    getActivity().finish();
+                }
+                return true;
         }
         return false;
     }
-    
+
     public void notifyDataSetChanged() {
         mAdapter.notifyDataSetChanged();
     }
-    
+
     public static interface OnAccountClickListener {
         public void onAccountClick(int oldPosition, int newPosition);
     }

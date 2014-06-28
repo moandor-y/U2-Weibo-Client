@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Random;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.CommentDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -22,26 +24,24 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.Random;
-
 public class SendCommentService extends Service {
     public static final String TOKEN = Utilities.buildIntentExtraName("TOKEN");
     public static final String COMMENT_DRAFT = Utilities.buildIntentExtraName("COMMENT_DRAFT");
-    
+
     private NotificationManager mNotificationManager;
     private String mToken;
     private CommentDraft mDraft;
-    
+
     @Override
     public void onCreate() {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
@@ -49,15 +49,15 @@ public class SendCommentService extends Service {
         new SendTask().execute();
         return START_REDELIVER_INTENT;
     }
-    
+
     private PendingIntent getFailedClickIntent() {
         return PendingIntent.getActivity(getBaseContext(), 0, ActivityUtils.draftBoxActivity(),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
-    
+
     private class SendTask extends MyAsyncTask<Void, Void, Void> {
         private int mNotificationId;
-        
+
         @Override
         protected void onPreExecute() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -72,7 +72,7 @@ public class SendCommentService extends Service {
             mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
             mNotificationManager.notify(mNotificationId, builder.build());
         }
-        
+
         @Override
         protected Void doInBackground(Void... v) {
             BaseSendCommentDao dao;
@@ -99,7 +99,7 @@ public class SendCommentService extends Service {
             }
             return null;
         }
-        
+
         @Override
         protected void onCancelled() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -121,7 +121,7 @@ public class SendCommentService extends Service {
                 }
             }, 3000);
         }
-        
+
         @Override
         protected void onPostExecute(Void result) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -142,7 +142,7 @@ public class SendCommentService extends Service {
                 }
             }, 3000);
         }
-        
+
         private void repost() throws WeiboException {
             RepostWeiboDao dao = new RepostWeiboDao();
             dao.setId(mDraft.commentedStatus.id);

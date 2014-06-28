@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.bean.Account;
@@ -26,26 +28,13 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.List;
-
 public class FetchUnreadMessageService extends IntentService {
     public static final String ACCOUNT_INDEX = Utilities.buildIntentExtraName("ACCOUNT_INDEX");
-    
+
     public FetchUnreadMessageService() {
         super(FetchUnreadMessageService.class.getSimpleName());
     }
-    
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        if (!ConfigManager.isNotificationEnabledAfterExit() && !MainActivity.isRunning()) {
-            return;
-        }
-        List<Account> accounts = DatabaseUtils.getAccounts();
-        for (Account account : accounts) {
-            fetch(this, account);
-        }
-    }
-    
+
     private static void fetch(Context context, Account account) {
         UnreadCountDao dao = new UnreadCountDao();
         dao.setToken(account.token);
@@ -62,7 +51,7 @@ public class FetchUnreadMessageService extends IntentService {
             Logger.logException(e);
         }
     }
-    
+
     private static List<WeiboComment> fetchComments(Account account) throws WeiboException {
         List<WeiboComment> oldComments = DatabaseUtils.getComments(account.user.id, CommentListFragment.ALL);
         WeiboComment oldComment = null;
@@ -77,7 +66,7 @@ public class FetchUnreadMessageService extends IntentService {
         }
         return dao.execute();
     }
-    
+
     private static List<WeiboStatus> fetchMentionStatuses(Account account) throws WeiboException {
         List<WeiboStatus> oldStatuses = DatabaseUtils.getAtmeStatuses(account.user.id, 0);
         WeiboStatus oldStatus = null;
@@ -92,7 +81,7 @@ public class FetchUnreadMessageService extends IntentService {
         }
         return dao.execute();
     }
-    
+
     private static List<WeiboComment> fetchMentionComments(Account account) throws WeiboException {
         List<WeiboComment> oldComments = DatabaseUtils.getComments(account.user.id, CommentListFragment.ATME);
         WeiboComment oldComment = null;
@@ -107,7 +96,7 @@ public class FetchUnreadMessageService extends IntentService {
         }
         return dao.execute();
     }
-    
+
     private static DirectMessage fetchDm(Account account) throws WeiboException {
         DmUserListDao dao = new DmUserListDao();
         dao.setToken(account.token);
@@ -119,7 +108,7 @@ public class FetchUnreadMessageService extends IntentService {
         }
         return null;
     }
-    
+
     private static void showNotification(Context context, Account account, UnreadCount unreadCount)
             throws WeiboException {
         WeiboComment comment = null;
@@ -203,7 +192,18 @@ public class FetchUnreadMessageService extends IntentService {
             context.startService(intent);
         }
     }
-    
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        if (!ConfigManager.isNotificationEnabledAfterExit() && !MainActivity.isRunning()) {
+            return;
+        }
+        List<Account> accounts = DatabaseUtils.getAccounts();
+        for (Account account : accounts) {
+            fetch(this, account);
+        }
+    }
+
     public static class UnreadCommentReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -214,7 +214,7 @@ public class FetchUnreadMessageService extends IntentService {
             AbsUnreadNotificationService.clearUnreadCount(account.token, UnreadCommentNotificationService.COUNT_TYPE);
         }
     }
-    
+
     public static class UnreadMentionWeiboReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -226,7 +226,7 @@ public class FetchUnreadMessageService extends IntentService {
                     UnreadMentionWeiboNotificationService.COUNT_TYPE);
         }
     }
-    
+
     public static class UnreadMentionCommentReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -238,7 +238,7 @@ public class FetchUnreadMessageService extends IntentService {
                     UnreadMentionCommentNotificationService.COUNT_TYPE);
         }
     }
-    
+
     public static class UnreadDmReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {

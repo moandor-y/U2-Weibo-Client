@@ -3,173 +3,189 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidweibo="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="match_parent">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/margin_vertical"
         android:paddingLeft="@dimen/margin_horizontal"
         android:paddingRight="@dimen/margin_horizontal"
-        android:paddingTop="@dimen/margin_vertical" >
-        
+        android:paddingTop="@dimen/margin_vertical">
+
         <ImageView
             android:id="@+id/avatar"
             android:layout_width="@dimen/list_avatar_width"
             android:layout_height="@dimen/list_avatar_height"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:clickable="true"
-            android:contentDescription="@string/avatar" />
-        
+            android:contentDescription="@string/avatar"/>
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/avatar"
             android:layout_marginLeft="@dimen/margin_horizontal"
-            android:singleLine="true" 
-            android:ellipsize="end" />
-        
+            android:layout_toRightOf="@+id/avatar"
+            android:ellipsize="end"
+            android:singleLine="true"/>
+
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
-            android:layout_toRightOf="@+id/avatar"
-            android:layout_marginLeft="@dimen/margin_horizontal" />
-        
+            android:layout_marginLeft="@dimen/margin_horizontal"
+            android:layout_toRightOf="@+id/avatar"/>
+
         <TextView
             android:id="@+id/source"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/time"
             android:layout_alignTop="@+id/time"
-            android:layout_marginLeft="@dimen/margin_horizontal" />
-        
+            android:layout_marginLeft="@dimen/margin_horizontal"
+            android:layout_toRightOf="@+id/time"/>
+
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/avatar"
             android:layout_marginTop="@dimen/margin_horizontal"
-            android:textSize="15sp"
-            android:lineSpacingMultiplier="1.2" />
-        
+            android:lineSpacingMultiplier="1.2"
+            android:textSize="15sp"/>
+
         <gov.moandor.androidweibo.widget.WeiboDetailPicView
             android:id="@+id/pic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text"
-            android:visibility="gone"
-            android:clickable="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_horizontal"
-            android:contentDescription="@string/weibo_pic" />
-        
+            android:clickable="true"
+            android:contentDescription="@string/weibo_pic"
+            android:visibility="gone"/>
+
         <android.support.v7.widget.GridLayout
             android:id="@+id/pic_multi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text"
+            android:layout_marginTop="@dimen/margin_horizontal"
+            android:clickable="false"
             android:visibility="gone"
             androidweibo:columnCount="3"
-            androidweibo:rowCount="3"
             androidweibo:orientation="horizontal"
-            androidweibo:useDefaultMargins="false"
-            android:clickable="false"
-            android:layout_marginTop="@dimen/margin_horizontal" >
-            
+            androidweibo:rowCount="3"
+            androidweibo:useDefaultMargins="false">
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
+
             <ImageView style="@style/list_multi_image_view"/>
-            
+
         </android.support.v7.widget.GridLayout>
-        
+
         <TextView
             android:id="@+id/coordinate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text"
             android:layout_marginTop="@dimen/margin_vertical"
-            android:visibility="gone" />
-        
+            android:visibility="gone"/>
+
         <ImageView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@+id/coordinate"
             android:layout_marginTop="@dimen/margin_vertical"
+            android:contentDescription="@string/map"
             android:scaleType="centerCrop"
-            android:visibility="gone"
-            android:contentDescription="@string/map" />
-        
+            android:visibility="gone"/>
+
         <RelativeLayout
             android:id="@+id/retweet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text"
             android:layout_marginTop="@dimen/margin_vertical"
-            android:visibility="gone"
+            android:background="?retweet_background"
             android:paddingBottom="@dimen/margin_vertical"
             android:paddingLeft="@dimen/margin_horizontal"
             android:paddingRight="@dimen/margin_horizontal"
             android:paddingTop="@dimen/margin_vertical"
-            android:background="?retweet_background" >
-            
+            android:visibility="gone">
+
             <TextView
                 android:id="@+id/retweet_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:lineSpacingMultiplier="1.2"
+                android:background="@color/clickable_text"
                 android:clickable="true"
-                android:background="@color/clickable_text" />
-            
+                android:lineSpacingMultiplier="1.2"
+                android:textSize="15sp"/>
+
             <gov.moandor.androidweibo.widget.WeiboDetailPicView
                 android:id="@+id/retweet_pic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_below="@+id/retweet_text"
-                android:clickable="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin_horizontal"
-                android:contentDescription="@string/weibo_pic" />
-            
+                android:clickable="true"
+                android:contentDescription="@string/weibo_pic"
+                android:visibility="gone"/>
+
             <android.support.v7.widget.GridLayout
                 android:id="@+id/retweet_pic_multi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/retweet_text"
+                android:layout_marginTop="@dimen/margin_horizontal"
+                android:clickable="false"
                 android:visibility="gone"
                 androidweibo:columnCount="3"
-                androidweibo:rowCount="3"
                 androidweibo:orientation="horizontal"
-                androidweibo:useDefaultMargins="false"
-                android:clickable="false"
-                android:layout_marginTop="@dimen/margin_horizontal" >
-                
+                androidweibo:rowCount="3"
+                androidweibo:useDefaultMargins="false">
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
+
                 <ImageView style="@style/list_multi_image_view"/>
-                
+
             </android.support.v7.widget.GridLayout>
-            
+
         </RelativeLayout>
-        
+
     </RelativeLayout>
-    
+
 </ScrollView>

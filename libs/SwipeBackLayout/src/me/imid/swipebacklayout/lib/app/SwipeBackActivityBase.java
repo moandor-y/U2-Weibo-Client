@@ -1,6 +1,7 @@
 package me.imid.swipebacklayout.lib.app;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
+
 /**
  * @author Yrom
  */

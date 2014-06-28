@@ -9,21 +9,6 @@ public class UnreadCount implements Parcelable {
     public int mentionWeibo;
     public int mentionComment;
     public int directMessage;
-    
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(weiboStatus);
-        dest.writeInt(comment);
-        dest.writeInt(mentionWeibo);
-        dest.writeInt(mentionComment);
-        dest.writeInt(directMessage);
-    }
-    
     public static final Parcelable.Creator<UnreadCount> CREATOR = new Parcelable.Creator<UnreadCount>() {
         @Override
         public UnreadCount createFromParcel(Parcel source) {
@@ -35,10 +20,24 @@ public class UnreadCount implements Parcelable {
             result.directMessage = source.readInt();
             return result;
         }
-        
+
         @Override
         public UnreadCount[] newArray(int size) {
             return new UnreadCount[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(weiboStatus);
+        dest.writeInt(comment);
+        dest.writeInt(mentionWeibo);
+        dest.writeInt(mentionComment);
+        dest.writeInt(directMessage);
+    }
 }

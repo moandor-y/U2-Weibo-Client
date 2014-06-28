@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
-    
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/comment"
-        android:title="@string/comment"
         android:icon="@drawable/ic_comment_dark"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/comment"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/repost"
-        android:title="@string/repost"
         android:icon="@drawable/ic_repost_dark"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/repost"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
-        android:id="@+id/refresh" 
-        android:title="@string/refresh" 
+        android:id="@+id/refresh"
         android:icon="@drawable/ic_refresh_dark"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/refresh"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/favorite"
-        android:title="@string/favorite"
         android:icon="@drawable/ic_favorited"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/favorite"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/unfavorite"
-        android:title="@string/unfavorite"
         android:icon="@drawable/ic_unfavorited"
-        androidweibo:showAsAction="ifRoom|withText" />
-    
+        android:title="@string/unfavorite"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/share"
-        android:title="@string/share"
         android:icon="@drawable/ic_share_dark"
-        androidweibo:showAsAction="ifRoom|withText"
-        androidweibo:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
-    
+        android:title="@string/share"
+        androidweibo:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
 </menu>

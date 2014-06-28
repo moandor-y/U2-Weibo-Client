@@ -15,7 +15,7 @@ public class CompatUtils {
             return SettingsActivity.class;
         }
     }
-    
+
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     static void applySharedPreferences(SharedPreferences.Editor editor) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {

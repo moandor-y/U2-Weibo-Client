@@ -3,15 +3,15 @@ package gov.moandor.androidweibo.util;
 import android.media.MediaScannerConnection;
 import android.os.Environment;
 
-import gov.moandor.androidweibo.concurrency.ImageDownloadTaskCache;
-import gov.moandor.androidweibo.concurrency.ImageDownloader;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import gov.moandor.androidweibo.concurrency.ImageDownloadTaskCache;
+import gov.moandor.androidweibo.concurrency.ImageDownloader;
 
 public class FileUtils {
     public static final String CACHE_SD = GlobalContext.getSdCacheDir();
@@ -20,7 +20,7 @@ public class FileUtils {
     public static final String WEIBO_AVATAR_CACHE = WEIBO_CACHE_SD + File.separator + "weibo_avatars";
     public static final String LOGS = CACHE_SD + File.separator + "logs";
     private static final String ACCOUNT_AVATARS = CACHE_SD + File.separator + "account_avatars";
-    
+
     public static File createFile(String path) {
         File file = new File(path);
         if (file.exists()) {
@@ -40,7 +40,7 @@ public class FileUtils {
         }
         return null;
     }
-    
+
     public static String getImagePathFromUrl(String url, ImageDownloader.ImageType type) {
         if (TextUtils.isEmpty(url)) {
             return null;
@@ -48,21 +48,21 @@ public class FileUtils {
         String fileName = url.replace(":", "").replace("/", "");
         String path;
         switch (type) {
-        case AVATAR_SMALL:
-        case AVATAR_LARGE:
-            path = WEIBO_AVATAR_CACHE;
-            break;
-        case PICTURE_SMALL:
-        case PICTURE_MEDIUM:
-        case PICTURE_LARGE:
-            path = WEIBO_PICTURE_CACHE;
-            break;
-        default:
-            throw new IllegalStateException("Wrong image type");
+            case AVATAR_SMALL:
+            case AVATAR_LARGE:
+                path = WEIBO_AVATAR_CACHE;
+                break;
+            case PICTURE_SMALL:
+            case PICTURE_MEDIUM:
+            case PICTURE_LARGE:
+                path = WEIBO_PICTURE_CACHE;
+                break;
+            default:
+                throw new IllegalStateException("Wrong image type");
         }
         return path + File.separator + fileName;
     }
-    
+
     public static String getAccountAvatarPathFromUrl(String url) {
         if (TextUtils.isEmpty(url)) {
             return null;
@@ -70,7 +70,7 @@ public class FileUtils {
         String fileName = url.replace(":", "").replace("/", "");
         return ACCOUNT_AVATARS + File.separator + fileName;
     }
-    
+
     public static boolean savePicture(String url, ImageDownloader.ImageType type) {
         ImageDownloadTaskCache.waitForPictureDownload(url, null, type);
         String sourcePath = getImagePathFromUrl(url, type);
@@ -92,7 +92,7 @@ public class FileUtils {
         }
         return false;
     }
-    
+
     private static boolean copy(File source, File target) {
         FileInputStream fis = null;
         BufferedInputStream in = null;

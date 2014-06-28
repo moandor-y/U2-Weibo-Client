@@ -31,7 +31,7 @@
     <declare-styleable name="ActionBarWindow">
         <attr name="windowActionBar" format="boolean"/>
         <attr name="windowActionBarOverlay" format="boolean"/>
-        <attr name="windowSplitActionBar" format="boolean" />
+        <attr name="windowSplitActionBar" format="boolean"/>
     </declare-styleable>
 
     <!-- ============================================ -->
@@ -231,7 +231,7 @@
              directly calling {@link android.view.View#requestFocus}, which will
              always request focus regardless of this view.  It only impacts where
              focus navigation will try to move focus. -->
-        <attr name="android:focusable" />
+        <attr name="android:focusable"/>
     </declare-styleable>
 
     <!-- =================== -->
@@ -277,16 +277,16 @@
         <!-- ============ -->
         <!-- Panel styles -->
         <!-- ============ -->
-        <eat-comment />
+        <eat-comment/>
 
         <!-- Default Panel Menu width. -->
-        <attr name="panelMenuListWidth" format="dimension" />
+        <attr name="panelMenuListWidth" format="dimension"/>
 
         <!-- Default Panel Menu style. -->
-        <attr name="panelMenuListTheme" format="reference" />
+        <attr name="panelMenuListTheme" format="reference"/>
 
         <!-- Drawable used as a background for selected list items. -->
-        <attr name="listChoiceBackgroundIndicator" format="reference" />
+        <attr name="listChoiceBackgroundIndicator" format="reference"/>
 
     </declare-styleable>
 
@@ -316,24 +316,24 @@
     <declare-styleable name="MenuGroup">
 
         <!-- The ID of the group. -->
-        <attr name="android:id" />
+        <attr name="android:id"/>
 
         <!-- The category applied to all items within this group.
              (This will be or'ed with the orderInCategory attribute.) -->
-        <attr name="android:menuCategory" />
+        <attr name="android:menuCategory"/>
 
         <!-- The order within the category applied to all items within this group.
              (This will be or'ed with the category attribute.) -->
-        <attr name="android:orderInCategory" />
+        <attr name="android:orderInCategory"/>
 
         <!-- Whether the items are capable of displaying a check mark. -->
-        <attr name="android:checkableBehavior" />
+        <attr name="android:checkableBehavior"/>
 
         <!-- Whether the items are shown/visible. -->
-        <attr name="android:visible" />
+        <attr name="android:visible"/>
 
         <!-- Whether the items are enabled. -->
-        <attr name="android:enabled" />
+        <attr name="android:enabled"/>
 
     </declare-styleable>
 
@@ -341,216 +341,216 @@
     <declare-styleable name="MenuItem">
 
         <!-- The ID of the item. -->
-        <attr name="android:id" />
+        <attr name="android:id"/>
 
         <!-- The category applied to the item.
              (This will be or'ed with the orderInCategory attribute.) -->
-        <attr name="android:menuCategory" />
+        <attr name="android:menuCategory"/>
 
         <!-- The order within the category applied to the item.
              (This will be or'ed with the category attribute.) -->
-        <attr name="android:orderInCategory" />
+        <attr name="android:orderInCategory"/>
 
         <!-- The title associated with the item. -->
-        <attr name="android:title" />
+        <attr name="android:title"/>
 
         <!-- The condensed title associated with the item.  This is used in situations where the
              normal title may be too long to be displayed. -->
-        <attr name="android:titleCondensed" />
+        <attr name="android:titleCondensed"/>
 
         <!-- The icon associated with this item.  This icon will not always be shown, so
              the title should be sufficient in describing this item. -->
-        <attr name="android:icon" />
+        <attr name="android:icon"/>
 
         <!-- The alphabetic shortcut key.  This is the shortcut when using a keyboard
              with alphabetic keys. -->
-        <attr name="android:alphabeticShortcut" />
+        <attr name="android:alphabeticShortcut"/>
 
         <!-- The numeric shortcut key.  This is the shortcut when using a numeric (e.g., 12-key)
              keyboard. -->
-        <attr name="android:numericShortcut" />
+        <attr name="android:numericShortcut"/>
 
         <!-- Whether the item is capable of displaying a check mark. -->
-        <attr name="android:checkable" />
+        <attr name="android:checkable"/>
 
         <!-- Whether the item is checked.  Note that you must first have enabled checking with
              the checkable attribute or else the check mark will not appear. -->
-        <attr name="android:checked"  />
+        <attr name="android:checked"/>
 
         <!-- Whether the item is shown/visible. -->
-        <attr name="android:visible" />
+        <attr name="android:visible"/>
 
         <!-- Whether the item is enabled. -->
-        <attr name="android:enabled" />
+        <attr name="android:enabled"/>
 
         <!-- Name of a method on the Context used to inflate the menu that will be
              called when the item is clicked. -->
-        <attr name="android:onClick" />
+        <attr name="android:onClick"/>
 
         <!-- How this item should display in the Action Bar, if present. -->
         <attr name="showAsAction">
             <!-- Never show this item in an action bar, show it in the overflow menu instead.
                  Mutually exclusive with "ifRoom" and "always". -->
-            <flag name="never" value="0" />
+            <flag name="never" value="0"/>
             <!-- Show this item in an action bar if there is room for it as determined
                  by the system. Favor this option over "always" where possible.
                  Mutually exclusive with "never" and "always". -->
-            <flag name="ifRoom" value="1" />
+            <flag name="ifRoom" value="1"/>
             <!-- Always show this item in an actionbar, even if it would override
                  the system's limits of how much stuff to put there. This may make
                  your action bar look bad on some screens. In most cases you should
                  use "ifRoom" instead. Mutually exclusive with "ifRoom" and "never". -->
-            <flag name="always" value="2" />
+            <flag name="always" value="2"/>
             <!-- When this item is shown as an action in the action bar, show a text
                  label with it even if it has an icon representation. -->
-            <flag name="withText" value="4" />
+            <flag name="withText" value="4"/>
             <!-- This item's action view collapses to a normal menu
                  item. When expanded, the action view takes over a
                  larger segment of its container. -->
-            <flag name="collapseActionView" value="8" />
+            <flag name="collapseActionView" value="8"/>
         </attr>
 
         <!-- An optional layout to be used as an action view.
              See {@link android.view.MenuItem#setActionView(android.view.View)}
              for more info. -->
-        <attr name="actionLayout" format="reference" />
+        <attr name="actionLayout" format="reference"/>
 
         <!-- The name of an optional View class to instantiate and use as an
              action view. See {@link android.view.MenuItem#setActionView(android.view.View)}
              for more info. -->
-        <attr name="actionViewClass" format="string" />
+        <attr name="actionViewClass" format="string"/>
 
         <!-- The name of an optional ActionProvider class to instantiate an action view
              and perform operations such as default action for that menu item.
              See {@link android.view.MenuItem#setActionProvider(android.view.ActionProvider)}
              for more info. -->
-        <attr name="actionProviderClass" format="string" />
+        <attr name="actionProviderClass" format="string"/>
 
     </declare-styleable>
 
     <declare-styleable name="Spinner">
         <!-- The prompt to display when the spinner's dialog is shown. -->
-        <attr name="prompt" format="reference" />
+        <attr name="prompt" format="reference"/>
         <!-- Display mode for spinner options. -->
         <attr name="spinnerMode" format="enum">
             <!-- Spinner options will be presented to the user as a dialog window. -->
-            <enum name="dialog" value="0" />
+            <enum name="dialog" value="0"/>
             <!-- Spinner options will be presented to the user as an inline dropdown
                  anchored to the spinner widget itself. -->
-            <enum name="dropdown" value="1" />
+            <enum name="dropdown" value="1"/>
         </attr>
         <!-- List selector to use for spinnerMode="dropdown" display. -->
-        <attr name="android:dropDownSelector" />
+        <attr name="android:dropDownSelector"/>
         <!-- Background drawable to use for the dropdown in spinnerMode="dropdown". -->
-        <attr name="android:popupBackground" />
+        <attr name="android:popupBackground"/>
         <!-- Vertical offset from the spinner widget for positioning the dropdown in
              spinnerMode="dropdown". -->
-        <attr name="android:dropDownVerticalOffset" />
+        <attr name="android:dropDownVerticalOffset"/>
         <!-- Horizontal offset from the spinner widget for positioning the dropdown
              in spinnerMode="dropdown". -->
-        <attr name="android:dropDownHorizontalOffset" />
+        <attr name="android:dropDownHorizontalOffset"/>
         <!-- Width of the dropdown in spinnerMode="dropdown". -->
-        <attr name="android:dropDownWidth" />
+        <attr name="android:dropDownWidth"/>
         <!-- Reference to a layout to use for displaying a prompt in the dropdown for
              spinnerMode="dropdown". This layout must contain a TextView with the id
              {@code @android:id/text1} to be populated with the prompt text. -->
-        <attr name="popupPromptView" format="reference" />
+        <attr name="popupPromptView" format="reference"/>
         <!-- Gravity setting for positioning the currently selected item. -->
-        <attr name="android:gravity" />
+        <attr name="android:gravity"/>
         <!-- Whether this spinner should mark child views as enabled/disabled when
              the spinner itself is enabled/disabled. -->
-        <attr name="disableChildrenWhenDisabled" format="boolean" />
+        <attr name="disableChildrenWhenDisabled" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="LinearLayoutICS">
         <!-- Drawable to use as a vertical divider between buttons. -->
-        <attr name="divider" />
+        <attr name="divider"/>
         <!-- Setting for which dividers to show. -->
         <attr name="showDividers">
-            <flag name="none" value="0" />
-            <flag name="beginning" value="1" />
-            <flag name="middle" value="2" />
-            <flag name="end" value="4" />
+            <flag name="none" value="0"/>
+            <flag name="beginning" value="1"/>
+            <flag name="middle" value="2"/>
+            <flag name="end" value="4"/>
         </attr>
         <!-- Size of padding on either end of a divider. -->
-        <attr name="dividerPadding" format="dimension" />
+        <attr name="dividerPadding" format="dimension"/>
     </declare-styleable>
 
     <!-- Default Spinner style. -->
-    <attr name="spinnerStyle" format="reference" />
+    <attr name="spinnerStyle" format="reference"/>
 
     <!-- Default Spinner style. -->
-    <attr name="spinnerDropDownItemStyle" format="reference" />
+    <attr name="spinnerDropDownItemStyle" format="reference"/>
 
     <!-- Specifies whether the theme is light, otherwise it is dark. -->
-    <attr name="isLightTheme" format="boolean" />
+    <attr name="isLightTheme" format="boolean"/>
 
     <declare-styleable name="SearchView">
         <!-- The default state of the SearchView. If true, it will be iconified when not in
              use and expanded when clicked. -->
         <attr name="iconifiedByDefault" format="boolean"/>
         <!-- An optional maximum width of the SearchView. -->
-        <attr name="android:maxWidth" />
+        <attr name="android:maxWidth"/>
         <!-- An optional query hint string to be displayed in the empty query field. -->
-        <attr name="queryHint" format="string" />
+        <attr name="queryHint" format="string"/>
         <!-- The IME options to set on the query text field. -->
-        <attr name="android:imeOptions" />
+        <attr name="android:imeOptions"/>
         <!-- The input type to set on the query text field. -->
-        <attr name="android:inputType" />
+        <attr name="android:inputType"/>
     </declare-styleable>
 
     <!-- ============================ -->
     <!-- SearchView styles and assets -->
     <!-- ============================ -->
-    <eat-comment />
+    <eat-comment/>
     <!-- SearchView dropdown background -->
-    <attr name="searchDropdownBackground" format="reference" />
+    <attr name="searchDropdownBackground" format="reference"/>
     <!-- SearchView close button icon -->
-    <attr name="searchViewCloseIcon" format="reference" />
+    <attr name="searchViewCloseIcon" format="reference"/>
     <!-- SearchView Go button icon -->
-    <attr name="searchViewGoIcon" format="reference" />
+    <attr name="searchViewGoIcon" format="reference"/>
     <!-- SearchView Search icon -->
-    <attr name="searchViewSearchIcon" format="reference" />
+    <attr name="searchViewSearchIcon" format="reference"/>
     <!-- SearchView Voice button icon -->
-    <attr name="searchViewVoiceIcon" format="reference" />
+    <attr name="searchViewVoiceIcon" format="reference"/>
     <!-- SearchView query refinement icon -->
-    <attr name="searchViewEditQuery" format="reference" />
+    <attr name="searchViewEditQuery" format="reference"/>
     <!-- SearchView query refinement icon background -->
-    <attr name="searchViewEditQueryBackground" format="reference" />
+    <attr name="searchViewEditQueryBackground" format="reference"/>
     <!-- SearchView text field background for the left section -->
-    <attr name="searchViewTextField" format="reference" />
+    <attr name="searchViewTextField" format="reference"/>
     <!-- SearchView text field background for the right section -->
-    <attr name="searchViewTextFieldRight" format="reference" />
+    <attr name="searchViewTextFieldRight" format="reference"/>
     <!-- The list item height for search results. @hide -->
-    <attr name="searchResultListItemHeight" format="dimension" />
+    <attr name="searchResultListItemHeight" format="dimension"/>
     <!-- Text color, typeface, size, and style for system search result title. Defaults to primary inverse text color. -->
-    <attr name="textAppearanceSearchResultTitle" format="reference" />
+    <attr name="textAppearanceSearchResultTitle" format="reference"/>
     <!-- Text color, typeface, size, and style for system search result subtitle. Defaults to primary inverse text color. -->
-    <attr name="textAppearanceSearchResultSubtitle" format="reference" />
+    <attr name="textAppearanceSearchResultSubtitle" format="reference"/>
     <!-- Text color for urls in search suggestions, used by things like global search -->
-    <attr name="textColorSearchUrl" format="reference|color" />
+    <attr name="textColorSearchUrl" format="reference|color"/>
     <!-- SearchView AutoCompleteTextView style -->
-    <attr name="searchViewAutoCompleteTextView" format="reference" />
+    <attr name="searchViewAutoCompleteTextView" format="reference"/>
 
     <!-- Attrbitutes for a ActivityChooserView. -->
     <declare-styleable name="ActivityChooserView">
         <!-- The maximal number of items initially shown in the activity list. -->
-        <attr name="initialActivityCount" format="string" />
+        <attr name="initialActivityCount" format="string"/>
         <!-- The drawable to show in the button for expanding the activities overflow popup.
              <strong>Note:</strong> Clients would like to set this drawable
              as a clue about the action the chosen activity will perform. For
              example, if share activity is to be chosen the drawable should
              give a clue that sharing is to be performed.
          -->
-        <attr name="expandActivityOverflowButtonDrawable" format="reference" />
+        <attr name="expandActivityOverflowButtonDrawable" format="reference"/>
     </declare-styleable>
 
     <!-- Default ActivityChooserView style. -->
-    <attr name="activityChooserViewStyle" format="reference" />
+    <attr name="activityChooserViewStyle" format="reference"/>
 
     <declare-styleable name="CompatTextView">
         <!-- Present the text in ALL CAPS. This may use a small-caps form when available. -->
-        <attr name="textAllCaps" format="reference|boolean" />
+        <attr name="textAllCaps" format="reference|boolean"/>
     </declare-styleable>
 
 </resources>

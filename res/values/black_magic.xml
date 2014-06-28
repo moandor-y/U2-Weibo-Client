@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <bool name="bm_enabled">true</bool>
-    
+
     <string-array name="hack_login_types">
         <item>Weico Android</item>
         <item>随享iPhone</item>
         <item>微格iPhone客户端</item>
         <item>Weico Pro</item>
     </string-array>
-    
+
     <string-array name="hack_login_keys">
         <item>211160679</item>
         <item>31024382</item>
         <item>2027761570</item>
         <item>2323547071</item>
     </string-array>
-    
+
     <string-array name="hack_login_secrets">
         <item>63b64d531b98c2dbff2443816f274dd3</item>
         <item>25c3e6b5763653d1e5b280884b45c51f</item>
         <item>5042214816d14b2d9e8ae8255f96180d</item>
         <item>16ed80cc77fea11f7f7e96eca178ada3</item>
     </string-array>
-    
+
 </resources>

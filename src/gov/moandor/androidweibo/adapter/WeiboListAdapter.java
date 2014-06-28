@@ -20,15 +20,16 @@ import gov.moandor.androidweibo.widget.TimelinePicImageView;
 public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
     private OnMultiPictureClickListener mOnMultiPictureClickListener;
     private OnPictureClickListener mOnPictureClickListener;
-    private ImageDownloader.ImageType mPictureType = Utilities.getListPictureType();;
-    
+    private ImageDownloader.ImageType mPictureType = Utilities.getListPictureType();
+    ;
+
     private float mCountFontSize = mFontSize - 5;
-    
+
     @Override
     View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
         return inflater.inflate(R.layout.weibo_list_item, parent, false);
     }
-    
+
     @Override
     ViewHolder initViewHolder(View view) {
         WeiboListViewHolder holder = new WeiboListViewHolder();
@@ -49,7 +50,7 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         holder.countLayout = (LinearLayout) view.findViewById(R.id.count_layout);
         return holder;
     }
-    
+
     @Override
     void initLayout(ViewHolder vh) {
         super.initLayout(vh);
@@ -59,7 +60,7 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         holder.repostCount.setTextSize(mCountFontSize);
         holder.commentCount.setTextSize(mCountFontSize);
     }
-    
+
     @Override
     void buildContent(ViewHolder vh, WeiboStatus status, int position) {
         super.buildContent(vh, status, position);
@@ -69,8 +70,8 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         boolean checkHasPicture =
                 mNoPictureModeEnabled
                         && (status.thumbnailPic != null && status.thumbnailPic.length > 0 || status.retweetStatus != null
-                                && status.retweetStatus.thumbnailPic != null
-                                && status.retweetStatus.thumbnailPic.length > 0);
+                        && status.retweetStatus.thumbnailPic != null
+                        && status.retweetStatus.thumbnailPic.length > 0);
         boolean chechGps = status.weiboGeo != null;
         if (!checkRepostsCount && !checkCommentsCount && !checkHasPicture && !chechGps) {
             holder.countLayout.setVisibility(View.INVISIBLE);
@@ -126,13 +127,13 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
             }
         }
     }
-    
+
     @Override
     public void updateState() {
         super.updateState();
         mPictureType = Utilities.getListPictureType();
     }
-    
+
     private void buildMultiPicture(WeiboStatus status, GridLayout grid, final int position) {
         for (int i = 0; i < status.picCount; i++) {
             ImageView view = (ImageView) grid.getChildAt(i);
@@ -151,58 +152,58 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         if (status.picCount < 9) {
             ImageView view;
             switch (status.picCount) {
-            case 8:
-                view = (ImageView) grid.getChildAt(8);
-                view.setVisibility(View.INVISIBLE);
-                break;
-            case 7:
-                for (int i = 8; i > 6; i--) {
-                    view = (ImageView) grid.getChildAt(i);
+                case 8:
+                    view = (ImageView) grid.getChildAt(8);
                     view.setVisibility(View.INVISIBLE);
-                }
-                break;
-            case 6:
-                for (int i = 8; i > 5; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                break;
-            case 5:
-                for (int i = 8; i > 5; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                view = (ImageView) grid.getChildAt(5);
-                view.setVisibility(View.INVISIBLE);
-                break;
-            case 4:
-                for (int i = 8; i > 5; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                for (int i = 5; i > 3; i--) {
-                    view = (ImageView) grid.getChildAt(i);
+                    break;
+                case 7:
+                    for (int i = 8; i > 6; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case 6:
+                    for (int i = 8; i > 5; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    break;
+                case 5:
+                    for (int i = 8; i > 5; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    view = (ImageView) grid.getChildAt(5);
                     view.setVisibility(View.INVISIBLE);
-                }
-                break;
-            case 3:
-                for (int i = 8; i > 2; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                break;
-            case 2:
-                for (int i = 8; i > 2; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                view = (ImageView) grid.getChildAt(2);
-                view.setVisibility(View.INVISIBLE);
-                break;
+                    break;
+                case 4:
+                    for (int i = 8; i > 5; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    for (int i = 5; i > 3; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case 3:
+                    for (int i = 8; i > 2; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    break;
+                case 2:
+                    for (int i = 8; i > 2; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    view = (ImageView) grid.getChildAt(2);
+                    view.setVisibility(View.INVISIBLE);
+                    break;
             }
         }
     }
-    
+
     private void buildPicture(WeiboStatus status, TimelinePicImageView view, final int position) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,9 +215,9 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         });
         ImageDownloader.downloadTimelinePicture(view, status, mFragment.isListViewFling(), mPictureType);
     }
-    
+
     private void buildRetweetContent(WeiboStatus status, WeiboStatus retweetedStatus, WeiboListViewHolder holder,
-            int position) {
+                                     int position) {
         if (!Long.valueOf(retweetedStatus.id).equals(holder.retweet.getTag())) {
             if (TextUtils.isEmpty(retweetedStatus.textSpannable)) {
                 String text = retweetedStatus.text;
@@ -244,15 +245,23 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
             holder.retweetMultiPic.setVisibility(View.GONE);
         }
     }
-    
+
     public void setOnMultiPictureClickListener(OnMultiPictureClickListener l) {
         mOnMultiPictureClickListener = l;
     }
-    
+
     public void setOnPictureClickListener(OnPictureClickListener l) {
         mOnPictureClickListener = l;
     }
-    
+
+    public static interface OnMultiPictureClickListener {
+        public void onMultiPictureClick(int position, int picIndex);
+    }
+
+    public static interface OnPictureClickListener {
+        public void onPictureClick(int position);
+    }
+
     private static class WeiboListViewHolder extends ViewHolder {
         public TimelinePicImageView pic;
         public GridLayout multiPic;
@@ -265,13 +274,5 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         public ImageView gpsIcon;
         public ImageView picIcon;
         public LinearLayout countLayout;
-    }
-    
-    public static interface OnMultiPictureClickListener {
-        public void onMultiPictureClick(int position, int picIndex);
-    }
-    
-    public static interface OnPictureClickListener {
-        public void onPictureClick(int position);
     }
 }

@@ -8,12 +8,12 @@ public abstract class AbsDraftBean implements Parcelable {
     public long accountId;
     public transient int id;
     public String error;
-    
+
     @Override
     public int describeContents() {
         return 0;
     }
-    
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(content);
@@ -21,7 +21,7 @@ public abstract class AbsDraftBean implements Parcelable {
         dest.writeInt(id);
         dest.writeString(error);
     }
-    
+
     protected static abstract class ParcelableCreator<T extends AbsDraftBean> implements Parcelable.Creator<T> {
         @Override
         public T createFromParcel(Parcel source) {
@@ -32,7 +32,7 @@ public abstract class AbsDraftBean implements Parcelable {
             result.error = source.readString();
             return result;
         }
-        
+
         protected abstract T onCreateObject();
     }
 }

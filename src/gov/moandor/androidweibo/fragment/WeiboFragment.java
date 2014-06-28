@@ -55,14 +55,83 @@ public class WeiboFragment extends Fragment {
     private TextView mText;
     private TextView mRetweetText;
     private TextView mCoordinate;
-    private float mFontSize = Utilities.getFontSize();;
+    private float mFontSize = Utilities.getFontSize();
+    ;
     private float mSmallFontSize = mFontSize - 3;
-    
+    private View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            TextView textView = (TextView) v;
+            Layout layout = textView.getLayout();
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            int offset = 0;
+            if (layout != null) {
+                int line = layout.getLineForVertical(y);
+                offset = layout.getOffsetForHorizontal(line, x);
+            }
+            SpannableString text = SpannableString.valueOf(textView.getText());
+            LongClickableLinkMovementMethod.getInstance().onTouchEvent(textView, text, event);
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    WeiboTextUrlSpan[] spans = text.getSpans(0, text.length(), WeiboTextUrlSpan.class);
+                    boolean found = false;
+                    int foundStart = 0;
+                    int foundEnd = 0;
+                    for (WeiboTextUrlSpan span : spans) {
+                        int start = text.getSpanStart(span);
+                        int end = text.getSpanEnd(span);
+                        if (offset >= start && offset <= end) {
+                            found = true;
+                            foundStart = start;
+                            foundEnd = end;
+                            break;
+                        }
+                    }
+                    boolean consumeEvent = false;
+                    if (found) {
+                        consumeEvent = true;
+                    }
+                    if (found && !consumeEvent) {
+                        clearBackgroundColorSpans(text, textView);
+                    }
+                    if (consumeEvent) {
+                        BackgroundColorSpan span =
+                                new BackgroundColorSpan(Utilities.getColor(R.attr.link_pressed_background_color));
+                        text.setSpan(span, foundStart, foundEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        textView.setText(text);
+                    }
+                    return consumeEvent;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    LongClickableLinkMovementMethod.getInstance().removeLongClickCallback();
+                    clearBackgroundColorSpans(text, textView);
+                    break;
+            }
+            return false;
+        }
+
+        private void clearBackgroundColorSpans(SpannableString text, TextView textView) {
+            BackgroundColorSpan[] spans = text.getSpans(0, text.length(), BackgroundColorSpan.class);
+            for (BackgroundColorSpan span : spans) {
+                text.removeSpan(span);
+                textView.setText(text);
+            }
+        }
+    };
+    private View.OnClickListener mTextOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = ActivityUtils.weiboActivity(mWeiboStatus.retweetStatus);
+            getActivity().startActivity(intent);
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_weibo, container, false);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -70,7 +139,7 @@ public class WeiboFragment extends Fragment {
         initLayout();
         buildLayout();
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mAvatar = (ImageView) view.findViewById(R.id.avatar);
@@ -87,7 +156,7 @@ public class WeiboFragment extends Fragment {
         mRetweetPictureMulti = (GridLayout) view.findViewById(R.id.retweet_pic_multi);
         mRetweetLayout = (RelativeLayout) view.findViewById(R.id.retweet);
     }
-    
+
     private void initLayout() {
         mUserName.setTextSize(mFontSize);
         mTime.setTextSize(mSmallFontSize);
@@ -99,7 +168,7 @@ public class WeiboFragment extends Fragment {
         mRetweetText.setOnTouchListener(mTextOnTouchListener);
         mRetweetText.setOnClickListener(mTextOnClickListener);
     }
-    
+
     private void buildLayout() {
         WeiboUser user = mWeiboStatus.weiboUser;
         if (user != null) {
@@ -153,23 +222,23 @@ public class WeiboFragment extends Fragment {
             buildCoordinate();
         }
     }
-    
+
     private void buildPicture(WeiboDetailPicView view, WeiboStatus status) {
         String url;
         switch (mPictureType) {
-        case PICTURE_MEDIUM:
-            url = status.bmiddlePic[0];
-            break;
-        case PICTURE_LARGE:
-            url = status.originalPic[0];
-            break;
-        default:
-            throw new IllegalStateException("Illegal image type");
+            case PICTURE_MEDIUM:
+                url = status.bmiddlePic[0];
+                break;
+            case PICTURE_LARGE:
+                url = status.originalPic[0];
+                break;
+            default:
+                throw new IllegalStateException("Illegal image type");
         }
         new WeiboDetailPictureReadTask(url, mPictureType, view).execute();
         view.setOnClickListener(new OnPictureClickListener(0, status));
     }
-    
+
     private void buildMultiPicture(GridLayout grid, WeiboStatus status) {
         for (int i = 0; i < status.picCount; i++) {
             ImageView view = (ImageView) grid.getChildAt(i);
@@ -180,58 +249,58 @@ public class WeiboFragment extends Fragment {
         if (status.picCount < 9) {
             ImageView view;
             switch (status.picCount) {
-            case 8:
-                view = (ImageView) grid.getChildAt(8);
-                view.setVisibility(View.INVISIBLE);
-                break;
-            case 7:
-                for (int i = 8; i > 6; i--) {
-                    view = (ImageView) grid.getChildAt(i);
+                case 8:
+                    view = (ImageView) grid.getChildAt(8);
                     view.setVisibility(View.INVISIBLE);
-                }
-                break;
-            case 6:
-                for (int i = 8; i > 5; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                break;
-            case 5:
-                for (int i = 8; i > 5; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                view = (ImageView) grid.getChildAt(5);
-                view.setVisibility(View.INVISIBLE);
-                break;
-            case 4:
-                for (int i = 8; i > 5; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                for (int i = 5; i > 3; i--) {
-                    view = (ImageView) grid.getChildAt(i);
+                    break;
+                case 7:
+                    for (int i = 8; i > 6; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case 6:
+                    for (int i = 8; i > 5; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    break;
+                case 5:
+                    for (int i = 8; i > 5; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    view = (ImageView) grid.getChildAt(5);
                     view.setVisibility(View.INVISIBLE);
-                }
-                break;
-            case 3:
-                for (int i = 8; i > 2; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                break;
-            case 2:
-                for (int i = 8; i > 2; i--) {
-                    view = (ImageView) grid.getChildAt(i);
-                    view.setVisibility(View.GONE);
-                }
-                view = (ImageView) grid.getChildAt(2);
-                view.setVisibility(View.INVISIBLE);
-                break;
+                    break;
+                case 4:
+                    for (int i = 8; i > 5; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    for (int i = 5; i > 3; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case 3:
+                    for (int i = 8; i > 2; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    break;
+                case 2:
+                    for (int i = 8; i > 2; i--) {
+                        view = (ImageView) grid.getChildAt(i);
+                        view.setVisibility(View.GONE);
+                    }
+                    view = (ImageView) grid.getChildAt(2);
+                    view.setVisibility(View.INVISIBLE);
+                    break;
             }
         }
     }
-    
+
     private void buildCoordinate() {
         final String token = GlobalContext.getCurrentAccount().token;
         MyAsyncTask.execute(new Runnable() {
@@ -257,7 +326,7 @@ public class WeiboFragment extends Fragment {
             }
         });
     }
-    
+
     private void displayMap(Bitmap map) {
         mMap.setVisibility(View.VISIBLE);
         mMap.setImageBitmap(map);
@@ -272,7 +341,7 @@ public class WeiboFragment extends Fragment {
             ((ViewGroup.MarginLayoutParams) mCoordinate.getLayoutParams()).topMargin += margin;
         }
     }
-    
+
     private String getCoordinate(WeiboGeo geo) {
         double latitude = geo.coordinate[0];
         double longitude = geo.coordinate[1];
@@ -292,7 +361,7 @@ public class WeiboFragment extends Fragment {
         }
         return builder.toString();
     }
-    
+
     private String decimalToSexagesimal(double decimal) {
         int degrees = (int) Math.floor(decimal);
         decimal -= degrees;
@@ -302,99 +371,29 @@ public class WeiboFragment extends Fragment {
         double seconds = decimal * 60;
         return degrees + "°" + String.format("%02d", minutes) + "′" + String.format("%.1f", seconds) + "″";
     }
-    
-    private View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            TextView textView = (TextView) v;
-            Layout layout = textView.getLayout();
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            int offset = 0;
-            if (layout != null) {
-                int line = layout.getLineForVertical(y);
-                offset = layout.getOffsetForHorizontal(line, x);
-            }
-            SpannableString text = SpannableString.valueOf(textView.getText());
-            LongClickableLinkMovementMethod.getInstance().onTouchEvent(textView, text, event);
-            switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-                WeiboTextUrlSpan[] spans = text.getSpans(0, text.length(), WeiboTextUrlSpan.class);
-                boolean found = false;
-                int foundStart = 0;
-                int foundEnd = 0;
-                for (WeiboTextUrlSpan span : spans) {
-                    int start = text.getSpanStart(span);
-                    int end = text.getSpanEnd(span);
-                    if (offset >= start && offset <= end) {
-                        found = true;
-                        foundStart = start;
-                        foundEnd = end;
-                        break;
-                    }
-                }
-                boolean consumeEvent = false;
-                if (found) {
-                    consumeEvent = true;
-                }
-                if (found && !consumeEvent) {
-                    clearBackgroundColorSpans(text, textView);
-                }
-                if (consumeEvent) {
-                    BackgroundColorSpan span =
-                            new BackgroundColorSpan(Utilities.getColor(R.attr.link_pressed_background_color));
-                    text.setSpan(span, foundStart, foundEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                    textView.setText(text);
-                }
-                return consumeEvent;
-            case MotionEvent.ACTION_CANCEL:
-            case MotionEvent.ACTION_UP:
-                LongClickableLinkMovementMethod.getInstance().removeLongClickCallback();
-                clearBackgroundColorSpans(text, textView);
-                break;
-            }
-            return false;
-        }
-        
-        private void clearBackgroundColorSpans(SpannableString text, TextView textView) {
-            BackgroundColorSpan[] spans = text.getSpans(0, text.length(), BackgroundColorSpan.class);
-            for (BackgroundColorSpan span : spans) {
-                text.removeSpan(span);
-                textView.setText(text);
-            }
-        }
-    };
-    
-    private View.OnClickListener mTextOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = ActivityUtils.weiboActivity(mWeiboStatus.retweetStatus);
-            getActivity().startActivity(intent);
-        }
-    };
-    
+
     private class OnPictureClickListener implements View.OnClickListener {
         private int mPosition;
         private WeiboStatus mStatus;
-        
+
         public OnPictureClickListener(int position, WeiboStatus status) {
             mPosition = position;
             mStatus = status;
         }
-        
+
         @Override
         public void onClick(View v) {
             startActivity(ActivityUtils.imageViewerActivity(mStatus, mPosition));
         }
     }
-    
+
     private class OnAvatarClickListener implements View.OnClickListener {
         private WeiboUser mUser;
-        
+
         public OnAvatarClickListener(WeiboUser user) {
             mUser = user;
         }
-        
+
         @Override
         public void onClick(View v) {
             getActivity().startActivity(ActivityUtils.userActivity(mUser));

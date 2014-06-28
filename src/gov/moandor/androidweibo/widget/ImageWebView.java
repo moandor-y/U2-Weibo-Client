@@ -14,22 +14,22 @@ public class ImageWebView extends WebView {
         super(context);
         initView();
     }
-    
+
     public ImageWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView();
     }
-    
+
     public ImageWebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initView();
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return false;
     }
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void initView() {
         setFocusable(false);

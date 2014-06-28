@@ -23,7 +23,7 @@ import gov.moandor.androidweibo.util.TextUtils;
 public class NotificationSettingsActivity extends AbsActivity {
     private static final int REQUEST_RINGTONE = 0;
     private static final String INTERVAL_DIALOG = "interval_dialog";
-    
+
     private static boolean sNeedRestart;
     private TextView mIntervalStatus;
     private TextView mRingtoneStatus;
@@ -38,7 +38,13 @@ public class NotificationSettingsActivity extends AbsActivity {
     private View mRingtoneLayout;
     private String[] mIntervals;
     private Uri mRingtoneUri;
-    
+
+    private static void requestRestart() {
+        if (!sNeedRestart) {
+            sNeedRestart = true;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +80,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         mRingtoneLayout.setOnClickListener(new OnRingtoneClickListener());
         setupViews();
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -82,17 +88,17 @@ public class NotificationSettingsActivity extends AbsActivity {
             return;
         }
         switch (requestCode) {
-        case REQUEST_RINGTONE:
-            mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-            if (mRingtoneUri != null) {
-                ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
-            } else {
-                ConfigManager.setNotificationRingtone(null);
-            }
-            setupRingtone();
+            case REQUEST_RINGTONE:
+                mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if (mRingtoneUri != null) {
+                    ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
+                } else {
+                    ConfigManager.setNotificationRingtone(null);
+                }
+                setupRingtone();
         }
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -101,18 +107,18 @@ public class NotificationSettingsActivity extends AbsActivity {
             ConnectivityChangeReceiver.judgeAlarm(GlobalContext.getInstance());
         }
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     private void setupViews() {
         setupInterval();
         setupMentionWeibo();
@@ -122,7 +128,7 @@ public class NotificationSettingsActivity extends AbsActivity {
         setupNotificationLed();
         setupRingtone();
     }
-    
+
     private void setupInterval() {
         boolean enabled = ConfigManager.isNotificationEnabled();
         mIntervalLayout.setEnabled(enabled);
@@ -130,32 +136,32 @@ public class NotificationSettingsActivity extends AbsActivity {
         mIntervalStatus.setEnabled(enabled);
         mIntervalStatus.setText(mIntervals[ConfigManager.getNotificationFrequency()]);
     }
-    
+
     private void setupMentionWeibo() {
         mMentionWeibo.setEnabled(ConfigManager.isNotificationEnabled());
         mMentionWeibo.setChecked(ConfigManager.isNotificationMentionWeiboEnabled());
     }
-    
+
     private void setupComment() {
         mComment.setEnabled(ConfigManager.isNotificationEnabled());
         mComment.setChecked(ConfigManager.isNotificationCommentEnabled());
     }
-    
+
     private void setupMentionComment() {
         mMentionComment.setEnabled(ConfigManager.isNotificationEnabled());
         mMentionComment.setChecked(ConfigManager.isNotificationMentionCommentEnabled());
     }
-    
+
     private void setupVibrate() {
         mVibrate.setEnabled(ConfigManager.isNotificationEnabled());
         mVibrate.setChecked(ConfigManager.isNotificationVibrateEnabled());
     }
-    
+
     private void setupNotificationLed() {
         mNotificationLed.setEnabled(ConfigManager.isNotificationEnabled());
         mNotificationLed.setChecked(ConfigManager.isNotificationLedEnabled());
     }
-    
+
     private void setupRingtone() {
         boolean enabled = ConfigManager.isNotificationEnabled();
         mRingtoneLayout.setEnabled(enabled);
@@ -169,26 +175,21 @@ public class NotificationSettingsActivity extends AbsActivity {
             mRingtoneStatus.setText(R.string.mute);
         }
     }
-    
-    private static void requestRestart() {
-        if (!sNeedRestart) {
-            sNeedRestart = true;
-        }
-    }
-    
+
     private class OnIntervalClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
                     SettingsActivityOldApi.buildListDialog(R.string.interval, mIntervals, ConfigManager
-                            .getNotificationFrequency(), new OnIntervalSelectedListener(),
-                            NotificationSettingsActivity.this);
+                                    .getNotificationFrequency(), new OnIntervalSelectedListener(),
+                            NotificationSettingsActivity.this
+                    );
             SettingsActivityOldApi.SettingsDialogFragment dialog = new SettingsActivityOldApi.SettingsDialogFragment();
             dialog.setBuilder(builder);
             dialog.show(getSupportFragmentManager(), INTERVAL_DIALOG);
         }
     }
-    
+
     private class OnMentionWeiboClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -197,7 +198,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnCommentClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -206,7 +207,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnMentionCommentClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -215,7 +216,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnVibrateClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -224,7 +225,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnNotificationLedClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -233,7 +234,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnRingtoneClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -247,7 +248,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             startActivityForResult(intent, REQUEST_RINGTONE);
         }
     }
-    
+
     private class OnIntervalSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -260,7 +261,7 @@ public class NotificationSettingsActivity extends AbsActivity {
             setupInterval();
         }
     }
-    
+
     private class OnActionCheckeChangeListener implements CompoundButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

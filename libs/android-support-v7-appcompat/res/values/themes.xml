@@ -60,7 +60,8 @@
         <item name="searchViewEditQuery">@drawable/abc_ic_commit_search_api_holo_dark</item>
         <item name="searchViewEditQueryBackground">?attr/selectableItemBackground</item>
         <item name="searchViewAutoCompleteTextView">
-            @style/Widget.AppCompat.AutoCompleteTextView</item>
+            @style/Widget.AppCompat.AutoCompleteTextView
+        </item>
         <item name="textColorSearchUrl">@color/abc_search_url_text_holo</item>
         <item name="textAppearanceSearchResultTitle">
             @style/TextAppearance.AppCompat.SearchResult.Title
@@ -111,7 +112,8 @@
         <item name="searchViewEditQuery">@drawable/abc_ic_commit_search_api_holo_light</item>
         <item name="searchViewEditQueryBackground">?attr/selectableItemBackground</item>
         <item name="searchViewAutoCompleteTextView">
-            @style/Widget.AppCompat.Light.AutoCompleteTextView</item>
+            @style/Widget.AppCompat.Light.AutoCompleteTextView
+        </item>
         <item name="textColorSearchUrl">@color/abc_search_url_text_holo</item>
         <item name="textAppearanceSearchResultTitle">
             @style/TextAppearance.AppCompat.Light.SearchResult.Title
@@ -164,7 +166,8 @@
         <item name="searchViewEditQuery">@drawable/abc_ic_commit_search_api_holo_dark</item>
         <item name="searchViewEditQueryBackground">?attr/selectableItemBackground</item>
         <item name="searchViewAutoCompleteTextView">
-            @style/Widget.AppCompat.AutoCompleteTextView</item>
+            @style/Widget.AppCompat.AutoCompleteTextView
+        </item>
         <item name="textColorSearchUrl">@color/abc_search_url_text_holo</item>
         <item name="textAppearanceSearchResultTitle">
             @style/TextAppearance.AppCompat.SearchResult.Title

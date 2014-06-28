@@ -11,7 +11,7 @@ public class ImageUtils {
     public static final int MAX_WIDTH = 1000;
     public static final int MAX_HEIGHT = 2000;
     public static final int MAX_DISPLAY_SIZE = 2048;
-    
+
     public static boolean getBitmapFromNetwork(String url, String path, HttpUtils.DownloadListener listener) {
         for (int i = 0; i < 3; i++) {
             if (HttpUtils.executeDownloadTask(url, path, listener)) {
@@ -20,7 +20,7 @@ public class ImageUtils {
         }
         return false;
     }
-    
+
     public static Bitmap getBitmapFromFile(String path, int width, int height) {
         try {
             final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -43,7 +43,7 @@ public class ImageUtils {
             return null;
         }
     }
-    
+
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -55,11 +55,11 @@ public class ImageUtils {
         }
         return inSampleSize;
     }
-    
+
     public static Drawable bitmapToDrawable(Bitmap bitmap) {
         return new BitmapDrawable(GlobalContext.getInstance().getResources(), bitmap);
     }
-    
+
     public static boolean isTooLargeToDisplay(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;

@@ -7,14 +7,14 @@
     android:paddingBottom="@dimen/margin_vertical"
     android:paddingLeft="@dimen/margin_horizontal"
     android:paddingRight="@dimen/margin_horizontal"
-    android:paddingTop="@dimen/margin_vertical" >
-    
+    android:paddingTop="@dimen/margin_vertical">
+
     <Spinner
         android:id="@+id/type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
-    
+        android:layout_alignParentTop="true"/>
+
     <android.support.v7.widget.GridLayout
         android:id="@+id/grid"
         android:layout_width="match_parent"
@@ -22,43 +22,43 @@
         android:layout_below="@+id/type"
         android:layout_marginTop="@dimen/margin_vertical"
         androidweibo:columnCount="2"
-        androidweibo:rowCount="2"
-        androidweibo:orientation="vertical" >
-        
+        androidweibo:orientation="vertical"
+        androidweibo:rowCount="2">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/username_label" />
-        
+            android:text="@string/username_label"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/password_label" />
-        
+            android:text="@string/password_label"/>
+
         <EditText
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            androidweibo:layout_gravity="fill_horizontal"
+            android:hint="@string/username"
             android:inputType="textEmailAddress"
-            android:hint="@string/username" />
-        
+            androidweibo:layout_gravity="fill_horizontal"/>
+
         <EditText
             android:id="@+id/password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            androidweibo:layout_gravity="fill_horizontal"
+            android:hint="@string/password"
             android:inputType="textPassword"
-            android:hint="@string/password" />
-        
+            androidweibo:layout_gravity="fill_horizontal"/>
+
     </android.support.v7.widget.GridLayout>
-    
+
     <Button
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/grid"
         android:layout_marginTop="@dimen/margin_vertical"
-        android:text="@string/login" />
-    
+        android:text="@string/login"/>
+
 </RelativeLayout>

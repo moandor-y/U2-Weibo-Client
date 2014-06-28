@@ -17,22 +17,22 @@ import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     public static final String USER_ID = "user_id";
     private static final int REQUEST_CODE = 0;
-    
+
     private long mUserId;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserId = getArguments().getLong(USER_ID);
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter.setOnPictureClickListener(new OnPictureClickListener());
         mAdapter.setOnMultiPictureClickListener(new OnMultiPictureClickListener());
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -40,7 +40,7 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
             refresh();
         }
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
@@ -49,35 +49,35 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
             mAdapter.notifyDataSetChanged();
         }
     }
-    
+
     @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
     }
-    
+
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         UserTimelineDao dao = new UserTimelineDao();
         dao.setUserId(mUserId);
         return dao;
     }
-    
+
     @Override
     LoadMoreTask createLoadMoreTask() {
         return new LoadMoreTask();
     }
-    
+
     @Override
     RefreshTask createRefreshTask() {
         return new RefreshTask();
     }
-    
+
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
         startActivityForResult(intent, REQUEST_CODE);
     }
-    
+
     @Override
     ActionMode.Callback getActionModeCallback() {
         WeiboListActionModeCallback callback = new WeiboListActionModeCallback();
@@ -85,7 +85,7 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
         callback.setFragment(this);
         return callback;
     }
-    
+
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {
         @Override
         public void onMultiPictureClick(int position, int picIndex) {
@@ -96,7 +96,7 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
             startActivity(ActivityUtils.imageViewerActivity(status, picIndex));
         }
     }
-    
+
     private class OnPictureClickListener implements WeiboListAdapter.OnPictureClickListener {
         @Override
         public void onPictureClick(int position) {

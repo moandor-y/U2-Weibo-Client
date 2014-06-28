@@ -18,6 +18,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.ActivityUtils;
@@ -27,14 +30,11 @@ import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class AuthorizeActivity extends AbsActivity {
     private static final String HACK_LOGIN_DIALOG = "hack_login_dialog";
-    
+
     private WebView mWebView;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,28 +49,28 @@ public class AuthorizeActivity extends AbsActivity {
             buildLayout();
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_authorize, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.refresh:
-            mWebView.loadUrl("about:blank");
-            mWebView.loadUrl(getWeiboOAuthUrl());
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.refresh:
+                mWebView.loadUrl("about:blank");
+                mWebView.loadUrl(getWeiboOAuthUrl());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -78,7 +78,7 @@ public class AuthorizeActivity extends AbsActivity {
             mWebView.stopLoading();
         }
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -86,7 +86,7 @@ public class AuthorizeActivity extends AbsActivity {
             mWebView.clearCache(true);
         }
     }
-    
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -94,12 +94,12 @@ public class AuthorizeActivity extends AbsActivity {
             mWebView.goBack();
         }
     }
-    
+
     private void onHackLoginConfirmed() {
         startActivity(ActivityUtils.hackLoginActivity());
         finish();
     }
-    
+
     @SuppressWarnings("deprecation")
     @SuppressLint("SetJavaScriptEnabled")
     private void buildLayout() {
@@ -116,7 +116,7 @@ public class AuthorizeActivity extends AbsActivity {
         cookieManager.removeAllCookie();
         mWebView.loadUrl(getWeiboOAuthUrl());
     }
-    
+
     private String getWeiboOAuthUrl() {
         Map<String, String> params = new HashMap<String, String>();
         params.put("client_id", UrlHelper.APPKEY);
@@ -126,30 +126,7 @@ public class AuthorizeActivity extends AbsActivity {
         return UrlHelper.OAUTH2_AUTHORIZE + "?" + Utilities.encodeUrl(params)
                 + "&scope=friendships_groups_read,friendships_groups_write";
     }
-    
-    private class AuthWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-        
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            if (url.startsWith(UrlHelper.AUTH_REDIRECT)) {
-                handleRedirectUrl(view, url);
-                view.stopLoading();
-                return;
-            }
-            super.onPageStarted(view, url, favicon);
-        }
-        
-        @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-            handler.proceed();
-        }
-    }
-    
+
     private void handleRedirectUrl(WebView view, String url) {
         Map<String, String> values = Utilities.parseUrl(url);
         String error = values.get("error");
@@ -167,31 +144,7 @@ public class AuthorizeActivity extends AbsActivity {
             Utilities.notice(WeiboException.getError(code, error));
         }
     }
-    
-    private class GetAccountInfoRunnable implements Runnable {
-        private String mToken;
-        
-        public GetAccountInfoRunnable(String token) {
-            mToken = token;
-        }
-        
-        @Override
-        public void run() {
-            try {
-                Utilities.fetchAndSaveAccountInfo(mToken);
-                Utilities.notice(R.string.auth_success);
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            } catch (final WeiboException e) {
-                Logger.logException(e);
-                Utilities.notice(e.getMessage());
-            }
-        }
-    }
-    
+
     public static class HackLoginDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -210,6 +163,53 @@ public class AuthorizeActivity extends AbsActivity {
                 }
             });
             return builder.create();
+        }
+    }
+
+    private class AuthWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            if (url.startsWith(UrlHelper.AUTH_REDIRECT)) {
+                handleRedirectUrl(view, url);
+                view.stopLoading();
+                return;
+            }
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+        }
+    }
+
+    private class GetAccountInfoRunnable implements Runnable {
+        private String mToken;
+
+        public GetAccountInfoRunnable(String token) {
+            mToken = token;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Utilities.fetchAndSaveAccountInfo(mToken);
+                Utilities.notice(R.string.auth_success);
+                Intent intent = new Intent();
+                intent.setClass(GlobalContext.getInstance(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            } catch (final WeiboException e) {
+                Logger.logException(e);
+                Utilities.notice(e.getMessage());
+            }
         }
     }
 }

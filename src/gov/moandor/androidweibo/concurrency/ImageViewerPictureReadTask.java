@@ -6,10 +6,10 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import uk.co.senab.photoview.PhotoView;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
+import uk.co.senab.photoview.PhotoView;
 
 public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boolean> {
     private static final String HTML = "<html>" + "    <head>"
@@ -19,7 +19,7 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
             + "                    <div style=\"display:block\">"
             + "                        <img src=\"file://%s\" width=\"100%%\" /" + "                    </div>"
             + "                </td>" + "            </tr>" + "        </table>" + "    </body>" + "</html>";
-    
+
     private boolean mUseWebView;
     private String mUrl;
     private String mPath;
@@ -29,9 +29,23 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     private ProgressBar mProgressBar;
     private Button mRetryButton;
     private Bitmap mBitmap;
-    
+    private HttpUtils.DownloadListener mDownloadListener = new HttpUtils.DownloadListener() {
+        @Override
+        public void onPushProgress(int progress, int max) {
+            publishProgress(progress, max);
+        }
+
+        @Override
+        public void onComplete() {
+        }
+
+        @Override
+        public void onCancelled() {
+        }
+    };
+
     public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type, WebView webView, PhotoView photoView,
-            ProgressBar progressBar, Button retryButton) {
+                                      ProgressBar progressBar, Button retryButton) {
         mUrl = url;
         mType = type;
         mWebView = webView;
@@ -39,7 +53,7 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mProgressBar = progressBar;
         mRetryButton = retryButton;
     }
-    
+
     @Override
     protected void onPreExecute() {
         mProgressBar.setVisibility(View.VISIBLE);
@@ -48,7 +62,7 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mRetryButton.setVisibility(View.GONE);
         mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
     }
-    
+
     @Override
     protected Boolean doInBackground(Void... params) {
         boolean result = ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mType);
@@ -60,13 +74,13 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         }
         return result;
     }
-    
+
     @Override
     protected void onProgressUpdate(Integer... values) {
         mProgressBar.setProgress(values[0]);
         mProgressBar.setMax(values[1]);
     }
-    
+
     @Override
     protected void onPostExecute(Boolean result) {
         mProgressBar.setVisibility(View.GONE);
@@ -91,17 +105,4 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
             });
         }
     }
-    
-    private HttpUtils.DownloadListener mDownloadListener = new HttpUtils.DownloadListener() {
-        @Override
-        public void onPushProgress(int progress, int max) {
-            publishProgress(progress, max);
-        }
-        
-        @Override
-        public void onComplete() {}
-        
-        @Override
-        public void onCancelled() {}
-    };
 }

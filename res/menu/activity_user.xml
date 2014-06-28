@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:androidweibo="http://schemas.android.com/apk/res-auto" >
-    
+    xmlns:androidweibo="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/follow"
         android:title="@string/follow"
-        androidweibo:showAsAction="ifRoom|withText"
-        android:visible="false" />
-    
+        android:visible="false"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/unfollow"
         android:title="@string/unfollow"
-        androidweibo:showAsAction="ifRoom|withText"
-        android:visible="false" />
-    
+        android:visible="false"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
     <item
         android:id="@+id/followed_each_other"
         android:title="@string/followed_each_other"
-        androidweibo:showAsAction="ifRoom|withText"
-        android:visible="false" />
-    
+        android:visible="false"
+        androidweibo:showAsAction="ifRoom|withText"/>
+
 </menu>

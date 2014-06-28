@@ -2,49 +2,20 @@ package gov.moandor.androidweibo.util;
 
 import org.json.JSONException;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.dao.FollowingDao;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ClearCacheRunnable implements Runnable {
     private static final long LAST_TIME = 1000 * 60 * 60 * 24 * 7;
-    
+
     private List<String> mSkipPaths;
-    
-    @Override
-    public void run() {
-        mSkipPaths = getSkipPaths();
-        File file = new File(FileUtils.WEIBO_PICTURE_CACHE);
-        if (file.exists()) {
-            clear(file);
-        }
-        file = new File(FileUtils.WEIBO_AVATAR_CACHE);
-        if (file.exists()) {
-            clear(file);
-        }
-    }
-    
-    private void clear(File dir) {
-        File[] files = dir.listFiles();
-        for (File file : files) {
-            if (file.isDirectory()) {
-                clear(file);
-            } else {
-                if (System.currentTimeMillis() - file.lastModified() > LAST_TIME) {
-                    String path = file.getAbsolutePath();
-                    if (mSkipPaths == null || !mSkipPaths.contains(path)) {
-                        file.delete();
-                    }
-                }
-            }
-        }
-    }
-    
+
     private static List<String> getSkipPaths() {
         if (GlobalContext.isInWifi()) {
             List<String> paths;
@@ -62,7 +33,7 @@ public class ClearCacheRunnable implements Runnable {
             return DatabaseUtils.getFollowingAvatarPaths();
         }
     }
-    
+
     private static List<String> fetchSkipPaths() throws WeiboException, JSONException {
         List<String> result = new ArrayList<String>();
         for (Account account : GlobalContext.getAccounts()) {
@@ -90,5 +61,34 @@ public class ClearCacheRunnable implements Runnable {
             } while (nextCursor != 0);
         }
         return result;
+    }
+
+    @Override
+    public void run() {
+        mSkipPaths = getSkipPaths();
+        File file = new File(FileUtils.WEIBO_PICTURE_CACHE);
+        if (file.exists()) {
+            clear(file);
+        }
+        file = new File(FileUtils.WEIBO_AVATAR_CACHE);
+        if (file.exists()) {
+            clear(file);
+        }
+    }
+
+    private void clear(File dir) {
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                clear(file);
+            } else {
+                if (System.currentTimeMillis() - file.lastModified() > LAST_TIME) {
+                    String path = file.getAbsolutePath();
+                    if (mSkipPaths == null || !mSkipPaths.contains(path)) {
+                        file.delete();
+                    }
+                }
+            }
+        }
     }
 }

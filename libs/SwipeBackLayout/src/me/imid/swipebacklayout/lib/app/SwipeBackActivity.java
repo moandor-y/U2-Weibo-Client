@@ -1,4 +1,3 @@
-
 package me.imid.swipebacklayout.lib.app;
 
 import android.os.Bundle;

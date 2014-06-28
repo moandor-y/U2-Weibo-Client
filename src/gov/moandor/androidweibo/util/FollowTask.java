@@ -6,22 +6,22 @@ import gov.moandor.androidweibo.dao.FollowDao;
 
 public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     private static final int CODE_ALREADY_FOLLOWED = 20506;
-    
+
     private WeiboUser mUser;
     private OnFollowFinishedListener mListener;
     private WeiboException mException;
     private String mToken;
-    
+
     public FollowTask(WeiboUser user, OnFollowFinishedListener l) {
         mUser = user;
         mListener = l;
     }
-    
+
     @Override
     protected void onPreExecute() {
         mToken = GlobalContext.getCurrentAccount().token;
     }
-    
+
     @Override
     protected WeiboUser doInBackground(Void... v) {
         FollowDao dao = new FollowDao();
@@ -43,20 +43,20 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
         cancel(true);
         return null;
     }
-    
+
     @Override
     protected void onPostExecute(WeiboUser result) {
         mListener.onFollowFinished(result);
     }
-    
+
     @Override
     protected void onCancelled() {
         mListener.onFollowFailed(mException);
     }
-    
+
     public static interface OnFollowFinishedListener {
         public void onFollowFinished(WeiboUser user);
-        
+
         public void onFollowFailed(WeiboException e);
     }
 }

@@ -14,6 +14,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 
+import java.util.Arrays;
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.DmConversationAdapter;
 import gov.moandor.androidweibo.bean.DirectMessage;
@@ -30,9 +33,6 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, DmConversationAdapter> {
     public static final int SEND_SUCCESSFUL = 0;
     public static final int SEND_FAILED = 1;
@@ -42,16 +42,35 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     public static final String SEND_SUCCESSFUL_MESSAGE = Utilities.buildIntentExtraName("SEND_SUCCESSFUL_MESSAGE");
     public static final String SEND_FAILED_TEXT = Utilities.buildIntentExtraName("SEND_FAILED_TEXT");
     public static final String SEND_FAILED_ERROR = Utilities.buildIntentExtraName("SEND_FAILED_ERROR");
+    private BroadcastReceiver mSendFinishReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int resultCode = intent.getIntExtra(SEND_RESULT_CODE, -1);
+            switch (resultCode) {
+                case SEND_SUCCESSFUL:
+                    DirectMessage message = intent.getParcelableExtra(SEND_SUCCESSFUL_MESSAGE);
+                    mAdapter.addFirst(message);
+                    mAdapter.notifyDataSetChanged();
+                    updateDatabase();
+                    break;
+                case SEND_FAILED:
+                    String error = intent.getStringExtra(SEND_FAILED_ERROR);
+                    String text = intent.getStringExtra(SEND_FAILED_TEXT);
+                    mEditText.setError(error);
+                    mEditText.setText(text);
+                    break;
+            }
+        }
+    };
     public static final String RESULT_USER = Utilities.buildIntentExtraName("RESULT_USER");
     public static final String RESULT_LATEST_MESSAGE = Utilities.buildIntentExtraName("RESULT_LATEST_MESSAGE");
     private static final long LOAD_INTERVAL = 3 * 60 * 1000;
     private static final int MAX_DATABASE_MESSAGE_COUNT = 100;
     private static final int RESULT_CODE = 0;
-    
     private boolean mRunning;
     private WeiboUser mUser;
     private EditText mEditText;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +79,12 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         intentFilter.addAction(SEND_FINISHED);
         Utilities.registerReceiver(mSendFinishReceiver, intentFilter);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_dm_conversation, container, false);
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -76,46 +95,46 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         mRefreshTask = new LoadFromDatabaseTask();
         mRefreshTask.execute();
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
         mRunning = true;
         startAutoLoadNewMessages();
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
         mRunning = false;
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         Utilities.unregisterReceiver(mSendFinishReceiver);
     }
-    
+
     @Override
     DmConversationAdapter createListAdapter() {
         return new DmConversationAdapter();
     }
-    
+
     @Override
     LoadMoreTask createLoadMoreTask() {
         return null;
     }
-    
+
     @Override
     RefreshTask createRefreshTask() {
         return null;
     }
-    
+
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // TODO Auto-generated method stub
     }
-    
+
     @Override
     ActionMode.Callback getActionModeCallback() {
         DmConversationActionModeCallback callback = new DmConversationActionModeCallback();
@@ -123,25 +142,25 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         callback.setAdapter(mAdapter);
         return callback;
     }
-    
+
     @Override
     protected BaseTimelineJsonDao<DirectMessage> onCreateDao() {
         DmConversationDao dao = new DmConversationDao();
         dao.setUid(mUser.id);
         return dao;
     }
-    
+
     @Override
     public void refresh() {/* do nothing */}
-    
+
     @Override
     protected void loadMore() {/* do nothing */}
-    
+
     @Override
     protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return new OnListRefreshListener();
     }
-    
+
     private void startAutoLoadNewMessages() {
         GlobalContext.runOnUiThread(new Runnable() {
             @Override
@@ -157,7 +176,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             }
         });
     }
-    
+
     private void updateDatabase() {
         final long accountId = GlobalContext.getCurrentAccount().user.id;
         final long userId = mUser.id;
@@ -176,38 +195,17 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         data.putExtra(RESULT_LATEST_MESSAGE, mAdapter.getItem(0));
         getActivity().setResult(RESULT_CODE, data);
     }
-    
-    private BroadcastReceiver mSendFinishReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int resultCode = intent.getIntExtra(SEND_RESULT_CODE, -1);
-            switch (resultCode) {
-            case SEND_SUCCESSFUL:
-                DirectMessage message = intent.getParcelableExtra(SEND_SUCCESSFUL_MESSAGE);
-                mAdapter.addFirst(message);
-                mAdapter.notifyDataSetChanged();
-                updateDatabase();
-                break;
-            case SEND_FAILED:
-                String error = intent.getStringExtra(SEND_FAILED_ERROR);
-                String text = intent.getStringExtra(SEND_FAILED_TEXT);
-                mEditText.setError(error);
-                mEditText.setText(text);
-                break;
-            }
-        }
-    };
-    
+
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
         private long mAccountId;
         private long mUserId;
-        
+
         @Override
         protected void onPreExecute() {
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mUserId = mUser.id;
         }
-        
+
         @Override
         protected List<DirectMessage> doInBackground(Void... params) {
             DirectMessage[] result = DatabaseUtils.getDmConversation(mAccountId, mUserId);
@@ -217,7 +215,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
@@ -236,10 +234,10 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             }
         }
     }
-    
+
     private class LoadEarlierMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
         private BaseTimelineJsonDao<DirectMessage> mDao;
-        
+
         @Override
         protected void onPreExecute() {
             long maxId = 0L;
@@ -251,7 +249,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setMaxId(maxId);
         }
-        
+
         @Override
         protected List<DirectMessage> doInBackground(Void... v) {
             try {
@@ -262,7 +260,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
@@ -274,17 +272,17 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             }
         }
     }
-    
+
     private class FetchMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
         private BaseTimelineJsonDao<DirectMessage> mDao;
-        
+
         @Override
         protected void onPreExecute() {
             mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
         }
-        
+
         @Override
         protected List<DirectMessage> doInBackground(Void... v) {
             try {
@@ -295,7 +293,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
@@ -308,17 +306,18 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             }
         }
     }
-    
+
     private class LoadNewMessagesTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
         private BaseTimelineJsonDao<DirectMessage> mDao;
         private List<DirectMessage> mLastResult;
-        
-        private LoadNewMessagesTask() {}
-        
+
+        private LoadNewMessagesTask() {
+        }
+
         private LoadNewMessagesTask(List<DirectMessage> lastResult) {
             mLastResult = lastResult;
         }
-        
+
         @Override
         protected void onPreExecute() {
             DirectMessage latestMessage = null;
@@ -333,7 +332,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 mDao.setMaxId(mLastResult.get(mLastResult.size() - 1).id - 1);
             }
         }
-        
+
         @Override
         protected List<DirectMessage> doInBackground(Void... v) {
             try {
@@ -344,7 +343,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DirectMessage> result) {
             mRefreshTask = null;
@@ -368,7 +367,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             }
         }
     }
-    
+
     private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {
@@ -381,7 +380,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             mAdapter.notifyDataSetChanged();
         }
     }
-    
+
     private class OnSendButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {

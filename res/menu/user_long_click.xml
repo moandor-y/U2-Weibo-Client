@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/follow"
         android:title="@string/follow"
-        android:visible="false" />
-    
+        android:visible="false"/>
+
     <item
         android:id="@+id/unfollow"
         android:title="@string/unfollow"
-        android:visible="false" />
-    
+        android:visible="false"/>
+
 </menu>

@@ -16,7 +16,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 public class FavoriteDao extends BaseHttpDao<WeiboStatus> {
     private String mToken;
     private long mId;
-    
+
     @Override
     public WeiboStatus execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -32,16 +32,16 @@ public class FavoriteDao extends BaseHttpDao<WeiboStatus> {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.FAVORITES_CREATE;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setId(long id) {
         mId = id;
     }

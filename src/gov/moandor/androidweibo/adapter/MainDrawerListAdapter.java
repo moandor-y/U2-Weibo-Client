@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -14,24 +16,30 @@ import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
 
-import java.io.File;
-
 public class MainDrawerListAdapter extends AbsBaseAdapter {
+    private static ViewHolder initViewHolder(View view) {
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.avatarView = (ImageView) view.findViewById(R.id.avatar);
+        viewHolder.nameView = (TextView) view.findViewById(R.id.name);
+        viewHolder.tickView = (ImageView) view.findViewById(R.id.tick);
+        return viewHolder;
+    }
+
     @Override
     public int getCount() {
         return GlobalContext.getAccountCount();
     }
-    
+
     @Override
     public Account getItem(int position) {
         return GlobalContext.getAccount(position);
     }
-    
+
     @Override
     public long getItemId(int position) {
         return GlobalContext.getAccount(position).user.id;
     }
-    
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -54,35 +62,27 @@ public class MainDrawerListAdapter extends AbsBaseAdapter {
         }
         return convertView;
     }
-    
+
     private static class ViewHolder {
         public ImageView avatarView;
         public TextView nameView;
         public ImageView tickView;
     }
-    
-    private static ViewHolder initViewHolder(View view) {
-        ViewHolder viewHolder = new ViewHolder();
-        viewHolder.avatarView = (ImageView) view.findViewById(R.id.avatar);
-        viewHolder.nameView = (TextView) view.findViewById(R.id.name);
-        viewHolder.tickView = (ImageView) view.findViewById(R.id.tick);
-        return viewHolder;
-    }
-    
+
     private static class DownloadAvatarTask extends MyAsyncTask<Void, Void, Bitmap> {
         private String mUrl;
         private ImageView mView;
-        
+
         public DownloadAvatarTask(String url, ImageView view) {
             mUrl = url;
             mView = view;
         }
-        
+
         @Override
         protected void onPreExecute() {
             mView.setImageDrawable(null);
         }
-        
+
         @Override
         protected Bitmap doInBackground(Void... v) {
             Bitmap bitmap = GlobalContext.getBitmapCache().get(mUrl);
@@ -107,7 +107,7 @@ public class MainDrawerListAdapter extends AbsBaseAdapter {
             cancel(true);
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(Bitmap result) {
             if (result != null) {

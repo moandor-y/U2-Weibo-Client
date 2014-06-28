@@ -7,25 +7,25 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 
-import java.util.List;
-
 public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
         extends AbsTimelineFragment<DataBean, TimelineListAdapter> {
     EditText mQuickPost;
     ImageButton mSendButton;
     private boolean mFirstShown = true;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_weibo_timeline, container, false);
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -33,23 +33,23 @@ public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, Tim
         mSendButton = (ImageButton) view.findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new SendButtonOnClickListener());
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
         hideKeyboard();
     }
-    
+
     @Override
     LoadMoreTask createLoadMoreTask() {
         return new WeiboTimelineLoadMoreTask();
     }
-    
+
     @Override
     RefreshTask createRefreshTask() {
         return new WeiboTimelineRefreshTask();
     }
-    
+
     public void onShown() {
         if (mFirstShown) {
             mFirstShown = false;
@@ -57,12 +57,14 @@ public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, Tim
         }
         hideKeyboard();
     }
-    
+
     private void hideKeyboard() {
         mQuickPost.clearFocus();
         Utilities.hideKeyboard(mQuickPost.getWindowToken());
     }
-    
+
+    abstract void onSend(String content);
+
     private class SendButtonOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -77,7 +79,7 @@ public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, Tim
             onSend(content);
         }
     }
-    
+
     private class WeiboTimelineRefreshTask extends RefreshTask {
         @Override
         protected void onPostExecute(List<DataBean> result) {
@@ -85,7 +87,7 @@ public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, Tim
             hideKeyboard();
         }
     }
-    
+
     private class WeiboTimelineLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPostExecute(List<DataBean> result) {
@@ -93,6 +95,4 @@ public abstract class AbsWeiboTimelineFragment<DataBean extends AbsItemBean, Tim
             hideKeyboard();
         }
     }
-    
-    abstract void onSend(String content);
 }

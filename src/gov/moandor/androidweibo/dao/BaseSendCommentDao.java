@@ -9,7 +9,7 @@ public abstract class BaseSendCommentDao extends BaseHttpDao<Void> {
     private String mComment;
     private long mId;
     private boolean mCommentOri;
-    
+
     @Override
     public Void execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -18,23 +18,23 @@ public abstract class BaseSendCommentDao extends BaseHttpDao<Void> {
         HttpUtils.executeNormalTask(method, mUrl, params);
         return null;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setComment(String comment) {
         mComment = comment;
     }
-    
+
     public void setId(long id) {
         mId = id;
     }
-    
+
     public void setCommentOri(boolean commentOri) {
         mCommentOri = commentOri;
     }
-    
+
     protected void initParams(HttpParams params) {
         params.put("access_token", mToken);
         params.put("comment", mComment);

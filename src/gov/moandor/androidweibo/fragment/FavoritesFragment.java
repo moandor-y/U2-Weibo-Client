@@ -6,6 +6,8 @@ import android.support.v7.view.ActionMode;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.activity.WeiboActivity;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
@@ -14,14 +16,12 @@ import gov.moandor.androidweibo.dao.FavoritesDao;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.WeiboListActionModeCallback;
 
-import java.util.List;
-
 public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboListAdapter> {
     private static final int REQUEST_CODE = 0;
-    
+
     private boolean mNoMore;
     private int mPage = 1;
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -29,14 +29,14 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
             refresh();
         }
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter.setOnPictureClickListener(new OnPictureClickListener());
         mAdapter.setOnMultiPictureClickListener(new OnMultiPictureClickListener());
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
@@ -46,42 +46,42 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
             mAdapter.notifyDataSetChanged();
         }
     }
-    
+
     @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
     }
-    
+
     @Override
     protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
         FavoritesDao dao = new FavoritesDao();
         dao.setPage(mPage);
         return dao;
     }
-    
+
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
         startActivityForResult(intent, REQUEST_CODE);
     }
-    
+
     @Override
     LoadMoreTask createLoadMoreTask() {
         return new FavoritesLoadMoreTask();
     }
-    
+
     @Override
     RefreshTask createRefreshTask() {
         return new FavoritesRefreshTask();
     }
-    
+
     @Override
     protected void loadMore() {
         if (!mNoMore) {
             super.loadMore();
         }
     }
-    
+
     @Override
     ActionMode.Callback getActionModeCallback() {
         WeiboListActionModeCallback callback = new WeiboListActionModeCallback();
@@ -89,7 +89,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
         callback.setFragment(this);
         return callback;
     }
-    
+
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {
         @Override
         public void onMultiPictureClick(int position, int picIndex) {
@@ -100,7 +100,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
             startActivity(ActivityUtils.imageViewerActivity(status, picIndex));
         }
     }
-    
+
     private class OnPictureClickListener implements WeiboListAdapter.OnPictureClickListener {
         @Override
         public void onPictureClick(int position) {
@@ -111,7 +111,7 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
             startActivity(ActivityUtils.imageViewerActivity(status, 0));
         }
     }
-    
+
     private class FavoritesRefreshTask extends RefreshTask {
         @Override
         protected void onPreExecute() {
@@ -119,21 +119,21 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
             mNoMore = false;
             mPage = 1;
         }
-        
+
         @Override
         protected void onPostExecute(List<WeiboStatus> result) {
             mAdapter.clearDataSet();
             super.onPostExecute(result);
         }
     }
-    
+
     private class FavoritesLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             mPage += 1;
         }
-        
+
         @Override
         protected void onPostExecute(List<WeiboStatus> result) {
             super.onPostExecute(result);

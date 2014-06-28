@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Random;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -17,31 +19,29 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.Random;
-
 public class SendDmService extends Service {
     public static final String TOKEN = Utilities.buildIntentExtraName("TOKEN");
     public static final String TEXT = Utilities.buildIntentExtraName("TEXT");
     public static final String USER_ID = Utilities.buildIntentExtraName("USER_ID");
     public static final String SCREEN_NAME = Utilities.buildIntentExtraName("SCREEN_NAME");
-    
+
     private long mUserId;
     private NotificationManager mNotificationManager;
     private String mToken;
     private String mText;
     private String mScreenName;
     private String mError;
-    
+
     @Override
     public void onCreate() {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
@@ -51,10 +51,10 @@ public class SendDmService extends Service {
         new SendTask().execute();
         return START_REDELIVER_INTENT;
     }
-    
+
     private class SendTask extends MyAsyncTask<Void, Void, DirectMessage> {
         private int mNotificationId;
-        
+
         @Override
         protected void onPreExecute() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -69,7 +69,7 @@ public class SendDmService extends Service {
             mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
             mNotificationManager.notify(mNotificationId, builder.build());
         }
-        
+
         @Override
         protected DirectMessage doInBackground(Void... v) {
             SendDmDao dao = new SendDmDao();
@@ -86,7 +86,7 @@ public class SendDmService extends Service {
             }
             return null;
         }
-        
+
         @Override
         protected void onCancelled() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -114,7 +114,7 @@ public class SendDmService extends Service {
             intent.putExtra(DmConversationFragment.SEND_FAILED_ERROR, mError);
             sendBroadcast(intent);
         }
-        
+
         @Override
         protected void onPostExecute(DirectMessage result) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());

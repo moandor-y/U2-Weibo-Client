@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipe_refresh"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
-        
+        android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/margin_vertical"
             android:paddingLeft="@dimen/margin_horizontal"
             android:paddingRight="@dimen/margin_horizontal"
-            android:paddingTop="@dimen/margin_vertical" >
-            
+            android:paddingTop="@dimen/margin_vertical">
+
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="@dimen/profile_avatar_width"
                 android:layout_height="@dimen/profile_avatar_height"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:contentDescription="@string/avatar" />
-            
+                android:contentDescription="@string/avatar"/>
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
@@ -33,25 +33,25 @@
                 android:layout_below="@+id/avatar"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin_vertical"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:drawablePadding="@dimen/margin_horizontal" />
-            
+                android:drawablePadding="@dimen/margin_horizontal"
+                android:textAppearance="?android:attr/textAppearanceLarge"/>
+
             <TextView
                 android:id="@+id/summary_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/name"
                 android:layout_alignParentLeft="true"
+                android:layout_below="@+id/name"
                 android:layout_marginTop="@dimen/margin_vertical"
-                android:text="@string/summary" />
-            
+                android:text="@string/summary"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/summary_label"
                 android:layout_marginTop="5dp"
-                android:background="?retweet_background" />
-            
+                android:background="?retweet_background"/>
+
             <TextView
                 android:id="@+id/summary"
                 android:layout_width="match_parent"
@@ -59,24 +59,24 @@
                 android:layout_below="@+id/summary_label"
                 android:layout_marginTop="@dimen/margin_vertical"
                 android:paddingLeft="@dimen/margin_horizontal"
-                android:paddingRight="@dimen/margin_horizontal" />
-            
+                android:paddingRight="@dimen/margin_horizontal"/>
+
             <TextView
                 android:id="@+id/address_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/summary"
                 android:layout_alignParentLeft="true"
+                android:layout_below="@+id/summary"
                 android:layout_marginTop="@dimen/margin_vertical"
-                android:text="@string/address" />
-            
+                android:text="@string/address"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/address_label"
                 android:layout_marginTop="5dp"
-                android:background="?retweet_background" />
-            
+                android:background="?retweet_background"/>
+
             <TextView
                 android:id="@+id/address"
                 android:layout_width="match_parent"
@@ -84,24 +84,24 @@
                 android:layout_below="@+id/address_label"
                 android:layout_marginTop="@dimen/margin_vertical"
                 android:paddingLeft="@dimen/margin_horizontal"
-                android:paddingRight="@dimen/margin_horizontal" />
-            
+                android:paddingRight="@dimen/margin_horizontal"/>
+
             <TextView
                 android:id="@+id/statistics_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/address"
                 android:layout_alignParentLeft="true"
+                android:layout_below="@+id/address"
                 android:layout_marginTop="@dimen/margin_vertical"
-                android:text="@string/statistics" />
-            
+                android:text="@string/statistics"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/statistics_label"
                 android:layout_marginTop="5dp"
-                android:background="?retweet_background" />
-            
+                android:background="?retweet_background"/>
+
             <LinearLayout
                 android:id="@+id/statistics"
                 android:layout_width="match_parent"
@@ -109,99 +109,99 @@
                 android:layout_below="@+id/statistics_label"
                 android:layout_marginTop="6dp"
                 android:baselineAligned="false"
-                android:orientation="horizontal" >
-                
+                android:orientation="horizontal">
+
                 <RelativeLayout
                     android:id="@+id/weibo_count_layout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/margin_horizontal"
-                    android:paddingTop="@dimen/margin_vertical"
-                    android:paddingBottom="@dimen/margin_vertical"
                     android:background="@color/clickable_text"
-                    android:clickable="true" >
-                    
+                    android:clickable="true"
+                    android:paddingBottom="@dimen/margin_vertical"
+                    android:paddingLeft="@dimen/margin_horizontal"
+                    android:paddingTop="@dimen/margin_vertical">
+
                     <TextView
                         android:id="@+id/weibo_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
-                    
+                        android:layout_alignParentTop="true"
+                        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
                     <TextView
                         android:id="@+id/weibo_count_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/weibo_count"
                         android:layout_alignParentLeft="true"
-                        android:text="@string/weibo_count" />
-                    
+                        android:layout_below="@+id/weibo_count"
+                        android:text="@string/weibo_count"/>
+
                 </RelativeLayout>
-                
+
                 <RelativeLayout
                     android:id="@+id/following_count_layout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/margin_horizontal"
-                    android:paddingTop="@dimen/margin_vertical"
-                    android:paddingBottom="@dimen/margin_vertical"
                     android:background="@color/clickable_text"
-                    android:clickable="true" >
-                    
+                    android:clickable="true"
+                    android:paddingBottom="@dimen/margin_vertical"
+                    android:paddingLeft="@dimen/margin_horizontal"
+                    android:paddingTop="@dimen/margin_vertical">
+
                     <TextView
                         android:id="@+id/following_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
-                    
+                        android:layout_alignParentTop="true"
+                        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
                     <TextView
                         android:id="@+id/following_count_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/following_count"
                         android:layout_alignParentLeft="true"
-                        android:text="@string/following_count" />
-                    
+                        android:layout_below="@+id/following_count"
+                        android:text="@string/following_count"/>
+
                 </RelativeLayout>
-                
+
                 <RelativeLayout
                     android:id="@+id/follower_count_layout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingLeft="@dimen/margin_horizontal"
-                    android:paddingTop="@dimen/margin_vertical"
-                    android:paddingBottom="@dimen/margin_vertical"
                     android:background="@color/clickable_text"
-                    android:clickable="true" >
-                    
+                    android:clickable="true"
+                    android:paddingBottom="@dimen/margin_vertical"
+                    android:paddingLeft="@dimen/margin_horizontal"
+                    android:paddingTop="@dimen/margin_vertical">
+
                     <TextView
                         android:id="@+id/follower_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
-                        android:textAppearance="?android:attr/textAppearanceLarge" />
-                    
+                        android:layout_alignParentTop="true"
+                        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
                     <TextView
                         android:id="@+id/follower_count_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/follower_count"
                         android:layout_alignParentLeft="true"
-                        android:text="@string/follower_count" />
-                    
+                        android:layout_below="@+id/follower_count"
+                        android:text="@string/follower_count"/>
+
                 </RelativeLayout>
-                
+
             </LinearLayout>
-            
+
         </RelativeLayout>
-        
+
     </ScrollView>
-    
+
 </android.support.v4.widget.SwipeRefreshLayout>

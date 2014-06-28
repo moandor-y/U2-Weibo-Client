@@ -1,131 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    
+
     <PreferenceCategory android:title="@string/general">
-        
+
         <Preference android:title="@string/notifications">
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$NotificationsActivity"
-                android:targetPackage="gov.moandor.androidweibo" />
+                android:targetPackage="gov.moandor.androidweibo"/>
         </Preference>
-        
+
         <ListPreference
-            android:key="theme"
-            android:title="@string/theme"
+            android:defaultValue="0"
             android:entries="@array/themes"
             android:entryValues="@array/theme_values"
-            android:defaultValue="0" />
-        
+            android:key="theme"
+            android:title="@string/theme"/>
+
         <ListPreference
-            android:key="font_size_mode"
-            android:title="@string/font_size"
+            android:defaultValue="1"
             android:entries="@array/font_sizes"
             android:entryValues="@array/font_size_values"
-            android:defaultValue="1" />
-        
+            android:key="font_size_mode"
+            android:title="@string/font_size"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="fast_scroll_enabled"
-            android:title="@string/fast_scroll"
-            android:defaultValue="true" />
-        
+            android:title="@string/fast_scroll"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="swipe_back_enabled"
-            android:title="@string/swipe_back"
-            android:defaultValue="true" />
-        
+            android:title="@string/swipe_back"/>
+
         <Preference android:title="@string/ignore">
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.IgnoreActivity"
-                android:targetPackage="gov.moandor.androidweibo" />
+                android:targetPackage="gov.moandor.androidweibo"/>
         </Preference>
-        
+
     </PreferenceCategory>
-    
+
     <PreferenceCategory android:title="@string/data_control">
-        
+
         <ListPreference
-            android:key="load_weibo_count_mode"
-            android:title="@string/load_weibo_count"
+            android:defaultValue="0"
             android:entries="@array/load_weibo_counts"
             android:entryValues="@array/load_weibo_count_values"
-            android:defaultValue="0" />
-        
+            android:key="load_weibo_count_mode"
+            android:title="@string/load_weibo_count"/>
+
         <CheckBoxPreference
-            android:key="no_picture_mode"
-            android:title="@string/no_picture_mode"
+            android:defaultValue="false"
             android:disableDependentsState="true"
-            android:defaultValue="false" />
-        
+            android:key="no_picture_mode"
+            android:title="@string/no_picture_mode"/>
+
         <ListPreference
-            android:key="avatar_quality"
+            android:defaultValue="0"
             android:dependency="no_picture_mode"
-            android:title="@string/avatar"
             android:entries="@array/avatar_modes"
             android:entryValues="@array/avatar_mode_values"
-            android:defaultValue="0" />
-        
+            android:key="avatar_quality"
+            android:title="@string/avatar"/>
+
         <ListPreference
+            android:defaultValue="0"
+            android:dependency="no_picture_mode"
+            android:entries="@array/picture_modes"
+            android:entryValues="@array/picture_mode_values"
             android:key="picture_quality"
+            android:title="@string/picture"/>
+
+        <ListPreference
+            android:defaultValue="2"
             android:dependency="no_picture_mode"
-            android:title="@string/picture"
             android:entries="@array/picture_modes"
             android:entryValues="@array/picture_mode_values"
-            android:defaultValue="0" />
-        
-        <ListPreference
             android:key="picture_wifi_quality"
-            android:dependency="no_picture_mode"
-            android:title="@string/picture_wifi"
-            android:entries="@array/picture_modes"
-            android:entryValues="@array/picture_mode_values"
-            android:defaultValue="2" />
-        
+            android:title="@string/picture_wifi"/>
+
         <ListPreference
-            android:key="comment_repost_list_avatar_mode"
+            android:defaultValue="0"
             android:dependency="no_picture_mode"
-            android:title="@string/comment_repost_list_avatar"
             android:entries="@array/comment_repost_list_avatar_modes"
             android:entryValues="@array/comment_repost_list_avatar_mode_values"
-            android:defaultValue="0" />
-        
+            android:key="comment_repost_list_avatar_mode"
+            android:title="@string/comment_repost_list_avatar"/>
+
         <CheckBoxPreference
-            android:key="wifi_auto_download_pic_enabled"
+            android:defaultValue="true"
             android:dependency="no_picture_mode"
-            android:title="@string/wifi_auto_download_pic"
-            android:defaultValue="true" />
-        
+            android:key="wifi_auto_download_pic_enabled"
+            android:title="@string/wifi_auto_download_pic"/>
+
     </PreferenceCategory>
-    
+
     <PreferenceCategory
-        android:title="@string/advanced"
         android:key="advanced"
-        android:persistent="false" >
-        
+        android:persistent="false"
+        android:title="@string/advanced">
+
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="list_hw_accel_enabled"
-            android:title="@string/list_hw_accel"
-            android:defaultValue="true" />
-        
+            android:title="@string/list_hw_accel"/>
+
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="pic_hw_accel_enabled"
-            android:title="@string/pic_hw_accel"
-            android:defaultValue="true" />
-        
+            android:title="@string/pic_hw_accel"/>
+
         <Preference
             android:key="black_magic"
-            android:title="@string/black_magic"
-            android:persistent="false" >
+            android:persistent="false"
+            android:title="@string/black_magic">
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$BlackMagicActivity"
-                android:targetPackage="gov.moandor.androidweibo" />
+                android:targetPackage="gov.moandor.androidweibo"/>
         </Preference>
-        
+
         <Preference android:title="@string/about">
             <intent
                 android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$AboutActivity"
-                android:targetPackage="gov.moandor.androidweibo" />
+                android:targetPackage="gov.moandor.androidweibo"/>
         </Preference>
-        
+
     </PreferenceCategory>
-    
+
 </PreferenceScreen>

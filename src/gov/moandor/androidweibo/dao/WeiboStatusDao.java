@@ -10,7 +10,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 public class WeiboStatusDao extends BaseHttpDao<WeiboStatus> {
     private String mToken;
     private long mId;
-    
+
     @Override
     public WeiboStatus execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -20,16 +20,16 @@ public class WeiboStatusDao extends BaseHttpDao<WeiboStatus> {
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getWeiboStatusFromJson(response);
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.STATUSES_SHOW;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setId(long id) {
         mId = id;
     }

@@ -6,22 +6,22 @@ import gov.moandor.androidweibo.dao.UnfollowDao;
 
 public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     private static final int CODE_ALREADY_UNFOLLOWED = 20522;
-    
+
     private WeiboUser mUser;
     private OnUnfollowFinishedListener mListener;
     private WeiboException mException;
     private String mToken;
-    
+
     public UnfollowTask(WeiboUser user, OnUnfollowFinishedListener l) {
         mUser = user;
         mListener = l;
     }
-    
+
     @Override
     protected void onPreExecute() {
         mToken = GlobalContext.getCurrentAccount().token;
     }
-    
+
     @Override
     protected WeiboUser doInBackground(Void... v) {
         UnfollowDao dao = new UnfollowDao();
@@ -41,20 +41,20 @@ public class UnfollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
         cancel(true);
         return null;
     }
-    
+
     @Override
     protected void onPostExecute(WeiboUser result) {
         mListener.onUnfollowFinished(result);
     }
-    
+
     @Override
     protected void onCancelled() {
         mListener.onUnfollowFailed(mException);
     }
-    
+
     public static interface OnUnfollowFinishedListener {
         public void onUnfollowFinished(WeiboUser user);
-        
+
         public void onUnfollowFailed(WeiboException e);
     }
 }

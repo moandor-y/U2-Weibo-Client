@@ -5,6 +5,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.adapter.CommentListAdapter;
 import gov.moandor.androidweibo.bean.Account;
@@ -20,53 +22,51 @@ import gov.moandor.androidweibo.util.CommentListActionModeCallback;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
 
-import java.util.List;
-
 public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, CommentListAdapter> {
     public static final int ALL = 0;
     public static final int FOLLOWED = 1;
     public static final int ATME = 2;
     public static final int BY_ME = 3;
-    
+
     @Override
     CommentListAdapter createListAdapter() {
         return new CommentListAdapter();
     }
-    
+
     @Override
     List<WeiboComment> getBeansFromDatabase(long accountId, int group) {
         return DatabaseUtils.getComments(accountId, group);
     }
-    
+
     @Override
     void saveRefreshResultToDatabase(List<WeiboComment> comments, long accountId, int group) {
         DatabaseUtils.removeComments(accountId, group);
         DatabaseUtils.insertComments(comments, accountId, group);
     }
-    
+
     @Override
     void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments, long accountId, int group) {
         DatabaseUtils.insertComments(comments, accountId, group);
     }
-    
+
     @Override
     protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
         switch (ConfigManager.getCommentFilter()) {
-        case ATME:
-            return new CommentsMentionsDao();
-        case BY_ME:
-            return new CommentsByMeDao();
-        case ALL:
-        case FOLLOWED:
-        default:
-            CommentsToMeDao dao = new CommentsToMeDao();
-            if (ConfigManager.getCommentFilter() == FOLLOWED) {
-                dao.setFilter(1);
-            }
-            return dao;
+            case ATME:
+                return new CommentsMentionsDao();
+            case BY_ME:
+                return new CommentsByMeDao();
+            case ALL:
+            case FOLLOWED:
+            default:
+                CommentsToMeDao dao = new CommentsToMeDao();
+                if (ConfigManager.getCommentFilter() == FOLLOWED) {
+                    dao.setFilter(1);
+                }
+                return dao;
         }
     }
-    
+
     @Override
     public void saveListPosition(Account account) {
         View view = mListView.getChildAt(0);
@@ -83,16 +83,16 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
                             .insertOrUpdateTimelinePosition(position, MainActivity.COMMENT_LIST, filter, accountId);
                 }
             });
-            
+
         }
     }
-    
+
     @Override
     void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         WeiboComment comment = mAdapter.getItem(position);
         startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
     }
-    
+
     @Override
     ActionMode.Callback getActionModeCallback() {
         CommentListActionModeCallback callback = new CommentListActionModeCallback() {
@@ -110,22 +110,22 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
         callback.setFragment(this);
         return callback;
     }
-    
+
     @Override
     RefreshTask createRefreshTask() {
         return new MainRefreshTask();
     }
-    
+
     @Override
     LoadMoreTask createLoadMoreTask() {
         return new MainLoadMoreTask();
     }
-    
+
     @Override
     TimelinePosition onRestoreListPosition(long accountId, int group) {
         return DatabaseUtils.getTimelinePosition(accountId, MainActivity.COMMENT_LIST, group);
     }
-    
+
     @Override
     protected int getGroup() {
         return ConfigManager.getCommentFilter();

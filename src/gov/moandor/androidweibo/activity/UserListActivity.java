@@ -17,9 +17,9 @@ import gov.moandor.androidweibo.util.Utilities;
 public class UserListActivity extends AbsActivity {
     public static final String TYPE = Utilities.buildIntentExtraName("TYPE");
     public static final String USER = Utilities.buildIntentExtraName("USER");
-    
+
     private AbsFriendsUserListFragment mFragment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,49 +32,49 @@ public class UserListActivity extends AbsActivity {
             args.putLong(AbsUserListFragment.USER_ID, user.id);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (type) {
-            case FOLLOWING:
-                mFragment = new FollowingListFragment();
-                mFragment.setArguments(args);
-                fragmentTransaction.add(android.R.id.content, mFragment);
-                break;
-            case FOLLOWERS:
-                mFragment = new FollowerListFragment();
-                mFragment.setArguments(args);
-                fragmentTransaction.add(android.R.id.content, mFragment);
+                case FOLLOWING:
+                    mFragment = new FollowingListFragment();
+                    mFragment.setArguments(args);
+                    fragmentTransaction.add(android.R.id.content, mFragment);
+                    break;
+                case FOLLOWERS:
+                    mFragment = new FollowerListFragment();
+                    mFragment.setArguments(args);
+                    fragmentTransaction.add(android.R.id.content, mFragment);
             }
             fragmentTransaction.commit();
         }
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         switch (type) {
-        case FOLLOWING:
-            getSupportActionBar().setTitle(getString(R.string.following_of, user.name));
-            break;
-        case FOLLOWERS:
-            getSupportActionBar().setTitle(getString(R.string.followers_of, user.name));
+            case FOLLOWING:
+                getSupportActionBar().setTitle(getString(R.string.following_of, user.name));
+                break;
+            case FOLLOWERS:
+                getSupportActionBar().setTitle(getString(R.string.followers_of, user.name));
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_user_list, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.refresh:
-            mFragment.refresh();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.refresh:
+                mFragment.refresh();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     public static enum Type {
         FOLLOWING, FOLLOWERS
     }

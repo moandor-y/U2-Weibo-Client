@@ -9,6 +9,11 @@ import android.util.SparseArray;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 import gov.moandor.androidweibo.bean.AbsDraftBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.CommentDraft;
@@ -22,104 +27,59 @@ import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.filter.WeiboFilter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
     private static final int VERSION = 19;
-    
+
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
-    
+
     private static final String CREATE_ACCOUNT_TABLE = "create table " + Table.Account.TABLE_NAME + "("
             + Table.Account.ID + " integer primary key, " + Table.Account.TOKEN + " text, "
             + Table.Account.USER_INFO_DATA + " text)";
-    
+
     private static final String CREATE_WEIBO_GROUP_TABLE = "create table " + Table.WeiboGroup.TABLE_NAME + "("
             + Table.WeiboGroup.ACCOUNT_ID + " integer primary key, " + Table.WeiboGroup.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_WEIBO_STATUS_TABLE = "create table if not exists %s("
             + Table.WeiboStatus.POSITION + " integer primary key, " + Table.WeiboStatus.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_ATME_STATUS_TABLE = "create table if not exists %s(" + Table.AtmeStatus.POSITION
             + " integer primary key, " + Table.AtmeStatus.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_COMMENT_TABLE = "create table if not exists %s(" + Table.Comment.POSITION
             + " integer primary key, " + Table.Comment.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_TIMELINE_POSITION_TABLE = "create table " + Table.TimelinePosition.TABLE_NAME
             + "(" + Table.TimelinePosition.ACCOUNT_ID + " integer, " + Table.TimelinePosition.FRAGMENT_INDEX
             + " integer, " + Table.TimelinePosition.SPINNER_POSITION + " integer, " + Table.TimelinePosition.POSITION
             + " integer, " + Table.TimelinePosition.TOP + " integer)";
-    
+
     private static final String CREATE_DRAFT_TABLE = "create table " + Table.Draft.TABLE_NAME + "(" + Table.Draft.ID
             + " integer primary key autoincrement, " + Table.Draft.ACCOUNT_ID + " integer, " + Table.Draft.TYPE
             + " integer, " + Table.Draft.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_FOLLOWING_AVATAR_PATH_TABLE = "create table "
             + Table.FollowingAvatarPath.TABLE_NAME + "(" + Table.FollowingAvatarPath.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_DM_USER_TABLE = "create table " + Table.DmUser.TABLE_NAME + "("
             + Table.DmUser.ACCOUNT_ID + " integer, " + Table.DmUser.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_FOLLOWING_ID_TABLE = "create table " + Table.FollowingId.TABLE_NAME + "("
             + Table.FollowingId.ACCOUNT_ID + " integer, " + Table.FollowingId.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_DM_CONVERSATION_TABLE = "create table " + Table.DmConversation.TABLE_NAME + "("
             + Table.DmConversation.ACCOUNT_ID + " integer, " + Table.DmConversation.USER_ID + " integer, "
             + Table.DmConversation.CONTENT_DATA + " text)";
-    
+
     private static final String CREATE_WEIBO_FILTER_TABLE = "create table " + Table.WeiboFilter.TABLE_NAME + "("
             + Table.WeiboFilter.ID + " integer primary key autoincrement, " + Table.WeiboFilter.CLASS_NAME + " text, "
             + Table.WeiboFilter.CONTENT_DATA + " text)";
-    
+
     private DatabaseUtils() {
         super(GlobalContext.getInstance(), NAME, null, VERSION);
     }
-    
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_ACCOUNT_TABLE);
-        db.execSQL(CREATE_WEIBO_GROUP_TABLE);
-        db.execSQL(CREATE_TIMELINE_POSITION_TABLE);
-        db.execSQL(CREATE_DRAFT_TABLE);
-        db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
-        db.execSQL(CREATE_DM_USER_TABLE);
-        db.execSQL(CREATE_FOLLOWING_ID_TABLE);
-        db.execSQL(CREATE_DM_CONVERSATION_TABLE);
-        db.execSQL(CREATE_WEIBO_FILTER_TABLE);
-    }
-    
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        switch (oldVersion) {
-        case 9:
-            db.execSQL(CREATE_DRAFT_TABLE);
-        case 10:
-            db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
-        case 11:
-            db.execSQL(CREATE_DM_USER_TABLE);
-        case 12:
-            db.execSQL("drop table if exists " + Table.DmUser.TABLE_NAME);
-            db.execSQL(CREATE_DM_USER_TABLE);
-        case 13:
-            db.execSQL(CREATE_FOLLOWING_ID_TABLE);
-        case 14:
-            db.execSQL(CREATE_DM_CONVERSATION_TABLE);
-        case 15:
-            db.delete(Table.DmUser.TABLE_NAME, null, null);
-        case 16:
-        case 17:
-            db.execSQL("drop table if exists " + Table.WeiboGroup.TABLE_NAME);
-            db.execSQL(CREATE_WEIBO_GROUP_TABLE);
-        case 18:
-            db.execSQL(CREATE_WEIBO_FILTER_TABLE);
-        }
-    }
-    
+
     public static synchronized void insertOrUpdateAccount(Account account) {
         ContentValues cv = new ContentValues();
         cv.put(Table.Account.ID, account.user.id);
@@ -141,7 +101,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized List<Account> getAccounts() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.Account.TABLE_NAME, null);
@@ -158,17 +118,17 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
         return result;
     }
-    
+
     public static synchronized void removeAccount(long id) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.Account.TABLE_NAME, Table.Account.ID + "=" + id, null);
         database.close();
     }
-    
+
     public static void insertWeiboStatuses(List<WeiboStatus> statuses, long accountId, int group) {
         insertWeiboStatuses(Utilities.toSparseArray(statuses), accountId, group);
     }
-    
+
     public static synchronized void insertWeiboStatuses(SparseArray<WeiboStatus> statuses, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
@@ -184,7 +144,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         database.close();
     }
-    
+
     public static synchronized void updateWeiboStatus(WeiboStatus status, int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
@@ -194,7 +154,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.update(tableName, values, Table.WeiboStatus.POSITION + "=" + position, null);
         database.close();
     }
-    
+
     public static synchronized void removeWeiboStatus(int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
@@ -212,7 +172,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized void removeWeiboStatuses(long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
@@ -220,7 +180,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.delete(tableName, null, null);
         database.close();
     }
-    
+
     public static synchronized List<WeiboStatus> getWeiboStatuses(long accountId, int group) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
@@ -241,11 +201,11 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return result;
     }
-    
+
     public static void insertAtmeStatuses(List<WeiboStatus> statuses, long accountId, int filter) {
         insertAtmeStatuses(Utilities.toSparseArray(statuses), accountId, filter);
     }
-    
+
     public static synchronized void insertAtmeStatuses(SparseArray<WeiboStatus> statuses, long accountId, int filter) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, filter);
@@ -261,7 +221,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         database.close();
     }
-    
+
     public static synchronized void updateAtmeStatus(WeiboStatus status, int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, group);
@@ -271,7 +231,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.update(tableName, values, Table.AtmeStatus.POSITION + "=" + position, null);
         database.close();
     }
-    
+
     public static synchronized void removeAtmeStatus(int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, group);
@@ -289,7 +249,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized void removeAtmeStatuses(long accountId, int filter) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, filter);
@@ -297,7 +257,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.delete(tableName, null, null);
         database.close();
     }
-    
+
     public static synchronized List<WeiboStatus> getAtmeStatuses(long accountId, int filter) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, filter);
@@ -318,11 +278,11 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return result;
     }
-    
+
     public static void insertComments(List<WeiboComment> comments, long accountId, int filter) {
         insertComments(Utilities.toSparseArray(comments), accountId, filter);
     }
-    
+
     public static synchronized void insertComments(SparseArray<WeiboComment> comments, long accountId, int filter) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.Comment.TABLE_NAME, accountId, filter);
@@ -338,7 +298,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         database.close();
     }
-    
+
     public static synchronized void removeComment(int position, long accountId, int group) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.Comment.TABLE_NAME, accountId, group);
@@ -355,7 +315,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized void removeComments(long accountId, int filter) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.Comment.TABLE_NAME, accountId, filter);
@@ -363,7 +323,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.delete(tableName, null, null);
         database.close();
     }
-    
+
     public static synchronized List<WeiboComment> getComments(long accountId, int filter) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String tableName = String.format(Locale.ENGLISH, Table.Comment.TABLE_NAME, accountId, filter);
@@ -384,7 +344,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return result;
     }
-    
+
     public static synchronized void updateWeiboGroups(long accountId, WeiboGroup[] groups) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.WeiboGroup.TABLE_NAME, Table.WeiboGroup.ACCOUNT_ID + "=" + accountId, null);
@@ -394,7 +354,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.insert(Table.WeiboGroup.TABLE_NAME, null, values);
         database.close();
     }
-    
+
     public static synchronized WeiboGroup[] getWeiboGroups(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor =
@@ -411,9 +371,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return null;
     }
-    
+
     public static synchronized TimelinePosition getTimelinePosition(long accountId, int fragmentIndex,
-            int spinnerPosition) {
+                                                                    int spinnerPosition) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor =
                 database.rawQuery("select " + Table.TimelinePosition.POSITION + ", " + Table.TimelinePosition.TOP
@@ -430,9 +390,9 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
         return result;
     }
-    
+
     public static synchronized void insertOrUpdateTimelinePosition(TimelinePosition position, int fragmentIndex,
-            int spinnerPosition, long accountId) {
+                                                                   int spinnerPosition, long accountId) {
         ContentValues values = new ContentValues();
         values.put(Table.TimelinePosition.ACCOUNT_ID, accountId);
         values.put(Table.TimelinePosition.FRAGMENT_INDEX, fragmentIndex);
@@ -459,7 +419,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized void insertDraft(AbsDraftBean bean) {
         ContentValues values = new ContentValues();
         values.put(Table.Draft.ACCOUNT_ID, bean.accountId);
@@ -475,7 +435,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.insert(Table.Draft.TABLE_NAME, null, values);
         database.close();
     }
-    
+
     public static synchronized List<AbsDraftBean> getDrafts(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor =
@@ -487,12 +447,12 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             int type = cursor.getInt(cursor.getColumnIndex(Table.Draft.TYPE));
             AbsDraftBean bean = null;
             switch (type) {
-            case Table.Draft.TYPE_WEIBO:
-                bean = sGson.fromJson(contentData, WeiboDraft.class);
-                break;
-            case Table.Draft.TYPE_COMMENT:
-                bean = sGson.fromJson(contentData, CommentDraft.class);
-                break;
+                case Table.Draft.TYPE_WEIBO:
+                    bean = sGson.fromJson(contentData, WeiboDraft.class);
+                    break;
+                case Table.Draft.TYPE_COMMENT:
+                    bean = sGson.fromJson(contentData, CommentDraft.class);
+                    break;
             }
             bean.id = cursor.getInt(cursor.getColumnIndex(Table.Draft.ID));
             result.add(bean);
@@ -501,7 +461,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
         return result;
     }
-    
+
     public static synchronized void removeDrafts(int[] ids) {
         String idsString = Arrays.toString(ids);
         idsString = idsString.replace('[', '(');
@@ -510,25 +470,27 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.delete(Table.Draft.TABLE_NAME, Table.Draft.ID + " in " + idsString, null);
         database.close();
     }
-    
+
     public static synchronized List<String> getFollowingAvatarPaths() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.FollowingAvatarPath.TABLE_NAME, null);
         List<String> result = null;
         if (cursor.moveToNext()) {
             String json = cursor.getString(cursor.getColumnIndex(Table.FollowingAvatarPath.CONTENT_DATA));
-            result = sGson.fromJson(json, new TypeToken<List<String>>() {}.getType());
+            result = sGson.fromJson(json, new TypeToken<List<String>>() {
+            }.getType());
         }
         cursor.close();
         database.close();
         return result;
     }
-    
+
     public static synchronized void updateFollowingAvatarPaths(List<String> paths) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.FollowingAvatarPath.TABLE_NAME, null);
         ContentValues values = new ContentValues();
-        values.put(Table.FollowingAvatarPath.CONTENT_DATA, sGson.toJson(paths, new TypeToken<List<String>>() {}
+        values.put(Table.FollowingAvatarPath.CONTENT_DATA, sGson.toJson(paths, new TypeToken<List<String>>() {
+        }
                 .getType()));
         if (cursor.getCount() > 0) {
             database.update(Table.FollowingAvatarPath.TABLE_NAME, values, null, null);
@@ -538,7 +500,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized void updateDmUsers(DmUsers users, long accountId) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.DmUser.TABLE_NAME, Table.DmUser.ACCOUNT_ID + "=" + accountId, null);
@@ -548,7 +510,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.insert(Table.DmUser.TABLE_NAME, null, values);
         database.close();
     }
-    
+
     public static synchronized DmUsers getDmUsers(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String sql = "select * from " + Table.DmUser.TABLE_NAME + " where " + Table.DmUser.ACCOUNT_ID + "=" + accountId;
@@ -564,7 +526,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return null;
     }
-    
+
     public static synchronized void updateFollowingIds(long[] ids, long accountId) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.FollowingId.TABLE_NAME, Table.FollowingId.ACCOUNT_ID + "=" + accountId, null);
@@ -574,7 +536,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.insert(Table.FollowingId.TABLE_NAME, null, values);
         database.close();
     }
-    
+
     public static synchronized long[] getFollowingIds(long accountId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String sql =
@@ -592,7 +554,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return null;
     }
-    
+
     public static synchronized void updateDmConversation(long accountId, long userId, DirectMessage[] messages) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.DmConversation.TABLE_NAME, Table.DmConversation.ACCOUNT_ID + "=" + accountId + " and "
@@ -604,7 +566,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.insert(Table.DmConversation.TABLE_NAME, null, values);
         database.close();
     }
-    
+
     public static synchronized DirectMessage[] getDmConversation(long accountId, long userId) {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         String sql =
@@ -622,7 +584,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         return null;
     }
-    
+
     public static synchronized void insertOrUpdateWeiboFilter(WeiboFilter filter) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -640,13 +602,13 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         cursor.close();
         database.close();
     }
-    
+
     public static synchronized void removeWeiboFilter(int id) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.WeiboFilter.TABLE_NAME, Table.WeiboFilter.ID + "=" + id, null);
         database.close();
     }
-    
+
     public static synchronized WeiboFilter[] getWeiboFilters() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.WeiboFilter.TABLE_NAME, null);
@@ -666,12 +628,52 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         database.close();
         return result.toArray(new WeiboFilter[0]);
     }
-    
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_ACCOUNT_TABLE);
+        db.execSQL(CREATE_WEIBO_GROUP_TABLE);
+        db.execSQL(CREATE_TIMELINE_POSITION_TABLE);
+        db.execSQL(CREATE_DRAFT_TABLE);
+        db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
+        db.execSQL(CREATE_DM_USER_TABLE);
+        db.execSQL(CREATE_FOLLOWING_ID_TABLE);
+        db.execSQL(CREATE_DM_CONVERSATION_TABLE);
+        db.execSQL(CREATE_WEIBO_FILTER_TABLE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        switch (oldVersion) {
+            case 9:
+                db.execSQL(CREATE_DRAFT_TABLE);
+            case 10:
+                db.execSQL(CREATE_FOLLOWING_AVATAR_PATH_TABLE);
+            case 11:
+                db.execSQL(CREATE_DM_USER_TABLE);
+            case 12:
+                db.execSQL("drop table if exists " + Table.DmUser.TABLE_NAME);
+                db.execSQL(CREATE_DM_USER_TABLE);
+            case 13:
+                db.execSQL(CREATE_FOLLOWING_ID_TABLE);
+            case 14:
+                db.execSQL(CREATE_DM_CONVERSATION_TABLE);
+            case 15:
+                db.delete(Table.DmUser.TABLE_NAME, null, null);
+            case 16:
+            case 17:
+                db.execSQL("drop table if exists " + Table.WeiboGroup.TABLE_NAME);
+                db.execSQL(CREATE_WEIBO_GROUP_TABLE);
+            case 18:
+                db.execSQL(CREATE_WEIBO_FILTER_TABLE);
+        }
+    }
+
     public static class DmUsers {
         public DirectMessagesUser[] users;
         public int nextCursor;
     }
-    
+
     private static final class Table {
         public static final class Account {
             public static final String TABLE_NAME = "account_table";
@@ -679,31 +681,31 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             public static final String TOKEN = "token";
             public static final String USER_INFO_DATA = "user_info_data";
         }
-        
+
         public static final class WeiboGroup {
             public static final String TABLE_NAME = "weibo_group_table";
             public static final String ACCOUNT_ID = "account_id";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class WeiboStatus {
             public static final String TABLE_NAME = "weibo_status_%d_%d";
             public static final String POSITION = "position";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class AtmeStatus {
             public static final String TABLE_NAME = "atme_status_%d_%d";
             public static final String POSITION = "position";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class Comment {
             public static final String TABLE_NAME = "comment_%d_%d";
             public static final String POSITION = "position";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class TimelinePosition {
             public static final String TABLE_NAME = "timeline_position";
             public static final String ACCOUNT_ID = "account_id";
@@ -712,7 +714,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             public static final String POSITION = "position";
             public static final String TOP = "top";
         }
-        
+
         public static final class Draft {
             public static final int TYPE_WEIBO = 0;
             public static final int TYPE_COMMENT = 1;
@@ -722,31 +724,31 @@ public class DatabaseUtils extends SQLiteOpenHelper {
             public static final String TYPE = "type";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class FollowingAvatarPath {
             public static final String TABLE_NAME = "following_avatar_path";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class DmUser {
             public static final String TABLE_NAME = "dm_user";
             public static final String ACCOUNT_ID = "account_id";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class FollowingId {
             public static final String TABLE_NAME = "following_ids";
             public static final String ACCOUNT_ID = "account_id";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class DmConversation {
             public static final String TABLE_NAME = "dm_conversation";
             public static final String ACCOUNT_ID = "account_id";
             public static final String USER_ID = "user_id";
             public static final String CONTENT_DATA = "content_data";
         }
-        
+
         public static final class WeiboFilter {
             public static final String TABLE_NAME = "weibo_filter";
             public static final String ID = "id";

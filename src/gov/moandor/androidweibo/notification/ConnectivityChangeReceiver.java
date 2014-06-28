@@ -13,12 +13,7 @@ import gov.moandor.androidweibo.util.Utilities;
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
     private static final int REQUEST_CODE = 0;
-    
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        judgeAlarm(context);
-    }
-    
+
     public static void judgeAlarm(Context context) {
         if (isConnected(context) && ConfigManager.isNotificationEnabled()) {
             startAlarm(context);
@@ -26,7 +21,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
             stopAlarm(context);
         }
     }
-    
+
     private static void startAlarm(Context context) {
         long time = Utilities.getNotificationInterval();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -36,7 +31,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
                 PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME, 0, time, pendingIntent);
     }
-    
+
     private static void stopAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent();
@@ -45,10 +40,15 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
                 PendingIntent.getService(context, REQUEST_CODE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
     }
-    
+
     private static boolean isConnected(Context context) {
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = manager.getActiveNetworkInfo();
         return info != null && info.isConnected();
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        judgeAlarm(context);
     }
 }

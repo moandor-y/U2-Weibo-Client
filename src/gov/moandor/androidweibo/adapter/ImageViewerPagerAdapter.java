@@ -16,30 +16,47 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import uk.co.senab.photoview.PhotoView;
-import uk.co.senab.photoview.PhotoViewAttacher;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.ImageViewerPictureReadTask;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ImageViewerPagerAdapter extends PagerAdapter {
     private ImageDownloader.ImageType mImageType;
     private String[] mUrls;
     private Activity mActivity;
-    
+    private GestureDetector.OnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            mActivity.finish();
+            return true;
+        }
+    };
+
     public ImageViewerPagerAdapter(ImageDownloader.ImageType imageType, String[] urls, Activity activity) {
         mImageType = imageType;
         mUrls = urls;
         mActivity = activity;
     }
-    
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static void setupForNewApi(WebView webView, WebSettings settings) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            settings.setDisplayZoomControls(false);
+            if (!ConfigManager.isPicHwAccelEnabled()) {
+                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+            }
+        }
+    }
+
     @Override
     public int getCount() {
         return mUrls.length;
     }
-    
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater = GlobalContext.getActivity().getLayoutInflater();
@@ -76,44 +93,26 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         container.addView(view);
         return view;
     }
-    
+
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view.equals(object);
     }
-    
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         if (object instanceof ViewGroup) {
             ((ViewPager) container).removeView((View) object);
         }
     }
-    
+
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
     }
-    
+
     public void setImageType(ImageDownloader.ImageType type, String[] urls) {
         mImageType = type;
         mUrls = urls;
     }
-    
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static void setupForNewApi(WebView webView, WebSettings settings) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            settings.setDisplayZoomControls(false);
-            if (!ConfigManager.isPicHwAccelEnabled()) {
-                webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-            }
-        }
-    }
-    
-    private GestureDetector.OnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            mActivity.finish();
-            return true;
-        }
-    };
 }

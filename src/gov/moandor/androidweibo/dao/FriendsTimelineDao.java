@@ -1,5 +1,8 @@
 package gov.moandor.androidweibo.dao;
 
+import java.util.Iterator;
+import java.util.List;
+
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.ConfigManager;
@@ -10,15 +13,21 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.filter.WeiboFilter;
 
-import java.util.Iterator;
-import java.util.List;
-
 public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
+    private static boolean contains(long[] array, long value) {
+        for (long element : array) {
+            if (value == element) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected String getUrl() {
         return UrlHelper.STATUSES_FRIENDS_TIMELINE;
     }
-    
+
     @Override
     public List<WeiboStatus> execute() throws WeiboException {
         List<WeiboStatus> result = super.execute();
@@ -47,14 +56,5 @@ public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
             }
         }
         return result;
-    }
-    
-    private static boolean contains(long[] array, long value) {
-        for (long element : array) {
-            if (value == element) {
-                return true;
-            }
-        }
-        return false;
     }
 }

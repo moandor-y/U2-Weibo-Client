@@ -19,36 +19,44 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
     private static final int CLICK = 1;
     private static final int UP = 2;
     private static final int DOWN = 3;
-    
+    private static LongClickableLinkMovementMethod sInstance;
+    private static Object FROM_BELOW = new NoCopySpan.Concrete();
     private CheckForLongPress mPendingCheckForLongPress;
     private Handler mHandler = new Handler();
     private boolean mHasPerformedLongPress;
     private boolean mPressed;
     private boolean mLongClickable = true;
     private float[] mLastEvent = new float[2];
-    
+
+    public static LongClickableLinkMovementMethod getInstance() {
+        if (sInstance == null) {
+            sInstance = new LongClickableLinkMovementMethod();
+        }
+        return sInstance;
+    }
+
     public void setLongClickable(boolean value) {
         mLongClickable = value;
     }
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected boolean handleMovementKey(TextView widget, Spannable buffer, int keyCode, int movementMetaState,
-            KeyEvent event) {
+                                        KeyEvent event) {
         switch (keyCode) {
-        case KeyEvent.KEYCODE_DPAD_CENTER:
-        case KeyEvent.KEYCODE_ENTER:
-            if (KeyEvent.metaStateHasNoModifiers(movementMetaState)) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0
-                        && action(CLICK, widget, buffer)) {
-                    return true;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+                if (KeyEvent.metaStateHasNoModifiers(movementMetaState)) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0
+                            && action(CLICK, widget, buffer)) {
+                        return true;
+                    }
                 }
-            }
-            break;
+                break;
         }
         return super.handleMovementKey(widget, buffer, keyCode, movementMetaState, event);
     }
-    
+
     @Override
     protected boolean up(TextView widget, Spannable buffer) {
         if (action(UP, widget, buffer)) {
@@ -56,7 +64,7 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         }
         return super.up(widget, buffer);
     }
-    
+
     @Override
     protected boolean down(TextView widget, Spannable buffer) {
         if (action(DOWN, widget, buffer)) {
@@ -64,7 +72,7 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         }
         return super.down(widget, buffer);
     }
-    
+
     @Override
     protected boolean left(TextView widget, Spannable buffer) {
         if (action(UP, widget, buffer)) {
@@ -72,7 +80,7 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         }
         return super.left(widget, buffer);
     }
-    
+
     @Override
     protected boolean right(TextView widget, Spannable buffer) {
         if (action(DOWN, widget, buffer)) {
@@ -80,7 +88,7 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         }
         return super.right(widget, buffer);
     }
-    
+
     private boolean action(int what, TextView widget, Spannable buffer) {
         Layout layout = widget.getLayout();
         int padding = widget.getTotalPaddingTop() + widget.getTotalPaddingBottom();
@@ -107,57 +115,57 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
             selStart = selEnd = -1;
         }
         switch (what) {
-        case CLICK:
-            if (selStart == selEnd) {
-                return false;
-            }
-            WeiboTextUrlSpan[] link = buffer.getSpans(selStart, selEnd, WeiboTextUrlSpan.class);
-            if (link.length != 1) {
-                return false;
-            }
-            link[0].onClick(widget);
-            break;
-        case UP:
-            int beststart,
-            bestend;
-            beststart = -1;
-            bestend = -1;
-            for (WeiboTextUrlSpan candidate : candidates) {
-                int end = buffer.getSpanEnd(candidate);
-                if (end < selEnd || selStart == selEnd) {
-                    if (end > bestend) {
-                        beststart = buffer.getSpanStart(candidate);
-                        bestend = end;
+            case CLICK:
+                if (selStart == selEnd) {
+                    return false;
+                }
+                WeiboTextUrlSpan[] link = buffer.getSpans(selStart, selEnd, WeiboTextUrlSpan.class);
+                if (link.length != 1) {
+                    return false;
+                }
+                link[0].onClick(widget);
+                break;
+            case UP:
+                int beststart,
+                        bestend;
+                beststart = -1;
+                bestend = -1;
+                for (WeiboTextUrlSpan candidate : candidates) {
+                    int end = buffer.getSpanEnd(candidate);
+                    if (end < selEnd || selStart == selEnd) {
+                        if (end > bestend) {
+                            beststart = buffer.getSpanStart(candidate);
+                            bestend = end;
+                        }
                     }
                 }
-            }
-            if (beststart >= 0) {
-                Selection.setSelection(buffer, bestend, beststart);
-                return true;
-            }
-            break;
-        case DOWN:
-            beststart = Integer.MAX_VALUE;
-            bestend = Integer.MAX_VALUE;
-            for (WeiboTextUrlSpan candidate : candidates) {
-                int start = buffer.getSpanStart(candidate);
-                
-                if (start > selStart || selStart == selEnd) {
-                    if (start < beststart) {
-                        beststart = start;
-                        bestend = buffer.getSpanEnd(candidate);
+                if (beststart >= 0) {
+                    Selection.setSelection(buffer, bestend, beststart);
+                    return true;
+                }
+                break;
+            case DOWN:
+                beststart = Integer.MAX_VALUE;
+                bestend = Integer.MAX_VALUE;
+                for (WeiboTextUrlSpan candidate : candidates) {
+                    int start = buffer.getSpanStart(candidate);
+
+                    if (start > selStart || selStart == selEnd) {
+                        if (start < beststart) {
+                            beststart = start;
+                            bestend = buffer.getSpanEnd(candidate);
+                        }
                     }
                 }
-            }
-            if (bestend < Integer.MAX_VALUE) {
-                Selection.setSelection(buffer, beststart, bestend);
-                return true;
-            }
-            break;
+                if (bestend < Integer.MAX_VALUE) {
+                    Selection.setSelection(buffer, beststart, bestend);
+                    return true;
+                }
+                break;
         }
         return false;
     }
-    
+
     @Override
     public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
         int action = event.getAction();
@@ -205,48 +213,30 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         }
         return super.onTouchEvent(widget, buffer, event);
     }
-    
+
     private void checkForLongClick(WeiboTextUrlSpan[] spans, View widget) {
         mHasPerformedLongPress = false;
         mPendingCheckForLongPress = new CheckForLongPress(spans, widget);
         mHandler.postDelayed(mPendingCheckForLongPress, ViewConfiguration.getLongPressTimeout());
     }
-    
+
     public void removeLongClickCallback() {
         if (mPendingCheckForLongPress != null) {
             mHandler.removeCallbacks(mPendingCheckForLongPress);
             mPendingCheckForLongPress = null;
         }
     }
-    
-    private class CheckForLongPress implements Runnable {
-        private WeiboTextUrlSpan[] mSpans;
-        private View mWidget;
-        
-        public CheckForLongPress(WeiboTextUrlSpan[] spans, View widget) {
-            mSpans = spans;
-            mWidget = widget;
-        }
-        
-        @Override
-        public void run() {
-            if (isPressed() && mLongClickable) {
-                mSpans[0].onLongClick(mWidget);
-                mHasPerformedLongPress = true;
-            }
-        }
-    }
-    
+
     public boolean isPressed() {
         return mPressed;
     }
-    
+
     @Override
     public void initialize(TextView widget, Spannable text) {
         Selection.removeSelection(text);
         text.removeSpan(FROM_BELOW);
     }
-    
+
     @Override
     public void onTakeFocus(TextView view, Spannable text, int dir) {
         Selection.removeSelection(text);
@@ -256,14 +246,22 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
             text.removeSpan(FROM_BELOW);
         }
     }
-    
-    public static LongClickableLinkMovementMethod getInstance() {
-        if (sInstance == null) {
-            sInstance = new LongClickableLinkMovementMethod();
+
+    private class CheckForLongPress implements Runnable {
+        private WeiboTextUrlSpan[] mSpans;
+        private View mWidget;
+
+        public CheckForLongPress(WeiboTextUrlSpan[] spans, View widget) {
+            mSpans = spans;
+            mWidget = widget;
         }
-        return sInstance;
+
+        @Override
+        public void run() {
+            if (isPressed() && mLongClickable) {
+                mSpans[0].onLongClick(mWidget);
+                mHasPerformedLongPress = true;
+            }
+        }
     }
-    
-    private static LongClickableLinkMovementMethod sInstance;
-    private static Object FROM_BELOW = new NoCopySpan.Concrete();
 }

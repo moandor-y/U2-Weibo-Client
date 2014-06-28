@@ -11,7 +11,7 @@ import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 
 public class ConfirmDeleteDialogFragment extends DialogFragment {
     MyAsyncTask<Void, Void, Void> mTask;
-    
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -25,7 +25,7 @@ public class ConfirmDeleteDialogFragment extends DialogFragment {
         builder.setNegativeButton(R.string.no, null);
         return builder.create();
     }
-    
+
     public void setTask(MyAsyncTask<Void, Void, Void> task) {
         mTask = task;
     }

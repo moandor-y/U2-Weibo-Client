@@ -3,56 +3,56 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
+    android:orientation="vertical">
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
-        
+        android:layout_weight="1">
+
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:drawSelectorOnTop="true" />
-        
+            android:drawSelectorOnTop="true"/>
+
     </android.support.v4.widget.SwipeRefreshLayout>
-    
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/action_height" >
-        
+        android:minHeight="@dimen/action_height">
+
         <View
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?quick_post_divider" />
-        
+            android:background="?quick_post_divider"/>
+
         <EditText
             android:id="@+id/send_dm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/divider"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/button_send"
             android:hint="@string/send_dm"
-            android:inputType="textCapSentences|textMultiLine" />
-        
+            android:inputType="textCapSentences|textMultiLine"/>
+
         <ImageButton
             android:id="@+id/button_send"
             style="@style/action_button"
             android:layout_width="@dimen/action_width"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_below="@+id/divider"
             android:layout_alignParentRight="true"
-            android:src="?icon_send"
-            android:contentDescription="@string/send" />
-        
+            android:layout_below="@+id/divider"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/send"
+            android:src="?icon_send"/>
+
     </RelativeLayout>
-    
+
 </LinearLayout>

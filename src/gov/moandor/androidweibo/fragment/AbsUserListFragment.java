@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.ISelectableAdapter;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
@@ -26,11 +28,9 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.List;
-
 public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean> extends Fragment {
     public static final String USER_ID = "user_id";
-    
+
     Adapter mAdapter;
     ListView mListView;
     MyAsyncTask<Void, ?, ?> mRefreshTask;
@@ -43,13 +43,13 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
     private ActionMode mActionMode;
     private ActionMode.Callback mActionModeCallback;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -57,12 +57,12 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             initContent();
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timeline_list, container, false);
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mListView = (ListView) view.findViewById(R.id.list);
@@ -80,26 +80,26 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
         mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
     }
-    
+
     public boolean isListViewFling() {
         return mListScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING;
     }
-    
+
     private boolean isLastItemVisible() {
         return mListView.getFirstVisiblePosition() + mListView.getChildCount() >= mAdapter.getCount() - 1;
     }
-    
+
     private void showLoadingFooter() {
         if (mListView.getFooterViewsCount() == 0) {
             mListView.addFooterView(mFooter);
             mFooterIcon.startAnimation(mFooterAnimation);
         }
     }
-    
+
     void hideLoadingFooter() {
         mListView.removeFooterView(mFooter);
     }
-    
+
     private void loadMore() {
         if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled() || mNoMoreUser) {
             return;
@@ -107,11 +107,11 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mRefreshTask = onCreateloLoadMoreTask();
         mRefreshTask.execute();
     }
-    
+
     void initContent() {
         refresh();
     }
-    
+
     public void refresh() {
         if (mRefreshTask != null || !mSwipeRefreshLayout.isEnabled()) {
             return;
@@ -120,39 +120,51 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mRefreshTask = onCreateRefreshTask();
         mRefreshTask.execute();
     }
-    
+
     public void setPullToRefreshEnabled(boolean enabled) {
         mSwipeRefreshLayout.setEnabled(enabled);
     }
-    
+
     public void onActionModeFinished() {
         mActionMode = null;
     }
-    
-    protected void onDaoCreated(BaseUserListDao<DataBean> dao) {}
-    
+
+    protected void onDaoCreated(BaseUserListDao<DataBean> dao) {
+    }
+
+    abstract void onItemClick(int position);
+
+    abstract MyAsyncTask<Void, ?, ?> onCreateRefreshTask();
+
+    abstract MyAsyncTask<Void, ?, ?> onCreateloLoadMoreTask();
+
+    protected abstract BaseUserListDao<DataBean> onCreateDao();
+
+    protected abstract ActionMode.Callback getActionModeCallback();
+
     private class OnListScrollListener implements AbsListView.OnScrollListener {
         @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
-        
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        }
+
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             mListScrollState = scrollState;
             switch (scrollState) {
-            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                mAdapter.notifyDataSetChanged();
-                ImageDownloader.setPauseImageReadTask(false);
-                if (isLastItemVisible()) {
-                    loadMore();
-                }
-                break;
-            case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
-                ImageDownloader.setPauseImageReadTask(true);
-                break;
+                case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                    mAdapter.notifyDataSetChanged();
+                    ImageDownloader.setPauseImageReadTask(false);
+                    if (isLastItemVisible()) {
+                        loadMore();
+                    }
+                    break;
+                case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
+                    ImageDownloader.setPauseImageReadTask(true);
+                    break;
             }
         }
     }
-    
+
     private class OnListItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -162,10 +174,10 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             AbsUserListFragment.this.onItemClick(position);
         }
     }
-    
+
     abstract class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseUserListDao<DataBean> mDao;
-        
+
         @Override
         protected void onPreExecute() {
             mDao = onCreateDao();
@@ -174,7 +186,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
         }
-        
+
         @Override
         protected List<DataBean> doInBackground(Void... v) {
             try {
@@ -187,7 +199,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
@@ -200,10 +212,10 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             }
         }
     }
-    
+
     abstract class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseUserListDao<DataBean> mDao;
-        
+
         @Override
         protected void onPreExecute() {
             showLoadingFooter();
@@ -214,7 +226,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setCursor(mNextCursor);
         }
-        
+
         @Override
         protected List<DataBean> doInBackground(Void... v) {
             try {
@@ -227,7 +239,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
@@ -237,7 +249,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             }
         }
     }
-    
+
     private class OnListItemLongClickListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -253,21 +265,11 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             return true;
         }
     }
-    
+
     private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {
             refresh();
         }
     }
-    
-    abstract void onItemClick(int position);
-    
-    abstract MyAsyncTask<Void, ?, ?> onCreateRefreshTask();
-    
-    abstract MyAsyncTask<Void, ?, ?> onCreateloLoadMoreTask();
-    
-    protected abstract BaseUserListDao<DataBean> onCreateDao();
-    
-    protected abstract ActionMode.Callback getActionModeCallback();
 }

@@ -5,6 +5,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
@@ -14,21 +16,19 @@ import gov.moandor.androidweibo.bean.TimelinePosition;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.GlobalContext;
 
-import java.util.List;
-
 public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
         extends AbsTimelineFragment<DataBean, TimelineListAdapter> {
     public static final String IS_FROM_UNREAD = "is_from_unread";
-    
+
     private boolean mIsFromUnread = false;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         mIsFromUnread = args != null && args.getBoolean(IS_FROM_UNREAD);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -37,7 +37,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             mRefreshTask.execute();
         }
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
@@ -46,7 +46,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             saveListPosition(account);
         }
     }
-    
+
     private boolean isThisCurrentFragment() {
         MainActivity activity = (MainActivity) getActivity();
         if (activity != null) {
@@ -54,7 +54,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
         }
         return false;
     }
-    
+
     public void notifyAccountOrGroupChanged() {
         if (mIsFromUnread) {
             return;
@@ -69,7 +69,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
         mRefreshTask = new LoadFromDatabaseTask();
         mRefreshTask.execute();
     }
-    
+
     private void restoreListPosition() {
         mListView.setVisibility(View.INVISIBLE);
         final int group = getGroup();
@@ -79,19 +79,31 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             protected TimelinePosition doInBackground(Void... params) {
                 return onRestoreListPosition(accountId, group);
             }
-            
+
             @Override
             protected void onPostExecute(TimelinePosition result) {
                 onListPositionRestored(result);
             }
         }.execute();
     }
-    
+
     void onListPositionRestored(TimelinePosition result) {
         mListView.setSelectionFromTop(result.position, result.top);
         mListView.setVisibility(View.VISIBLE);
     }
-    
+
+    abstract List<DataBean> getBeansFromDatabase(long accountId, int group);
+
+    abstract void saveRefreshResultToDatabase(List<DataBean> beans, long accountId, int group);
+
+    abstract void saveLoadMoreResultToDatabase(SparseArray<DataBean> beans, long accountId, int group);
+
+    public abstract void saveListPosition(Account account);
+
+    abstract TimelinePosition onRestoreListPosition(long accountId, int group);
+
+    protected abstract int getGroup();
+
     class MainRefreshTask extends RefreshTask {
         @Override
         protected void onPostExecute(List<DataBean> result) {
@@ -119,7 +131,7 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             }
         }
     }
-    
+
     class MainLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPostExecute(List<DataBean> result) {
@@ -140,11 +152,11 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             }
         }
     }
-    
+
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private long mAccountId;
         private int mGroup;
-        
+
         @Override
         protected void onPreExecute() {
             setPullToRefreshEnabled(false);
@@ -153,12 +165,12 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mGroup = getGroup();
         }
-        
+
         @Override
         protected List<DataBean> doInBackground(Void... v) {
             return getBeansFromDatabase(mAccountId, mGroup);
         }
-        
+
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
@@ -176,16 +188,4 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             }
         }
     }
-    
-    abstract List<DataBean> getBeansFromDatabase(long accountId, int group);
-    
-    abstract void saveRefreshResultToDatabase(List<DataBean> beans, long accountId, int group);
-    
-    abstract void saveLoadMoreResultToDatabase(SparseArray<DataBean> beans, long accountId, int group);
-    
-    public abstract void saveListPosition(Account account);
-    
-    abstract TimelinePosition onRestoreListPosition(long accountId, int group);
-    
-    protected abstract int getGroup();
 }

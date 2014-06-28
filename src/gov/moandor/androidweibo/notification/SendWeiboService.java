@@ -9,6 +9,8 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Random;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboDraft;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
@@ -25,26 +27,24 @@ import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.Random;
-
 public class SendWeiboService extends Service {
     public static final String TOKEN = Utilities.buildIntentExtraName("TOKEN");
     public static final String WEIBO_DRAFT = Utilities.buildIntentExtraName("WEIBO_DRAFT");
-    
+
     private NotificationManager mNotificationManager;
     private String mToken;
     private WeiboDraft mDraft;
-    
+
     @Override
     public void onCreate() {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
@@ -52,18 +52,18 @@ public class SendWeiboService extends Service {
         new SendTask().execute();
         return START_REDELIVER_INTENT;
     }
-    
+
     private PendingIntent getFailedClickIntent() {
         return PendingIntent.getActivity(getBaseContext(), 0, ActivityUtils.draftBoxActivity(),
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
-    
+
     private class SendTask extends MyAsyncTask<Void, Integer, Void> {
         private static final int WAITING_RESPONSE = -1;
         private static final int COMPLETE = -2;
-        
+
         private int mNotificationId;
-        
+
         @Override
         protected void onPreExecute() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -78,7 +78,7 @@ public class SendWeiboService extends Service {
             mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
             mNotificationManager.notify(mNotificationId, builder.build());
         }
-        
+
         @Override
         protected Void doInBackground(Void... v) {
             BaseSendWeiboDao<?> dao;
@@ -131,7 +131,7 @@ public class SendWeiboService extends Service {
             }
             return null;
         }
-        
+
         @Override
         protected void onProgressUpdate(Integer... values) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -142,21 +142,21 @@ public class SendWeiboService extends Service {
             builder.setSmallIcon(R.drawable.ic_upload);
             builder.setContentIntent(Utilities.newEmptyPendingIntent());
             switch (values[0]) {
-            case WAITING_RESPONSE:
-                builder.setContentTitle(getString(R.string.waiting_response));
-                builder.setNumber(100);
-                builder.setProgress(1, 1, false);
-                break;
-            case COMPLETE:
-                break;
-            default:
-                builder.setContentTitle(getString(R.string.uploading));
-                builder.setNumber(values[0]);
-                builder.setProgress(values[1], values[0], false);
+                case WAITING_RESPONSE:
+                    builder.setContentTitle(getString(R.string.waiting_response));
+                    builder.setNumber(100);
+                    builder.setProgress(1, 1, false);
+                    break;
+                case COMPLETE:
+                    break;
+                default:
+                    builder.setContentTitle(getString(R.string.uploading));
+                    builder.setNumber(values[0]);
+                    builder.setProgress(values[1], values[0], false);
             }
             mNotificationManager.notify(mNotificationId, builder.build());
         }
-        
+
         @Override
         protected void onCancelled() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -178,7 +178,7 @@ public class SendWeiboService extends Service {
                 }
             }, 3000);
         }
-        
+
         @Override
         protected void onPostExecute(Void result) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
@@ -199,10 +199,10 @@ public class SendWeiboService extends Service {
                 }
             }, 3000);
         }
-        
+
         private class UploadListener implements HttpUtils.UploadListener {
             private long mLastTime;
-            
+
             @Override
             public void onTransferring(int sent, int total) {
                 long time = SystemClock.uptimeMillis();
@@ -213,12 +213,12 @@ public class SendWeiboService extends Service {
                 double proportion = (double) sent / (double) total;
                 publishProgress((int) (100 * proportion), 100);
             }
-            
+
             @Override
             public void onWaitResponse() {
                 publishProgress(WAITING_RESPONSE);
             }
-            
+
             @Override
             public void onComplete() {
                 publishProgress(COMPLETE);

@@ -28,7 +28,7 @@ public class SettingsActivityOldApi extends AbsActivity {
     private static final String FONT_SIZE_DIALOG = "font_size_dialog";
     private static final String LOAD_WEIBO_COUNT_DIALOG = "load_weibo_count_dialog";
     private static final String COMMENT_REPOST_LIST_AVATAR_MODE_DIALOG = "comment_repost_list_avatar_mode_dialog";
-    
+
     private static boolean sNeedRestart;
     private TextView mThemeStatus;
     private TextView mFontSizeStatus;
@@ -56,7 +56,22 @@ public class SettingsActivityOldApi extends AbsActivity {
     private String[] mFontSizes;
     private String[] mCommentRepostListAvatarModes;
     private String[] mLoadWeiboCounts;
-    
+
+    static AlertDialog.Builder buildListDialog(int titleResId, String[] items, int checkedItem,
+                                               DialogInterface.OnClickListener listener, Context context) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setSingleChoiceItems(items, checkedItem, listener);
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.setTitle(titleResId);
+        return builder;
+    }
+
+    private static void requestRestart() {
+        if (!sNeedRestart) {
+            sNeedRestart = true;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +132,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.settings);
     }
-    
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
@@ -133,37 +148,37 @@ public class SettingsActivityOldApi extends AbsActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            if (sNeedRestart) {
-                sNeedRestart = false;
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-            finish();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                if (sNeedRestart) {
+                    sNeedRestart = false;
+                    Intent intent = new Intent();
+                    intent.setClass(GlobalContext.getInstance(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     private void setupTheme() {
         mThemeStatus.setText(mThemes[ConfigManager.getAppTheme()]);
     }
-    
+
     private void setupFontSize() {
         mFontSizeStatus.setText(mFontSizes[ConfigManager.getFontSizeMode()]);
     }
-    
+
     private void setupFastScroll() {
         mFastScroll.setChecked(ConfigManager.isFastScrollEnabled());
     }
-    
+
     private void setupLoadWeiboCount() {
         int count = ConfigManager.getLoadWeiboCountMode();
         if (count != 0) {
@@ -172,11 +187,11 @@ public class SettingsActivityOldApi extends AbsActivity {
             mLoadWeiboCountStatus.setText(R.string.auto);
         }
     }
-    
+
     private void setupNoPictureMode() {
         mNoPictureMode.setChecked(ConfigManager.isNoPictureMode());
     }
-    
+
     private void setupAvatarMode() {
         if (ConfigManager.isNoPictureMode()) {
             mAvatarModeLayout.setEnabled(false);
@@ -189,7 +204,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         }
         mAvatarModeStatus.setText(mAvatarModes[ConfigManager.getAvatarQuality()]);
     }
-    
+
     private void setupPictureMode() {
         if (ConfigManager.isNoPictureMode()) {
             mPictureModeLayout.setEnabled(false);
@@ -202,7 +217,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         }
         mPictureModeStatus.setText(mPictureModes[ConfigManager.getPictureQuality()]);
     }
-    
+
     private void setupPictureWifiMode() {
         if (ConfigManager.isNoPictureMode()) {
             mPictureWifiModeLayout.setEnabled(false);
@@ -215,7 +230,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         }
         mPictureWifiModeStatus.setText(mPictureModes[ConfigManager.getPictureWifiQuality()]);
     }
-    
+
     private void setupCommentRepostListAvatarMode() {
         if (ConfigManager.isNoPictureMode()) {
             mCommentRepostListAvatarLayout.setEnabled(false);
@@ -229,12 +244,12 @@ public class SettingsActivityOldApi extends AbsActivity {
         mCommentRepostListAvatarStatus.setText(mCommentRepostListAvatarModes[ConfigManager
                 .getCommentRepostListAvatarMode()]);
     }
-    
+
     private void setupWifiAutoDownloadPic() {
         mWifiAutoDownloadPic.setChecked(ConfigManager.isWifiAutoDownloadPicEnabled());
         mWifiAutoDownloadPic.setEnabled(!ConfigManager.isNoPictureMode());
     }
-    
+
     private void setupListHwAccel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             mListHwAccel.setChecked(ConfigManager.isListHwAccelEnabled());
@@ -242,7 +257,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             mListHwAccel.setEnabled(false);
         }
     }
-    
+
     private void setupPicHwAccel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             mPicHwAccel.setChecked(ConfigManager.isPicHwAccelEnabled());
@@ -250,22 +265,20 @@ public class SettingsActivityOldApi extends AbsActivity {
             mPicHwAccel.setEnabled(false);
         }
     }
-    
-    static AlertDialog.Builder buildListDialog(int titleResId, String[] items, int checkedItem,
-            DialogInterface.OnClickListener listener, Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setSingleChoiceItems(items, checkedItem, listener);
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setTitle(titleResId);
-        return builder;
-    }
-    
-    private static void requestRestart() {
-        if (!sNeedRestart) {
-            sNeedRestart = true;
+
+    public static class SettingsDialogFragment extends DialogFragment {
+        private AlertDialog.Builder mBuilder;
+
+        public void setBuilder(AlertDialog.Builder builder) {
+            mBuilder = builder;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            return mBuilder.create();
         }
     }
-    
+
     private class OnNotificationClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -274,7 +287,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             startActivity(intent);
         }
     }
-    
+
     private class OnThemeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -286,7 +299,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             dialog.show(getSupportFragmentManager(), THEME_DIALOG);
         }
     }
-    
+
     private class OnFontSizeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -298,7 +311,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             dialog.show(getSupportFragmentManager(), FONT_SIZE_DIALOG);
         }
     }
-    
+
     private class OnFastScrollClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -307,7 +320,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnLoadWeiboCountClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -319,7 +332,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             dialog.show(getSupportFragmentManager(), LOAD_WEIBO_COUNT_DIALOG);
         }
     }
-    
+
     private class OnNoPictureModeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -333,7 +346,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             setupWifiAutoDownloadPic();
         }
     }
-    
+
     private class OnAvatarModeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -345,7 +358,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             dialog.show(getSupportFragmentManager(), AVATAR_MODE_DIALOG);
         }
     }
-    
+
     private class OnPictureModeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -357,7 +370,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             dialog.show(getSupportFragmentManager(), PICTURE_MODE_DIALOG);
         }
     }
-    
+
     private class OnPictureWifiModeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -369,7 +382,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             dialog.show(getSupportFragmentManager(), PICTURE_WIFI_MODE_DIALOG);
         }
     }
-    
+
     private class OnWifiAutoDownloadPicClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -378,7 +391,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnListHwAccelClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -387,7 +400,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnPicHwAccelClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -396,20 +409,21 @@ public class SettingsActivityOldApi extends AbsActivity {
             requestRestart();
         }
     }
-    
+
     private class OnCommentRepostListAvatarModeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             AlertDialog.Builder builder =
                     buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, ConfigManager
-                            .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(),
-                            SettingsActivityOldApi.this);
+                                    .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(),
+                            SettingsActivityOldApi.this
+                    );
             SettingsDialogFragment dialog = new SettingsDialogFragment();
             dialog.setBuilder(builder);
             dialog.show(getSupportFragmentManager(), COMMENT_REPOST_LIST_AVATAR_MODE_DIALOG);
         }
     }
-    
+
     private class OnThemeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -428,7 +442,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             overridePendingTransition(R.anim.stay, R.anim.activity_fade_out);
         }
     }
-    
+
     private class OnFontSizeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -441,7 +455,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             setupFontSize();
         }
     }
-    
+
     private class OnLoadWeiboCountSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -454,7 +468,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             setupLoadWeiboCount();
         }
     }
-    
+
     private class OnAvatarModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -467,7 +481,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             setupAvatarMode();
         }
     }
-    
+
     private class OnPictureModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -480,7 +494,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             setupPictureMode();
         }
     }
-    
+
     private class OnPictureWifiModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -493,7 +507,7 @@ public class SettingsActivityOldApi extends AbsActivity {
             setupPictureWifiMode();
         }
     }
-    
+
     private class OnCommentRepostListAvatarModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -503,19 +517,6 @@ public class SettingsActivityOldApi extends AbsActivity {
             ConfigManager.setCommentRepostListAvatarMode(which);
             dialog.dismiss();
             setupCommentRepostListAvatarMode();
-        }
-    }
-    
-    public static class SettingsDialogFragment extends DialogFragment {
-        private AlertDialog.Builder mBuilder;
-        
-        public void setBuilder(AlertDialog.Builder builder) {
-            mBuilder = builder;
-        }
-        
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return mBuilder.create();
         }
     }
 }

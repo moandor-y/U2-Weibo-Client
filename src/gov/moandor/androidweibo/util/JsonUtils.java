@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.DirectMessage;
 import gov.moandor.androidweibo.bean.DirectMessagesUser;
@@ -15,9 +18,6 @@ import gov.moandor.androidweibo.bean.WeiboGeo;
 import gov.moandor.androidweibo.bean.WeiboGroup;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.bean.WeiboUser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class JsonUtils {
     public static List<WeiboStatus> getWeiboStatusesFromJson(String jsonStr) throws WeiboException {
@@ -35,7 +35,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static List<WeiboStatus> getWeiboRepostsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
@@ -51,7 +51,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static List<WeiboStatus> getFavoritesFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject json = new JSONObject(jsonStr);
@@ -67,7 +67,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static WeiboStatus getWeiboStatusFromJson(String jsonStr) throws WeiboException {
         try {
             return getWeiboStatusFromJson(new JSONObject(jsonStr));
@@ -76,7 +76,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static WeiboStatus getWeiboStatusFromJson(JSONObject json) throws JSONException {
         WeiboStatus weiboStatus = new WeiboStatus();
         weiboStatus.createdAt = json.optString("created_at", null);
@@ -116,7 +116,7 @@ public class JsonUtils {
         }
         return weiboStatus;
     }
-    
+
     public static List<WeiboUser> getWeiboUsersFromJson(JSONObject json) throws WeiboException {
         try {
             JSONArray users = json.getJSONArray("users");
@@ -131,7 +131,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static WeiboUser getWeiboUserFromJson(String jsonStr) throws WeiboException {
         try {
             return getWeiboUserFromJson(new JSONObject(jsonStr));
@@ -140,7 +140,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     private static WeiboUser getWeiboUserFromJson(JSONObject json) {
         WeiboUser result = new WeiboUser();
         result.id = json.optLong("id");
@@ -163,7 +163,7 @@ public class JsonUtils {
         result.onlineStatus = json.optInt("online_status");
         return result;
     }
-    
+
     private static WeiboGeo getWeiboGeoFromJson(JSONObject json) throws JSONException {
         JSONArray array = json.optJSONArray("coordinates");
         if (array != null) {
@@ -175,7 +175,7 @@ public class JsonUtils {
             return null;
         }
     }
-    
+
     public static long getWeiboAccountIdFromJson(String jsonStr) throws WeiboException {
         JSONObject json;
         try {
@@ -185,9 +185,9 @@ public class JsonUtils {
             Logger.logException(e);
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
-        
+
     }
-    
+
     public static List<DirectMessagesUser> getDmUsersFromJson(JSONObject json) throws WeiboException {
         List<DirectMessagesUser> result = new ArrayList<DirectMessagesUser>();
         try {
@@ -203,7 +203,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     private static DirectMessagesUser getDmUserFromJson(JSONObject json) throws JSONException {
         WeiboUser user = getWeiboUserFromJson(json.getJSONObject("user"));
         DirectMessage dm = getDmFromJson(json.getJSONObject("direct_message"));
@@ -213,7 +213,7 @@ public class JsonUtils {
         result.unreadCount = json.getInt("unread_count");
         return result;
     }
-    
+
     public static DirectMessage getDmFromJson(String jsonStr) throws WeiboException {
         try {
             return getDmFromJson(new JSONObject(jsonStr));
@@ -222,7 +222,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     private static DirectMessage getDmFromJson(JSONObject json) throws JSONException {
         DirectMessage result = new DirectMessage();
         result.id = json.getLong("id");
@@ -232,7 +232,7 @@ public class JsonUtils {
         result.recipient = getWeiboUserFromJson(json.getJSONObject("recipient"));
         return result;
     }
-    
+
     public static List<WeiboComment> getWeiboCommentsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
@@ -248,7 +248,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     private static WeiboComment getWeiboCommentFromJson(JSONObject json) throws JSONException {
         WeiboComment weiboComment = new WeiboComment();
         weiboComment.createdAt = json.optString("created_at", null);
@@ -270,7 +270,7 @@ public class JsonUtils {
         }
         return weiboComment;
     }
-    
+
     public static UnreadCount getUnreadCountFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject json = new JSONObject(jsonStr);
@@ -286,7 +286,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static List<UserSuggestion> getUserSuggestionsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONArray json = new JSONArray(jsonStr);
@@ -306,7 +306,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static UserIds getUserIdsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject json = new JSONObject(jsonStr);
@@ -325,7 +325,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static List<DirectMessage> getDmsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject json = new JSONObject(jsonStr);
@@ -340,7 +340,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     public static List<WeiboGroup> getGroupsFromJson(String jsonStr) throws WeiboException {
         try {
             JSONObject json = new JSONObject(jsonStr);
@@ -355,7 +355,7 @@ public class JsonUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     private static WeiboGroup getGroupFromJson(JSONObject json) throws JSONException {
         WeiboGroup result = new WeiboGroup();
         result.id = json.getLong("id");

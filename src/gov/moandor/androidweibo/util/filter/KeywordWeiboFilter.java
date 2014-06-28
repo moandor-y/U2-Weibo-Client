@@ -6,7 +6,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 
 public class KeywordWeiboFilter extends AbsWeiboTextFilter {
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     public boolean shouldBeRemoved(WeiboStatus status) {
         if (status.retweetStatus != null && mCheckReposted) {
@@ -14,7 +14,7 @@ public class KeywordWeiboFilter extends AbsWeiboTextFilter {
         }
         return matches(status.text);
     }
-    
+
     @Override
     protected String getType() {
         return GlobalContext.getInstance().getString(R.string.keywords);

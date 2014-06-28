@@ -3,63 +3,63 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
+    android:orientation="vertical">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" >
-        
+        android:layout_weight="1">
+
         <EditText
             android:id="@+id/edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="left|top"
-            android:inputType="textCapSentences|textMultiLine"
-            android:hint="@string/write_hint" />
-        
+            android:hint="@string/write_hint"
+            android:inputType="textCapSentences|textMultiLine"/>
+
         <ImageView
             android:id="@+id/preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.2"
+            android:contentDescription="@string/weibo_pic"
             android:scaleType="centerCrop"
-            android:visibility="gone"
-            android:contentDescription="@string/weibo_pic" />
-        
+            android:visibility="gone"/>
+
     </FrameLayout>
-    
+
     <RelativeLayout
         android:id="@+id/action"
         android:layout_width="match_parent"
         android:layout_height="@dimen/action_height"
-        android:background="?bottom_background" >
-        
+        android:background="?bottom_background">
+
         <LinearLayout
             android:id="@+id/bottom_menu"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:orientation="horizontal" />
-        
+            android:orientation="horizontal"/>
+
         <Button
             android:id="@+id/send"
             style="@style/action_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:textAppearance="@style/text_appearance_action_bar_menu"
+            android:drawableRight="@drawable/ic_send_dark"
             android:text="@string/send"
-            android:textColor="@color/action_menu_text_color"
-            android:drawableRight="@drawable/ic_send_dark" />
-        
+            android:textAppearance="@style/text_appearance_action_bar_menu"
+            android:textColor="@color/action_menu_text_color"/>
+
     </RelativeLayout>
-    
+
     <gov.moandor.androidweibo.widget.SmileyPicker
         android:id="@+id/smiley_picker"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:columnWidth="30dp"
-        android:visibility="gone" />
-    
+        android:visibility="gone"/>
+
 </LinearLayout>

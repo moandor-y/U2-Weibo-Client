@@ -23,12 +23,12 @@ public class WriteCommentActivity extends AbsWriteActivity {
     public static final String DRAFT = Utilities.buildIntentExtraName("DRAFT");
     private static final String STATE_COMMENT_ORI = "state_comment_ori";
     private static final String STATE_REPOST_WHEN_COMMENT = "state_repost_when_comment";
-    
+
     private boolean mCommentOri;
     private boolean mRepostWhenComment;
     private WeiboStatus mCommentedStatus;
     private WeiboComment mRepliedComment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +62,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
             mRepostWhenComment = savedInstanceState.getBoolean(STATE_REPOST_WHEN_COMMENT);
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_write_comment, menu);
@@ -74,40 +74,40 @@ public class WriteCommentActivity extends AbsWriteActivity {
         menu.findItem(R.id.repost_when_comment).setChecked(mRepostWhenComment);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.comment_ori:
-            if (item.isChecked()) {
-                item.setChecked(false);
-                mCommentOri = false;
-            } else {
-                item.setChecked(true);
-                mCommentOri = true;
-            }
-            return true;
-        case R.id.repost_when_comment:
-            if (item.isChecked()) {
-                item.setChecked(false);
-                mRepostWhenComment = false;
-            } else {
-                item.setChecked(true);
-                mRepostWhenComment = true;
-            }
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.comment_ori:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    mCommentOri = false;
+                } else {
+                    item.setChecked(true);
+                    mCommentOri = true;
+                }
+                return true;
+            case R.id.repost_when_comment:
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    mRepostWhenComment = false;
+                } else {
+                    item.setChecked(true);
+                    mRepostWhenComment = true;
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(STATE_COMMENT_ORI, mCommentOri);
         outState.putBoolean(STATE_REPOST_WHEN_COMMENT, mRepostWhenComment);
     }
-    
+
     @Override
     void onSend(String content) {
         Intent intent = new Intent();
@@ -117,7 +117,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
         startService(intent);
         finish();
     }
-    
+
     @Override
     void onCreateBottomMenu(ViewGroup container) {
         getLayoutInflater().inflate(R.layout.bottom_menu_write_no_pic, container);
@@ -125,22 +125,22 @@ public class WriteCommentActivity extends AbsWriteActivity {
         CheatSheet.setup(container.findViewById(R.id.at), R.string.mention);
         CheatSheet.setup(container.findViewById(R.id.emotion), R.string.insert_emotion);
     }
-    
+
     @Override
     void onBottomMenuItemSelected(View view) {
         switch (view.getId()) {
-        case R.id.insert_topic:
-            insertTopic();
-            break;
-        case R.id.at:
-            atUser();
-            break;
-        case R.id.emotion:
-            toggleEmotionPanel();
-            break;
+            case R.id.insert_topic:
+                insertTopic();
+                break;
+            case R.id.at:
+                atUser();
+                break;
+            case R.id.emotion:
+                toggleEmotionPanel();
+                break;
         }
     }
-    
+
     @Override
     CommentDraft onCreateDraft(String content) {
         CommentDraft draft = new CommentDraft();

@@ -8,7 +8,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 public class AccountIdDao extends BaseHttpDao<Long> {
     private String mToken;
-    
+
     @Override
     public Long execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -17,12 +17,12 @@ public class AccountIdDao extends BaseHttpDao<Long> {
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getWeiboAccountIdFromJson(response);
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.ACCOUNT_GET_UID;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }

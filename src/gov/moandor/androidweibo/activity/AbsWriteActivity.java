@@ -29,17 +29,16 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.widget.SmileyPicker;
 
 public abstract class AbsWriteActivity extends AbsActivity {
+    public static final String AT_USER_RESULT_NAME = Utilities.buildIntentExtraName("AT_USER_RESULT_NAME");
     private static final int MAX_LENGTH = 140;
     private static final int REQUEST_AT_USER = 2;
     private static final long SMILEY_PICKER_DELAY = 100;
     private static final String SAVE_DRAFT_DIALOG = "save_draft_dialog";
-    public static final String AT_USER_RESULT_NAME = Utilities.buildIntentExtraName("AT_USER_RESULT_NAME");
-    
     EditText mEditText;
     private SmileyPicker mSmileyPicker;
     private Button mSendButton;
     private MyAsyncTask<Void, Void, Void> mSaveDraftTask;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +67,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             view.setOnClickListener(listener);
         }
     }
-    
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -76,31 +75,31 @@ public abstract class AbsWriteActivity extends AbsActivity {
             return;
         }
         switch (requestCode) {
-        case REQUEST_AT_USER:
-            UserSuggestion suggestion = data.getParcelableExtra(AT_USER_RESULT_NAME);
-            int index = mEditText.getSelectionStart();
-            String toInsert = "@" + suggestion.nickname + " ";
-            StringBuilder stringBuilder = new StringBuilder(mEditText.getText());
-            stringBuilder.insert(index, toInsert);
-            mEditText.setText(stringBuilder.toString());
-            mEditText.setSelection(index + toInsert.length());
+            case REQUEST_AT_USER:
+                UserSuggestion suggestion = data.getParcelableExtra(AT_USER_RESULT_NAME);
+                int index = mEditText.getSelectionStart();
+                String toInsert = "@" + suggestion.nickname + " ";
+                StringBuilder stringBuilder = new StringBuilder(mEditText.getText());
+                stringBuilder.insert(index, toInsert);
+                mEditText.setText(stringBuilder.toString());
+                mEditText.setSelection(index + toInsert.length());
         }
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            if (!TextUtils.isEmpty(mEditText.getText())) {
-                new SaveDraftDialogFragment().show(getSupportFragmentManager(), SAVE_DRAFT_DIALOG);
-            } else {
-                finish();
-            }
-            return true;
+            case android.R.id.home:
+                if (!TextUtils.isEmpty(mEditText.getText())) {
+                    new SaveDraftDialogFragment().show(getSupportFragmentManager(), SAVE_DRAFT_DIALOG);
+                } else {
+                    finish();
+                }
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     @Override
     public void onBackPressed() {
         if (mSmileyPicker.getVisibility() == View.VISIBLE) {
@@ -111,7 +110,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             finish();
         }
     }
-    
+
     private void hideSmileyPicker() {
         Utilities.showKeyboard(mEditText);
         GlobalContext.runOnUiThread(new Runnable() {
@@ -121,7 +120,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             }
         }, SMILEY_PICKER_DELAY);
     }
-    
+
     private void showSmileyPicker() {
         Utilities.hideKeyboard(mEditText.getWindowToken());
         GlobalContext.runOnUiThread(new Runnable() {
@@ -131,7 +130,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             }
         }, SMILEY_PICKER_DELAY);
     }
-    
+
     void toggleEmotionPanel() {
         if (mSmileyPicker.getVisibility() == View.VISIBLE) {
             hideSmileyPicker();
@@ -139,7 +138,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
             showSmileyPicker();
         }
     }
-    
+
     private void saveDraft() {
         if (mSaveDraftTask != null && mSaveDraftTask.getStatus() != MyAsyncTask.Status.FINISHED) {
             return;
@@ -151,7 +150,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
                 DatabaseUtils.insertDraft(draft);
                 return null;
             }
-            
+
             @Override
             protected void onPostExecute(Void result) {
                 finish();
@@ -159,7 +158,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
         };
         mSaveDraftTask.execute();
     }
-    
+
     void insertTopic() {
         int index = mEditText.getSelectionStart();
         StringBuilder stringBuilder = new StringBuilder(mEditText.getText());
@@ -167,72 +166,19 @@ public abstract class AbsWriteActivity extends AbsActivity {
         mEditText.setText(stringBuilder.toString());
         mEditText.setSelection(index + 1);
     }
-    
+
     void atUser() {
         startActivityForResult(ActivityUtils.atUserActivity(), REQUEST_AT_USER);
     }
-    
-    private class OnSmileyClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            String key = SmileyPicker.getKey(position);
-            String old = mEditText.getText().toString();
-            int index = mEditText.getSelectionStart();
-            StringBuilder stringBuilder = new StringBuilder(old);
-            stringBuilder.insert(index, key);
-            mEditText.setText(stringBuilder.toString());
-            mEditText.setSelection(index + key.length());
-        }
-    }
-    
-    private class OnSendClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            String content = mEditText.getText().toString();
-            if (TextUtils.isEmpty(content)) {
-                mEditText.setError(getString(R.string.cannot_be_empty));
-                return;
-            } else if (Utilities.sendLength(content) >= MAX_LENGTH) {
-                mEditText.setError(getString(R.string.too_many_words));
-                return;
-            }
-            onSend(content);
-            Utilities.hideKeyboard(mEditText.getWindowToken());
-        }
-    }
-    
-    private class LengthTextWatcher implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-        
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            int len = Utilities.sendLength(mEditText.getText().toString());
-            if (len == 0) {
-                mSendButton.setTextColor(getResources().getColor(R.color.action_menu_text_color));
-                mSendButton.setText(R.string.send);
-            } else {
-                int left = MAX_LENGTH - len;
-                if (left < 0) {
-                    mSendButton.setTextColor(Color.RED);
-                } else {
-                    mSendButton.setTextColor(getResources().getColor(R.color.action_menu_text_color));
-                }
-                mSendButton.setText(String.valueOf(left));
-            }
-        }
-        
-        @Override
-        public void afterTextChanged(Editable s) {}
-    }
-    
-    private class OnBottomMenuItemClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            onBottomMenuItemSelected(v);
-        }
-    }
-    
+
+    abstract void onSend(String content);
+
+    abstract void onCreateBottomMenu(ViewGroup container);
+
+    abstract void onBottomMenuItemSelected(View view);
+
+    abstract AbsDraftBean onCreateDraft(String content);
+
     public static class SaveDraftDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -253,12 +199,67 @@ public abstract class AbsWriteActivity extends AbsActivity {
             return builder.create();
         }
     }
-    
-    abstract void onSend(String content);
-    
-    abstract void onCreateBottomMenu(ViewGroup container);
-    
-    abstract void onBottomMenuItemSelected(View view);
-    
-    abstract AbsDraftBean onCreateDraft(String content);
+
+    private class OnSmileyClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            String key = SmileyPicker.getKey(position);
+            String old = mEditText.getText().toString();
+            int index = mEditText.getSelectionStart();
+            StringBuilder stringBuilder = new StringBuilder(old);
+            stringBuilder.insert(index, key);
+            mEditText.setText(stringBuilder.toString());
+            mEditText.setSelection(index + key.length());
+        }
+    }
+
+    private class OnSendClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            String content = mEditText.getText().toString();
+            if (TextUtils.isEmpty(content)) {
+                mEditText.setError(getString(R.string.cannot_be_empty));
+                return;
+            } else if (Utilities.sendLength(content) >= MAX_LENGTH) {
+                mEditText.setError(getString(R.string.too_many_words));
+                return;
+            }
+            onSend(content);
+            Utilities.hideKeyboard(mEditText.getWindowToken());
+        }
+    }
+
+    private class LengthTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            int len = Utilities.sendLength(mEditText.getText().toString());
+            if (len == 0) {
+                mSendButton.setTextColor(getResources().getColor(R.color.action_menu_text_color));
+                mSendButton.setText(R.string.send);
+            } else {
+                int left = MAX_LENGTH - len;
+                if (left < 0) {
+                    mSendButton.setTextColor(Color.RED);
+                } else {
+                    mSendButton.setTextColor(getResources().getColor(R.color.action_menu_text_color));
+                }
+                mSendButton.setText(String.valueOf(left));
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    }
+
+    private class OnBottomMenuItemClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            onBottomMenuItemSelected(v);
+        }
+    }
 }

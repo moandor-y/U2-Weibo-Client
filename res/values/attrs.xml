@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <attr name="icon_comment" format="reference"/>
     <attr name="icon_repost" format="reference"/>
     <attr name="icon_gps" format="reference"/>
@@ -18,5 +18,5 @@
     <attr name="item_background" format="reference"/>
     <attr name="icon_refresh" format="reference"/>
     <attr name="bottom_background" format="reference"/>
-    
+
 </resources>

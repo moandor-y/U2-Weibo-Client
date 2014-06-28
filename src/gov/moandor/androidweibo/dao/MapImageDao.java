@@ -22,7 +22,7 @@ public class MapImageDao extends BaseHttpDao<Bitmap> {
     private String mToken;
     private double mLatitude;
     private double mLongitude;
-    
+
     @Override
     public Bitmap execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -48,20 +48,20 @@ public class MapImageDao extends BaseHttpDao<Bitmap> {
         }
         return null;
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.LOCATION_BASE_GET_MAP_IMAGE;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setLatitude(double latitude) {
         mLatitude = latitude;
     }
-    
+
     public void setLongitude(double longitude) {
         mLongitude = longitude;
     }

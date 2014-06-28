@@ -8,18 +8,18 @@ import android.widget.Toast;
 
 public class CheatSheet {
     private static final int TOAST_HEIGHT = Utilities.dpToPx(48);
-    
+
     public static void setup(View view, int textResId) {
         view.setOnLongClickListener(new OnLongClickListener(textResId));
     }
-    
+
     private static class OnLongClickListener implements View.OnLongClickListener {
         private int mTextResId;
-        
+
         public OnLongClickListener(int textResId) {
             mTextResId = textResId;
         }
-        
+
         @Override
         public boolean onLongClick(View v) {
             int[] screenPos = new int[2];

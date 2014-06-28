@@ -11,11 +11,11 @@ public class ViewPagerFixed extends ViewPager {
     public ViewPagerFixed(Context context) {
         super(context);
     }
-    
+
     public ViewPagerFixed(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-    
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         try {
@@ -25,7 +25,7 @@ public class ViewPagerFixed extends ViewPager {
         }
         return false;
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         try {

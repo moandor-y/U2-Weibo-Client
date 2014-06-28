@@ -14,7 +14,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 public class WeiboMidToIdDao extends BaseHttpDao<Long> {
     private String mToken;
     private String mMid;
-    
+
     @Override
     public Long execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -32,16 +32,16 @@ public class WeiboMidToIdDao extends BaseHttpDao<Long> {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.json_error));
         }
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.STATUSES_QUERYID;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }
-    
+
     public void setMid(String mid) {
         mMid = mid;
     }

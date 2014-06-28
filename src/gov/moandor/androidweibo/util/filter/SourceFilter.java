@@ -6,7 +6,7 @@ import gov.moandor.androidweibo.util.GlobalContext;
 
 public class SourceFilter extends AbsWeiboTextFilter {
     private static final long serialVersionUID = 1L;
-    
+
     @Override
     public boolean shouldBeRemoved(WeiboStatus status) {
         if (status.retweetStatus != null && mCheckReposted) {
@@ -14,7 +14,7 @@ public class SourceFilter extends AbsWeiboTextFilter {
         }
         return matches(status.source);
     }
-    
+
     @Override
     protected String getType() {
         return GlobalContext.getInstance().getString(R.string.source);

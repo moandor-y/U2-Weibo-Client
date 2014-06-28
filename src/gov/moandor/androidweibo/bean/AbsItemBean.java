@@ -11,14 +11,14 @@ public abstract class AbsItemBean implements Parcelable {
     public String text;
     public String source;
     public WeiboUser weiboUser;
-    
+
     public transient SpannableString textSpannable;
-    
+
     @Override
     public int describeContents() {
         return 0;
     }
-    
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(createdAt);
@@ -28,7 +28,7 @@ public abstract class AbsItemBean implements Parcelable {
         dest.writeString(source);
         dest.writeParcelable(weiboUser, flags);
     }
-    
+
     protected static abstract class ParcelableCreator<T extends AbsItemBean> implements Parcelable.Creator<T> {
         @Override
         public T createFromParcel(Parcel source) {
@@ -41,7 +41,7 @@ public abstract class AbsItemBean implements Parcelable {
             result.weiboUser = source.readParcelable(WeiboUser.class.getClassLoader());
             return result;
         }
-        
+
         protected abstract T onCreateObject();
     }
 }

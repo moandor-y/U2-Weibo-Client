@@ -26,10 +26,10 @@ public class UserActivity extends AbsActivity {
     public static final String USER_NAME = Utilities.buildIntentExtraName("USER_NAME");
     public static final String USER_ID = Utilities.buildIntentExtraName("USER_ID");
     private static final String LOADING_DIALOG = "loading_dialog";
-    
+
     private WeiboUser mUser;
     private ProfileFragment mFragment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,13 +45,13 @@ public class UserActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_user, menu);
         return true;
     }
-    
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (mUser == null) {
@@ -73,25 +73,25 @@ public class UserActivity extends AbsActivity {
         }
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.follow:
-            new FollowTask(mUser, new OnFollowFinishedListener()).execute();
-            return true;
-        case R.id.unfollow:
-        case R.id.followed_each_other:
-            new UnfollowTask(mUser, new OnUnfollowFinishedListener()).execute();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.follow:
+                new FollowTask(mUser, new OnFollowFinishedListener()).execute();
+                return true;
+            case R.id.unfollow:
+            case R.id.followed_each_other:
+                new UnfollowTask(mUser, new OnUnfollowFinishedListener()).execute();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -100,7 +100,7 @@ public class UserActivity extends AbsActivity {
             dialog.dismiss();
         }
     }
-    
+
     private void buildContent() {
         if (mUser != null) {
             onUserLoadFinished();
@@ -125,7 +125,7 @@ public class UserActivity extends AbsActivity {
             getSupportActionBar().setTitle(R.string.user);
         }
     }
-    
+
     private void onUserLoadFinished() {
         getSupportActionBar().setTitle(mUser.name);
         mFragment = new ProfileFragment();
@@ -140,19 +140,19 @@ public class UserActivity extends AbsActivity {
         }
         supportInvalidateOptionsMenu();
     }
-    
+
     private class LoadUserTask extends MyAsyncTask<Void, Void, WeiboUser> {
         private long mUserId;
         private String mUserName;
-        
+
         public LoadUserTask(long userId) {
             mUserId = userId;
         }
-        
+
         public LoadUserTask(String userName) {
             mUserName = userName;
         }
-        
+
         @Override
         protected WeiboUser doInBackground(Void... v) {
             UserShowDao dao = new UserShowDao();
@@ -169,7 +169,7 @@ public class UserActivity extends AbsActivity {
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(WeiboUser result) {
             if (result != null) {
@@ -182,27 +182,27 @@ public class UserActivity extends AbsActivity {
             }
         }
     }
-    
+
     private class OnFollowFinishedListener implements FollowTask.OnFollowFinishedListener {
         @Override
         public void onFollowFinished(WeiboUser user) {
             mUser = user;
             onUserLoadFinished();
         }
-        
+
         @Override
         public void onFollowFailed(WeiboException e) {
             Utilities.notice(R.string.follow_failed_reason, e.getMessage());
         }
     }
-    
+
     private class OnUnfollowFinishedListener implements UnfollowTask.OnUnfollowFinishedListener {
         @Override
         public void onUnfollowFinished(WeiboUser user) {
             mUser = user;
             onUserLoadFinished();
         }
-        
+
         @Override
         public void onUnfollowFailed(WeiboException e) {
             Utilities.notice(R.string.unfollow_failed_reason, e.getMessage());

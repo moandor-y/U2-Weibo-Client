@@ -12,10 +12,10 @@ import gov.moandor.androidweibo.fragment.ConfirmDeleteDialogFragment;
 
 public class CommentListActionModeCallback implements ActionMode.Callback {
     private static final String DELETE_DIALOG = "delete_dialog";
-    
+
     private AbsTimelineFragment<WeiboComment, ?> mFragment;
     private AbsTimelineListAdapter<WeiboComment> mAdapter;
-    
+
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mFragment.setPullToRefreshEnabled(false);
@@ -27,39 +27,39 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         Utilities.registerShareActionMenu(shareItem, mAdapter.getSelectedItem());
         return true;
     }
-    
+
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
         WeiboComment comment = mAdapter.getSelectedItem();
         mode.setTitle(comment.weiboUser.name);
         return true;
     }
-    
+
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
         switch (item.getItemId()) {
-        case R.id.reply:
-            reply();
-            break;
-        case R.id.view_weibo:
-            mFragment.startActivity(ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus));
-            break;
-        case R.id.view_user:
-            mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
-            break;
-        case R.id.delete:
-            delete();
-            break;
-        case R.id.copy:
-            Utilities.copyText(mAdapter.getSelectedItem().text);
-            break;
-        default:
-            return true;
+            case R.id.reply:
+                reply();
+                break;
+            case R.id.view_weibo:
+                mFragment.startActivity(ActivityUtils.weiboActivity(mAdapter.getSelectedItem().weiboStatus));
+                break;
+            case R.id.view_user:
+                mFragment.startActivity(ActivityUtils.userActivity(mAdapter.getSelectedItem().weiboUser));
+                break;
+            case R.id.delete:
+                delete();
+                break;
+            case R.id.copy:
+                Utilities.copyText(mAdapter.getSelectedItem().text);
+                break;
+            default:
+                return true;
         }
         mode.finish();
         return true;
     }
-    
+
     @Override
     public void onDestroyActionMode(ActionMode mode) {
         mFragment.onActionModeFinished();
@@ -67,12 +67,12 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         mAdapter.notifyDataSetChanged();
         mFragment.setPullToRefreshEnabled(true);
     }
-    
+
     private void reply() {
         WeiboComment comment = mAdapter.getSelectedItem();
         mFragment.startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
     }
-    
+
     private void delete() {
         DeleteCommentTask task =
                 new DeleteCommentTask(mAdapter.getSelectedItem().id, new OnDeleteFinishedListener(mAdapter
@@ -81,22 +81,25 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
         dialog.setTask(task);
         dialog.show(mFragment.getFragmentManager(), DELETE_DIALOG);
     }
-    
+
     public void setAdapter(AbsTimelineListAdapter<WeiboComment> adapter) {
         mAdapter = adapter;
     }
-    
+
     public void setFragment(AbsTimelineFragment<WeiboComment, ?> fragment) {
         mFragment = fragment;
     }
-    
+
+    protected void removeFromDatabase(int position, long accountId, int group) {
+    }
+
     private class OnDeleteFinishedListener implements DeleteCommentTask.OnDeleteFinishedListener {
         private int mSelection;
-        
+
         public OnDeleteFinishedListener(int selection) {
             mSelection = selection;
         }
-        
+
         @Override
         public void onDeleteFinished() {
             mAdapter.removeItem(mSelection);
@@ -105,12 +108,10 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
             int group = ConfigManager.getCommentFilter();
             removeFromDatabase(mSelection, accountId, group);
         }
-        
+
         @Override
         public void onDeleteFailed(WeiboException e) {
             Utilities.notice(R.string.delete_failed_reason, e.getMessage());
         }
     }
-    
-    protected void removeFromDatabase(int position, long accountId, int group) {}
 }

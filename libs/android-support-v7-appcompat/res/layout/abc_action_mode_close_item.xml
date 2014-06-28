@@ -14,19 +14,21 @@
      limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/action_mode_close_button"
-              android:focusable="true"
-              android:clickable="true"
-              android:paddingLeft="8dip"
-              android:contentDescription="@string/abc_action_mode_done"
+<LinearLayout android:id="@+id/action_mode_close_button"
               style="?attr/actionModeCloseButtonStyle"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="fill_parent"
-              android:layout_marginRight="16dip">
-    <ImageView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_gravity="center"
-               android:scaleType="fitCenter"
-               android:src="?attr/actionModeCloseDrawable"/>
+              android:layout_marginRight="16dip"
+              android:clickable="true"
+              android:contentDescription="@string/abc_action_mode_done"
+              android:focusable="true"
+              android:paddingLeft="8dip">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:src="?attr/actionModeCloseDrawable"/>
 </LinearLayout>

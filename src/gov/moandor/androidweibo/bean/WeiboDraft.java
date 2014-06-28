@@ -9,17 +9,6 @@ public class WeiboDraft extends AbsDraftBean {
     public GpsLocation location;
     public boolean commentWhenRepost;
     public boolean commentOriWhenRepost;
-    
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
-        dest.writeParcelable(retweetStatus, 0);
-        dest.writeString(picPath);
-        dest.writeParcelable(location, 0);
-        boolean[] bools = {commentWhenRepost, commentOriWhenRepost};
-        dest.writeBooleanArray(bools);
-    }
-    
     public static final Parcelable.Creator<WeiboDraft> CREATOR = new ParcelableCreator<WeiboDraft>() {
         @Override
         public WeiboDraft createFromParcel(Parcel source) {
@@ -33,15 +22,25 @@ public class WeiboDraft extends AbsDraftBean {
             result.commentOriWhenRepost = bools[1];
             return result;
         }
-        
+
         @Override
         public WeiboDraft[] newArray(int size) {
             return new WeiboDraft[size];
         }
-        
+
         @Override
         protected WeiboDraft onCreateObject() {
             return new WeiboDraft();
         }
     };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeParcelable(retweetStatus, 0);
+        dest.writeString(picPath);
+        dest.writeParcelable(location, 0);
+        boolean[] bools = {commentWhenRepost, commentOriWhenRepost};
+        dest.writeBooleanArray(bools);
+    }
 }

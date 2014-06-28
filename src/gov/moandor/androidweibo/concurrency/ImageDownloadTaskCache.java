@@ -1,9 +1,5 @@
 package gov.moandor.androidweibo.concurrency;
 
-import gov.moandor.androidweibo.util.FileUtils;
-import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.Logger;
-
 import java.io.File;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,13 +7,17 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import gov.moandor.androidweibo.util.FileUtils;
+import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.Logger;
+
 public class ImageDownloadTaskCache {
+    static final Object backgroundWifiDownloadLock = new Object();
     private static ConcurrentHashMap<String, ImageDownloadTask> mTasks =
             new ConcurrentHashMap<String, ImageDownloadTask>();
-    static final Object backgroundWifiDownloadLock = new Object();
-    
+
     public static boolean waitForPictureDownload(String url, HttpUtils.DownloadListener downloadListener,
-            ImageDownloader.ImageType type) {
+                                                 ImageDownloader.ImageType type) {
         while (true) {
             ImageDownloadTask task = mTasks.get(url);
             boolean fileExists = new File(FileUtils.getImagePathFromUrl(url, type)).exists();
@@ -55,7 +55,7 @@ public class ImageDownloadTaskCache {
             }
         }
     }
-    
+
     public static void removeImageDownloadTask(String url, ImageDownloadTask task) {
         synchronized (backgroundWifiDownloadLock) {
             mTasks.remove(url, task);
@@ -64,7 +64,7 @@ public class ImageDownloadTaskCache {
             }
         }
     }
-    
+
     static boolean isDownloadTaskFinished() {
         return mTasks.isEmpty();
     }

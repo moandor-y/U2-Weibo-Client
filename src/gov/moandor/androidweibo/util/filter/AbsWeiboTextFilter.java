@@ -1,18 +1,18 @@
 package gov.moandor.androidweibo.util.filter;
 
+import java.util.regex.PatternSyntaxException;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 
-import java.util.regex.PatternSyntaxException;
-
 public abstract class AbsWeiboTextFilter extends BaseWeiboFilter {
     private static final long serialVersionUID = 1L;
-    
+
     protected boolean mCheckReposted;
     protected boolean mIsRegex;
     protected String mPattern;
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -27,31 +27,31 @@ public abstract class AbsWeiboTextFilter extends BaseWeiboFilter {
         sb.append("\"");
         return sb.toString();
     }
-    
-    public void setPattern(String pattern) {
-        mPattern = pattern;
-    }
-    
+
     public String getPattern() {
         return mPattern;
     }
-    
-    public void setCheckReposted(boolean checkReposted) {
-        mCheckReposted = checkReposted;
+
+    public void setPattern(String pattern) {
+        mPattern = pattern;
     }
-    
+
     public boolean getCheckReposted() {
         return mCheckReposted;
     }
-    
+
+    public void setCheckReposted(boolean checkReposted) {
+        mCheckReposted = checkReposted;
+    }
+
     public void setIsRegex(boolean isRegex) {
         mIsRegex = isRegex;
     }
-    
+
     public boolean isRegex() {
         return mIsRegex;
     }
-    
+
     protected boolean matches(String text) {
         if (mIsRegex) {
             try {
@@ -64,6 +64,6 @@ public abstract class AbsWeiboTextFilter extends BaseWeiboFilter {
             return text.contains(mPattern);
         }
     }
-    
+
     protected abstract String getType();
 }

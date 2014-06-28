@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.text.DecimalFormat;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.activity.MainActivity;
 import gov.moandor.androidweibo.activity.UserListActivity;
@@ -25,12 +28,9 @@ import gov.moandor.androidweibo.util.ImageUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.io.File;
-import java.text.DecimalFormat;
-
 public class ProfileFragment extends Fragment {
     public static final String USER = "user";
-    
+
     private ImageView mAvatar;
     private TextView mName;
     private TextView mSummary;
@@ -50,10 +50,11 @@ public class ProfileFragment extends Fragment {
     private RefreshTask mRefreshTask;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeiboUser mUser;
-    private float mFontSize = Utilities.getFontSize();;
+    private float mFontSize = Utilities.getFontSize();
+    ;
     private float mSmallFontSize = mFontSize - 3;
     private float mUserNameFontSize = mFontSize + 5;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +67,12 @@ public class ProfileFragment extends Fragment {
             mUser = GlobalContext.getCurrentAccount().user;
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mAvatar = (ImageView) view.findViewById(R.id.avatar);
@@ -97,7 +98,7 @@ public class ProfileFragment extends Fragment {
         initFontSize();
         buildLayout();
     }
-    
+
     public void notifyAccountChanged() {
         if (mRefreshTask != null) {
             mRefreshTask.cancel(true);
@@ -105,7 +106,7 @@ public class ProfileFragment extends Fragment {
         mUser = GlobalContext.getCurrentAccount().user;
         buildLayout();
     }
-    
+
     private void buildLayout() {
         AvatarDownloadTask task = new AvatarDownloadTask();
         task.execute();
@@ -131,7 +132,7 @@ public class ProfileFragment extends Fragment {
             mFollowerCountLayout.setClickable(false);
         }
     }
-    
+
     private void initFontSize() {
         mName.setTextSize(mUserNameFontSize);
         mSummary.setTextSize(mSmallFontSize);
@@ -146,7 +147,7 @@ public class ProfileFragment extends Fragment {
         mFollowingCount.setTextSize(mFontSize);
         mFollowerCount.setTextSize(mFontSize);
     }
-    
+
     private boolean isThisCurrentFragment() {
         if (getActivity() instanceof MainActivity) {
             MainActivity activity = (MainActivity) getActivity();
@@ -158,7 +159,7 @@ public class ProfileFragment extends Fragment {
             return true;
         }
     }
-    
+
     public void refresh() {
         if (mRefreshTask != null) {
             return;
@@ -169,19 +170,19 @@ public class ProfileFragment extends Fragment {
         mRefreshTask = new RefreshTask();
         mRefreshTask.execute();
     }
-    
+
     public WeiboUser getUser() {
         return mUser;
     }
-    
+
     private class AvatarDownloadTask extends MyAsyncTask<Void, Void, Bitmap> {
         private String mUrl;
-        
+
         @Override
         protected void onPreExecute() {
             mAvatar.setImageDrawable(null);
         }
-        
+
         @Override
         protected Bitmap doInBackground(Void... params) {
             mUrl = mUser.avatarLargeUrl;
@@ -214,7 +215,7 @@ public class ProfileFragment extends Fragment {
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(Bitmap result) {
             if (result != null) {
@@ -223,7 +224,7 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-    
+
     private class RefreshTask extends MyAsyncTask<Void, Void, WeiboUser> {
         @Override
         protected WeiboUser doInBackground(Void... v) {
@@ -237,7 +238,7 @@ public class ProfileFragment extends Fragment {
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(WeiboUser result) {
             mSwipeRefreshLayout.setRefreshing(false);
@@ -254,28 +255,28 @@ public class ProfileFragment extends Fragment {
             buildLayout();
         }
     }
-    
+
     private class OnWeiboCountLayoutClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             startActivity(ActivityUtils.userWeiboListActivity(mUser));
         }
     }
-    
+
     private class OnFollowingCountLayoutClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             startActivity(ActivityUtils.userListActivity(mUser, UserListActivity.Type.FOLLOWING));
         }
     }
-    
+
     private class OnFollowerCountLayoutClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             startActivity(ActivityUtils.userListActivity(mUser, UserListActivity.Type.FOLLOWERS));
         }
     }
-    
+
     private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {

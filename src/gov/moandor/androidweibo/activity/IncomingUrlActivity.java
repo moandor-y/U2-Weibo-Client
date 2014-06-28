@@ -41,20 +41,20 @@ public class IncomingUrlActivity extends AbsActivity {
             web.loadUrl(url);
         }
     }
-    
+
     private class RedirectToWeiboActivityTask extends MyAsyncTask<Void, Void, WeiboStatus> {
         private String mMid;
         private String mToken;
-        
+
         private RedirectToWeiboActivityTask(String mid) {
             mMid = mid;
         }
-        
+
         @Override
         protected void onPreExecute() {
             mToken = GlobalContext.getCurrentAccount().token;
         }
-        
+
         @Override
         protected WeiboStatus doInBackground(Void... params) {
             WeiboMidToIdDao dao = new WeiboMidToIdDao();
@@ -73,7 +73,7 @@ public class IncomingUrlActivity extends AbsActivity {
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(WeiboStatus result) {
             startActivity(ActivityUtils.weiboActivity(result));

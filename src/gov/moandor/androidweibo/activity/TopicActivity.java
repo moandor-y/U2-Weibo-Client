@@ -10,7 +10,7 @@ import gov.moandor.androidweibo.fragment.TopicWeiboListFragment;
 
 public class TopicActivity extends AbsActivity {
     private TopicWeiboListFragment mFragment;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,24 +32,24 @@ public class TopicActivity extends AbsActivity {
             fragmentManager.executePendingTransactions();
         }
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_topic, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-        case android.R.id.home:
-            finish();
-            return true;
-        case R.id.refresh:
-            mFragment.refresh();
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.refresh:
+                mFragment.refresh();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

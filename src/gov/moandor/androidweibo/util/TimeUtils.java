@@ -2,14 +2,14 @@ package gov.moandor.androidweibo.util;
 
 import android.content.res.Resources;
 
-import gov.moandor.androidweibo.R;
-import gov.moandor.androidweibo.bean.AbsItemBean;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.bean.AbsItemBean;
 
 public class TimeUtils {
     private static final DateFormat sSinaFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.ENGLISH);
@@ -19,7 +19,7 @@ public class TimeUtils {
     private static final DateFormat sDateFormat24 = new SimpleDateFormat("M-d H:mm", Locale.ENGLISH);
     private static final DateFormat sYearFormat12 = new SimpleDateFormat("yyyy-M-d h:mm a", Locale.ENGLISH);
     private static final DateFormat sYearFormat24 = new SimpleDateFormat("yyyy-M-d H:mm", Locale.ENGLISH);
-    
+
     public static String getListTime(AbsItemBean bean) {
         try {
             long timeMillis = parseSinaTime(bean);
@@ -29,7 +29,7 @@ public class TimeUtils {
             return "";
         }
     }
-    
+
     private static String getListTime(long msg) {
         Resources res = GlobalContext.getInstance().getResources();
         long now = System.currentTimeMillis();
@@ -73,7 +73,7 @@ public class TimeUtils {
             return sYearFormat12.format(msg);
         }
     }
-    
+
     public static long parseSinaTime(AbsItemBean bean) throws ParseException {
         return sSinaFormat.parse(bean.createdAt).getTime();
     }

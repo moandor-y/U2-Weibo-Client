@@ -22,6 +22,9 @@ import android.widget.ArrayAdapter;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.MainPagerAdapter;
 import gov.moandor.androidweibo.bean.Account;
@@ -45,27 +48,43 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeListener,
         MainDrawerFragment.OnAccountClickListener, ActionBar.OnNavigationListener {
-    private static final String STATE_TAB = "state_tab";
-    private static final String STATE_UNREAD_COUNT = "state_unread_count";
-    private static final String STATE_GROUPS = "state_groups";
-    private static final String DIALOG_FIND_USER = "dialog_find_user";
     public static final int WEIBO_LIST = 0;
     public static final int ATME_LIST = 1;
     public static final int COMMENT_LIST = 2;
-    private static final int PROFILE = 3;
     public static final String UNREAD_PAGE_POSITION = Utilities.buildIntentExtraName("UNREAD_PAGE_POSITION");
     public static final String UNREAD_GROUP = Utilities.buildIntentExtraName("UNREAD_GROUP");
     public static final String ACTION_UNREAD_UPDATED = Utilities.buildIntentExtraName("ACTION_UNREAD_UPDATED");
     public static final String UNREAD_COUNT = Utilities.buildIntentExtraName("UNREAD_COUNT");
+    private BroadcastReceiver mUnreadUpdateReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            UnreadCount count = intent.getParcelableExtra(UNREAD_COUNT);
+            if (count.weiboStatus > 0) {
+                mPagerAdapter.setWeiboUnreadCount(count.weiboStatus);
+            }
+            mTabStrip.notifyDataSetChanged();
+        }
+    };
     public static final String ACTION_ACCOUNT_CHANGED = Utilities.buildIntentExtraName("ACTION_ACCOUNT_CHANGED");
     public static final String NEW_ACCOUNT_INDEX = Utilities.buildIntentExtraName("CHANGED_ACCOUNT_INDEX");
     public static final String OLD_ACCOUNT_INDEX = Utilities.buildIntentExtraName("PREVIOUS_ACCOUNT_INDEX");
-    
+    private BroadcastReceiver mOnAccountChangedReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int newIndex = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
+            int oldIndex = intent.getIntExtra(OLD_ACCOUNT_INDEX, -1);
+            if (newIndex != -1 && newIndex != oldIndex) {
+                onAccountClick(oldIndex, newIndex);
+            }
+        }
+    };
+    private static final String STATE_TAB = "state_tab";
+    private static final String STATE_UNREAD_COUNT = "state_unread_count";
+    private static final String STATE_GROUPS = "state_groups";
+    private static final String DIALOG_FIND_USER = "dialog_find_user";
+    private static final int PROFILE = 3;
     private static boolean sRunning;
     private int mUnreadPage = -1;
     private int mUnreadGroup = -1;
@@ -85,7 +104,11 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private WeiboGroup[] mGroups;
     private Object mGroupsLoadLock = new Object();
     private MyAsyncTask<Void, Void, WeiboGroup[]> mLoadWeiboGroupsTask;
-    
+
+    public static boolean isRunning() {
+        return sRunning;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,12 +195,12 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             Bundle args = new Bundle();
             args.putBoolean(AbsMainTimelineFragment.IS_FROM_UNREAD, true);
             switch (mUnreadPage) {
-            case ATME_LIST:
-                mAtmeListFragment.setArguments(args);
-                break;
-            case COMMENT_LIST:
-                mCommentListFragment.setArguments(args);
-                break;
+                case ATME_LIST:
+                    mAtmeListFragment.setArguments(args);
+                    break;
+                case COMMENT_LIST:
+                    mCommentListFragment.setArguments(args);
+                    break;
             }
             getIntent().removeExtra(UNREAD_PAGE_POSITION);
             getIntent().removeExtra(UNREAD_GROUP);
@@ -199,19 +222,19 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             mLoadWeiboGroupsTask.execute();
         }
     }
-    
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mActionBarDrawerToggle.syncState();
     }
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
-    
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -219,7 +242,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         outState.putInt(STATE_UNREAD_COUNT, mPagerAdapter.getWeiboUnreadCount());
         outState.putParcelableArray(STATE_GROUPS, mGroups);
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -227,89 +250,89 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         Utilities.unregisterReceiver(mUnreadUpdateReciever);
         Utilities.unregisterReceiver(mOnAccountChangedReciever);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
     }
-    
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem orientation = menu.findItem(R.id.orientation);
         switch (ConfigManager.getScreenOrientation()) {
-        case ConfigManager.ORIENTATION_USER:
-            orientation.setTitle(R.string.lock_orientation);
-            if (Utilities.isScreenLandscape()) {
-                orientation.setIcon(R.drawable.ic_lock_orientation_land);
-            } else {
-                orientation.setIcon(R.drawable.ic_lock_orientation_port);
-            }
-            break;
-        case ConfigManager.ORIENTATION_LANDSCAPE:
-        case ConfigManager.ORIENTATION_PORTRAIT:
-            orientation.setTitle(R.string.unlock_orientation);
-            orientation.setIcon(R.drawable.ic_unlock_orientation);
-            break;
+            case ConfigManager.ORIENTATION_USER:
+                orientation.setTitle(R.string.lock_orientation);
+                if (Utilities.isScreenLandscape()) {
+                    orientation.setIcon(R.drawable.ic_lock_orientation_land);
+                } else {
+                    orientation.setIcon(R.drawable.ic_lock_orientation_port);
+                }
+                break;
+            case ConfigManager.ORIENTATION_LANDSCAPE:
+            case ConfigManager.ORIENTATION_PORTRAIT:
+                orientation.setTitle(R.string.unlock_orientation);
+                orientation.setIcon(R.drawable.ic_unlock_orientation);
+                break;
         }
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         mActionBarDrawerToggle.onOptionsItemSelected(item);
         switch (item.getItemId()) {
-        case R.id.write_weibo:
-            writeWeibo();
-            return true;
-        case R.id.refresh:
-            refresh();
-            return true;
-        case R.id.settings:
-            settings();
-            return true;
-        case R.id.orientation:
-            toggleOrientationLock();
-            return true;
-        case R.id.find_user:
-            new FindUserDialogFragment().show(getSupportFragmentManager(), DIALOG_FIND_USER);
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
+            case R.id.write_weibo:
+                writeWeibo();
+                return true;
+            case R.id.refresh:
+                refresh();
+                return true;
+            case R.id.settings:
+                settings();
+                return true;
+            case R.id.orientation:
+                toggleOrientationLock();
+                return true;
+            case R.id.find_user:
+                new FindUserDialogFragment().show(getSupportFragmentManager(), DIALOG_FIND_USER);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
-    
+
     public void refresh() {
         switch (mViewPager.getCurrentItem()) {
-        case WEIBO_LIST:
-            mWeiboListFragment.refresh();
-            break;
-        case ATME_LIST:
-            mAtmeListFragment.refresh();
-            break;
-        case COMMENT_LIST:
-            mCommentListFragment.refresh();
-            break;
-        case PROFILE:
-            mProfileFragment.refresh();
-            break;
+            case WEIBO_LIST:
+                mWeiboListFragment.refresh();
+                break;
+            case ATME_LIST:
+                mAtmeListFragment.refresh();
+                break;
+            case COMMENT_LIST:
+                mCommentListFragment.refresh();
+                break;
+            case PROFILE:
+                mProfileFragment.refresh();
+                break;
         }
     }
-    
+
     private void clearSpinnerGroups() {
         for (WeiboGroup group : mGroups) {
             mWeiboListSpinnerAdapter.remove(group.name);
         }
         mWeiboListSpinnerAdapter.remove(getString(R.string.refresh_groups));
     }
-    
+
     private void setupSpinnerGroups() {
         for (WeiboGroup group : mGroups) {
             mWeiboListSpinnerAdapter.add(group.name);
         }
         mWeiboListSpinnerAdapter.add(getString(R.string.refresh_groups));
     }
-    
+
     private void saveGroupsToDatabase(final long accountId, final WeiboGroup[] groups) {
         MyAsyncTask.execute(new Runnable() {
             @Override
@@ -318,7 +341,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             }
         });
     }
-    
+
     private void updateWeiboListSpinner() {
         if (mViewPager.getCurrentItem() != WEIBO_LIST) {
             return;
@@ -340,13 +363,15 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             }
         }
     }
-    
+
     @Override
-    public void onPageScrollStateChanged(int state) {}
-    
+    public void onPageScrollStateChanged(int state) {
+    }
+
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-    
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
     @Override
     public void onPageSelected(int position) {
         ActionBar actionBar = getSupportActionBar();
@@ -354,42 +379,42 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
             actionBar.setTitle("");
             switch (position) {
-            case ATME_LIST:
-                actionBar.setListNavigationCallbacks(mAtmeListSpinnerAdapter, this);
-                actionBar.setSelectedNavigationItem(mUnreadGroup);
-                break;
-            case COMMENT_LIST:
-                actionBar.setListNavigationCallbacks(mCommentListSpinnerAdapter, this);
-                actionBar.setSelectedNavigationItem(mUnreadGroup);
-                break;
+                case ATME_LIST:
+                    actionBar.setListNavigationCallbacks(mAtmeListSpinnerAdapter, this);
+                    actionBar.setSelectedNavigationItem(mUnreadGroup);
+                    break;
+                case COMMENT_LIST:
+                    actionBar.setListNavigationCallbacks(mCommentListSpinnerAdapter, this);
+                    actionBar.setSelectedNavigationItem(mUnreadGroup);
+                    break;
             }
             mUnreadPage = -1;
             mUnreadGroup = -1;
             return;
         }
         switch (position) {
-        case WEIBO_LIST:
-            updateWeiboListSpinner();
-            break;
-        case ATME_LIST:
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            actionBar.setTitle("");
-            actionBar.setListNavigationCallbacks(mAtmeListSpinnerAdapter, this);
-            actionBar.setSelectedNavigationItem(ConfigManager.getAtmeFilter());
-            break;
-        case COMMENT_LIST:
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-            actionBar.setTitle("");
-            actionBar.setListNavigationCallbacks(mCommentListSpinnerAdapter, this);
-            actionBar.setSelectedNavigationItem(ConfigManager.getCommentFilter());
-            break;
-        case PROFILE:
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            actionBar.setTitle(GlobalContext.getCurrentAccount().user.name);
-            break;
+            case WEIBO_LIST:
+                updateWeiboListSpinner();
+                break;
+            case ATME_LIST:
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                actionBar.setTitle("");
+                actionBar.setListNavigationCallbacks(mAtmeListSpinnerAdapter, this);
+                actionBar.setSelectedNavigationItem(ConfigManager.getAtmeFilter());
+                break;
+            case COMMENT_LIST:
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                actionBar.setTitle("");
+                actionBar.setListNavigationCallbacks(mCommentListSpinnerAdapter, this);
+                actionBar.setSelectedNavigationItem(ConfigManager.getCommentFilter());
+                break;
+            case PROFILE:
+                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                actionBar.setTitle(GlobalContext.getCurrentAccount().user.name);
+                break;
         }
     }
-    
+
     @Override
     public void onAccountClick(int oldPosition, int newPosition) {
         mDrawerLayout.closeDrawer(Gravity.LEFT);
@@ -417,70 +442,70 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         }
         mDrawerFragment.notifyDataSetChanged();
     }
-    
+
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         switch (mViewPager.getCurrentItem()) {
-        case WEIBO_LIST:
-            if (itemPosition == mWeiboListSpinnerAdapter.getCount() - 1) {
-                clearSpinnerGroups();
-                mGroups = null;
-                updateWeiboListSpinner();
-                if (mLoadWeiboGroupsTask != null) {
-                    mLoadWeiboGroupsTask.cancel(true);
+            case WEIBO_LIST:
+                if (itemPosition == mWeiboListSpinnerAdapter.getCount() - 1) {
+                    clearSpinnerGroups();
+                    mGroups = null;
+                    updateWeiboListSpinner();
+                    if (mLoadWeiboGroupsTask != null) {
+                        mLoadWeiboGroupsTask.cancel(true);
+                    }
+                    mLoadWeiboGroupsTask = new RefreshGroupsTask();
+                    mLoadWeiboGroupsTask.execute();
+                    break;
                 }
-                mLoadWeiboGroupsTask = new RefreshGroupsTask();
-                mLoadWeiboGroupsTask.execute();
+                long accountId = GlobalContext.getCurrentAccount().user.id;
+                if (itemPosition != ConfigManager.getWeiboGroup(accountId)) {
+                    mWeiboListFragment.saveListPosition(GlobalContext.getCurrentAccount());
+                    ConfigManager.setWeiboGroup(itemPosition, accountId);
+                    mWeiboListFragment.notifyAccountOrGroupChanged();
+                }
                 break;
-            }
-            long accountId = GlobalContext.getCurrentAccount().user.id;
-            if (itemPosition != ConfigManager.getWeiboGroup(accountId)) {
-                mWeiboListFragment.saveListPosition(GlobalContext.getCurrentAccount());
-                ConfigManager.setWeiboGroup(itemPosition, accountId);
-                mWeiboListFragment.notifyAccountOrGroupChanged();
-            }
-            break;
-        case ATME_LIST:
-            if (itemPosition != ConfigManager.getAtmeFilter()) {
-                mAtmeListFragment.saveListPosition(GlobalContext.getCurrentAccount());
-                ConfigManager.setAtmeFilter(itemPosition);
-                mAtmeListFragment.notifyAccountOrGroupChanged();
-            }
-            break;
-        case COMMENT_LIST:
-            if (itemPosition != ConfigManager.getCommentFilter()) {
-                mCommentListFragment.saveListPosition(GlobalContext.getCurrentAccount());
-                ConfigManager.setCommentFilter(itemPosition);
-                mCommentListFragment.notifyAccountOrGroupChanged();
-            }
-            break;
+            case ATME_LIST:
+                if (itemPosition != ConfigManager.getAtmeFilter()) {
+                    mAtmeListFragment.saveListPosition(GlobalContext.getCurrentAccount());
+                    ConfigManager.setAtmeFilter(itemPosition);
+                    mAtmeListFragment.notifyAccountOrGroupChanged();
+                }
+                break;
+            case COMMENT_LIST:
+                if (itemPosition != ConfigManager.getCommentFilter()) {
+                    mCommentListFragment.saveListPosition(GlobalContext.getCurrentAccount());
+                    ConfigManager.setCommentFilter(itemPosition);
+                    mCommentListFragment.notifyAccountOrGroupChanged();
+                }
+                break;
         }
         return true;
     }
-    
+
     public boolean isCurrentFragment(Fragment fragment) {
         switch (mViewPager.getCurrentItem()) {
-        case WEIBO_LIST:
-            return fragment instanceof WeiboListFragment;
-        case ATME_LIST:
-            return fragment instanceof AtmeListFragment;
-        case COMMENT_LIST:
-            return fragment instanceof CommentListFragment;
-        case PROFILE:
-            return fragment instanceof ProfileFragment;
-        default:
-            return false;
+            case WEIBO_LIST:
+                return fragment instanceof WeiboListFragment;
+            case ATME_LIST:
+                return fragment instanceof AtmeListFragment;
+            case COMMENT_LIST:
+                return fragment instanceof CommentListFragment;
+            case PROFILE:
+                return fragment instanceof ProfileFragment;
+            default:
+                return false;
         }
     }
-    
+
     private void writeWeibo() {
         startActivity(ActivityUtils.writeWeiboActivity());
     }
-    
+
     private void settings() {
         startActivity(ActivityUtils.settingsActivity());
     }
-    
+
     private void toggleOrientationLock() {
         if (ConfigManager.getScreenOrientation() == ConfigManager.ORIENTATION_USER) {
             if (Utilities.isScreenLandscape()) {
@@ -496,12 +521,12 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         }
         supportInvalidateOptionsMenu();
     }
-    
+
     public void resetWeiboUnreadCount() {
         mPagerAdapter.setWeiboUnreadCount(0);
         mTabStrip.notifyDataSetChanged();
     }
-    
+
     public void waitForGroupsLoad() {
         synchronized (mGroupsLoadLock) {
             while (mGroups == null) {
@@ -513,47 +538,21 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             }
         }
     }
-    
+
     public long getGroupId(int group) {
         return mGroups[group - getResources().getStringArray(R.array.weibo_list_spinner).length].id;
     }
-    
-    public static boolean isRunning() {
-        return sRunning;
-    }
-    
-    private BroadcastReceiver mUnreadUpdateReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            UnreadCount count = intent.getParcelableExtra(UNREAD_COUNT);
-            if (count.weiboStatus > 0) {
-                mPagerAdapter.setWeiboUnreadCount(count.weiboStatus);
-            }
-            mTabStrip.notifyDataSetChanged();
-        }
-    };
-    
-    private BroadcastReceiver mOnAccountChangedReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int newIndex = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
-            int oldIndex = intent.getIntExtra(OLD_ACCOUNT_INDEX, -1);
-            if (newIndex != -1 && newIndex != oldIndex) {
-                onAccountClick(oldIndex, newIndex);
-            }
-        }
-    };
-    
+
     private class LoadWeiboGroupsTask extends MyAsyncTask<Void, Void, WeiboGroup[]> {
         private long mAccountId;
         private String mToken;
-        
+
         @Override
         protected void onPreExecute() {
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mToken = GlobalContext.getCurrentAccount().token;
         }
-        
+
         @Override
         protected WeiboGroup[] doInBackground(Void... params) {
             WeiboGroup[] groups = DatabaseUtils.getWeiboGroups(mAccountId);
@@ -570,7 +569,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(WeiboGroup[] result) {
             if (result != null) {
@@ -587,17 +586,17 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             mLoadWeiboGroupsTask = null;
         }
     }
-    
+
     private class RefreshGroupsTask extends MyAsyncTask<Void, Void, WeiboGroup[]> {
         private long mAccountId;
         private String mToken;
-        
+
         @Override
         protected void onPreExecute() {
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mToken = GlobalContext.getCurrentAccount().token;
         }
-        
+
         @Override
         protected WeiboGroup[] doInBackground(Void... params) {
             GroupsDao dao = new GroupsDao();
@@ -610,7 +609,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             }
             return null;
         }
-        
+
         @Override
         protected void onPostExecute(WeiboGroup[] result) {
             if (result != null) {

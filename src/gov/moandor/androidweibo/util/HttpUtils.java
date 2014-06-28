@@ -3,8 +3,6 @@ package gov.moandor.androidweibo.util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import gov.moandor.androidweibo.R;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -32,6 +30,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import gov.moandor.androidweibo.R;
+
 public class HttpUtils {
     private static final int CONNECT_TIMEOUT = 10 * 1000;
     private static final int READ_TIMEOUT = 10 * 1000;
@@ -41,26 +41,28 @@ public class HttpUtils {
     private static final int UPLOAD_READ_TIMEOUT = 5 * 60 * 1000;
     private static final String BOUNDARY = "-----------------------------7db1c5232222b";
     private static final String ENCODING = "UTF-8";
-    
+
     private static final HostnameVerifier sDoNotVerify = new HostnameVerifier() {
         @Override
         public boolean verify(String hostname, SSLSession session) {
             return true;
         }
     };
-    
+
     public static void trustAllHosts() {
         TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
             @Override
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return new java.security.cert.X509Certificate[]{};
             }
-            
+
             @Override
-            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
-            
+            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
             @Override
-            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            }
         }};
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
@@ -70,11 +72,7 @@ public class HttpUtils {
             Logger.logException(e);
         }
     }
-    
-    public static enum Method {
-        POST, GET
-    }
-    
+
     private static Proxy getProxy() {
         String proxyHost = System.getProperty("http.proxyHost");
         String proxyPort = System.getProperty("http.proxyPort");
@@ -84,27 +82,27 @@ public class HttpUtils {
             return null;
         }
     }
-    
+
     public static String executeNormalTask(Method httpMethod, String urlAddress, HttpParams params)
             throws WeiboException {
         switch (httpMethod) {
-        case GET:
-            return doGet(urlAddress, params);
-        case POST:
-            return doPost(urlAddress, params);
+            case GET:
+                return doGet(urlAddress, params);
+            case POST:
+                return doPost(urlAddress, params);
         }
         return null;
     }
-    
+
     public static boolean executeDownloadTask(String urlAddress, String cachePath, DownloadListener listener) {
         return !Thread.currentThread().isInterrupted() && download(urlAddress, cachePath, listener);
     }
-    
+
     public static boolean executeUploadTask(String urlAddress, HttpParams params, String path, String fileParamKey,
-            UploadListener listener) throws WeiboException {
+                                            UploadListener listener) throws WeiboException {
         return !Thread.currentThread().isInterrupted() && uploadFile(urlAddress, params, path, fileParamKey, listener);
     }
-    
+
     private static boolean download(String urlAddress, String cachePath, DownloadListener listener) {
         File cacheFile = FileUtils.createFile(cachePath);
         if (cacheFile == null) {
@@ -167,7 +165,7 @@ public class HttpUtils {
         }
         return false;
     }
-    
+
     private static String readResult(HttpURLConnection connection) throws WeiboException {
         InputStream in = null;
         BufferedReader buffer = null;
@@ -192,7 +190,7 @@ public class HttpUtils {
             connection.disconnect();
         }
     }
-    
+
     private static String doGet(String urlAddress, HttpParams params) throws WeiboException {
         try {
             URL url = new URL(urlAddress + "?" + params.getParams());
@@ -221,7 +219,7 @@ public class HttpUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         }
     }
-    
+
     private static String doPost(String urlAddress, HttpParams params) throws WeiboException {
         try {
             URL url = new URL(urlAddress);
@@ -253,7 +251,7 @@ public class HttpUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.network_error));
         }
     }
-    
+
     private static String handleResponse(HttpURLConnection connection) throws WeiboException {
         int responseCode;
         try {
@@ -268,7 +266,7 @@ public class HttpUtils {
         }
         return readResult(connection);
     }
-    
+
     private static void handleError(HttpURLConnection connection) throws WeiboException {
         String result = readError(connection);
         try {
@@ -286,7 +284,7 @@ public class HttpUtils {
             throw new WeiboException(GlobalContext.getInstance().getString(R.string.unknown_error));
         }
     }
-    
+
     private static String readError(HttpURLConnection connection) throws WeiboException {
         InputStream in = null;
         BufferedReader buffer = null;
@@ -314,9 +312,9 @@ public class HttpUtils {
             connection.disconnect();
         }
     }
-    
+
     private static boolean uploadFile(String urlAddress, HttpParams params, String path, String fileParamKey,
-            UploadListener listener) throws WeiboException {
+                                      UploadListener listener) throws WeiboException {
         StringBuffer sb = new StringBuffer();
         sb.append("--").append(BOUNDARY).append("\r\n");
         Iterator<String> keys = params.keySet().iterator();
@@ -409,20 +407,24 @@ public class HttpUtils {
         }
         return false;
     }
-    
+
+    public static enum Method {
+        POST, GET
+    }
+
     public static interface DownloadListener {
         public void onPushProgress(int progress, int max);
-        
+
         public void onComplete();
-        
+
         public void onCancelled();
     }
-    
+
     public static interface UploadListener {
         public void onTransferring(int sent, int total);
-        
+
         public void onWaitResponse();
-        
+
         public void onComplete();
     }
 }

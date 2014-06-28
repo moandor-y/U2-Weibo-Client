@@ -1,22 +1,22 @@
 package gov.moandor.androidweibo.concurrency;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
-
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ImageDownloadTask extends MyAsyncTask<Void, Integer, Boolean> {
     private String mUrl;
     private ImageDownloader.ImageType mType;
     private CopyOnWriteArrayList<HttpUtils.DownloadListener> mListeners =
             new CopyOnWriteArrayList<HttpUtils.DownloadListener>();
-    
+
     public ImageDownloadTask(String url, ImageDownloader.ImageType type) {
         mUrl = url;
         mType = type;
     }
-    
+
     @Override
     protected Boolean doInBackground(Void... v) {
         if (isCancelled()) {
@@ -28,24 +28,26 @@ public class ImageDownloadTask extends MyAsyncTask<Void, Integer, Boolean> {
             public void onPushProgress(int progress, int max) {
                 publishProgress(progress, max);
             }
-            
+
             @Override
-            public void onComplete() {}
-            
+            public void onComplete() {
+            }
+
             @Override
-            public void onCancelled() {}
+            public void onCancelled() {
+            }
         });
         ImageDownloadTaskCache.removeImageDownloadTask(mUrl, this);
         return result;
     }
-    
+
     @Override
     protected void onProgressUpdate(Integer... values) {
         for (HttpUtils.DownloadListener l : mListeners) {
             l.onPushProgress(values[0], values[1]);
         }
     }
-    
+
     public void addDownloadListener(HttpUtils.DownloadListener l) {
         mListeners.addIfAbsent(l);
     }

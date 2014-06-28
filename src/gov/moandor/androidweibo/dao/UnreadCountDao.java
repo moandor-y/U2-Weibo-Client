@@ -9,7 +9,7 @@ import gov.moandor.androidweibo.util.WeiboException;
 
 public class UnreadCountDao extends BaseHttpDao<UnreadCount> {
     private String mToken;
-    
+
     @Override
     public UnreadCount execute() throws WeiboException {
         HttpParams params = new HttpParams();
@@ -18,12 +18,12 @@ public class UnreadCountDao extends BaseHttpDao<UnreadCount> {
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getUnreadCountFromJson(response);
     }
-    
+
     @Override
     protected String getUrl() {
         return UrlHelper.REMIND_UNREAD_COUNT;
     }
-    
+
     public void setToken(String token) {
         mToken = token;
     }

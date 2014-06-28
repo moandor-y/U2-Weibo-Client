@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
+
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.adapter.WeiboListAdapter;
@@ -32,17 +34,14 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-import java.util.List;
-
 public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
         extends Fragment {
     private static final String USER_DIALOG = "user_dialog";
-    
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
     TimelineListAdapter mAdapter;
     ListView mListView;
     ActionMode mActionMode;
     MyAsyncTask<Void, Void, List<DataBean>> mRefreshTask;
-    protected SwipeRefreshLayout mSwipeRefreshLayout;
     private int mListScrollState;
     private boolean mNoEarlierMessage = false;
     private View mFooter;
@@ -50,18 +49,18 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     private TextView mFooterText;
     private ActionMode.Callback mActionModeCallback;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timeline_list, container, false);
     }
-    
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mListView = (ListView) view.findViewById(R.id.list);
@@ -86,14 +85,14 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
         mAdapter.updateState();
         mAdapter.notifyDataSetChanged();
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
@@ -101,21 +100,21 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mActionMode.finish();
         }
     }
-    
+
     protected boolean isRefreshTaskRunning() {
         return mRefreshTask != null && mRefreshTask.getStatus() != MyAsyncTask.Status.FINISHED;
     }
-    
+
     protected void stopRefreshTaskIfRunning() {
         if (isRefreshTaskRunning()) {
             mRefreshTask.cancel(true);
         }
     }
-    
+
     protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
         return new OnListRefreshListener();
     }
-    
+
     private void buildLoadingFooter() {
         mFooter =
                 GlobalContext.getActivity().getLayoutInflater()
@@ -123,7 +122,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mFooterIcon = mFooter.findViewById(R.id.image);
         mFooterText = (TextView) mFooter.findViewById(R.id.text);
     }
-    
+
     protected void showLoadingFooter() {
         if (mFooter == null) {
             return;
@@ -133,26 +132,26 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mFooterIcon.startAnimation(mFooterAnimation);
         }
     }
-    
+
     protected void hideLoadingFooter() {
         if (mFooter == null) {
             return;
         }
         mListView.removeFooterView(mFooter);
     }
-    
+
     public boolean isListViewFling() {
         return mListScrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING;
     }
-    
+
     public boolean hasActionMode() {
         return mActionMode != null;
     }
-    
+
     public void setPullToRefreshEnabled(boolean enabled) {
         mSwipeRefreshLayout.setEnabled(enabled);
     }
-    
+
     protected void loadMore() {
         if (isRefreshTaskRunning() || !mSwipeRefreshLayout.isEnabled() || mNoEarlierMessage) {
             return;
@@ -162,7 +161,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mAdapter.updateState();
         mAdapter.notifyDataSetChanged();
     }
-    
+
     public void refresh() {
         if (isRefreshTaskRunning() || !mSwipeRefreshLayout.isEnabled()) {
             return;
@@ -173,44 +172,61 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mAdapter.updateState();
         mAdapter.notifyDataSetChanged();
     }
-    
+
     private boolean isLastItemVisible() {
         return mListView.getFirstVisiblePosition() + mListView.getChildCount() >= mAdapter.getCount() - 1;
     }
-    
+
     public void onActionModeFinished() {
         mActionMode = null;
     }
-    
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupListHwAccel() {
         if (!ConfigManager.isListHwAccelEnabled()) {
             mListView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
     }
-    
+
+    abstract TimelineListAdapter createListAdapter();
+
+    abstract LoadMoreTask createLoadMoreTask();
+
+    abstract RefreshTask createRefreshTask();
+
+    ;
+
+    abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
+
+    ;
+
+    abstract ActionMode.Callback getActionModeCallback();
+
+    protected abstract BaseTimelineJsonDao<DataBean> onCreateDao();
+
     private class OnListScrollListener implements AbsListView.OnScrollListener {
         @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
-        
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        }
+
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             mListScrollState = scrollState;
             switch (scrollState) {
-            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                mAdapter.notifyDataSetChanged();
-                ImageDownloader.setPauseImageReadTask(false);
-                if (isLastItemVisible()) {
-                    loadMore();
-                }
-                break;
-            case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
-                ImageDownloader.setPauseImageReadTask(true);
-                break;
+                case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
+                    mAdapter.notifyDataSetChanged();
+                    ImageDownloader.setPauseImageReadTask(false);
+                    if (isLastItemVisible()) {
+                        loadMore();
+                    }
+                    break;
+                case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
+                    ImageDownloader.setPauseImageReadTask(true);
+                    break;
             }
         }
     }
-    
+
     private class OnListItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -220,15 +236,15 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             AbsTimelineFragment.this.onItemClick(parent, view, position, id);
         }
     }
-    
+
     private class OnAvatarClickListener implements WeiboListAdapter.OnAvatarClickListener {
         @Override
         public void onAvatarClick(int position) {
             WeiboUser user = mAdapter.getItem(position).weiboUser;
             getActivity().startActivity(ActivityUtils.userActivity(user));
         }
-    };
-    
+    }
+
     private class OnAvatarLongClickListener implements WeiboListAdapter.OnAvatarLongClickListener {
         @Override
         public void onAvatarLongClick(int position) {
@@ -239,18 +255,18 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             dialog.setArguments(args);
             dialog.show(getFragmentManager(), USER_DIALOG);
         }
-    };
-    
+    }
+
     private class OnListRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
         @Override
         public void onRefresh() {
             refresh();
         }
     }
-    
+
     class RefreshTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         protected BaseTimelineJsonDao<DataBean> mDao;
-        
+
         @Override
         protected void onPreExecute() {
             DataBean latestMessage = null;
@@ -262,7 +278,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setSinceMessage(latestMessage);
         }
-        
+
         @Override
         protected List<DataBean> doInBackground(Void... v) {
             try {
@@ -273,7 +289,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
@@ -293,10 +309,10 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             }
         }
     }
-    
+
     class LoadMoreTask extends MyAsyncTask<Void, Void, List<DataBean>> {
         private BaseTimelineJsonDao<DataBean> mDao;
-        
+
         @Override
         protected void onPreExecute() {
             long maxId = 0L;
@@ -309,7 +325,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setMaxId(maxId);
         }
-        
+
         @Override
         protected List<DataBean> doInBackground(Void... v) {
             try {
@@ -320,7 +336,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                 return null;
             }
         }
-        
+
         @Override
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
@@ -339,7 +355,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             }
         }
     }
-    
+
     private class OnListItemLongClickListener implements AdapterView.OnItemLongClickListener {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -355,16 +371,4 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             return true;
         }
     }
-    
-    abstract TimelineListAdapter createListAdapter();
-    
-    abstract LoadMoreTask createLoadMoreTask();
-    
-    abstract RefreshTask createRefreshTask();
-    
-    abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
-    
-    abstract ActionMode.Callback getActionModeCallback();
-    
-    protected abstract BaseTimelineJsonDao<DataBean> onCreateDao();
 }
