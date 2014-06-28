@@ -25,6 +25,7 @@ public class NotificationSettingsActivity extends AbsActivity {
     private static final String INTERVAL_DIALOG = "interval_dialog";
 
     private static boolean sNeedRestart;
+
     private TextView mIntervalStatus;
     private TextView mRingtoneStatus;
     private TextView mIntervalLabel;

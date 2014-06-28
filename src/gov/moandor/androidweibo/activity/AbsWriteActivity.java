@@ -34,6 +34,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
     private static final int REQUEST_AT_USER = 2;
     private static final long SMILEY_PICKER_DELAY = 100;
     private static final String SAVE_DRAFT_DIALOG = "save_draft_dialog";
+
     EditText mEditText;
     private SmileyPicker mSmileyPicker;
     private Button mSendButton;

@@ -8,16 +8,16 @@ import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.fragment.FavoritesFragment;
 
 public class FavoritesActivity extends AbsActivity {
-    private FavoritesFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragment = (FavoritesFragment) fragmentManager.findFragmentById(android.R.id.content);
-        if (mFragment == null) {
-            mFragment = new FavoritesFragment();
-            fragmentManager.beginTransaction().add(android.R.id.content, mFragment).commit();
+        FavoritesFragment fragment = (FavoritesFragment) fragmentManager.findFragmentById
+                (android.R.id.content);
+        if (fragment == null) {
+            fragment = new FavoritesFragment();
+            fragmentManager.beginTransaction().add(android.R.id.content, fragment).commit();
             fragmentManager.executePendingTransactions();
         }
         getSupportActionBar().setDisplayShowHomeEnabled(false);

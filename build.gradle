@@ -20,8 +20,6 @@ dependencies {
 }
 
 android {
-    signingConfigs {
-    }
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
     sourceSets {
@@ -43,9 +41,7 @@ android {
             }
         }
     }
-    defaultConfig {}
-    productFlavors {
-    }
-    buildTypes {
+    lintOptions {
+        abortOnError false
     }
 }

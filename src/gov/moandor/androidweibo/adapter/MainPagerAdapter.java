@@ -17,7 +17,8 @@ public class MainPagerAdapter extends PagerAdapter {
     private FragmentTransaction mCurTransaction;
     private Fragment mCurrentPrimaryItem;
     private Fragment[] mFragments;
-    private String[] mTitles = GlobalContext.getInstance().getResources().getStringArray(R.array.main_tabs);
+    private String[] mTitles =
+            GlobalContext.getInstance().getResources().getStringArray(R.array.main_tabs);
 
     public MainPagerAdapter(FragmentManager fm, Fragment[] fragments) {
         mFragmentManager = fm;

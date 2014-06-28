@@ -127,7 +127,7 @@ public class AuthorizeActivity extends AbsActivity {
                 + "&scope=friendships_groups_read,friendships_groups_write";
     }
 
-    private void handleRedirectUrl(WebView view, String url) {
+    private void handleRedirectUrl(String url) {
         Map<String, String> values = Utilities.parseUrl(url);
         String error = values.get("error");
         String errorCode = values.get("error_code");
@@ -176,7 +176,7 @@ public class AuthorizeActivity extends AbsActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             if (url.startsWith(UrlHelper.AUTH_REDIRECT)) {
-                handleRedirectUrl(view, url);
+                handleRedirectUrl(url);
                 view.stopLoading();
                 return;
             }

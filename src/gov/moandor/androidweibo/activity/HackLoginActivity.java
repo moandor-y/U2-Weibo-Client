@@ -27,7 +27,7 @@ public class HackLoginActivity extends AbsActivity {
                 ArrayAdapter.createFromResource(this, R.array.hack_login_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        final EditText username = (EditText) findViewById(R.id.username);
+        final EditText username = (EditText) findViewById(R.id.user_name);
         final EditText password = (EditText) findViewById(R.id.password);
         findViewById(R.id.login).setOnClickListener(new View.OnClickListener() {
             @Override

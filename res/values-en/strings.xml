@@ -134,7 +134,6 @@
     <string name="view_pictures">View pictures</string>
     <string name="follow_failed_reason">Follow failed : %s</string>
     <string name="unfollow_failed_reason">Unfollow failed : %s</string>
-    <string name="gender">Gender</string>
     <string name="view_user">View user</string>
     <string name="find_user">Find user</string>
     <string name="user_name_is">Name:</string>

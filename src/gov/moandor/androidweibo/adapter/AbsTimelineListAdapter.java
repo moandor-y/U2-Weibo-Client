@@ -27,75 +27,14 @@ import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 
-public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter implements
-        ISelectableAdapter<T> {
+public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter
+        implements ISelectableAdapter<T> {
     private static final int MAX_COUNT = 500;
 
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     float mTimeFontSize = mFontSize - 3;
-    View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            TextView textView = (TextView) v;
-            Layout layout = textView.getLayout();
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            int offset = 0;
-            if (layout != null) {
-                int line = layout.getLineForVertical(y);
-                offset = layout.getOffsetForHorizontal(line, x);
-            }
-            SpannableString text = SpannableString.valueOf(textView.getText());
-            LongClickableLinkMovementMethod.getInstance().onTouchEvent(textView, text, event);
-            switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN:
-                    WeiboTextUrlSpan[] spans = text.getSpans(0, text.length(), WeiboTextUrlSpan.class);
-                    boolean found = false;
-                    int foundStart = 0;
-                    int foundEnd = 0;
-                    for (WeiboTextUrlSpan span : spans) {
-                        int start = text.getSpanStart(span);
-                        int end = text.getSpanEnd(span);
-                        if (start <= offset && offset <= end) {
-                            found = true;
-                            foundStart = start;
-                            foundEnd = end;
-                            break;
-                        }
-                    }
-                    boolean consumeEvent = false;
-                    if (found && !mFragment.hasActionMode()) {
-                        consumeEvent = true;
-                    }
-                    if (found && !consumeEvent) {
-                        clearBackgroundColorSpans(text, textView);
-                    }
-                    if (consumeEvent) {
-                        BackgroundColorSpan span =
-                                new BackgroundColorSpan(Utilities.getColor(R.attr.link_pressed_background_color));
-                        text.setSpan(span, foundStart, foundEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        textView.setText(text);
-                    }
-                    return consumeEvent;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    LongClickableLinkMovementMethod.getInstance().removeLongClickCallback();
-                    clearBackgroundColorSpans(text, textView);
-                    break;
-            }
-            return false;
-        }
-
-        private void clearBackgroundColorSpans(SpannableString text, TextView textView) {
-            BackgroundColorSpan[] spans = text.getSpans(0, text.length(), BackgroundColorSpan.class);
-            for (BackgroundColorSpan span : spans) {
-                text.removeSpan(span);
-                textView.setText(text);
-            }
-        }
-    };
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
@@ -199,7 +138,8 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         holder.text.setOnTouchListener(mTextOnTouchListener);
         if (mNoPictureModeEnabled) {
             holder.avatar.setVisibility(View.INVISIBLE);
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) holder.avatar.getLayoutParams();
+            ViewGroup.MarginLayoutParams params =
+                    (ViewGroup.MarginLayoutParams) holder.avatar.getLayoutParams();
             params.width = 0;
             params.rightMargin = 0;
         }
@@ -294,6 +234,70 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     abstract View inflateLayout(LayoutInflater inflater, ViewGroup parent);
 
     abstract ViewHolder initViewHolder(View view);
+
+    View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            TextView textView = (TextView) v;
+            Layout layout = textView.getLayout();
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            int offset = 0;
+            if (layout != null) {
+                int line = layout.getLineForVertical(y);
+                offset = layout.getOffsetForHorizontal(line, x);
+            }
+            SpannableString text = SpannableString.valueOf(textView.getText());
+            LongClickableLinkMovementMethod.getInstance().onTouchEvent(textView, text, event);
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    WeiboTextUrlSpan[] spans = text.getSpans(
+                            0, text.length(), WeiboTextUrlSpan.class);
+                    boolean found = false;
+                    int foundStart = 0;
+                    int foundEnd = 0;
+                    for (WeiboTextUrlSpan span : spans) {
+                        int start = text.getSpanStart(span);
+                        int end = text.getSpanEnd(span);
+                        if (start <= offset && offset <= end) {
+                            found = true;
+                            foundStart = start;
+                            foundEnd = end;
+                            break;
+                        }
+                    }
+                    boolean consumeEvent = false;
+                    if (found && !mFragment.hasActionMode()) {
+                        consumeEvent = true;
+                    }
+                    if (found && !consumeEvent) {
+                        clearBackgroundColorSpans(text, textView);
+                    }
+                    if (consumeEvent) {
+                        BackgroundColorSpan span = new BackgroundColorSpan(
+                                Utilities.getColor(R.attr.link_pressed_background_color));
+                        text.setSpan(span, foundStart, foundEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        textView.setText(text);
+                    }
+                    return consumeEvent;
+                case MotionEvent.ACTION_CANCEL:
+                case MotionEvent.ACTION_UP:
+                    LongClickableLinkMovementMethod.getInstance().removeLongClickCallback();
+                    clearBackgroundColorSpans(text, textView);
+                    break;
+            }
+            return false;
+        }
+
+        private void clearBackgroundColorSpans(SpannableString text, TextView textView) {
+            BackgroundColorSpan[] spans = text.getSpans(
+                    0, text.length(), BackgroundColorSpan.class);
+            for (BackgroundColorSpan span : spans) {
+                text.removeSpan(span);
+                textView.setText(text);
+            }
+        }
+    };
 
     public static interface OnAvatarClickListener {
         public void onAvatarClick(int position);

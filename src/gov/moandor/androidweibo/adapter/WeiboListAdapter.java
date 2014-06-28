@@ -21,7 +21,6 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
     private OnMultiPictureClickListener mOnMultiPictureClickListener;
     private OnPictureClickListener mOnPictureClickListener;
     private ImageDownloader.ImageType mPictureType = Utilities.getListPictureType();
-    ;
 
     private float mCountFontSize = mFontSize - 5;
 
@@ -121,7 +120,7 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
             holder.pic.setVisibility(View.GONE);
             if (status.retweetStatus != null) {
                 holder.retweet.setVisibility(View.VISIBLE);
-                buildRetweetContent(status, status.retweetStatus, holder, position);
+                buildRetweetContent(status.retweetStatus, holder, position);
             } else {
                 holder.retweet.setVisibility(View.GONE);
             }
@@ -216,7 +215,7 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
         ImageDownloader.downloadTimelinePicture(view, status, mFragment.isListViewFling(), mPictureType);
     }
 
-    private void buildRetweetContent(WeiboStatus status, WeiboStatus retweetedStatus, WeiboListViewHolder holder,
+    private void buildRetweetContent(WeiboStatus retweetedStatus, WeiboListViewHolder holder,
                                      int position) {
         if (!Long.valueOf(retweetedStatus.id).equals(holder.retweet.getTag())) {
             if (TextUtils.isEmpty(retweetedStatus.textSpannable)) {

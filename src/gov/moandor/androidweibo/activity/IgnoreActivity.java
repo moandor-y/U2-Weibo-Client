@@ -204,7 +204,7 @@ public class IgnoreActivity extends AbsActivity {
 
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = null;
+                TextView textView;
                 if (convertView != null) {
                     textView = (TextView) convertView;
                 } else {

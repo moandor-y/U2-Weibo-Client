@@ -68,6 +68,8 @@ public class ConfigManager {
     public static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     public static final String SCREEN_ORIENTATION = "screen_orientation";
     public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowing_enabled";
+    private static final int PREFERENCE_VERSION = 5;
+
     static {
         SharedPreferences sharedPreferences = getPreferences();
         if (sharedPreferences.getInt(PREFERENCE_VERSION_KEY, 0) < PREFERENCE_VERSION) {
@@ -80,7 +82,6 @@ public class ConfigManager {
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_bm, true);
         }
     }
-    private static final int PREFERENCE_VERSION = 5;
 
     public static int getAppTheme() {
         return Integer.parseInt(getPreferences().getString(THEME, String.valueOf(THEME_LIGHT)));

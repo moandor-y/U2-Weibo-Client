@@ -28,15 +28,9 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
     private ImageDownloader.ImageType mImageType;
     private String[] mUrls;
     private Activity mActivity;
-    private GestureDetector.OnGestureListener mOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            mActivity.finish();
-            return true;
-        }
-    };
 
-    public ImageViewerPagerAdapter(ImageDownloader.ImageType imageType, String[] urls, Activity activity) {
+    public ImageViewerPagerAdapter(
+            ImageDownloader.ImageType imageType, String[] urls, Activity activity) {
         mImageType = imageType;
         mUrls = urls;
         mActivity = activity;
@@ -71,7 +65,8 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         webView.setHorizontalScrollBarEnabled(false);
         webView.setVerticalScrollBarEnabled(false);
         webView.setBackgroundColor(Color.TRANSPARENT);
-        final GestureDetector gestureDetector = new GestureDetector(mActivity, mOnGestureListener);
+        final GestureDetector gestureDetector = new GestureDetector(mActivity,
+                new OnGestureListener());
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -88,7 +83,8 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
         ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
         Button retryButton = (Button) view.findViewById(R.id.button_retry);
         ImageViewerPictureReadTask task =
-                new ImageViewerPictureReadTask(url, mImageType, webView, photoView, progressBar, retryButton);
+                new ImageViewerPictureReadTask(url, mImageType, webView, photoView, progressBar,
+                        retryButton);
         task.execute();
         container.addView(view);
         return view;
@@ -114,5 +110,13 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
     public void setImageType(ImageDownloader.ImageType type, String[] urls) {
         mImageType = type;
         mUrls = urls;
+    }
+
+    private class OnGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            mActivity.finish();
+            return true;
+        }
     }
 }

@@ -30,6 +30,7 @@ public class SettingsActivityOldApi extends AbsActivity {
     private static final String COMMENT_REPOST_LIST_AVATAR_MODE_DIALOG = "comment_repost_list_avatar_mode_dialog";
 
     private static boolean sNeedRestart;
+
     private TextView mThemeStatus;
     private TextView mFontSizeStatus;
     private TextView mLoadWeiboCountStatus;
