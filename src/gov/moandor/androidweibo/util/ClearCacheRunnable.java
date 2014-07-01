@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.dao.FollowingDao;
 
 public class ClearCacheRunnable implements Runnable {
-    private static final long LAST_TIME = 1000 * 60 * 60 * 24 * 7;
+    private static final long LAST_TIME = 1000 * 60 * 60 * 24 * 3;
 
     private List<String> mSkipPaths;
 
