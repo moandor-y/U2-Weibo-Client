@@ -136,9 +136,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     }
 
     @Override
-    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // TODO Auto-generated method stub
-    }
+    void onItemClick(AdapterView<?> parent, View view, int position, long id) {}
 
     @Override
     ActionMode.Callback getActionModeCallback() {

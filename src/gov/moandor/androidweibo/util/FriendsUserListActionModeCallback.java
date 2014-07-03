@@ -15,7 +15,7 @@ public class FriendsUserListActionModeCallback implements ActionMode.Callback {
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        mode.getMenuInflater().inflate(R.menu.user_long_click, menu);
+        mode.getMenuInflater().inflate(R.menu.long_click_user, menu);
         mFragment.setPullToRefreshEnabled(false);
         return true;
     }

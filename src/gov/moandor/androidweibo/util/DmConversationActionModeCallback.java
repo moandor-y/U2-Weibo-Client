@@ -4,6 +4,7 @@ import android.support.v7.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.DmConversationAdapter;
 import gov.moandor.androidweibo.fragment.DmConversationFragment;
 
@@ -13,20 +14,26 @@ public class DmConversationActionModeCallback implements ActionMode.Callback {
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        // TODO Auto-generated method stub
+        mode.getMenuInflater().inflate(R.menu.long_click_dm_conversation, menu);
         return true;
     }
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        // TODO Auto-generated method stub
-        return false;
+        switch (item.getItemId()) {
+            case R.id.copy:
+                Utilities.copyText(mAdapter.getSelectedItem().text);
+                break;
+            default:
+                return true;
+        }
+        mode.finish();
+        return true;
     }
 
     @Override
