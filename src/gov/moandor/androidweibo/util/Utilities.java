@@ -358,10 +358,6 @@ public class Utilities {
         GlobalContext.addOrUpdateAccount(account);
     }
 
-    public static boolean isBmEnabled() {
-        return GlobalContext.getInstance().getResources().getBoolean(R.bool.bm_enabled);
-    }
-
     public static void registerShareActionMenu(MenuItem item, AbsItemBean bean) {
         WeiboUser user = bean.weiboUser;
         if (user == null) {
@@ -435,6 +431,18 @@ public class Utilities {
             url = url.substring(UrlHelper.E_WEIBO_COM.length() + 1, end);
         }
         return url.split("/")[1];
+    }
+
+    public static String getVersionName() {
+        GlobalContext context = GlobalContext.getInstance();
+        String packageName = context.getPackageName();
+        PackageManager manager = context.getPackageManager();
+        try {
+            return manager.getPackageInfo(packageName, 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private static String convertWeiboCnToCom(String url) {

@@ -276,7 +276,9 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                 Utilities.notice(e.getMessage());
                 return null;
             }
-        }        @Override
+        }
+
+        @Override
         protected void onPreExecute() {
             DataBean latestMessage = null;
             if (mAdapter.getCount() > 0) {
@@ -287,7 +289,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setSinceMessage(latestMessage);
         }
-
 
 
         @Override

@@ -8,6 +8,11 @@
     </Preference>
 
     <Preference
+        android:key="version"
+        android:persistent="false"
+        android:title="@string/version"/>
+
+    <Preference
         android:key="memory"
         android:persistent="false"
         android:title="@string/memory"/>

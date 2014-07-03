@@ -227,6 +227,7 @@
     <string name="dir_avatar">头像缓存</string>
     <string name="dir_logs">崩溃日志</string>
     <string name="open_source_licenses">开源协议</string>
+    <string name="version">版本</string>
 
     <!-- IgnoreActivity -->
     <string name="ignore">屏蔽</string>

@@ -562,12 +562,13 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 return groups;
             }
             return null;
-        }        @Override
+        }
+
+        @Override
         protected void onPreExecute() {
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mToken = GlobalContext.getCurrentAccount().token;
         }
-
 
 
         @Override

@@ -66,10 +66,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     protected void onDestroy() {
         super.onDestroy();
         ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
     }
 
     @Override
@@ -86,13 +82,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         requestRestart();
-    }    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            exit();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void exit() {
@@ -117,6 +106,12 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
+    }
+
     public static class SettingsFragment extends PreferenceFragment implements
             SharedPreferences.OnSharedPreferenceChangeListener {
         private static final String ADVANCED = "advanced";
@@ -127,7 +122,7 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             addPreferencesFromResource(R.xml.prefs);
             buildSummaries();
             Preference preference = findPreference(KEY_BLACK_MAGIC);
-            if (!Utilities.isBmEnabled()) {
+            if (!ConfigManager.isBmEnabled()) {
                 PreferenceCategory advanced = (PreferenceCategory) findPreference(ADVANCED);
                 advanced.removePreference(preference);
             }
@@ -147,29 +142,11 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             buildPictureSummary();
             buildWifiPictureSummary();
             buildComRepAvatarSummary();
-        }        @Override
-        public void onPause() {
-            super.onPause();
-            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
 
         private void buildThemeSummary() {
             ListPreference preference = (ListPreference) findPreference(ConfigManager.THEME);
             preference.setSummary(preference.getEntry());
-        }        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(ConfigManager.THEME)) {
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), SettingsActivity.class);
-                getActivity().finish();
-                getActivity().overridePendingTransition(0, 0);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(NEED_RESTART, true);
-                getActivity().startActivity(intent);
-                getActivity().overridePendingTransition(R.anim.stay, R.anim.activity_fade_out);
-            } else {
-                buildSummaries();
-            }
         }
 
         private void buildFontSizeSummary() {
@@ -192,6 +169,12 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             preference.setSummary(preference.getEntry());
         }
 
+        @Override
+        public void onPause() {
+            super.onPause();
+            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
         private void buildWifiPictureSummary() {
             ListPreference preference = (ListPreference) findPreference(ConfigManager.PICTURE_WIFI_QUALITY);
             preference.setSummary(preference.getEntry());
@@ -203,6 +186,21 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         }
 
 
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals(ConfigManager.THEME)) {
+                Intent intent = new Intent();
+                intent.setClass(GlobalContext.getInstance(), SettingsActivity.class);
+                getActivity().finish();
+                getActivity().overridePendingTransition(0, 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(NEED_RESTART, true);
+                getActivity().startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.stay, R.anim.activity_fade_out);
+            } else {
+                buildSummaries();
+            }
+        }
 
 
     }
@@ -253,39 +251,16 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             buildIntervalSummary();
             buildWifiIntervalSummary();
             buildRingtoneSummary();
-        }        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs_notifications);
-            buildSummaries();
-            findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(
-                    new OnRingtoneClickListener());
-            String ringtone = ConfigManager.getNotificationRingtone();
-            if (!TextUtils.isEmpty(ringtone)) {
-                mRingtoneUri = Uri.parse(ringtone);
-            }
-            if (!Utilities.isBmEnabled()) {
-                PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
-                unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
-            }
         }
 
         private void buildIntervalSummary() {
             ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY);
             preference.setSummary(preference.getEntry());
-        }        @Override
-        public void onResume() {
-            super.onResume();
-            ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
         }
 
         private void buildWifiIntervalSummary() {
             ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY_WIFI);
             preference.setSummary(preference.getEntry());
-        }        @Override
-        public void onPause() {
-            super.onPause();
-            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
 
         private void buildRingtoneSummary() {
@@ -297,7 +272,56 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             } else {
                 preference.setSummary(R.string.mute);
             }
-        }        @Override
+        }
+
+        private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
+                startActivityForResult(intent, REQUEST_RINGTONE);
+                return true;
+            }
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_notifications);
+            buildSummaries();
+            findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(
+                    new OnRingtoneClickListener());
+            String ringtone = ConfigManager.getNotificationRingtone();
+            if (!TextUtils.isEmpty(ringtone)) {
+                mRingtoneUri = Uri.parse(ringtone);
+            }
+            if (!ConfigManager.isBmEnabled()) {
+                PreferenceCategory unread = (PreferenceCategory) findPreference(KEY_UNREAD_MESSAGES);
+                unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
+            }
+        }
+
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+
+        @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode != RESULT_OK) {
@@ -315,33 +339,11 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             }
         }
 
-        private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                Intent intent = new Intent();
-                intent.setAction(RingtoneManager.ACTION_RINGTONE_PICKER);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone));
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
-                startActivityForResult(intent, REQUEST_RINGTONE);
-                return true;
-            }
-        }        @Override
+
+        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             buildSummaries();
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     public static class BlackMagicActivity extends AbsActivity {
@@ -385,11 +387,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 Utilities.notice(R.string.updating);
                 return true;
             }
-        }        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs_bm);
-            findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
         }
 
         private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
@@ -397,6 +394,13 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             public void onUpdateFinidhed() {
                 Utilities.notice(R.string.update_finished);
             }
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_bm);
+            findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
         }
 
 
@@ -439,9 +443,12 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         private static final String KEY_DIR_PIC = "dir_pic";
         private static final String KEY_DIR_AVATAR = "dir_avatar";
         private static final String KEY_DIR_LOGS = "dir_logs";
+        private static final String KEY_VERSION = "version";
         private static final long OFFICIAL_ACCOUNT = 3941216030L;
         private static final long DEVELOPER_1 = 1732168142L;
         private static final long DEVELOPER_2 = 2936096844L;
+
+        private int mBmClickCount;
 
         private static void buildMemoryInfo(Preference preference) {
             Runtime runtime = Runtime.getRuntime();
@@ -454,6 +461,21 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                     context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass + " MB")
                             + "\n" + context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
             preference.setSummary(summary);
+        }
+
+        private void buildVersion() {
+            Preference preference = findPreference(KEY_VERSION);
+            preference.setSummary(Utilities.getVersionName());
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    mBmClickCount++;
+                    if (mBmClickCount >= 7) {
+                        ConfigManager.setBmEnabled(true);
+                    }
+                    return false;
+                }
+            });
         }
 
         private static String formatMemoryText(long memory) {
@@ -469,14 +491,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                     return true;
                 }
             });
-        }        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs_about);
-            buildMemoryInfo(findPreference(KEY_MEMORY));
-            buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
-            buildDevelopers();
-            buildDirectories();
         }
 
         private void buildDevelopers() {
@@ -502,7 +516,25 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             findPreference(KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
         }
 
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_about);
+            buildMemoryInfo(findPreference(KEY_MEMORY));
+            buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
+            buildDevelopers();
+            buildDirectories();
+            buildVersion();
+        }
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public static class LicensesActivity extends AbsActivity {
@@ -517,8 +549,4 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             getSupportActionBar().hide();
         }
     }
-
-
-
-
 }

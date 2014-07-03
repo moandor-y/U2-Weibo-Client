@@ -319,6 +319,26 @@ public class IgnoreActivity extends AbsActivity {
                     view.setTag(filter.getId());
                 }
             }
+        }
+
+        private void buildView(View view, UserWeiboFilter filter) {
+            if (filter != null) {
+                RadioButton userName = (RadioButton) view.findViewById(R.id.user_name);
+                RadioButton userId = (RadioButton) view.findViewById(R.id.user_id);
+                EditText pattern = (EditText) view.findViewById(R.id.pattern);
+                if (filter.getUser() != null) {
+                    pattern.setText(filter.getUser().name);
+                } else if (!TextUtils.isEmpty(filter.getUserName())) {
+                    userName.toggle();
+                    pattern.setText(filter.getUserName());
+                } else {
+                    userId.toggle();
+                    pattern.setText(String.valueOf(filter.getUserId()));
+                }
+                if (filter.getId() >= 0) {
+                    view.setTag(filter.getId());
+                }
+            }
         }        @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -375,26 +395,6 @@ public class IgnoreActivity extends AbsActivity {
             return builder.create();
         }
 
-        private void buildView(View view, UserWeiboFilter filter) {
-            if (filter != null) {
-                RadioButton userName = (RadioButton) view.findViewById(R.id.user_name);
-                RadioButton userId = (RadioButton) view.findViewById(R.id.user_id);
-                EditText pattern = (EditText) view.findViewById(R.id.pattern);
-                if (filter.getUser() != null) {
-                    pattern.setText(filter.getUser().name);
-                } else if (!TextUtils.isEmpty(filter.getUserName())) {
-                    userName.toggle();
-                    pattern.setText(filter.getUserName());
-                } else {
-                    userId.toggle();
-                    pattern.setText(String.valueOf(filter.getUserId()));
-                }
-                if (filter.getId() >= 0) {
-                    view.setTag(filter.getId());
-                }
-            }
-        }
-
         private AbsWeiboTextFilter buildTextWeiboFilter(View view, AbsWeiboTextFilter filter) {
             CheckBox checkReposted = (CheckBox) view.findViewById(R.id.check_reposted);
             CheckBox isRegex = (CheckBox) view.findViewById(R.id.is_regex);
@@ -440,6 +440,8 @@ public class IgnoreActivity extends AbsActivity {
         private static enum Type {
             KEYWORD, USER, SOURCE
         }
+
+
 
 
     }

@@ -22,6 +22,7 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.UserShowDao;
 import gov.moandor.androidweibo.util.ActivityUtils;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
@@ -122,7 +123,7 @@ public class ProfileFragment extends Fragment {
         } else if (mUser.gender.equals("f")) {
             mName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_female, 0);
         }
-        if (Utilities.isBmEnabled() || mUser.id == GlobalContext.getCurrentAccount().user.id) {
+        if (ConfigManager.isBmEnabled() || mUser.id == GlobalContext.getCurrentAccount().user.id) {
             mWeiboCountLayout.setOnClickListener(new OnWeiboCountLayoutClickListener());
             mFollowingCountLayout.setOnClickListener(new OnFollowingCountLayoutClickListener());
             mFollowerCountLayout.setOnClickListener(new OnFollowerCountLayoutClickListener());
@@ -209,11 +210,12 @@ public class ProfileFragment extends Fragment {
                 return ImageUtils.getBitmapFromFile(path, width, height);
             }
             return null;
-        }        @Override
+        }
+
+        @Override
         protected void onPreExecute() {
             mAvatar.setImageDrawable(null);
         }
-
 
 
         @Override

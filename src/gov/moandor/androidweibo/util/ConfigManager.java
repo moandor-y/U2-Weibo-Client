@@ -68,6 +68,7 @@ public class ConfigManager {
     public static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     public static final String SCREEN_ORIENTATION = "screen_orientation";
     public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowing_enabled";
+    public static final String BM_ENABLED = "bm_enabled";
     private static final int PREFERENCE_VERSION = 5;
 
     static {
@@ -375,6 +376,16 @@ public class ConfigManager {
 
     public static boolean isIgnoringUnfollowedEnabled() {
         return getPreferences().getBoolean(IGNORING_UNFOLLOWED_ENABLED, true);
+    }
+
+    public static boolean isBmEnabled() {
+        return getPreferences().getBoolean(BM_ENABLED, false);
+    }
+
+    public static void setBmEnabled(boolean value) {
+        SharedPreferences.Editor editor = getPreferences().edit();
+        editor.putBoolean(BM_ENABLED, value);
+        apply(editor);
     }
 
     public static SharedPreferences getPreferences() {

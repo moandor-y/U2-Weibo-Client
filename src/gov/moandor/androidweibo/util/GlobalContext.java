@@ -264,7 +264,7 @@ public class GlobalContext extends Application {
         Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
-        if (Utilities.isBmEnabled() && GlobalContext.isInWifi()) {
+        if (ConfigManager.isBmEnabled() && GlobalContext.isInWifi()) {
             new UpdateFollowingIdsTask().execute();
         }
     }

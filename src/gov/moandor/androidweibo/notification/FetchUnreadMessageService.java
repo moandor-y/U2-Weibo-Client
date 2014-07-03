@@ -133,7 +133,8 @@ public class FetchUnreadMessageService extends IntentService {
             }
         }
         DirectMessage directMessage = null;
-        if (unreadCount.directMessage > 0 && Utilities.isBmEnabled() && ConfigManager.isNotificationDmEnabled()) {
+        if (unreadCount.directMessage > 0 && ConfigManager.isBmEnabled() && ConfigManager
+                .isNotificationDmEnabled()) {
             directMessage = fetchDm(account);
         }
         if (comment != null) {

@@ -208,12 +208,13 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             } else {
                 return null;
             }
-        }        @Override
+        }
+
+        @Override
         protected void onPreExecute() {
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mUserId = mUser.id;
         }
-
 
 
         @Override

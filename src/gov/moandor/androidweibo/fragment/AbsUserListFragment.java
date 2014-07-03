@@ -189,7 +189,9 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 Utilities.notice(e.getMessage());
                 return null;
             }
-        }        @Override
+        }
+
+        @Override
         protected void onPreExecute() {
             mDao = onCreateDao();
             mDao.setTrimStatus(1);
@@ -197,7 +199,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
         }
-
 
 
         @Override

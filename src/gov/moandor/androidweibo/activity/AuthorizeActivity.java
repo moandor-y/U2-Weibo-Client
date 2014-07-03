@@ -24,6 +24,7 @@ import java.util.Map;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.util.ActivityUtils;
+import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.UrlHelper;
@@ -41,7 +42,7 @@ public class AuthorizeActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.login);
-        if (Utilities.isBmEnabled()) {
+        if (ConfigManager.isBmEnabled()) {
             HackLoginDialogFragment dialog = new HackLoginDialogFragment();
             dialog.setCancelable(false);
             dialog.show(getSupportFragmentManager(), HACK_LOGIN_DIALOG);

@@ -31,7 +31,7 @@ public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
     @Override
     public List<WeiboStatus> execute() throws WeiboException {
         List<WeiboStatus> result = super.execute();
-        if (Utilities.isBmEnabled() && ConfigManager.isIgnoringUnfollowedEnabled()) {
+        if (ConfigManager.isBmEnabled() && ConfigManager.isIgnoringUnfollowedEnabled()) {
             long[] followingIds = DatabaseUtils.getFollowingIds(GlobalContext.getCurrentAccount().user.id);
             if (followingIds != null) {
                 Iterator<WeiboStatus> iterator = result.iterator();

@@ -167,21 +167,14 @@ public class PhotoView extends ImageView implements IPhotoView {
     @Override
     public void setOnPhotoTapListener(OnPhotoTapListener listener) {
         mAttacher.setOnPhotoTapListener(listener);
-    }    @Override
-    public ScaleType getScaleType() {
-        return mAttacher.getScaleType();
     }
 
     @Override
     public void setRotationTo(float rotationDegree) {
         mAttacher.setRotationTo(rotationDegree);
     }    @Override
-    public void setScaleType(ScaleType scaleType) {
-        if (null != mAttacher) {
-            mAttacher.setScaleType(scaleType);
-        } else {
-            mPendingScaleType = scaleType;
-        }
+    public ScaleType getScaleType() {
+        return mAttacher.getScaleType();
     }
 
     @Override
@@ -192,6 +185,13 @@ public class PhotoView extends ImageView implements IPhotoView {
     @Override
     public OnViewTapListener getOnViewTapListener() {
         return mAttacher.getOnViewTapListener();
+    }    @Override
+    public void setScaleType(ScaleType scaleType) {
+        if (null != mAttacher) {
+            mAttacher.setScaleType(scaleType);
+        } else {
+            mPendingScaleType = scaleType;
+        }
     }
 
     @Override
@@ -261,6 +261,7 @@ public class PhotoView extends ImageView implements IPhotoView {
     public void setOnLongClickListener(OnLongClickListener l) {
         mAttacher.setOnLongClickListener(l);
     }
+
 
 
 
