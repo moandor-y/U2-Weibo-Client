@@ -36,7 +36,7 @@ public class DraftBoxActivity extends AbsActivity {
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.draft_long_click, menu);
+            mode.getMenuInflater().inflate(R.menu.long_click_draft, menu);
             return true;
         }
 

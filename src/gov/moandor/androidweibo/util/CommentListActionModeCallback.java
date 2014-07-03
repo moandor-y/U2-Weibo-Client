@@ -19,7 +19,7 @@ public class CommentListActionModeCallback implements ActionMode.Callback {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mFragment.setPullToRefreshEnabled(false);
-        mode.getMenuInflater().inflate(R.menu.comment_long_click, menu);
+        mode.getMenuInflater().inflate(R.menu.long_click_comment, menu);
         if (mAdapter.getSelectedItem().weiboUser.id != GlobalContext.getCurrentAccount().user.id) {
             menu.removeItem(R.id.delete);
         }
