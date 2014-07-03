@@ -1,9 +1,9 @@
 buildscript {
-    repositories {
-        jcenter()
-    }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.12.+'
+    }
+    repositories {
+        jcenter()
     }
 }
 
@@ -14,33 +14,28 @@ android {
     buildToolsVersion '20.0.0'
     sourceSets {
         main {
-            manifest {
-                srcFile 'AndroidManifest.xml'
-            }
-            java {
-                srcDir 'src'
-            }
-            res {
-                srcDir 'res'
-            }
-            assets {
-                srcDir 'assets'
-            }
-            resources {
-                srcDir 'src'
-            }
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
         }
     }
     lintOptions {
         abortOnError false
     }
+    dexOptions {
+        preDexLibraries = false
+    }
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:20.0.0'
-    compile 'com.android.support:gridlayout-v7:20.0.0'
     compile project(':libs:PagerSlidingTabStrip')
     compile project(':libs:PhotoView')
     compile project(':libs:SwipeBackLayout')
+    compile 'com.android.support:appcompat-v7:20.0.0'
+    compile 'com.android.support:gridlayout-v7:20.0.0'
     compile files('libs/gson-2.2.4.jar')
 }
