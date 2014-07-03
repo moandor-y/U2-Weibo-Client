@@ -1,27 +1,17 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 
-apply plugin: 'android'
-
-dependencies {
-    compile files('libs/gson-2.2.4.jar')
-    compile project(':libs:android-support-v7-appcompat')
-    compile project(':libs:android-support-v7-gridlayout')
-    compile project(':libs:PagerSlidingTabStrip')
-    compile project(':libs:PhotoView')
-    compile project(':libs:SwipeBackLayout')
-}
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 20
+    buildToolsVersion '20.0.0'
     sourceSets {
         main {
             manifest {
@@ -44,4 +34,13 @@ android {
     lintOptions {
         abortOnError false
     }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:20.0.0'
+    compile 'com.android.support:gridlayout-v7:20.0.0'
+    compile project(':libs:PagerSlidingTabStrip')
+    compile project(':libs:PhotoView')
+    compile project(':libs:SwipeBackLayout')
+    compile files('libs/gson-2.2.4.jar')
 }
