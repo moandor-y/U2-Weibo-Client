@@ -51,11 +51,6 @@ public class IncomingUrlActivity extends AbsActivity {
         }
 
         @Override
-        protected void onPreExecute() {
-            mToken = GlobalContext.getCurrentAccount().token;
-        }
-
-        @Override
         protected WeiboStatus doInBackground(Void... params) {
             WeiboMidToIdDao dao = new WeiboMidToIdDao();
             dao.setToken(mToken);
@@ -72,6 +67,11 @@ public class IncomingUrlActivity extends AbsActivity {
                 cancel(true);
                 return null;
             }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mToken = GlobalContext.getCurrentAccount().token;
         }
 
         @Override

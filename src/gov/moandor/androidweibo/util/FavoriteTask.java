@@ -18,11 +18,6 @@ public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
     }
 
     @Override
-    protected void onPreExecute() {
-        mToken = GlobalContext.getCurrentAccount().token;
-    }
-
-    @Override
     protected WeiboStatus doInBackground(Void... v) {
         FavoriteDao dao = new FavoriteDao();
         dao.setToken(mToken);
@@ -35,6 +30,11 @@ public class FavoriteTask extends MyAsyncTask<Void, Void, WeiboStatus> {
         }
         cancel(true);
         return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        mToken = GlobalContext.getCurrentAccount().token;
     }
 
     @Override

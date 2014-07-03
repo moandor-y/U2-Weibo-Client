@@ -41,13 +41,13 @@ public class WeiboStatus extends AbsItemBean {
         }
 
         @Override
-        public WeiboStatus[] newArray(int size) {
-            return new WeiboStatus[size];
+        protected WeiboStatus onCreateObject() {
+            return new WeiboStatus();
         }
 
         @Override
-        protected WeiboStatus onCreateObject() {
-            return new WeiboStatus();
+        public WeiboStatus[] newArray(int size) {
+            return new WeiboStatus[size];
         }
     };
 

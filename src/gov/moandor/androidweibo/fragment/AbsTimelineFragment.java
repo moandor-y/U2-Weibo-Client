@@ -206,10 +206,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
 
     private class OnListScrollListener implements AbsListView.OnScrollListener {
         @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        }
-
-        @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             mListScrollState = scrollState;
             switch (scrollState) {
@@ -224,6 +220,10 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                     ImageDownloader.setPauseImageReadTask(true);
                     break;
             }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         }
     }
 
@@ -268,6 +268,15 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected BaseTimelineJsonDao<DataBean> mDao;
 
         @Override
+        protected List<DataBean> doInBackground(Void... v) {
+            try {
+                return mDao.execute();
+            } catch (WeiboException e) {
+                Logger.logException(e);
+                Utilities.notice(e.getMessage());
+                return null;
+            }
+        }        @Override
         protected void onPreExecute() {
             DataBean latestMessage = null;
             if (mAdapter.getCount() > 0) {
@@ -279,16 +288,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mDao.setSinceMessage(latestMessage);
         }
 
-        @Override
-        protected List<DataBean> doInBackground(Void... v) {
-            try {
-                return mDao.execute();
-            } catch (WeiboException e) {
-                Logger.logException(e);
-                Utilities.notice(e.getMessage());
-                return null;
-            }
-        }
+
 
         @Override
         protected void onPostExecute(List<DataBean> result) {

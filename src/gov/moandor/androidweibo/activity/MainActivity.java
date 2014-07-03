@@ -57,17 +57,35 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     public static final String UNREAD_GROUP = Utilities.buildIntentExtraName("UNREAD_GROUP");
     public static final String ACTION_UNREAD_UPDATED = Utilities.buildIntentExtraName("ACTION_UNREAD_UPDATED");
     public static final String UNREAD_COUNT = Utilities.buildIntentExtraName("UNREAD_COUNT");
+    private BroadcastReceiver mUnreadUpdateReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            UnreadCount count = intent.getParcelableExtra(UNREAD_COUNT);
+            if (count.weiboStatus > 0) {
+                mPagerAdapter.setWeiboUnreadCount(count.weiboStatus);
+            }
+            mTabStrip.notifyDataSetChanged();
+        }
+    };
     public static final String ACTION_ACCOUNT_CHANGED = Utilities.buildIntentExtraName("ACTION_ACCOUNT_CHANGED");
     public static final String NEW_ACCOUNT_INDEX = Utilities.buildIntentExtraName("CHANGED_ACCOUNT_INDEX");
     public static final String OLD_ACCOUNT_INDEX = Utilities.buildIntentExtraName("PREVIOUS_ACCOUNT_INDEX");
+    private BroadcastReceiver mOnAccountChangedReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int newIndex = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
+            int oldIndex = intent.getIntExtra(OLD_ACCOUNT_INDEX, -1);
+            if (newIndex != -1 && newIndex != oldIndex) {
+                onAccountClick(oldIndex, newIndex);
+            }
+        }
+    };
     private static final String STATE_TAB = "state_tab";
     private static final String STATE_UNREAD_COUNT = "state_unread_count";
     private static final String STATE_GROUPS = "state_groups";
     private static final String DIALOG_FIND_USER = "dialog_find_user";
     private static final int PROFILE = 3;
-
     private static boolean sRunning;
-
     private int mUnreadPage = -1;
     private int mUnreadGroup = -1;
     private ViewPager mViewPager;
@@ -212,28 +230,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_TAB, mViewPager.getCurrentItem());
-        outState.putInt(STATE_UNREAD_COUNT, mPagerAdapter.getWeiboUnreadCount());
-        outState.putParcelableArray(STATE_GROUPS, mGroups);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        sRunning = false;
-        Utilities.unregisterReceiver(mUnreadUpdateReciever);
-        Utilities.unregisterReceiver(mOnAccountChangedReciever);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
@@ -282,6 +278,28 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mActionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sRunning = false;
+        Utilities.unregisterReceiver(mUnreadUpdateReciever);
+        Utilities.unregisterReceiver(mOnAccountChangedReciever);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_TAB, mViewPager.getCurrentItem());
+        outState.putInt(STATE_UNREAD_COUNT, mPagerAdapter.getWeiboUnreadCount());
+        outState.putParcelableArray(STATE_GROUPS, mGroups);
     }
 
     public void refresh() {
@@ -347,10 +365,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-
-    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
 
@@ -395,6 +409,10 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 actionBar.setTitle(GlobalContext.getCurrentAccount().user.name);
                 break;
         }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 
     @Override
@@ -530,12 +548,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         private String mToken;
 
         @Override
-        protected void onPreExecute() {
-            mAccountId = GlobalContext.getCurrentAccount().user.id;
-            mToken = GlobalContext.getCurrentAccount().token;
-        }
-
-        @Override
         protected WeiboGroup[] doInBackground(Void... params) {
             WeiboGroup[] groups = DatabaseUtils.getWeiboGroups(mAccountId);
             if (groups == null) {
@@ -550,7 +562,13 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 return groups;
             }
             return null;
+        }        @Override
+        protected void onPreExecute() {
+            mAccountId = GlobalContext.getCurrentAccount().user.id;
+            mToken = GlobalContext.getCurrentAccount().token;
         }
+
+
 
         @Override
         protected void onPostExecute(WeiboGroup[] result) {
@@ -609,26 +627,4 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             getSupportActionBar().setSelectedNavigationItem(0);
         }
     }
-
-    private BroadcastReceiver mOnAccountChangedReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int newIndex = intent.getIntExtra(NEW_ACCOUNT_INDEX, -1);
-            int oldIndex = intent.getIntExtra(OLD_ACCOUNT_INDEX, -1);
-            if (newIndex != -1 && newIndex != oldIndex) {
-                onAccountClick(oldIndex, newIndex);
-            }
-        }
-    };
-
-    private BroadcastReceiver mUnreadUpdateReciever = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            UnreadCount count = intent.getParcelableExtra(UNREAD_COUNT);
-            if (count.weiboStatus > 0) {
-                mPagerAdapter.setWeiboUnreadCount(count.weiboStatus);
-            }
-            mTabStrip.notifyDataSetChanged();
-        }
-    };
 }

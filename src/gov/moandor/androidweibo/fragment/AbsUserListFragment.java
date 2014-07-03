@@ -51,14 +51,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mAdapter.getCount() == 0) {
-            initContent();
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_timeline_list, container, false);
     }
@@ -79,6 +71,14 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
         mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mAdapter.getCount() == 0) {
+            initContent();
+        }
     }
 
     public boolean isListViewFling() {
@@ -144,10 +144,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
 
     private class OnListScrollListener implements AbsListView.OnScrollListener {
         @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        }
-
-        @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             mListScrollState = scrollState;
             switch (scrollState) {
@@ -162,6 +158,10 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                     ImageDownloader.setPauseImageReadTask(true);
                     break;
             }
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         }
     }
 
@@ -179,15 +179,6 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
         private BaseUserListDao<DataBean> mDao;
 
         @Override
-        protected void onPreExecute() {
-            mDao = onCreateDao();
-            mDao.setTrimStatus(1);
-            onDaoCreated(mDao);
-            mDao.setToken(GlobalContext.getCurrentAccount().token);
-            mDao.setCount(Utilities.getLoadWeiboCount());
-        }
-
-        @Override
         protected List<DataBean> doInBackground(Void... v) {
             try {
                 List<DataBean> beans = mDao.execute();
@@ -198,7 +189,16 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
                 Utilities.notice(e.getMessage());
                 return null;
             }
+        }        @Override
+        protected void onPreExecute() {
+            mDao = onCreateDao();
+            mDao.setTrimStatus(1);
+            onDaoCreated(mDao);
+            mDao.setToken(GlobalContext.getCurrentAccount().token);
+            mDao.setCount(Utilities.getLoadWeiboCount());
         }
+
+
 
         @Override
         protected void onPostExecute(List<DataBean> result) {

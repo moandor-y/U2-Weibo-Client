@@ -70,21 +70,6 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     }
 
     @Override
-    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
-        if (mWeiboStatus.favorited) {
-            menu.findItem(R.id.favorite).setVisible(false);
-        } else {
-            menu.findItem(R.id.unfavorite).setVisible(false);
-        }
-        if (mViewPager.getCurrentItem() == WeiboPagerAdapter.WEIBO) {
-            menu.findItem(R.id.refresh).setVisible(false);
-        } else {
-            menu.findItem(R.id.refresh).setVisible(true);
-        }
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -114,7 +99,18 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (mWeiboStatus.favorited) {
+            menu.findItem(R.id.favorite).setVisible(false);
+        } else {
+            menu.findItem(R.id.unfavorite).setVisible(false);
+        }
+        if (mViewPager.getCurrentItem() == WeiboPagerAdapter.WEIBO) {
+            menu.findItem(R.id.refresh).setVisible(false);
+        } else {
+            menu.findItem(R.id.refresh).setVisible(true);
+        }
+        return true;
     }
 
     @Override
@@ -132,6 +128,10 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
                 mWeiboRepostListFragment.onShown();
                 break;
         }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 
     private void refresh() {

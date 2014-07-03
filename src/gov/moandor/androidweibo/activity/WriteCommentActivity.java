@@ -64,18 +64,6 @@ public class WriteCommentActivity extends AbsWriteActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_write_comment, menu);
-        if (mCommentedStatus.retweetStatus == null) {
-            menu.findItem(R.id.comment_ori).setVisible(false);
-        } else {
-            menu.findItem(R.id.comment_ori).setChecked(mCommentOri);
-        }
-        menu.findItem(R.id.repost_when_comment).setChecked(mRepostWhenComment);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.comment_ori:
@@ -99,13 +87,6 @@ public class WriteCommentActivity extends AbsWriteActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_COMMENT_ORI, mCommentOri);
-        outState.putBoolean(STATE_REPOST_WHEN_COMMENT, mRepostWhenComment);
     }
 
     @Override
@@ -151,5 +132,24 @@ public class WriteCommentActivity extends AbsWriteActivity {
         draft.commentOri = mCommentOri;
         draft.repostWhenComment = mRepostWhenComment;
         return draft;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_write_comment, menu);
+        if (mCommentedStatus.retweetStatus == null) {
+            menu.findItem(R.id.comment_ori).setVisible(false);
+        } else {
+            menu.findItem(R.id.comment_ori).setChecked(mCommentOri);
+        }
+        menu.findItem(R.id.repost_when_comment).setChecked(mRepostWhenComment);
+        return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_COMMENT_ORI, mCommentOri);
+        outState.putBoolean(STATE_REPOST_WHEN_COMMENT, mRepostWhenComment);
     }
 }

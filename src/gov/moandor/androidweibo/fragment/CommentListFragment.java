@@ -34,57 +34,13 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
 
     @Override
-    List<WeiboComment> getBeansFromDatabase(long accountId, int group) {
-        return DatabaseUtils.getComments(accountId, group);
+    LoadMoreTask createLoadMoreTask() {
+        return new MainLoadMoreTask();
     }
 
     @Override
-    void saveRefreshResultToDatabase(List<WeiboComment> comments, long accountId, int group) {
-        DatabaseUtils.removeComments(accountId, group);
-        DatabaseUtils.insertComments(comments, accountId, group);
-    }
-
-    @Override
-    void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments, long accountId, int group) {
-        DatabaseUtils.insertComments(comments, accountId, group);
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
-        switch (ConfigManager.getCommentFilter()) {
-            case ATME:
-                return new CommentsMentionsDao();
-            case BY_ME:
-                return new CommentsByMeDao();
-            case ALL:
-            case FOLLOWED:
-            default:
-                CommentsToMeDao dao = new CommentsToMeDao();
-                if (ConfigManager.getCommentFilter() == FOLLOWED) {
-                    dao.setFilter(1);
-                }
-                return dao;
-        }
-    }
-
-    @Override
-    public void saveListPosition(Account account) {
-        View view = mListView.getChildAt(0);
-        if (view != null) {
-            final TimelinePosition position = new TimelinePosition();
-            position.position = mListView.getFirstVisiblePosition();
-            position.top = mListView.getChildAt(0).getTop();
-            final long accountId = account.user.id;
-            final int filter = ConfigManager.getCommentFilter();
-            MyAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    DatabaseUtils
-                            .insertOrUpdateTimelinePosition(position, MainActivity.COMMENT_LIST, filter, accountId);
-                }
-            });
-
-        }
+    RefreshTask createRefreshTask() {
+        return new MainRefreshTask();
     }
 
     @Override
@@ -112,13 +68,57 @@ public class CommentListFragment extends AbsMainTimelineFragment<WeiboComment, C
     }
 
     @Override
-    RefreshTask createRefreshTask() {
-        return new MainRefreshTask();
+    protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
+        switch (ConfigManager.getCommentFilter()) {
+            case ATME:
+                return new CommentsMentionsDao();
+            case BY_ME:
+                return new CommentsByMeDao();
+            case ALL:
+            case FOLLOWED:
+            default:
+                CommentsToMeDao dao = new CommentsToMeDao();
+                if (ConfigManager.getCommentFilter() == FOLLOWED) {
+                    dao.setFilter(1);
+                }
+                return dao;
+        }
     }
 
     @Override
-    LoadMoreTask createLoadMoreTask() {
-        return new MainLoadMoreTask();
+    List<WeiboComment> getBeansFromDatabase(long accountId, int group) {
+        return DatabaseUtils.getComments(accountId, group);
+    }
+
+    @Override
+    void saveRefreshResultToDatabase(List<WeiboComment> comments, long accountId, int group) {
+        DatabaseUtils.removeComments(accountId, group);
+        DatabaseUtils.insertComments(comments, accountId, group);
+    }
+
+    @Override
+    void saveLoadMoreResultToDatabase(SparseArray<WeiboComment> comments, long accountId, int group) {
+        DatabaseUtils.insertComments(comments, accountId, group);
+    }
+
+    @Override
+    public void saveListPosition(Account account) {
+        View view = mListView.getChildAt(0);
+        if (view != null) {
+            final TimelinePosition position = new TimelinePosition();
+            position.position = mListView.getFirstVisiblePosition();
+            position.top = mListView.getChildAt(0).getTop();
+            final long accountId = account.user.id;
+            final int filter = ConfigManager.getCommentFilter();
+            MyAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    DatabaseUtils
+                            .insertOrUpdateTimelinePosition(position, MainActivity.COMMENT_LIST, filter, accountId);
+                }
+            });
+
+        }
     }
 
     @Override

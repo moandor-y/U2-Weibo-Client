@@ -31,13 +31,6 @@ public class WeiboRepostListFragment extends
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mQuickRepostLayout = view.findViewById(R.id.quick_post_layout);
-        mQuickPost.setHint(R.string.quick_repost);
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mWeiboStatus = ((WeiboActivity) getActivity()).getWeiboStatus();
@@ -47,21 +40,10 @@ public class WeiboRepostListFragment extends
     }
 
     @Override
-    WeiboTimelineListAdapter<WeiboStatus> createListAdapter() {
-        return new WeiboTimelineListAdapter<WeiboStatus>();
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        RepostTimelineDao dao = new RepostTimelineDao();
-        dao.setWeiboId(mWeiboStatus.id);
-        return dao;
-    }
-
-    @Override
-    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
-        startActivity(intent);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mQuickRepostLayout = view.findViewById(R.id.quick_post_layout);
+        mQuickPost.setHint(R.string.quick_repost);
     }
 
     @Override
@@ -78,10 +60,28 @@ public class WeiboRepostListFragment extends
     }
 
     @Override
+    WeiboTimelineListAdapter<WeiboStatus> createListAdapter() {
+        return new WeiboTimelineListAdapter<WeiboStatus>();
+    }
+
+    @Override
+    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
+        startActivity(intent);
+    }
+
+    @Override
     ActionMode.Callback getActionModeCallback() {
         WeiboListActionModeCallback callback = new WeiboListActionModeCallback();
         callback.setAdapter(mAdapter);
         callback.setFragment(this);
         return callback;
+    }
+
+    @Override
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
+        RepostTimelineDao dao = new RepostTimelineDao();
+        dao.setWeiboId(mWeiboStatus.id);
+        return dao;
     }
 }

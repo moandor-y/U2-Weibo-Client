@@ -53,24 +53,6 @@ public class PhotoView extends ImageView implements IPhotoView {
         }
     }
 
-    /**
-     * @deprecated use {@link #setRotationTo(float)}
-     */
-    @Override
-    public void setPhotoViewRotation(float rotationDegree) {
-        mAttacher.setPhotoViewRotation(rotationDegree);
-    }
-
-    @Override
-    public void setRotationTo(float rotationDegree) {
-        mAttacher.setRotationTo(rotationDegree);
-    }
-
-    @Override
-    public void setRotationBy(float rotationDegree) {
-        mAttacher.setRotationBy(rotationDegree);
-    }
-
     @Override
     public boolean canZoom() {
         return mAttacher.canZoom();
@@ -82,13 +64,13 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public Matrix getDisplayMatrix() {
-        return mAttacher.getDrawMatrix();
+    public boolean setDisplayMatrix(Matrix finalRectangle) {
+        return mAttacher.setDisplayMatrix(finalRectangle);
     }
 
     @Override
-    public boolean setDisplayMatrix(Matrix finalRectangle) {
-        return mAttacher.setDisplayMatrix(finalRectangle);
+    public Matrix getDisplayMatrix() {
+        return mAttacher.getDrawMatrix();
     }
 
     @Override
@@ -168,57 +150,13 @@ public class PhotoView extends ImageView implements IPhotoView {
     }
 
     @Override
-    public ScaleType getScaleType() {
-        return mAttacher.getScaleType();
-    }
-
-    @Override
-    public void setScaleType(ScaleType scaleType) {
-        if (null != mAttacher) {
-            mAttacher.setScaleType(scaleType);
-        } else {
-            mPendingScaleType = scaleType;
-        }
-    }
-
-    @Override
     public void setAllowParentInterceptOnEdge(boolean allow) {
         mAttacher.setAllowParentInterceptOnEdge(allow);
     }
 
     @Override
-    // setImageBitmap calls through to this method
-    public void setImageDrawable(Drawable drawable) {
-        super.setImageDrawable(drawable);
-        if (null != mAttacher) {
-            mAttacher.update();
-        }
-    }
-
-    @Override
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
-        if (null != mAttacher) {
-            mAttacher.update();
-        }
-    }
-
-    @Override
-    public void setImageURI(Uri uri) {
-        super.setImageURI(uri);
-        if (null != mAttacher) {
-            mAttacher.update();
-        }
-    }
-
-    @Override
     public void setOnMatrixChangeListener(OnMatrixChangedListener listener) {
         mAttacher.setOnMatrixChangeListener(listener);
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        mAttacher.setOnLongClickListener(l);
     }
 
     @Override
@@ -229,6 +167,26 @@ public class PhotoView extends ImageView implements IPhotoView {
     @Override
     public void setOnPhotoTapListener(OnPhotoTapListener listener) {
         mAttacher.setOnPhotoTapListener(listener);
+    }    @Override
+    public ScaleType getScaleType() {
+        return mAttacher.getScaleType();
+    }
+
+    @Override
+    public void setRotationTo(float rotationDegree) {
+        mAttacher.setRotationTo(rotationDegree);
+    }    @Override
+    public void setScaleType(ScaleType scaleType) {
+        if (null != mAttacher) {
+            mAttacher.setScaleType(scaleType);
+        } else {
+            mPendingScaleType = scaleType;
+        }
+    }
+
+    @Override
+    public void setRotationBy(float rotationDegree) {
+        mAttacher.setRotationBy(rotationDegree);
     }
 
     @Override
@@ -256,6 +214,14 @@ public class PhotoView extends ImageView implements IPhotoView {
         mAttacher.setZoomable(zoomable);
     }
 
+    /**
+     * @deprecated use {@link #setRotationTo(float)}
+     */
+    @Override
+    public void setPhotoViewRotation(float rotationDegree) {
+        mAttacher.setPhotoViewRotation(rotationDegree);
+    }
+
     @Override
     public Bitmap getVisibleRectangleBitmap() {
         return mAttacher.getVisibleRectangleBitmap();
@@ -265,6 +231,40 @@ public class PhotoView extends ImageView implements IPhotoView {
     public void setZoomTransitionDuration(int milliseconds) {
         mAttacher.setZoomTransitionDuration(milliseconds);
     }
+
+    @Override
+    public void setImageResource(int resId) {
+        super.setImageResource(resId);
+        if (null != mAttacher) {
+            mAttacher.update();
+        }
+    }
+
+    @Override
+    public void setImageURI(Uri uri) {
+        super.setImageURI(uri);
+        if (null != mAttacher) {
+            mAttacher.update();
+        }
+    }
+
+    @Override
+    // setImageBitmap calls through to this method
+    public void setImageDrawable(Drawable drawable) {
+        super.setImageDrawable(drawable);
+        if (null != mAttacher) {
+            mAttacher.update();
+        }
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        mAttacher.setOnLongClickListener(l);
+    }
+
+
+
+
 
     @Override
     protected void onDetachedFromWindow() {

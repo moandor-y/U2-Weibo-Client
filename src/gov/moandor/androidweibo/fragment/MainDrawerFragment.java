@@ -59,19 +59,6 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (view != mFooterView) {
-            int currentIndex = ConfigManager.getCurrentAccountIndex();
-            if (position != currentIndex) {
-                ((OnAccountClickListener) getActivity()).onAccountClick(currentIndex, position);
-                mAdapter.notifyDataSetChanged();
-            }
-        } else {
-            getActivity().startActivity(ActivityUtils.authorizeActivity());
-        }
-    }
-
-    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         int position = ((AdapterView.AdapterContextMenuInfo) menuInfo).position;
         if (position < GlobalContext.getAccountCount()) {
@@ -95,6 +82,19 @@ public class MainDrawerFragment extends Fragment implements AdapterView.OnItemCl
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (view != mFooterView) {
+            int currentIndex = ConfigManager.getCurrentAccountIndex();
+            if (position != currentIndex) {
+                ((OnAccountClickListener) getActivity()).onAccountClick(currentIndex, position);
+                mAdapter.notifyDataSetChanged();
+            }
+        } else {
+            getActivity().startActivity(ActivityUtils.authorizeActivity());
+        }
     }
 
     public void notifyDataSetChanged() {

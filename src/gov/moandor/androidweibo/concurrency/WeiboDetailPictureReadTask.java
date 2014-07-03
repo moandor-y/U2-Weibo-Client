@@ -45,23 +45,17 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     }
 
     @Override
-    protected void onPreExecute() {
-        mImageView.setVisibility(View.GONE);
-        mImageWebView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mRetryButton.setVisibility(View.GONE);
-    }
-
-    @Override
     protected Boolean doInBackground(Void... params) {
         mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
         return ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mType);
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
-        mProgressBar.setProgress(values[0]);
-        mProgressBar.setMax(values[1]);
+    protected void onPreExecute() {
+        mImageView.setVisibility(View.GONE);
+        mImageWebView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRetryButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -78,5 +72,11 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
                 }
             });
         }
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        mProgressBar.setProgress(values[0]);
+        mProgressBar.setMax(values[1]);
     }
 }

@@ -22,13 +22,13 @@ public class CommentDraft extends AbsDraftBean {
         }
 
         @Override
-        public CommentDraft[] newArray(int size) {
-            return new CommentDraft[size];
+        protected CommentDraft onCreateObject() {
+            return new CommentDraft();
         }
 
         @Override
-        protected CommentDraft onCreateObject() {
-            return new CommentDraft();
+        public CommentDraft[] newArray(int size) {
+            return new CommentDraft[size];
         }
     };
 

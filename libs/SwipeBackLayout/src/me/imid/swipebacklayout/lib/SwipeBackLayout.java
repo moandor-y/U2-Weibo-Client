@@ -314,32 +314,6 @@ public class SwipeBackLayout extends FrameLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!mEnable) {
-            return false;
-        }
-        mDragHelper.processTouchEvent(event);
-        return true;
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        mInLayout = true;
-        if (mContentView != null)
-            mContentView.layout(mContentLeft, mContentTop,
-                    mContentLeft + mContentView.getMeasuredWidth(),
-                    mContentTop + mContentView.getMeasuredHeight());
-        mInLayout = false;
-    }
-
-    @Override
-    public void requestLayout() {
-        if (!mInLayout) {
-            super.requestLayout();
-        }
-    }
-
-    @Override
     protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
         final boolean drawContent = child == mContentView;
 
@@ -350,6 +324,40 @@ public class SwipeBackLayout extends FrameLayout {
             drawScrim(canvas, child);
         }
         return ret;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!mEnable) {
+            return false;
+        }
+        mDragHelper.processTouchEvent(event);
+        return true;
+    }
+
+    @Override
+    public void computeScroll() {
+        mScrimOpacity = 1 - mScrollPercent;
+        if (mDragHelper.continueSettling(true)) {
+            ViewCompat.postInvalidateOnAnimation(this);
+        }
+    }
+
+    @Override
+    public void requestLayout() {
+        if (!mInLayout) {
+            super.requestLayout();
+        }
+    }
+
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        mInLayout = true;
+        if (mContentView != null)
+            mContentView.layout(mContentLeft, mContentTop,
+                    mContentLeft + mContentView.getMeasuredWidth(),
+                    mContentTop + mContentView.getMeasuredHeight());
+        mInLayout = false;
     }
 
     private void drawScrim(Canvas canvas, View child) {
@@ -410,14 +418,6 @@ public class SwipeBackLayout extends FrameLayout {
         decor.addView(this);
     }
 
-    @Override
-    public void computeScroll() {
-        mScrimOpacity = 1 - mScrollPercent;
-        if (mDragHelper.continueSettling(true)) {
-            ViewCompat.postInvalidateOnAnimation(this);
-        }
-    }
-
     public static interface SwipeListener {
         /**
          * Invoke when state change
@@ -450,34 +450,13 @@ public class SwipeBackLayout extends FrameLayout {
         private boolean mIsScrollOverValid;
 
         @Override
-        public boolean tryCaptureView(View view, int i) {
-            boolean ret = mDragHelper.isEdgeTouched(mEdgeFlag, i);
-            if (ret) {
-                if (mDragHelper.isEdgeTouched(EDGE_LEFT, i)) {
-                    mTrackingEdge = EDGE_LEFT;
-                } else if (mDragHelper.isEdgeTouched(EDGE_RIGHT, i)) {
-                    mTrackingEdge = EDGE_RIGHT;
-                } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
-                    mTrackingEdge = EDGE_BOTTOM;
+        public void onViewDragStateChanged(int state) {
+            super.onViewDragStateChanged(state);
+            if (mListeners != null && !mListeners.isEmpty()) {
+                for (SwipeListener listener : mListeners) {
+                    listener.onScrollStateChange(state, mScrollPercent);
                 }
-                if (mListeners != null && !mListeners.isEmpty()) {
-                    for (SwipeListener listener : mListeners) {
-                        listener.onEdgeTouch(mTrackingEdge);
-                    }
-                }
-                mIsScrollOverValid = true;
             }
-            return ret;
-        }
-
-        @Override
-        public int getViewHorizontalDragRange(View child) {
-            return mEdgeFlag & (EDGE_LEFT | EDGE_RIGHT);
-        }
-
-        @Override
-        public int getViewVerticalDragRange(View child) {
-            return mEdgeFlag & EDGE_BOTTOM;
         }
 
         @Override
@@ -536,6 +515,37 @@ public class SwipeBackLayout extends FrameLayout {
         }
 
         @Override
+        public int getViewHorizontalDragRange(View child) {
+            return mEdgeFlag & (EDGE_LEFT | EDGE_RIGHT);
+        }
+
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return mEdgeFlag & EDGE_BOTTOM;
+        }
+
+        @Override
+        public boolean tryCaptureView(View view, int i) {
+            boolean ret = mDragHelper.isEdgeTouched(mEdgeFlag, i);
+            if (ret) {
+                if (mDragHelper.isEdgeTouched(EDGE_LEFT, i)) {
+                    mTrackingEdge = EDGE_LEFT;
+                } else if (mDragHelper.isEdgeTouched(EDGE_RIGHT, i)) {
+                    mTrackingEdge = EDGE_RIGHT;
+                } else if (mDragHelper.isEdgeTouched(EDGE_BOTTOM, i)) {
+                    mTrackingEdge = EDGE_BOTTOM;
+                }
+                if (mListeners != null && !mListeners.isEmpty()) {
+                    for (SwipeListener listener : mListeners) {
+                        listener.onEdgeTouch(mTrackingEdge);
+                    }
+                }
+                mIsScrollOverValid = true;
+            }
+            return ret;
+        }
+
+        @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
             int ret = 0;
             if ((mTrackingEdge & EDGE_LEFT) != 0) {
@@ -553,16 +563,6 @@ public class SwipeBackLayout extends FrameLayout {
                 ret = Math.min(0, Math.max(top, -child.getHeight()));
             }
             return ret;
-        }
-
-        @Override
-        public void onViewDragStateChanged(int state) {
-            super.onViewDragStateChanged(state);
-            if (mListeners != null && !mListeners.isEmpty()) {
-                for (SwipeListener listener : mListeners) {
-                    listener.onScrollStateChange(state, mScrollPercent);
-                }
-            }
         }
     }
 }

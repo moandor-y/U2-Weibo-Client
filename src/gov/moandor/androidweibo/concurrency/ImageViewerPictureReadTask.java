@@ -55,15 +55,6 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     }
 
     @Override
-    protected void onPreExecute() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mWebView.setVisibility(View.GONE);
-        mPhotoView.setVisibility(View.GONE);
-        mRetryButton.setVisibility(View.GONE);
-        mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
-    }
-
-    @Override
     protected Boolean doInBackground(Void... params) {
         boolean result = ImageDownloadTaskCache.waitForPictureDownload(mUrl, mDownloadListener, mType);
         if (mPath.endsWith(".gif") || ImageUtils.isTooLargeToDisplay(mPath)) {
@@ -76,9 +67,12 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     }
 
     @Override
-    protected void onProgressUpdate(Integer... values) {
-        mProgressBar.setProgress(values[0]);
-        mProgressBar.setMax(values[1]);
+    protected void onPreExecute() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mWebView.setVisibility(View.GONE);
+        mPhotoView.setVisibility(View.GONE);
+        mRetryButton.setVisibility(View.GONE);
+        mPath = FileUtils.getImagePathFromUrl(mUrl, mType);
     }
 
     @Override
@@ -104,5 +98,11 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
                 }
             });
         }
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        mProgressBar.setProgress(values[0]);
+        mProgressBar.setMax(values[1]);
     }
 }

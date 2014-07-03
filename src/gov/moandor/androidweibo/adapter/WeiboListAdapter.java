@@ -25,42 +25,6 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
     private float mCountFontSize = mFontSize - 5;
 
     @Override
-    View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
-        return inflater.inflate(R.layout.weibo_list_item, parent, false);
-    }
-
-    @Override
-    ViewHolder initViewHolder(View view) {
-        WeiboListViewHolder holder = new WeiboListViewHolder();
-        holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-        holder.userName = (TextView) view.findViewById(R.id.user_name);
-        holder.time = (TextView) view.findViewById(R.id.time);
-        holder.text = (TextView) view.findViewById(R.id.text);
-        holder.pic = (TimelinePicImageView) view.findViewById(R.id.pic);
-        holder.multiPic = (GridLayout) view.findViewById(R.id.pic_multi);
-        holder.retweet = (RelativeLayout) view.findViewById(R.id.retweet);
-        holder.retweetText = (TextView) view.findViewById(R.id.retweet_text);
-        holder.retweetPic = (TimelinePicImageView) view.findViewById(R.id.retweet_pic);
-        holder.retweetMultiPic = (GridLayout) view.findViewById(R.id.retweet_pic_multi);
-        holder.repostCount = (TextView) view.findViewById(R.id.repost_count);
-        holder.commentCount = (TextView) view.findViewById(R.id.comment_count);
-        holder.gpsIcon = (ImageView) view.findViewById(R.id.ic_gps);
-        holder.picIcon = (ImageView) view.findViewById(R.id.ic_pic);
-        holder.countLayout = (LinearLayout) view.findViewById(R.id.count_layout);
-        return holder;
-    }
-
-    @Override
-    void initLayout(ViewHolder vh) {
-        super.initLayout(vh);
-        WeiboListViewHolder holder = (WeiboListViewHolder) vh;
-        holder.retweetText.setOnTouchListener(mTextOnTouchListener);
-        holder.retweetText.setTextSize(mFontSize);
-        holder.repostCount.setTextSize(mCountFontSize);
-        holder.commentCount.setTextSize(mCountFontSize);
-    }
-
-    @Override
     void buildContent(ViewHolder vh, WeiboStatus status, int position) {
         super.buildContent(vh, status, position);
         WeiboListViewHolder holder = (WeiboListViewHolder) vh;
@@ -128,9 +92,45 @@ public class WeiboListAdapter extends AbsTimelineListAdapter<WeiboStatus> {
     }
 
     @Override
+    void initLayout(ViewHolder vh) {
+        super.initLayout(vh);
+        WeiboListViewHolder holder = (WeiboListViewHolder) vh;
+        holder.retweetText.setOnTouchListener(mTextOnTouchListener);
+        holder.retweetText.setTextSize(mFontSize);
+        holder.repostCount.setTextSize(mCountFontSize);
+        holder.commentCount.setTextSize(mCountFontSize);
+    }
+
+    @Override
     public void updateState() {
         super.updateState();
         mPictureType = Utilities.getListPictureType();
+    }
+
+    @Override
+    View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
+        return inflater.inflate(R.layout.weibo_list_item, parent, false);
+    }
+
+    @Override
+    ViewHolder initViewHolder(View view) {
+        WeiboListViewHolder holder = new WeiboListViewHolder();
+        holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+        holder.userName = (TextView) view.findViewById(R.id.user_name);
+        holder.time = (TextView) view.findViewById(R.id.time);
+        holder.text = (TextView) view.findViewById(R.id.text);
+        holder.pic = (TimelinePicImageView) view.findViewById(R.id.pic);
+        holder.multiPic = (GridLayout) view.findViewById(R.id.pic_multi);
+        holder.retweet = (RelativeLayout) view.findViewById(R.id.retweet);
+        holder.retweetText = (TextView) view.findViewById(R.id.retweet_text);
+        holder.retweetPic = (TimelinePicImageView) view.findViewById(R.id.retweet_pic);
+        holder.retweetMultiPic = (GridLayout) view.findViewById(R.id.retweet_pic_multi);
+        holder.repostCount = (TextView) view.findViewById(R.id.repost_count);
+        holder.commentCount = (TextView) view.findViewById(R.id.comment_count);
+        holder.gpsIcon = (ImageView) view.findViewById(R.id.ic_gps);
+        holder.picIcon = (ImageView) view.findViewById(R.id.ic_pic);
+        holder.countLayout = (LinearLayout) view.findViewById(R.id.count_layout);
+        return holder;
     }
 
     private void buildMultiPicture(WeiboStatus status, GridLayout grid, final int position) {

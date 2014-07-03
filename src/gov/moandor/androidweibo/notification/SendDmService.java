@@ -38,11 +38,6 @@ public class SendDmService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
         mText = intent.getStringExtra(TEXT);
@@ -52,8 +47,30 @@ public class SendDmService extends Service {
         return START_REDELIVER_INTENT;
     }
 
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
     private class SendTask extends MyAsyncTask<Void, Void, DirectMessage> {
         private int mNotificationId;
+
+        @Override
+        protected DirectMessage doInBackground(Void... v) {
+            SendDmDao dao = new SendDmDao();
+            dao.setToken(mToken);
+            dao.setText(mText);
+            dao.setUid(mUserId);
+            dao.setScreenName(mScreenName);
+            try {
+                return dao.execute();
+            } catch (WeiboException e) {
+                Logger.logException(e);
+                mError = e.getMessage();
+                cancel(true);
+            }
+            return null;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -71,20 +88,29 @@ public class SendDmService extends Service {
         }
 
         @Override
-        protected DirectMessage doInBackground(Void... v) {
-            SendDmDao dao = new SendDmDao();
-            dao.setToken(mToken);
-            dao.setText(mText);
-            dao.setUid(mUserId);
-            dao.setScreenName(mScreenName);
-            try {
-                return dao.execute();
-            } catch (WeiboException e) {
-                Logger.logException(e);
-                mError = e.getMessage();
-                cancel(true);
-            }
-            return null;
+        protected void onPostExecute(DirectMessage result) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+            builder.setTicker(getString(R.string.sent_successfully));
+            builder.setContentTitle(getString(R.string.sent_successfully));
+            builder.setOnlyAlertOnce(true);
+            builder.setAutoCancel(true);
+            builder.setSmallIcon(R.drawable.ic_accept);
+            builder.setOngoing(false);
+            builder.setContentIntent(Utilities.newEmptyPendingIntent());
+            mNotificationManager.notify(mNotificationId, builder.build());
+            GlobalContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mNotificationManager.cancel(mNotificationId);
+                    stopForeground(true);
+                    stopSelf();
+                }
+            }, 3000);
+            Intent intent = new Intent();
+            intent.setAction(DmConversationFragment.SEND_FINISHED);
+            intent.putExtra(DmConversationFragment.SEND_RESULT_CODE, DmConversationFragment.SEND_SUCCESSFUL);
+            intent.putExtra(DmConversationFragment.SEND_SUCCESSFUL_MESSAGE, result);
+            sendBroadcast(intent);
         }
 
         @Override
@@ -112,32 +138,6 @@ public class SendDmService extends Service {
             intent.putExtra(DmConversationFragment.SEND_RESULT_CODE, DmConversationFragment.SEND_FAILED);
             intent.putExtra(DmConversationFragment.SEND_FAILED_TEXT, mText);
             intent.putExtra(DmConversationFragment.SEND_FAILED_ERROR, mError);
-            sendBroadcast(intent);
-        }
-
-        @Override
-        protected void onPostExecute(DirectMessage result) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
-            builder.setTicker(getString(R.string.sent_successfully));
-            builder.setContentTitle(getString(R.string.sent_successfully));
-            builder.setOnlyAlertOnce(true);
-            builder.setAutoCancel(true);
-            builder.setSmallIcon(R.drawable.ic_accept);
-            builder.setOngoing(false);
-            builder.setContentIntent(Utilities.newEmptyPendingIntent());
-            mNotificationManager.notify(mNotificationId, builder.build());
-            GlobalContext.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mNotificationManager.cancel(mNotificationId);
-                    stopForeground(true);
-                    stopSelf();
-                }
-            }, 3000);
-            Intent intent = new Intent();
-            intent.setAction(DmConversationFragment.SEND_FINISHED);
-            intent.putExtra(DmConversationFragment.SEND_RESULT_CODE, DmConversationFragment.SEND_SUCCESSFUL);
-            intent.putExtra(DmConversationFragment.SEND_SUCCESSFUL_MESSAGE, result);
             sendBroadcast(intent);
         }
     }

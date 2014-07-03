@@ -63,24 +63,13 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            exit();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+    }    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
     }
 
     @Override
@@ -97,6 +86,13 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         requestRestart();
+    }    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void exit() {
@@ -143,13 +139,24 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
         }
 
-        @Override
+        private void buildSummaries() {
+            buildThemeSummary();
+            buildFontSizeSummary();
+            buildLoadCountSummary();
+            buildAvatarSummary();
+            buildPictureSummary();
+            buildWifiPictureSummary();
+            buildComRepAvatarSummary();
+        }        @Override
         public void onPause() {
             super.onPause();
             ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
 
-        @Override
+        private void buildThemeSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.THEME);
+            preference.setSummary(preference.getEntry());
+        }        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (key.equals(ConfigManager.THEME)) {
                 Intent intent = new Intent();
@@ -163,21 +170,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             } else {
                 buildSummaries();
             }
-        }
-
-        private void buildSummaries() {
-            buildThemeSummary();
-            buildFontSizeSummary();
-            buildLoadCountSummary();
-            buildAvatarSummary();
-            buildPictureSummary();
-            buildWifiPictureSummary();
-            buildComRepAvatarSummary();
-        }
-
-        private void buildThemeSummary() {
-            ListPreference preference = (ListPreference) findPreference(ConfigManager.THEME);
-            preference.setSummary(preference.getEntry());
         }
 
         private void buildFontSizeSummary() {
@@ -209,6 +201,10 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             ListPreference preference = (ListPreference) findPreference(ConfigManager.COMMENT_REPOST_LIST_AVATAR_MODE);
             preference.setSummary(preference.getEntry());
         }
+
+
+
+
     }
 
     public static class NotificationsActivity extends AbsActivity {
@@ -253,7 +249,11 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
 
         private Uri mRingtoneUri;
 
-        @Override
+        private void buildSummaries() {
+            buildIntervalSummary();
+            buildWifiIntervalSummary();
+            buildRingtoneSummary();
+        }        @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_notifications);
@@ -270,19 +270,34 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             }
         }
 
-        @Override
+        private void buildIntervalSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY);
+            preference.setSummary(preference.getEntry());
+        }        @Override
         public void onResume() {
             super.onResume();
             ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
         }
 
-        @Override
+        private void buildWifiIntervalSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY_WIFI);
+            preference.setSummary(preference.getEntry());
+        }        @Override
         public void onPause() {
             super.onPause();
             ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
         }
 
-        @Override
+        private void buildRingtoneSummary() {
+            Preference preference = findPreference(ConfigManager.NOTIFICATION_RINGTONE);
+            String ringtone = ConfigManager.getNotificationRingtone();
+            if (!TextUtils.isEmpty(ringtone)) {
+                Uri ringtoneUri = Uri.parse(ringtone);
+                preference.setSummary(RingtoneManager.getRingtone(getActivity(), ringtoneUri).getTitle(getActivity()));
+            } else {
+                preference.setSummary(R.string.mute);
+            }
+        }        @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode != RESULT_OK) {
@@ -300,38 +315,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             }
         }
 
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            buildSummaries();
-        }
-
-        private void buildSummaries() {
-            buildIntervalSummary();
-            buildWifiIntervalSummary();
-            buildRingtoneSummary();
-        }
-
-        private void buildIntervalSummary() {
-            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY);
-            preference.setSummary(preference.getEntry());
-        }
-
-        private void buildWifiIntervalSummary() {
-            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY_WIFI);
-            preference.setSummary(preference.getEntry());
-        }
-
-        private void buildRingtoneSummary() {
-            Preference preference = findPreference(ConfigManager.NOTIFICATION_RINGTONE);
-            String ringtone = ConfigManager.getNotificationRingtone();
-            if (!TextUtils.isEmpty(ringtone)) {
-                Uri ringtoneUri = Uri.parse(ringtone);
-                preference.setSummary(RingtoneManager.getRingtone(getActivity(), ringtoneUri).getTitle(getActivity()));
-            } else {
-                preference.setSummary(R.string.mute);
-            }
-        }
-
         private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -345,7 +328,20 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 startActivityForResult(intent, REQUEST_RINGTONE);
                 return true;
             }
+        }        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            buildSummaries();
         }
+
+
+
+
+
+
+
+
+
+
     }
 
     public static class BlackMagicActivity extends AbsActivity {
@@ -380,13 +376,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     public static class BlackMagicFragment extends PreferenceFragment {
         private static final String KEY_UPDATE_FOLLOWING = "update_following";
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs_bm);
-            findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
-        }
-
         private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -396,6 +385,11 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 Utilities.notice(R.string.updating);
                 return true;
             }
+        }        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_bm);
+            findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new OnUpdateFollowingClickListener());
         }
 
         private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
@@ -404,6 +398,8 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                 Utilities.notice(R.string.update_finished);
             }
         }
+
+
     }
 
     public static class AboutActivity extends AbsActivity {
@@ -465,16 +461,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             return String.format(Locale.ENGLISH, "%.1f MB", memoryInMB);
         }
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.prefs_about);
-            buildMemoryInfo(findPreference(KEY_MEMORY));
-            buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
-            buildDevelopers();
-            buildDirectories();
-        }
-
         private void buildOfficialAccount(Preference preference) {
             preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -483,6 +469,14 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
                     return true;
                 }
             });
+        }        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_about);
+            buildMemoryInfo(findPreference(KEY_MEMORY));
+            buildOfficialAccount(findPreference(KEY_OFFICIAL_ACCOUNT));
+            buildDevelopers();
+            buildDirectories();
         }
 
         private void buildDevelopers() {
@@ -507,6 +501,8 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             findPreference(KEY_DIR_AVATAR).setSummary(FileUtils.WEIBO_AVATAR_CACHE);
             findPreference(KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
         }
+
+
     }
 
     public static class LicensesActivity extends AbsActivity {
@@ -521,4 +517,8 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             getSupportActionBar().hide();
         }
     }
+
+
+
+
 }

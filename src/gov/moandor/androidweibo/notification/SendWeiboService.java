@@ -41,16 +41,16 @@ public class SendWeiboService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
         mDraft = intent.getParcelableExtra(WEIBO_DRAFT);
         new SendTask().execute();
         return START_REDELIVER_INTENT;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private PendingIntent getFailedClickIntent() {
@@ -63,21 +63,6 @@ public class SendWeiboService extends Service {
         private static final int COMPLETE = -2;
 
         private int mNotificationId;
-
-        @Override
-        protected void onPreExecute() {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
-            builder.setTicker(getString(R.string.sending));
-            builder.setContentTitle(getString(R.string.sending));
-            builder.setContentText(mDraft.content);
-            builder.setOnlyAlertOnce(true);
-            builder.setOngoing(true);
-            builder.setSmallIcon(R.drawable.ic_upload);
-            builder.setProgress(0, 100, TextUtils.isEmpty(mDraft.picPath));
-            builder.setContentIntent(Utilities.newEmptyPendingIntent());
-            mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
-            mNotificationManager.notify(mNotificationId, builder.build());
-        }
 
         @Override
         protected Void doInBackground(Void... v) {
@@ -133,6 +118,42 @@ public class SendWeiboService extends Service {
         }
 
         @Override
+        protected void onPreExecute() {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+            builder.setTicker(getString(R.string.sending));
+            builder.setContentTitle(getString(R.string.sending));
+            builder.setContentText(mDraft.content);
+            builder.setOnlyAlertOnce(true);
+            builder.setOngoing(true);
+            builder.setSmallIcon(R.drawable.ic_upload);
+            builder.setProgress(0, 100, TextUtils.isEmpty(mDraft.picPath));
+            builder.setContentIntent(Utilities.newEmptyPendingIntent());
+            mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
+            mNotificationManager.notify(mNotificationId, builder.build());
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+            builder.setTicker(getString(R.string.sent_successfully));
+            builder.setContentTitle(getString(R.string.sent_successfully));
+            builder.setOnlyAlertOnce(true);
+            builder.setAutoCancel(true);
+            builder.setSmallIcon(R.drawable.ic_accept);
+            builder.setOngoing(false);
+            builder.setContentIntent(Utilities.newEmptyPendingIntent());
+            mNotificationManager.notify(mNotificationId, builder.build());
+            GlobalContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mNotificationManager.cancel(mNotificationId);
+                    stopForeground(true);
+                    stopSelf();
+                }
+            }, 3000);
+        }
+
+        @Override
         protected void onProgressUpdate(Integer... values) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
             builder.setTicker(getString(R.string.upload_picture));
@@ -168,27 +189,6 @@ public class SendWeiboService extends Service {
             builder.setSmallIcon(R.drawable.ic_cancel);
             builder.setOngoing(false);
             builder.setContentIntent(getFailedClickIntent());
-            mNotificationManager.notify(mNotificationId, builder.build());
-            GlobalContext.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mNotificationManager.cancel(mNotificationId);
-                    stopForeground(true);
-                    stopSelf();
-                }
-            }, 3000);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
-            builder.setTicker(getString(R.string.sent_successfully));
-            builder.setContentTitle(getString(R.string.sent_successfully));
-            builder.setOnlyAlertOnce(true);
-            builder.setAutoCancel(true);
-            builder.setSmallIcon(R.drawable.ic_accept);
-            builder.setOngoing(false);
-            builder.setContentIntent(Utilities.newEmptyPendingIntent());
             mNotificationManager.notify(mNotificationId, builder.build());
             GlobalContext.runOnUiThread(new Runnable() {
                 @Override

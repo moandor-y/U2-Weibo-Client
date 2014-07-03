@@ -30,20 +30,20 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mAdapter.getCount() == 0 || mIsFromUnread) {
-            mRefreshTask = new LoadFromDatabaseTask();
-            mRefreshTask.execute();
-        }
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
         Account account = GlobalContext.getCurrentAccount();
         if (account != null) {
             saveListPosition(account);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mAdapter.getCount() == 0 || mIsFromUnread) {
+            mRefreshTask = new LoadFromDatabaseTask();
+            mRefreshTask.execute();
         }
     }
 
@@ -158,17 +158,17 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
         private int mGroup;
 
         @Override
+        protected List<DataBean> doInBackground(Void... v) {
+            return getBeansFromDatabase(mAccountId, mGroup);
+        }
+
+        @Override
         protected void onPreExecute() {
             setPullToRefreshEnabled(false);
             mAdapter.clearDataSet();
             mAdapter.notifyDataSetChanged();
             mAccountId = GlobalContext.getCurrentAccount().user.id;
             mGroup = getGroup();
-        }
-
-        @Override
-        protected List<DataBean> doInBackground(Void... v) {
-            return getBeansFromDatabase(mAccountId, mGroup);
         }
 
         @Override

@@ -72,18 +72,18 @@ public class AuthorizeActivity extends AbsActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (mWebView != null && isFinishing()) {
-            mWebView.stopLoading();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mWebView != null) {
             mWebView.clearCache(true);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mWebView != null && isFinishing()) {
+            mWebView.stopLoading();
         }
     }
 

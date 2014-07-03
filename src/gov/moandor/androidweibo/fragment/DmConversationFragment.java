@@ -110,10 +110,15 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Utilities.unregisterReceiver(mSendFinishReceiver);
+    protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
+        return new OnListRefreshListener();
     }
+
+    @Override
+    protected void loadMore() {/* do nothing */}
+
+    @Override
+    public void refresh() {/* do nothing */}
 
     @Override
     DmConversationAdapter createListAdapter() {
@@ -151,14 +156,9 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
     }
 
     @Override
-    public void refresh() {/* do nothing */}
-
-    @Override
-    protected void loadMore() {/* do nothing */}
-
-    @Override
-    protected SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
-        return new OnListRefreshListener();
+    public void onDestroy() {
+        super.onDestroy();
+        Utilities.unregisterReceiver(mSendFinishReceiver);
     }
 
     private void startAutoLoadNewMessages() {
@@ -201,12 +201,6 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         private long mUserId;
 
         @Override
-        protected void onPreExecute() {
-            mAccountId = GlobalContext.getCurrentAccount().user.id;
-            mUserId = mUser.id;
-        }
-
-        @Override
         protected List<DirectMessage> doInBackground(Void... params) {
             DirectMessage[] result = DatabaseUtils.getDmConversation(mAccountId, mUserId);
             if (result != null) {
@@ -214,7 +208,13 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
             } else {
                 return null;
             }
+        }        @Override
+        protected void onPreExecute() {
+            mAccountId = GlobalContext.getCurrentAccount().user.id;
+            mUserId = mUser.id;
         }
+
+
 
         @Override
         protected void onPostExecute(List<DirectMessage> result) {

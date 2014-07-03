@@ -15,30 +15,6 @@ import gov.moandor.androidweibo.util.TextUtils;
 
 public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
     @Override
-    View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
-        return inflater.inflate(R.layout.comment_list_item, parent, false);
-    }
-
-    @Override
-    ViewHolder initViewHolder(View view) {
-        CommentListViewHolder holder = new CommentListViewHolder();
-        holder.avatar = (ImageView) view.findViewById(R.id.avatar);
-        holder.userName = (TextView) view.findViewById(R.id.user_name);
-        holder.time = (TextView) view.findViewById(R.id.time);
-        holder.text = (TextView) view.findViewById(R.id.text);
-        holder.repliedText = (TextView) view.findViewById(R.id.replied_text);
-        return holder;
-    }
-
-    @Override
-    void initLayout(ViewHolder vh) {
-        super.initLayout(vh);
-        CommentListViewHolder holder = (CommentListViewHolder) vh;
-        holder.repliedText.setOnTouchListener(mTextOnTouchListener);
-        holder.repliedText.setTextSize(mFontSize);
-    }
-
-    @Override
     void buildContent(ViewHolder vh, WeiboComment comment, int position) {
         super.buildContent(vh, comment, position);
         CommentListViewHolder holder = (CommentListViewHolder) vh;
@@ -73,6 +49,30 @@ public class CommentListAdapter extends AbsTimelineListAdapter<WeiboComment> {
                 holder.repliedText.setText(comment.repliedTextSpannable);
             }
         }
+    }
+
+    @Override
+    void initLayout(ViewHolder vh) {
+        super.initLayout(vh);
+        CommentListViewHolder holder = (CommentListViewHolder) vh;
+        holder.repliedText.setOnTouchListener(mTextOnTouchListener);
+        holder.repliedText.setTextSize(mFontSize);
+    }
+
+    @Override
+    View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
+        return inflater.inflate(R.layout.comment_list_item, parent, false);
+    }
+
+    @Override
+    ViewHolder initViewHolder(View view) {
+        CommentListViewHolder holder = new CommentListViewHolder();
+        holder.avatar = (ImageView) view.findViewById(R.id.avatar);
+        holder.userName = (TextView) view.findViewById(R.id.user_name);
+        holder.time = (TextView) view.findViewById(R.id.time);
+        holder.text = (TextView) view.findViewById(R.id.text);
+        holder.repliedText = (TextView) view.findViewById(R.id.replied_text);
+        return holder;
     }
 
     private static class CommentListViewHolder extends ViewHolder {

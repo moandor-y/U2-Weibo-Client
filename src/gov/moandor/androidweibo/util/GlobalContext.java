@@ -31,6 +31,7 @@ public class GlobalContext extends Application {
     private static final int MIN_CACHE_SIZE = 1024 * 1024 * 8;
     private static final Map<String, Bitmap> sEmotionMap = new LinkedHashMap<String, Bitmap>();
     private static final Map<String, String> sWeiboEmotionNameMap = new LinkedHashMap<String, String>();
+
     static {
         sWeiboEmotionNameMap.put("[爱你]", "e1.png");
         sWeiboEmotionNameMap.put("[抱抱]", "e2.png");
@@ -110,6 +111,7 @@ public class GlobalContext extends Application {
         sWeiboEmotionNameMap.put("[转发]", "e77.png");
         sWeiboEmotionNameMap.put("[浮云]", "e78.png");
     }
+
     private static volatile GlobalContext sInstance;
     private static volatile AbsActivity sActivity;
     private static Handler sHandler;

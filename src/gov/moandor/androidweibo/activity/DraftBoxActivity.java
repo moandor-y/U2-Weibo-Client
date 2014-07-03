@@ -33,6 +33,57 @@ public class DraftBoxActivity extends AbsActivity {
     private List<AbsDraftBean> mBeans = new ArrayList<AbsDraftBean>();
     private MyAsyncTask<Void, Void, List<AbsDraftBean>> mTask;
     private ActionMode mActionMode;
+    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.draft_long_click, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (mTask != null && mTask.getStatus() != MyAsyncTask.Status.FINISHED) {
+                return true;
+            }
+            switch (item.getItemId()) {
+                case R.id.send:
+                    for (AbsDraftBean draft : mListAdapter.getCheckedItems()) {
+                        Intent intent = new Intent();
+                        if (draft instanceof WeiboDraft) {
+                            intent.setClass(GlobalContext.getInstance(), SendWeiboService.class);
+                            intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
+                            intent.putExtra(SendWeiboService.WEIBO_DRAFT, draft);
+                        } else if (draft instanceof CommentDraft) {
+                            intent.setClass(GlobalContext.getInstance(), SendCommentService.class);
+                            intent.putExtra(SendCommentService.TOKEN, GlobalContext.getCurrentAccount().token);
+                            intent.putExtra(SendCommentService.COMMENT_DRAFT, draft);
+                        }
+                        startService(intent);
+                    }
+                    mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
+                    mTask.execute();
+                    break;
+                case R.id.delete:
+                    mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
+                    mTask.execute();
+                    break;
+            }
+            mode.finish();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+            mListAdapter.clearCheck();
+            mListAdapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,56 +269,4 @@ public class DraftBoxActivity extends AbsActivity {
             mListAdapter.notifyDataSetChanged();
         }
     }
-
-    private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (mTask != null && mTask.getStatus() != MyAsyncTask.Status.FINISHED) {
-                return true;
-            }
-            switch (item.getItemId()) {
-                case R.id.send:
-                    for (AbsDraftBean draft : mListAdapter.getCheckedItems()) {
-                        Intent intent = new Intent();
-                        if (draft instanceof WeiboDraft) {
-                            intent.setClass(GlobalContext.getInstance(), SendWeiboService.class);
-                            intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
-                            intent.putExtra(SendWeiboService.WEIBO_DRAFT, draft);
-                        } else if (draft instanceof CommentDraft) {
-                            intent.setClass(GlobalContext.getInstance(), SendCommentService.class);
-                            intent.putExtra(SendCommentService.TOKEN, GlobalContext.getCurrentAccount().token);
-                            intent.putExtra(SendCommentService.COMMENT_DRAFT, draft);
-                        }
-                        startService(intent);
-                    }
-                    mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
-                    mTask.execute();
-                    break;
-                case R.id.delete:
-                    mTask = new RemoveAndGetDraftsTask(mListAdapter.getCheckedIds());
-                    mTask.execute();
-                    break;
-            }
-            mode.finish();
-            return true;
-        }
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.draft_long_click, menu);
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            mActionMode = null;
-            mListAdapter.clearCheck();
-            mListAdapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-    };
 }

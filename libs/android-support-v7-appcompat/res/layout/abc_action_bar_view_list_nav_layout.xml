@@ -16,8 +16,9 @@
 
 <!-- Styled linear layout, compensating for the lack of a defStyle parameter
      in pre-Honeycomb LinearLayout's constructor. -->
-<LinearLayout style="?attr/actionBarTabBarStyle"
-              xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent">
+<LinearLayout
+    style="?attr/actionBarTabBarStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 </LinearLayout>

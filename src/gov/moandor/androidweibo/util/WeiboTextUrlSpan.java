@@ -46,6 +46,12 @@ public class WeiboTextUrlSpan extends ClickableSpan implements ParcelableSpan {
         Utilities.openUri(context, uri);
     }
 
+    @Override
+    public void updateDrawState(TextPaint tp) {
+        int color = Utilities.getColor(R.attr.link_color);
+        tp.setColor(color);
+    }
+
     public void onLongClick(View widget) {
         LongClickDialogFragment dialog = new LongClickDialogFragment();
         String url = mUrl;
@@ -56,12 +62,6 @@ public class WeiboTextUrlSpan extends ClickableSpan implements ParcelableSpan {
         args.putString(LongClickDialogFragment.URL, url);
         dialog.setArguments(args);
         dialog.show(GlobalContext.getActivity().getSupportFragmentManager(), LONG_CLICK_DIALOG);
-    }
-
-    @Override
-    public void updateDrawState(TextPaint tp) {
-        int color = Utilities.getColor(R.attr.link_color);
-        tp.setColor(color);
     }
 
     public static class LongClickDialogFragment extends DialogFragment {

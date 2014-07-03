@@ -54,6 +54,12 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     private OnAddPicDialogClickListener mOnAddPicDialogClickListener = new OnAddPicDialogClickListener();
     private LocationListener mLocationListener = new LocationListener() {
         @Override
+        public void onLocationChanged(Location location) {
+            ((LocationManager) getSystemService(LOCATION_SERVICE)).removeUpdates(this);
+            onLocationUpdated(location);
+        }
+
+        @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
         }
 
@@ -63,12 +69,6 @@ public class WriteWeiboActivity extends AbsWriteActivity {
 
         @Override
         public void onProviderDisabled(String provider) {
-        }
-
-        @Override
-        public void onLocationChanged(Location location) {
-            ((LocationManager) getSystemService(LOCATION_SERVICE)).removeUpdates(this);
-            onLocationUpdated(location);
         }
     };
 
@@ -143,24 +143,6 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_write_weibo, menu);
-        menu.findItem(R.id.comment_when_repost).setChecked(mCommentWhenRepost);
-        menu.findItem(R.id.comment_ori_when_repost).setChecked(mCommentOriWhenRepost);
-        if (mRetweetWeiboStatus == null) {
-            menu.removeItem(R.id.comment_when_repost);
-            menu.removeItem(R.id.comment_ori_when_repost);
-        } else {
-            menu.removeItem(R.id.insert_topic);
-            menu.removeItem(R.id.add_location);
-            if (mRetweetWeiboStatus.retweetStatus == null) {
-                menu.removeItem(R.id.comment_ori_when_repost);
-            }
-        }
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.add_location:
@@ -189,24 +171,6 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(STATE_PIC_PATH, mPicPath);
-        outState.putBoolean(STATE_COMMENT_WHEN_REPOST, mCommentWhenRepost);
-        outState.putBoolean(STATE_COMMENT_ORI_WHEN_REPOST, mCommentOriWhenRepost);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState == null) {
-            return;
-        }
-        mPicPath = savedInstanceState.getString(STATE_PIC_PATH);
-        loadPicPreview();
     }
 
     @Override
@@ -251,6 +215,55 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
     }
 
+    @Override
+    WeiboDraft onCreateDraft(String content) {
+        WeiboDraft draft = new WeiboDraft();
+        draft.content = content;
+        draft.accountId = GlobalContext.getCurrentAccount().user.id;
+        draft.picPath = mPicPath;
+        draft.retweetStatus = mRetweetWeiboStatus;
+        draft.location = mLocation;
+        draft.commentWhenRepost = mCommentWhenRepost;
+        draft.commentOriWhenRepost = mCommentOriWhenRepost;
+        return draft;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(STATE_PIC_PATH, mPicPath);
+        outState.putBoolean(STATE_COMMENT_WHEN_REPOST, mCommentWhenRepost);
+        outState.putBoolean(STATE_COMMENT_ORI_WHEN_REPOST, mCommentOriWhenRepost);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState == null) {
+            return;
+        }
+        mPicPath = savedInstanceState.getString(STATE_PIC_PATH);
+        loadPicPreview();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_write_weibo, menu);
+        menu.findItem(R.id.comment_when_repost).setChecked(mCommentWhenRepost);
+        menu.findItem(R.id.comment_ori_when_repost).setChecked(mCommentOriWhenRepost);
+        if (mRetweetWeiboStatus == null) {
+            menu.removeItem(R.id.comment_when_repost);
+            menu.removeItem(R.id.comment_ori_when_repost);
+        } else {
+            menu.removeItem(R.id.insert_topic);
+            menu.removeItem(R.id.add_location);
+            if (mRetweetWeiboStatus.retweetStatus == null) {
+                menu.removeItem(R.id.comment_ori_when_repost);
+            }
+        }
+        return true;
+    }
+
     private void addPicture() {
         AddPictureDialogFragment dialog = new AddPictureDialogFragment();
         dialog.setOnClickListener(mOnAddPicDialogClickListener);
@@ -267,19 +280,6 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             return cursor.getString(columnIndex);
         }
         return path;
-    }
-
-    @Override
-    WeiboDraft onCreateDraft(String content) {
-        WeiboDraft draft = new WeiboDraft();
-        draft.content = content;
-        draft.accountId = GlobalContext.getCurrentAccount().user.id;
-        draft.picPath = mPicPath;
-        draft.retweetStatus = mRetweetWeiboStatus;
-        draft.location = mLocation;
-        draft.commentWhenRepost = mCommentWhenRepost;
-        draft.commentOriWhenRepost = mCommentOriWhenRepost;
-        return draft;
     }
 
     private void addLocation() {

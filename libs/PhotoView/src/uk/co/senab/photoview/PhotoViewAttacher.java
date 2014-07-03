@@ -84,6 +84,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     private boolean mRotationDetectionEnabled = false;
     private boolean mZoomEnabled;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
+
     public PhotoViewAttacher(ImageView imageView) {
         mImageView = new WeakReference<ImageView>(imageView);
 
@@ -192,47 +193,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
         return mZoomEnabled;
     }
 
-    /**
-     * Clean-up the resources attached to this object. This needs to be called when the ImageView is
-     * no longer used. A good example is from {@link android.view.View#onDetachedFromWindow()} or
-     * from {@link android.app.Activity#onDestroy()}. This is automatically called if you are using
-     * {@link uk.co.senab.photoview.PhotoView}.
-     */
-    @SuppressWarnings("deprecation")
-    public void cleanup() {
-        if (null == mImageView) {
-            return; // cleanup already done
-        }
-
-        final ImageView imageView = mImageView.get();
-
-        if (null != imageView) {
-            // Remove this as a global layout listener
-            ViewTreeObserver observer = imageView.getViewTreeObserver();
-            if (null != observer && observer.isAlive()) {
-                observer.removeGlobalOnLayoutListener(this);
-            }
-
-            // Remove the ImageView's reference to this
-            imageView.setOnTouchListener(null);
-
-            // make sure a pending fling runnable won't be run
-            cancelFling();
-        }
-
-        if (null != mGestureDetector) {
-            mGestureDetector.setOnDoubleTapListener(null);
-        }
-
-        // Clear listeners too
-        mMatrixChangeListener = null;
-        mPhotoTapListener = null;
-        mViewTapListener = null;
-
-        // Finally, clear ImageView
-        mImageView = null;
-    }
-
     @Override
     public RectF getDisplayRect() {
         checkMatrixBounds();
@@ -258,42 +218,9 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
         return true;
     }
 
-    /**
-     * @deprecated use {@link #setRotationTo(float)}
-     */
     @Override
-    public void setPhotoViewRotation(float degrees) {
-        mSuppMatrix.setRotate(degrees % 360);
-        checkAndDisplayMatrix();
-    }
-
-    @Override
-    public void setRotationTo(float degrees) {
-        mSuppMatrix.setRotate(degrees % 360);
-        checkAndDisplayMatrix();
-    }
-
-    @Override
-    public void setRotationBy(float degrees) {
-        mSuppMatrix.postRotate(degrees % 360);
-        checkAndDisplayMatrix();
-    }
-
-    public ImageView getImageView() {
-        ImageView imageView = null;
-
-        if (null != mImageView) {
-            imageView = mImageView.get();
-        }
-
-        // If we don't have an ImageView, call cleanup()
-        if (null == imageView) {
-            cleanup();
-            Log.i(LOG_TAG,
-                    "ImageView no longer exists. You should not use this PhotoViewAttacher any more.");
-        }
-
-        return imageView;
+    public Matrix getDisplayMatrix() {
+        return new Matrix(getDrawMatrix());
     }
 
     @Override
@@ -391,6 +318,175 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     }
 
     @Override
+    public void setAllowParentInterceptOnEdge(boolean allow) {
+        mAllowParentInterceptOnEdge = allow;
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener listener) {
+        mLongClickListener = listener;
+    }
+
+    @Override
+    public void setOnMatrixChangeListener(OnMatrixChangedListener listener) {
+        mMatrixChangeListener = listener;
+    }
+
+    @Override
+    public OnPhotoTapListener getOnPhotoTapListener() {
+        return mPhotoTapListener;
+    }
+
+    @Override
+    public void setOnPhotoTapListener(OnPhotoTapListener listener) {
+        mPhotoTapListener = listener;
+    }
+
+    @Override
+    public void setRotationTo(float degrees) {
+        mSuppMatrix.setRotate(degrees % 360);
+        checkAndDisplayMatrix();
+    }
+
+    @Override
+    public void setRotationBy(float degrees) {
+        mSuppMatrix.postRotate(degrees % 360);
+        checkAndDisplayMatrix();
+    }
+
+    @Override
+    public OnViewTapListener getOnViewTapListener() {
+        return mViewTapListener;
+    }
+
+    @Override
+    public void setOnViewTapListener(OnViewTapListener listener) {
+        mViewTapListener = listener;
+    }
+
+    @Override
+    public void setScale(float scale, boolean animate) {
+        ImageView imageView = getImageView();
+
+        if (null != imageView) {
+            setScale(scale,
+                    (imageView.getRight()) / 2,
+                    (imageView.getBottom()) / 2,
+                    animate);
+        }
+    }
+
+    @Override
+    public void setScale(float scale, float focalX, float focalY,
+                         boolean animate) {
+        ImageView imageView = getImageView();
+
+        if (null != imageView) {
+            // Check to see if the scale is within bounds
+            if (scale < mMinScale || scale > mMaxScale) {
+                LogManager
+                        .getLogger()
+                        .i(LOG_TAG,
+                                "Scale must be within the range of minScale and maxScale");
+                return;
+            }
+
+            if (animate) {
+                imageView.post(new AnimatedZoomRunnable(getScale(), scale,
+                        focalX, focalY));
+            } else {
+                mSuppMatrix.setScale(scale, scale, focalX, focalY);
+                checkAndDisplayMatrix();
+            }
+        }
+    }
+
+    @Override
+    public void setZoomable(boolean zoomable) {
+        mZoomEnabled = zoomable;
+        update();
+    }
+
+    /**
+     * @deprecated use {@link #setRotationTo(float)}
+     */
+    @Override
+    public void setPhotoViewRotation(float degrees) {
+        mSuppMatrix.setRotate(degrees % 360);
+        checkAndDisplayMatrix();
+    }
+
+    public Bitmap getVisibleRectangleBitmap() {
+        ImageView imageView = getImageView();
+        return imageView == null ? null : imageView.getDrawingCache();
+    }
+
+    @Override
+    public void setZoomTransitionDuration(int milliseconds) {
+        if (milliseconds < 0)
+            milliseconds = DEFAULT_ZOOM_DURATION;
+        this.ZOOM_DURATION = milliseconds;
+    }
+
+    /**
+     * Clean-up the resources attached to this object. This needs to be called when the ImageView is
+     * no longer used. A good example is from {@link android.view.View#onDetachedFromWindow()} or
+     * from {@link android.app.Activity#onDestroy()}. This is automatically called if you are using
+     * {@link uk.co.senab.photoview.PhotoView}.
+     */
+    @SuppressWarnings("deprecation")
+    public void cleanup() {
+        if (null == mImageView) {
+            return; // cleanup already done
+        }
+
+        final ImageView imageView = mImageView.get();
+
+        if (null != imageView) {
+            // Remove this as a global layout listener
+            ViewTreeObserver observer = imageView.getViewTreeObserver();
+            if (null != observer && observer.isAlive()) {
+                observer.removeGlobalOnLayoutListener(this);
+            }
+
+            // Remove the ImageView's reference to this
+            imageView.setOnTouchListener(null);
+
+            // make sure a pending fling runnable won't be run
+            cancelFling();
+        }
+
+        if (null != mGestureDetector) {
+            mGestureDetector.setOnDoubleTapListener(null);
+        }
+
+        // Clear listeners too
+        mMatrixChangeListener = null;
+        mPhotoTapListener = null;
+        mViewTapListener = null;
+
+        // Finally, clear ImageView
+        mImageView = null;
+    }
+
+    public ImageView getImageView() {
+        ImageView imageView = null;
+
+        if (null != mImageView) {
+            imageView = mImageView.get();
+        }
+
+        // If we don't have an ImageView, call cleanup()
+        if (null == imageView) {
+            cleanup();
+            Log.i(LOG_TAG,
+                    "ImageView no longer exists. You should not use this PhotoViewAttacher any more.");
+        }
+
+        return imageView;
+    }
+
+    @Override
     public void onDrag(float dx, float dy) {
         if (mScaleDragDetector.isScaling()) {
             return; // Do not drag if we are already scaling
@@ -447,6 +543,22 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
     }
 
     @Override
+    public void onScale(float scaleFactor, float focusX, float focusY) {
+        if (DEBUG) {
+            LogManager.getLogger().d(
+                    LOG_TAG,
+                    String.format("onScale: scale: %.2f. fX: %.2f. fY: %.2f",
+                            scaleFactor, focusX, focusY)
+            );
+        }
+
+        if (getScale() < mMaxScale || scaleFactor < 1f) {
+            mSuppMatrix.postScale(scaleFactor, scaleFactor, focusX, focusY);
+            checkAndDisplayMatrix();
+        }
+    }
+
+    @Override
     public void onGlobalLayout() {
         ImageView imageView = getImageView();
 
@@ -478,22 +590,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
             } else {
                 updateBaseMatrix(imageView.getDrawable());
             }
-        }
-    }
-
-    @Override
-    public void onScale(float scaleFactor, float focusX, float focusY) {
-        if (DEBUG) {
-            LogManager.getLogger().d(
-                    LOG_TAG,
-                    String.format("onScale: scale: %.2f. fX: %.2f. fY: %.2f",
-                            scaleFactor, focusX, focusY)
-            );
-        }
-
-        if (getScale() < mMaxScale || scaleFactor < 1f) {
-            mSuppMatrix.postScale(scaleFactor, scaleFactor, focusX, focusY);
-            checkAndDisplayMatrix();
         }
     }
 
@@ -547,84 +643,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
         return handled;
     }
 
-    @Override
-    public void setAllowParentInterceptOnEdge(boolean allow) {
-        mAllowParentInterceptOnEdge = allow;
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener listener) {
-        mLongClickListener = listener;
-    }
-
-    @Override
-    public void setOnMatrixChangeListener(OnMatrixChangedListener listener) {
-        mMatrixChangeListener = listener;
-    }
-
-    @Override
-    public OnPhotoTapListener getOnPhotoTapListener() {
-        return mPhotoTapListener;
-    }
-
-    @Override
-    public void setOnPhotoTapListener(OnPhotoTapListener listener) {
-        mPhotoTapListener = listener;
-    }
-
-    @Override
-    public OnViewTapListener getOnViewTapListener() {
-        return mViewTapListener;
-    }
-
-    @Override
-    public void setOnViewTapListener(OnViewTapListener listener) {
-        mViewTapListener = listener;
-    }
-
-    @Override
-    public void setScale(float scale, boolean animate) {
-        ImageView imageView = getImageView();
-
-        if (null != imageView) {
-            setScale(scale,
-                    (imageView.getRight()) / 2,
-                    (imageView.getBottom()) / 2,
-                    animate);
-        }
-    }
-
-    @Override
-    public void setScale(float scale, float focalX, float focalY,
-                         boolean animate) {
-        ImageView imageView = getImageView();
-
-        if (null != imageView) {
-            // Check to see if the scale is within bounds
-            if (scale < mMinScale || scale > mMaxScale) {
-                LogManager
-                        .getLogger()
-                        .i(LOG_TAG,
-                                "Scale must be within the range of minScale and maxScale");
-                return;
-            }
-
-            if (animate) {
-                imageView.post(new AnimatedZoomRunnable(getScale(), scale,
-                        focalX, focalY));
-            } else {
-                mSuppMatrix.setScale(scale, scale, focalX, focalY);
-                checkAndDisplayMatrix();
-            }
-        }
-    }
-
-    @Override
-    public void setZoomable(boolean zoomable) {
-        mZoomEnabled = zoomable;
-        update();
-    }
-
     public void update() {
         ImageView imageView = getImageView();
 
@@ -640,11 +658,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
                 resetMatrix();
             }
         }
-    }
-
-    @Override
-    public Matrix getDisplayMatrix() {
-        return new Matrix(getDrawMatrix());
     }
 
     public Matrix getDrawMatrix() {
@@ -765,18 +778,6 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
             }
         }
         return null;
-    }
-
-    public Bitmap getVisibleRectangleBitmap() {
-        ImageView imageView = getImageView();
-        return imageView == null ? null : imageView.getDrawingCache();
-    }
-
-    @Override
-    public void setZoomTransitionDuration(int milliseconds) {
-        if (milliseconds < 0)
-            milliseconds = DEFAULT_ZOOM_DURATION;
-        this.ZOOM_DURATION = milliseconds;
     }
 
     /**

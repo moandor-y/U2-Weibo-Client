@@ -17,11 +17,6 @@ public class DeleteCommentTask extends MyAsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPreExecute() {
-        mToken = GlobalContext.getCurrentAccount().token;
-    }
-
-    @Override
     protected Void doInBackground(Void... v) {
         DeleteCommentDao dao = new DeleteCommentDao();
         dao.setToken(mToken);
@@ -39,13 +34,18 @@ public class DeleteCommentTask extends MyAsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onCancelled() {
-        mListener.onDeleteFailed(mException);
+    protected void onPreExecute() {
+        mToken = GlobalContext.getCurrentAccount().token;
     }
 
     @Override
     protected void onPostExecute(Void result) {
         mListener.onDeleteFinished();
+    }
+
+    @Override
+    protected void onCancelled() {
+        mListener.onDeleteFailed(mException);
     }
 
     public static interface OnDeleteFinishedListener {

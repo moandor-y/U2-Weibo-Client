@@ -61,11 +61,6 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mAccount = intent.getParcelableExtra(ACCOUNT);
         mMessage = intent.getParcelableExtra(MESSAGE);
@@ -76,6 +71,11 @@ public abstract class AbsUnreadNotificationService<T extends AbsItemBean> extend
         notificationManager.notify(Long.valueOf(mMessage.id).intValue(), notification);
         stopSelf();
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private Notification buildNotification() {

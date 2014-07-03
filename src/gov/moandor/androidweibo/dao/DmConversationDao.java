@@ -12,11 +12,6 @@ public class DmConversationDao extends BaseTimelineJsonDao<DirectMessage> {
     private long mUid;
 
     @Override
-    protected List<DirectMessage> parceJson(String json) throws WeiboException {
-        return JsonUtils.getDmsFromJson(json);
-    }
-
-    @Override
     protected String getUrl() {
         return UrlHelper.DIRECT_MESSAGES_CONVERSATION;
     }
@@ -25,6 +20,11 @@ public class DmConversationDao extends BaseTimelineJsonDao<DirectMessage> {
     protected void addParams(HttpParams params) {
         super.addParams(params);
         params.put("uid", mUid);
+    }
+
+    @Override
+    protected List<DirectMessage> parceJson(String json) throws WeiboException {
+        return JsonUtils.getDmsFromJson(json);
     }
 
     public void setUid(long uid) {

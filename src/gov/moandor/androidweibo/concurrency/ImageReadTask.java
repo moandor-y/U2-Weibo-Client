@@ -89,12 +89,12 @@ public class ImageReadTask extends MyAsyncTask<Void, Integer, Bitmap> {
     }
 
     @Override
-    protected void onCancelled(Bitmap bitmap) {
+    protected void onPostExecute(Bitmap bitmap) {
         display(bitmap);
     }
 
     @Override
-    protected void onPostExecute(Bitmap bitmap) {
+    protected void onCancelled(Bitmap bitmap) {
         display(bitmap);
     }
 

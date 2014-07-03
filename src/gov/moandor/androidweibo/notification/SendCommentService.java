@@ -38,16 +38,16 @@ public class SendCommentService extends Service {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mToken = intent.getStringExtra(TOKEN);
         mDraft = intent.getParcelableExtra(COMMENT_DRAFT);
         new SendTask().execute();
         return START_REDELIVER_INTENT;
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private PendingIntent getFailedClickIntent() {
@@ -57,21 +57,6 @@ public class SendCommentService extends Service {
 
     private class SendTask extends MyAsyncTask<Void, Void, Void> {
         private int mNotificationId;
-
-        @Override
-        protected void onPreExecute() {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
-            builder.setTicker(getString(R.string.sending));
-            builder.setContentTitle(getString(R.string.sending));
-            builder.setContentText(mDraft.content);
-            builder.setOnlyAlertOnce(true);
-            builder.setOngoing(true);
-            builder.setSmallIcon(R.drawable.ic_upload);
-            builder.setProgress(0, 100, true);
-            builder.setContentIntent(Utilities.newEmptyPendingIntent());
-            mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
-            mNotificationManager.notify(mNotificationId, builder.build());
-        }
 
         @Override
         protected Void doInBackground(Void... v) {
@@ -101,25 +86,18 @@ public class SendCommentService extends Service {
         }
 
         @Override
-        protected void onCancelled() {
+        protected void onPreExecute() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
-            builder.setTicker(getString(R.string.send_failed));
-            builder.setContentTitle(getString(R.string.send_failed));
+            builder.setTicker(getString(R.string.sending));
+            builder.setContentTitle(getString(R.string.sending));
             builder.setContentText(mDraft.content);
             builder.setOnlyAlertOnce(true);
-            builder.setAutoCancel(true);
-            builder.setSmallIcon(R.drawable.ic_cancel);
-            builder.setOngoing(false);
-            builder.setContentIntent(getFailedClickIntent());
+            builder.setOngoing(true);
+            builder.setSmallIcon(R.drawable.ic_upload);
+            builder.setProgress(0, 100, true);
+            builder.setContentIntent(Utilities.newEmptyPendingIntent());
+            mNotificationId = new Random().nextInt(Integer.MAX_VALUE);
             mNotificationManager.notify(mNotificationId, builder.build());
-            GlobalContext.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mNotificationManager.cancel(mNotificationId);
-                    stopForeground(true);
-                    stopSelf();
-                }
-            }, 3000);
         }
 
         @Override
@@ -132,6 +110,28 @@ public class SendCommentService extends Service {
             builder.setSmallIcon(R.drawable.ic_accept);
             builder.setOngoing(false);
             builder.setContentIntent(Utilities.newEmptyPendingIntent());
+            mNotificationManager.notify(mNotificationId, builder.build());
+            GlobalContext.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mNotificationManager.cancel(mNotificationId);
+                    stopForeground(true);
+                    stopSelf();
+                }
+            }, 3000);
+        }
+
+        @Override
+        protected void onCancelled() {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+            builder.setTicker(getString(R.string.send_failed));
+            builder.setContentTitle(getString(R.string.send_failed));
+            builder.setContentText(mDraft.content);
+            builder.setOnlyAlertOnce(true);
+            builder.setAutoCancel(true);
+            builder.setSmallIcon(R.drawable.ic_cancel);
+            builder.setOngoing(false);
+            builder.setContentIntent(getFailedClickIntent());
             mNotificationManager.notify(mNotificationId, builder.build());
             GlobalContext.runOnUiThread(new Runnable() {
                 @Override

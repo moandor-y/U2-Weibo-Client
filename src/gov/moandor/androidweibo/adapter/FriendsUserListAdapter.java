@@ -87,6 +87,11 @@ public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectabl
         return getItem(mSelectedPosition);
     }
 
+    @Override
+    public int getSelection() {
+        return mSelectedPosition;
+    }
+
     public void updateDataSet(List<WeiboUser> users) {
         mUsers.clear();
         mUsers.addAll(users);
@@ -98,11 +103,6 @@ public class FriendsUserListAdapter extends AbsBaseAdapter implements ISelectabl
 
     public void updatePosition(int position, WeiboUser user) {
         mUsers.set(position, user);
-    }
-
-    @Override
-    public int getSelection() {
-        return mSelectedPosition;
     }
 
     private ViewHolder initViewHolder(View view) {

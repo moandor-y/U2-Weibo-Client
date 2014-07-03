@@ -39,22 +39,20 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         mLongClickable = value;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
-    protected boolean handleMovementKey(TextView widget, Spannable buffer, int keyCode, int movementMetaState,
-                                        KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_ENTER:
-                if (KeyEvent.metaStateHasNoModifiers(movementMetaState)) {
-                    if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0
-                            && action(CLICK, widget, buffer)) {
-                        return true;
-                    }
-                }
-                break;
+    protected boolean left(TextView widget, Spannable buffer) {
+        if (action(UP, widget, buffer)) {
+            return true;
         }
-        return super.handleMovementKey(widget, buffer, keyCode, movementMetaState, event);
+        return super.left(widget, buffer);
+    }
+
+    @Override
+    protected boolean right(TextView widget, Spannable buffer) {
+        if (action(DOWN, widget, buffer)) {
+            return true;
+        }
+        return super.right(widget, buffer);
     }
 
     @Override
@@ -74,19 +72,61 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
     }
 
     @Override
-    protected boolean left(TextView widget, Spannable buffer) {
-        if (action(UP, widget, buffer)) {
-            return true;
+    public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
+        int action = event.getAction();
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN) {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
+            x -= widget.getTotalPaddingLeft();
+            y -= widget.getTotalPaddingTop();
+            x += widget.getScrollX();
+            y += widget.getScrollY();
+            Layout layout = widget.getLayout();
+            int line = layout.getLineForVertical(y);
+            int off = layout.getOffsetForHorizontal(line, x);
+            WeiboTextUrlSpan[] link = buffer.getSpans(off, off, WeiboTextUrlSpan.class);
+            if (link.length != 0) {
+                if (action == MotionEvent.ACTION_UP) {
+                    if (!mHasPerformedLongPress) {
+                        link[0].onClick(widget);
+                    }
+                    mPressed = false;
+                    mLastEvent = new float[2];
+                } else if (action == MotionEvent.ACTION_DOWN) {
+                    mPressed = true;
+                    mLastEvent[0] = event.getX();
+                    mLastEvent[1] = event.getY();
+                    checkForLongClick(link, widget);
+                    Selection.setSelection(buffer, buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
+                }
+                return true;
+            } else {
+                Selection.removeSelection(buffer);
+            }
+        } else if (action == MotionEvent.ACTION_MOVE) {
+            float[] position = {event.getX(), event.getY()};
+            int slop = 6;
+            float xInstance = Math.abs(mLastEvent[0] - position[0]);
+            float yInstance = Math.abs(mLastEvent[1] - position[1]);
+            double instance = Math.sqrt(Math.hypot(xInstance, yInstance));
+            if (instance > slop) {
+                mPressed = false;
+            }
+        } else {
+            mPressed = false;
+            mLastEvent = new float[2];
         }
-        return super.left(widget, buffer);
+        return super.onTouchEvent(widget, buffer, event);
     }
 
     @Override
-    protected boolean right(TextView widget, Spannable buffer) {
-        if (action(DOWN, widget, buffer)) {
-            return true;
+    public void onTakeFocus(TextView view, Spannable text, int dir) {
+        Selection.removeSelection(text);
+        if ((dir & View.FOCUS_BACKWARD) != 0) {
+            text.setSpan(FROM_BELOW, 0, 0, Spanned.SPAN_POINT_POINT);
+        } else {
+            text.removeSpan(FROM_BELOW);
         }
-        return super.right(widget, buffer);
     }
 
     private boolean action(int what, TextView widget, Spannable buffer) {
@@ -166,54 +206,6 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         return false;
     }
 
-    @Override
-    public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
-        int action = event.getAction();
-        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN) {
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            x -= widget.getTotalPaddingLeft();
-            y -= widget.getTotalPaddingTop();
-            x += widget.getScrollX();
-            y += widget.getScrollY();
-            Layout layout = widget.getLayout();
-            int line = layout.getLineForVertical(y);
-            int off = layout.getOffsetForHorizontal(line, x);
-            WeiboTextUrlSpan[] link = buffer.getSpans(off, off, WeiboTextUrlSpan.class);
-            if (link.length != 0) {
-                if (action == MotionEvent.ACTION_UP) {
-                    if (!mHasPerformedLongPress) {
-                        link[0].onClick(widget);
-                    }
-                    mPressed = false;
-                    mLastEvent = new float[2];
-                } else if (action == MotionEvent.ACTION_DOWN) {
-                    mPressed = true;
-                    mLastEvent[0] = event.getX();
-                    mLastEvent[1] = event.getY();
-                    checkForLongClick(link, widget);
-                    Selection.setSelection(buffer, buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
-                }
-                return true;
-            } else {
-                Selection.removeSelection(buffer);
-            }
-        } else if (action == MotionEvent.ACTION_MOVE) {
-            float[] position = {event.getX(), event.getY()};
-            int slop = 6;
-            float xInstance = Math.abs(mLastEvent[0] - position[0]);
-            float yInstance = Math.abs(mLastEvent[1] - position[1]);
-            double instance = Math.sqrt(Math.hypot(xInstance, yInstance));
-            if (instance > slop) {
-                mPressed = false;
-            }
-        } else {
-            mPressed = false;
-            mLastEvent = new float[2];
-        }
-        return super.onTouchEvent(widget, buffer, event);
-    }
-
     private void checkForLongClick(WeiboTextUrlSpan[] spans, View widget) {
         mHasPerformedLongPress = false;
         mPendingCheckForLongPress = new CheckForLongPress(spans, widget);
@@ -237,14 +229,22 @@ public class LongClickableLinkMovementMethod extends ScrollingMovementMethod {
         text.removeSpan(FROM_BELOW);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
-    public void onTakeFocus(TextView view, Spannable text, int dir) {
-        Selection.removeSelection(text);
-        if ((dir & View.FOCUS_BACKWARD) != 0) {
-            text.setSpan(FROM_BELOW, 0, 0, Spanned.SPAN_POINT_POINT);
-        } else {
-            text.removeSpan(FROM_BELOW);
+    protected boolean handleMovementKey(TextView widget, Spannable buffer, int keyCode, int movementMetaState,
+                                        KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+                if (KeyEvent.metaStateHasNoModifiers(movementMetaState)) {
+                    if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0
+                            && action(CLICK, widget, buffer)) {
+                        return true;
+                    }
+                }
+                break;
         }
+        return super.handleMovementKey(widget, buffer, keyCode, movementMetaState, event);
     }
 
     private class CheckForLongPress implements Runnable {

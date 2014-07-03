@@ -40,21 +40,12 @@ public class CupcakeGestureDetector implements GestureDetector {
         mTouchSlop = configuration.getScaledTouchSlop();
     }
 
-    @Override
-    public void setOnGestureListener(OnGestureListener listener) {
-        this.mListener = listener;
-    }
-
     float getActiveX(MotionEvent ev) {
         return ev.getX();
     }
 
     float getActiveY(MotionEvent ev) {
         return ev.getY();
-    }
-
-    public boolean isScaling() {
-        return false;
     }
 
     @Override
@@ -138,5 +129,14 @@ public class CupcakeGestureDetector implements GestureDetector {
         }
 
         return true;
+    }
+
+    public boolean isScaling() {
+        return false;
+    }
+
+    @Override
+    public void setOnGestureListener(OnGestureListener listener) {
+        this.mListener = listener;
     }
 }

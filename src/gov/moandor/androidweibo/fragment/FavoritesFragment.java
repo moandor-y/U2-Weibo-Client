@@ -23,14 +23,6 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     private int mPage = 1;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mAdapter.getCount() == 0) {
-            refresh();
-        }
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter.setOnPictureClickListener(new OnPictureClickListener());
@@ -38,31 +30,15 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-            int position = mAdapter.positionOf(status.id);
-            mAdapter.updatePosition(position, status);
-            mAdapter.notifyDataSetChanged();
+    protected void loadMore() {
+        if (!mNoMore) {
+            super.loadMore();
         }
     }
 
     @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        FavoritesDao dao = new FavoritesDao();
-        dao.setPage(mPage);
-        return dao;
-    }
-
-    @Override
-    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -76,10 +52,9 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     }
 
     @Override
-    protected void loadMore() {
-        if (!mNoMore) {
-            super.loadMore();
-        }
+    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -88,6 +63,31 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
         callback.setAdapter(mAdapter);
         callback.setFragment(this);
         return callback;
+    }
+
+    @Override
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
+        FavoritesDao dao = new FavoritesDao();
+        dao.setPage(mPage);
+        return dao;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
+            int position = mAdapter.positionOf(status.id);
+            mAdapter.updatePosition(position, status);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mAdapter.getCount() == 0) {
+            refresh();
+        }
     }
 
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {

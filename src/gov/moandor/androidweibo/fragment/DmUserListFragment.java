@@ -44,35 +44,6 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        final long accountId = GlobalContext.getCurrentAccount().user.id;
-        DirectMessagesUser[] users = mAdapter.getItems();
-        final DatabaseUtils.DmUsers dmUsers = new DatabaseUtils.DmUsers();
-        dmUsers.users = users;
-        dmUsers.nextCursor = mNextCursor;
-        MyAsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                DatabaseUtils.updateDmUsers(dmUsers, accountId);
-            }
-        });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            WeiboUser user = data.getParcelableExtra(DmConversationFragment.RESULT_USER);
-            DirectMessage message = data.getParcelableExtra(DmConversationFragment.RESULT_LATEST_MESSAGE);
-            int position = mAdapter.findPositionByUserId(user.id);
-            DirectMessagesUser item = mAdapter.getItem(position);
-            item.message = message;
-            mAdapter.updateItem(position, item);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
     void initContent() {
         if (mFromUnread) {
             refresh();
@@ -104,11 +75,6 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     }
 
     @Override
-    protected BaseUserListDao<DirectMessagesUser> onCreateDao() {
-        return new DmUserListDao();
-    }
-
-    @Override
     void onItemClick(int position) {
         startActivityForResult(ActivityUtils.dmConversationActivity(mAdapter.getItem(position).weiboUser), REQUEST_CODE);
     }
@@ -124,11 +90,45 @@ public class DmUserListFragment extends AbsUserListFragment<DmUserListAdapter, D
     }
 
     @Override
+    protected BaseUserListDao<DirectMessagesUser> onCreateDao() {
+        return new DmUserListDao();
+    }
+
+    @Override
     protected ActionMode.Callback getActionModeCallback() {
         DmUserListActionModeCallback callback = new DmUserListActionModeCallback();
         callback.setFragment(this);
         callback.setAdapter(mAdapter);
         return callback;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            WeiboUser user = data.getParcelableExtra(DmConversationFragment.RESULT_USER);
+            DirectMessage message = data.getParcelableExtra(DmConversationFragment.RESULT_LATEST_MESSAGE);
+            int position = mAdapter.findPositionByUserId(user.id);
+            DirectMessagesUser item = mAdapter.getItem(position);
+            item.message = message;
+            mAdapter.updateItem(position, item);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        final long accountId = GlobalContext.getCurrentAccount().user.id;
+        DirectMessagesUser[] users = mAdapter.getItems();
+        final DatabaseUtils.DmUsers dmUsers = new DatabaseUtils.DmUsers();
+        dmUsers.users = users;
+        dmUsers.nextCursor = mNextCursor;
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseUtils.updateDmUsers(dmUsers, accountId);
+            }
+        });
     }
 
     private class DmUserListRefreshTask extends RefreshTask {

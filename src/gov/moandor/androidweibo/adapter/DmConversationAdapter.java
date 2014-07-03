@@ -38,6 +38,43 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
     }
 
     @Override
+    void buildTime(ViewHolder holder, DirectMessage message, int position) {
+        if (position == getCount() - 1 || shouldDisplayTime(message, mBeans.get(position + 1))) {
+            holder.time.setVisibility(View.VISIBLE);
+            super.buildTime(holder, message, position);
+        } else {
+            holder.time.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    void buildUserLayout(ViewHolder h, WeiboUser user, int position) {
+        DmConversationViewHolder holder = (DmConversationAdapter.DmConversationViewHolder) h;
+        if (user.id == mCurrentUser.id) {
+            holder.avatarOppo.setVisibility(View.GONE);
+            holder.avatar.setVisibility(View.VISIBLE);
+            buildAvatar(holder.avatar, user, getCount() - 1 - position);
+        } else {
+            holder.avatar.setVisibility(View.GONE);
+            holder.avatarOppo.setVisibility(View.VISIBLE);
+            buildAvatar(holder.avatarOppo, user, getCount() - 1 - position);
+        }
+
+    }
+
+    @Override
+    void initLayout(ViewHolder holder) {
+        holder.time.setTextSize(mTimeFontSize);
+        holder.text.setTextSize(mFontSize);
+        holder.text.setOnTouchListener(mTextOnTouchListener);
+    }
+
+    @Override
+    public void addAllFirst(List<DirectMessage> beans) {
+        mBeans.addAll(0, beans);
+    }
+
+    @Override
     public int positionOf(DirectMessage bean) {
         throw new UnsupportedOperationException();
     }
@@ -68,11 +105,6 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
     }
 
     @Override
-    public void addAllFirst(List<DirectMessage> beans) {
-        mBeans.addAll(0, beans);
-    }
-
-    @Override
     View inflateLayout(LayoutInflater inflater, ViewGroup parent) {
         return inflater.inflate(R.layout.dm_conversation_item, parent, false);
     }
@@ -85,38 +117,6 @@ public class DmConversationAdapter extends AbsTimelineListAdapter<DirectMessage>
         holder.text = (TextView) view.findViewById(R.id.text);
         holder.time = (TextView) view.findViewById(R.id.time);
         return holder;
-    }
-
-    @Override
-    void initLayout(ViewHolder holder) {
-        holder.time.setTextSize(mTimeFontSize);
-        holder.text.setTextSize(mFontSize);
-        holder.text.setOnTouchListener(mTextOnTouchListener);
-    }
-
-    @Override
-    void buildUserLayout(ViewHolder h, WeiboUser user, int position) {
-        DmConversationViewHolder holder = (DmConversationAdapter.DmConversationViewHolder) h;
-        if (user.id == mCurrentUser.id) {
-            holder.avatarOppo.setVisibility(View.GONE);
-            holder.avatar.setVisibility(View.VISIBLE);
-            buildAvatar(holder.avatar, user, getCount() - 1 - position);
-        } else {
-            holder.avatar.setVisibility(View.GONE);
-            holder.avatarOppo.setVisibility(View.VISIBLE);
-            buildAvatar(holder.avatarOppo, user, getCount() - 1 - position);
-        }
-
-    }
-
-    @Override
-    void buildTime(ViewHolder holder, DirectMessage message, int position) {
-        if (position == getCount() - 1 || shouldDisplayTime(message, mBeans.get(position + 1))) {
-            holder.time.setVisibility(View.VISIBLE);
-            super.buildTime(holder, message, position);
-        } else {
-            holder.time.setVisibility(View.GONE);
-        }
     }
 
     private static class DmConversationViewHolder extends ViewHolder {

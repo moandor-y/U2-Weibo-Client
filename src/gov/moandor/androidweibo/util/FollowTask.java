@@ -18,11 +18,6 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
     }
 
     @Override
-    protected void onPreExecute() {
-        mToken = GlobalContext.getCurrentAccount().token;
-    }
-
-    @Override
     protected WeiboUser doInBackground(Void... v) {
         FollowDao dao = new FollowDao();
         dao.setToken(mToken);
@@ -42,6 +37,11 @@ public class FollowTask extends MyAsyncTask<Void, Void, WeiboUser> {
         }
         cancel(true);
         return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        mToken = GlobalContext.getCurrentAccount().token;
     }
 
     @Override

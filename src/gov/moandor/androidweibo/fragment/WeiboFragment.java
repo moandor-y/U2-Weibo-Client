@@ -133,14 +133,6 @@ public class WeiboFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mWeiboStatus = ((WeiboActivity) getActivity()).getWeiboStatus();
-        initLayout();
-        buildLayout();
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         mAvatar = (ImageView) view.findViewById(R.id.avatar);
         mMap = (ImageView) view.findViewById(R.id.map);
@@ -155,6 +147,14 @@ public class WeiboFragment extends Fragment {
         mPictureMulti = (GridLayout) view.findViewById(R.id.pic_multi);
         mRetweetPictureMulti = (GridLayout) view.findViewById(R.id.retweet_pic_multi);
         mRetweetLayout = (RelativeLayout) view.findViewById(R.id.retweet);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mWeiboStatus = ((WeiboActivity) getActivity()).getWeiboStatus();
+        initLayout();
+        buildLayout();
     }
 
     private void initLayout() {

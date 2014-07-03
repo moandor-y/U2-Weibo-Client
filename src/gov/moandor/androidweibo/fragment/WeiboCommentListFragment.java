@@ -32,33 +32,15 @@ public class WeiboCommentListFragment extends
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mQuickPost.setHint(R.string.quick_comment);
-    }
-
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mWeiboStatus = ((WeiboActivity) getActivity()).getWeiboStatus();
     }
 
     @Override
-    WeiboTimelineListAdapter<WeiboComment> createListAdapter() {
-        return new WeiboTimelineListAdapter<WeiboComment>();
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
-        CommentsShowDao dao = new CommentsShowDao();
-        dao.setWeiboId(mWeiboStatus.id);
-        return dao;
-    }
-
-    @Override
-    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        WeiboComment comment = mAdapter.getItem(position);
-        startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mQuickPost.setHint(R.string.quick_comment);
     }
 
     @Override
@@ -75,6 +57,17 @@ public class WeiboCommentListFragment extends
     }
 
     @Override
+    WeiboTimelineListAdapter<WeiboComment> createListAdapter() {
+        return new WeiboTimelineListAdapter<WeiboComment>();
+    }
+
+    @Override
+    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        WeiboComment comment = mAdapter.getItem(position);
+        startActivity(ActivityUtils.writeCommentActivity(comment.weiboStatus, comment));
+    }
+
+    @Override
     ActionMode.Callback getActionModeCallback() {
         CommentListActionModeCallback callback = new CommentListActionModeCallback() {
             @Override
@@ -86,5 +79,12 @@ public class WeiboCommentListFragment extends
         callback.setAdapter(mAdapter);
         callback.setFragment(this);
         return callback;
+    }
+
+    @Override
+    protected BaseTimelineJsonDao<WeiboComment> onCreateDao() {
+        CommentsShowDao dao = new CommentsShowDao();
+        dao.setWeiboId(mWeiboStatus.id);
+        return dao;
     }
 }

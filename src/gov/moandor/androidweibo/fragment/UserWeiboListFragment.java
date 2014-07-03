@@ -34,32 +34,8 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mAdapter.getCount() == 0) {
-            refresh();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-            mAdapter.updatePosition(mAdapter.positionOf(status.id), status);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        UserTimelineDao dao = new UserTimelineDao();
-        dao.setUserId(mUserId);
-        return dao;
     }
 
     @Override
@@ -84,6 +60,30 @@ public class UserWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Weib
         callback.setAdapter(mAdapter);
         callback.setFragment(this);
         return callback;
+    }
+
+    @Override
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
+        UserTimelineDao dao = new UserTimelineDao();
+        dao.setUserId(mUserId);
+        return dao;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
+            mAdapter.updatePosition(mAdapter.positionOf(status.id), status);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mAdapter.getCount() == 0) {
+            refresh();
+        }
     }
 
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {

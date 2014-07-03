@@ -27,14 +27,6 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (mAdapter.getCount() == 0) {
-            refresh();
-        }
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mAdapter.setOnPictureClickListener(new OnPictureClickListener());
@@ -42,31 +34,8 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-            int position = mAdapter.positionOf(status.id);
-            mAdapter.updatePosition(position, status);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        SearchTopicsDao dao = new SearchTopicsDao();
-        dao.setTopic(mTopic);
-        return dao;
-    }
-
-    @Override
-    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -80,11 +49,42 @@ public class TopicWeiboListFragment extends AbsTimelineFragment<WeiboStatus, Wei
     }
 
     @Override
+    void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = ActivityUtils.weiboActivity(mAdapter.getItem(position));
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
     ActionMode.Callback getActionModeCallback() {
         WeiboListActionModeCallback callback = new WeiboListActionModeCallback();
         callback.setAdapter(mAdapter);
         callback.setFragment(this);
         return callback;
+    }
+
+    @Override
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
+        SearchTopicsDao dao = new SearchTopicsDao();
+        dao.setTopic(mTopic);
+        return dao;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
+            int position = mAdapter.positionOf(status.id);
+            mAdapter.updatePosition(position, status);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mAdapter.getCount() == 0) {
+            refresh();
+        }
     }
 
     private class OnMultiPictureClickListener implements WeiboListAdapter.OnMultiPictureClickListener {

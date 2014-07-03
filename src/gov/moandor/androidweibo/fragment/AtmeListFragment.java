@@ -35,70 +35,18 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
-            final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
-            final int position = mAdapter.positionOf(status.id);
-            if (0 <= position && position < mAdapter.getCount()) {
-                mAdapter.updatePosition(position, status);
-                mAdapter.notifyDataSetChanged();
-                final long accountId = GlobalContext.getCurrentAccount().user.id;
-                final int group = ConfigManager.getAtmeFilter();
-                MyAsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        DatabaseUtils.updateAtmeStatus(status, position, accountId, group);
-                    }
-                });
-            }
-        }
-    }
-
-    @Override
     WeiboListAdapter createListAdapter() {
         return new WeiboListAdapter();
     }
 
     @Override
-    List<WeiboStatus> getBeansFromDatabase(long accountId, int group) {
-        return DatabaseUtils.getAtmeStatuses(accountId, group);
+    LoadMoreTask createLoadMoreTask() {
+        return new MainLoadMoreTask();
     }
 
     @Override
-    void saveRefreshResultToDatabase(List<WeiboStatus> statuses, long accountId, int group) {
-        DatabaseUtils.removeAtmeStatuses(accountId, group);
-        DatabaseUtils.insertAtmeStatuses(statuses, accountId, group);
-    }
-
-    @Override
-    void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses, long accountId, int group) {
-        DatabaseUtils.insertAtmeStatuses(statuses, accountId, group);
-    }
-
-    @Override
-    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
-        MentionsWeiboTimelineDao dao = new MentionsWeiboTimelineDao();
-        dao.setFilter(ConfigManager.getAtmeFilter());
-        return dao;
-    }
-
-    @Override
-    public void saveListPosition(Account account) {
-        View view = mListView.getChildAt(0);
-        if (view != null) {
-            final TimelinePosition position = new TimelinePosition();
-            position.position = mListView.getFirstVisiblePosition();
-            position.top = mListView.getChildAt(0).getTop();
-            final long accountId = account.user.id;
-            final int filter = ConfigManager.getAtmeFilter();
-            MyAsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    DatabaseUtils.insertOrUpdateTimelinePosition(position, MainActivity.ATME_LIST, filter, accountId);
-                }
-            });
-
-        }
+    RefreshTask createRefreshTask() {
+        return new MainRefreshTask();
     }
 
     @Override
@@ -137,13 +85,65 @@ public class AtmeListFragment extends AbsMainTimelineFragment<WeiboStatus, Weibo
     }
 
     @Override
-    RefreshTask createRefreshTask() {
-        return new MainRefreshTask();
+    protected BaseTimelineJsonDao<WeiboStatus> onCreateDao() {
+        MentionsWeiboTimelineDao dao = new MentionsWeiboTimelineDao();
+        dao.setFilter(ConfigManager.getAtmeFilter());
+        return dao;
     }
 
     @Override
-    LoadMoreTask createLoadMoreTask() {
-        return new MainLoadMoreTask();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            final WeiboStatus status = data.getParcelableExtra(WeiboActivity.WEIBO_STATUS);
+            final int position = mAdapter.positionOf(status.id);
+            if (0 <= position && position < mAdapter.getCount()) {
+                mAdapter.updatePosition(position, status);
+                mAdapter.notifyDataSetChanged();
+                final long accountId = GlobalContext.getCurrentAccount().user.id;
+                final int group = ConfigManager.getAtmeFilter();
+                MyAsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        DatabaseUtils.updateAtmeStatus(status, position, accountId, group);
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    List<WeiboStatus> getBeansFromDatabase(long accountId, int group) {
+        return DatabaseUtils.getAtmeStatuses(accountId, group);
+    }
+
+    @Override
+    void saveRefreshResultToDatabase(List<WeiboStatus> statuses, long accountId, int group) {
+        DatabaseUtils.removeAtmeStatuses(accountId, group);
+        DatabaseUtils.insertAtmeStatuses(statuses, accountId, group);
+    }
+
+    @Override
+    void saveLoadMoreResultToDatabase(SparseArray<WeiboStatus> statuses, long accountId, int group) {
+        DatabaseUtils.insertAtmeStatuses(statuses, accountId, group);
+    }
+
+    @Override
+    public void saveListPosition(Account account) {
+        View view = mListView.getChildAt(0);
+        if (view != null) {
+            final TimelinePosition position = new TimelinePosition();
+            position.position = mListView.getFirstVisiblePosition();
+            position.top = mListView.getChildAt(0).getTop();
+            final long accountId = account.user.id;
+            final int filter = ConfigManager.getAtmeFilter();
+            MyAsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    DatabaseUtils.insertOrUpdateTimelinePosition(position, MainActivity.ATME_LIST, filter, accountId);
+                }
+            });
+
+        }
     }
 
     @Override

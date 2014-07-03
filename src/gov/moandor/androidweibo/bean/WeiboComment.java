@@ -17,13 +17,13 @@ public class WeiboComment extends AbsItemBean {
         }
 
         @Override
-        public WeiboComment[] newArray(int size) {
-            return new WeiboComment[size];
+        protected WeiboComment onCreateObject() {
+            return new WeiboComment();
         }
 
         @Override
-        protected WeiboComment onCreateObject() {
-            return new WeiboComment();
+        public WeiboComment[] newArray(int size) {
+            return new WeiboComment[size];
         }
     };
     public transient SpannableString repliedTextSpannable;

@@ -92,6 +92,11 @@ public class AtUserActivity extends AbsActivity {
         private SearchTask mSearchTask;
 
         @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
         public boolean onQueryTextChange(String newText) {
             if (!TextUtils.isEmpty(newText)) {
                 if (mSearchTask != null && mSearchTask.getStatus() != MyAsyncTask.Status.FINISHED) {
@@ -103,11 +108,6 @@ public class AtUserActivity extends AbsActivity {
                 mSuggestions.clear();
                 mAdapter.notifyDataSetChanged();
             }
-            return false;
-        }
-
-        @Override
-        public boolean onQueryTextSubmit(String query) {
             return false;
         }
     }

@@ -14,13 +14,13 @@ public class DirectMessage extends AbsItemBean {
         }
 
         @Override
-        public DirectMessage[] newArray(int size) {
-            return new DirectMessage[size];
+        protected DirectMessage onCreateObject() {
+            return new DirectMessage();
         }
 
         @Override
-        protected DirectMessage onCreateObject() {
-            return new DirectMessage();
+        public DirectMessage[] newArray(int size) {
+            return new DirectMessage[size];
         }
     };
 

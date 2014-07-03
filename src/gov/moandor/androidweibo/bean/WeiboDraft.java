@@ -24,13 +24,13 @@ public class WeiboDraft extends AbsDraftBean {
         }
 
         @Override
-        public WeiboDraft[] newArray(int size) {
-            return new WeiboDraft[size];
+        protected WeiboDraft onCreateObject() {
+            return new WeiboDraft();
         }
 
         @Override
-        protected WeiboDraft onCreateObject() {
-            return new WeiboDraft();
+        public WeiboDraft[] newArray(int size) {
+            return new WeiboDraft[size];
         }
     };
 

@@ -124,10 +124,6 @@ public class ImageViewerActivity extends AbsActivity {
 
     private class OnPageChangeListener implements ViewPager.OnPageChangeListener {
         @Override
-        public void onPageScrollStateChanged(int state) {
-        }
-
-        @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         }
 
@@ -138,6 +134,10 @@ public class ImageViewerActivity extends AbsActivity {
             if (count > 1) {
                 mCountView.setText(String.format("%d/%d", position + 1, urls.length));
             }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
         }
     }
 }

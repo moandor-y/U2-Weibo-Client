@@ -179,11 +179,6 @@ public class ProfileFragment extends Fragment {
         private String mUrl;
 
         @Override
-        protected void onPreExecute() {
-            mAvatar.setImageDrawable(null);
-        }
-
-        @Override
         protected Bitmap doInBackground(Void... params) {
             mUrl = mUser.avatarLargeUrl;
             Bitmap bitmap = GlobalContext.getBitmapCache().get(mUrl);
@@ -214,7 +209,12 @@ public class ProfileFragment extends Fragment {
                 return ImageUtils.getBitmapFromFile(path, width, height);
             }
             return null;
+        }        @Override
+        protected void onPreExecute() {
+            mAvatar.setImageDrawable(null);
         }
+
+
 
         @Override
         protected void onPostExecute(Bitmap result) {

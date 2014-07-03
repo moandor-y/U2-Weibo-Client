@@ -307,7 +307,19 @@ public class IgnoreActivity extends AbsActivity {
         public static final String TYPE = "type";
         public static final String FILTER = "filter";
 
-        @Override
+        private void buildView(View view, AbsWeiboTextFilter filter) {
+            if (filter != null) {
+                CheckBox checkReposted = (CheckBox) view.findViewById(R.id.check_reposted);
+                CheckBox isRegex = (CheckBox) view.findViewById(R.id.is_regex);
+                EditText pattern = (EditText) view.findViewById(R.id.pattern);
+                checkReposted.setChecked(filter.getCheckReposted());
+                isRegex.setChecked(filter.isRegex());
+                pattern.setText(filter.getPattern());
+                if (filter.getId() >= 0) {
+                    view.setTag(filter.getId());
+                }
+            }
+        }        @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final Type type = (Type) getArguments().getSerializable(TYPE);
@@ -361,20 +373,6 @@ public class IgnoreActivity extends AbsActivity {
             });
             builder.setNegativeButton(R.string.cancel, null);
             return builder.create();
-        }
-
-        private void buildView(View view, AbsWeiboTextFilter filter) {
-            if (filter != null) {
-                CheckBox checkReposted = (CheckBox) view.findViewById(R.id.check_reposted);
-                CheckBox isRegex = (CheckBox) view.findViewById(R.id.is_regex);
-                EditText pattern = (EditText) view.findViewById(R.id.pattern);
-                checkReposted.setChecked(filter.getCheckReposted());
-                isRegex.setChecked(filter.isRegex());
-                pattern.setText(filter.getPattern());
-                if (filter.getId() >= 0) {
-                    view.setTag(filter.getId());
-                }
-            }
         }
 
         private void buildView(View view, UserWeiboFilter filter) {
@@ -442,5 +440,7 @@ public class IgnoreActivity extends AbsActivity {
         private static enum Type {
             KEYWORD, USER, SOURCE
         }
+
+
     }
 }
