@@ -477,6 +477,9 @@ public class Utilities {
 
     public static long getIdFromWeiboAccountLink(String url) {
         url = convertWeiboCnToCom(url);
+        if (url.contains("?")) {
+            url = url.substring(0, url.indexOf("?"));
+        }
         String idStr = url.substring(UrlHelper.WEIBO_USER_ID_PREFIX.length());
         return Long.valueOf(idStr);
     }
