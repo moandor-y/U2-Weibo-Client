@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
+import gov.moandor.androidweibo.dao.BaseHttpDao;
+import gov.moandor.androidweibo.dao.UserDomainShowDao;
 import gov.moandor.androidweibo.dao.UserShowDao;
 import gov.moandor.androidweibo.fragment.ProfileFragment;
 import gov.moandor.androidweibo.fragment.ProgressDialogFragment;
@@ -25,6 +27,7 @@ public class UserActivity extends AbsActivity {
     public static final String USER = Utilities.buildIntentExtraName("USER");
     public static final String USER_NAME = Utilities.buildIntentExtraName("USER_NAME");
     public static final String USER_ID = Utilities.buildIntentExtraName("USER_ID");
+    public static final String USER_DOMAIN = Utilities.buildIntentExtraName("USER_DOMAIN");
     private static final String LOADING_DIALOG = "loading_dialog";
 
     private WeiboUser mUser;
@@ -106,20 +109,23 @@ public class UserActivity extends AbsActivity {
             onUserLoadFinished();
         } else {
             long userId = getIntent().getLongExtra(USER_ID, 0);
+            String userName = getIntent().getStringExtra(USER_NAME);
+            String userDomain = getIntent().getStringExtra(USER_DOMAIN);
+            LoadUserTask task = new LoadUserTask();
             if (userId != 0) {
-                LoadUserTask task = new LoadUserTask(userId);
-                task.execute();
+                task.setUserId(userId);
+            } else if (!TextUtils.isEmpty(userName)) {
+                task.setUserName(userName);
+            } else if (!TextUtils.isEmpty(userDomain)) {
+                task.setUserDomain(userDomain);
             } else {
-                String userName = getIntent().getStringExtra(USER_NAME);
-                if (TextUtils.isEmpty(userName)) {
-                    Uri data = getIntent().getData();
-                    userName = data.toString();
-                    int index = userName.lastIndexOf("@");
-                    userName = userName.substring(index + 1);
-                }
-                LoadUserTask task = new LoadUserTask(userName);
-                task.execute();
+                Uri data = getIntent().getData();
+                userName = data.toString();
+                int index = userName.lastIndexOf("@");
+                userName = userName.substring(index + 1);
+                task.setUserName(userName);
             }
+            task.execute();
             DialogFragment dialog = ProgressDialogFragment.newInstance(getString(R.string.loading));
             dialog.show(getSupportFragmentManager(), LOADING_DIALOG);
             getSupportActionBar().setTitle(R.string.user);
@@ -144,23 +150,40 @@ public class UserActivity extends AbsActivity {
     private class LoadUserTask extends MyAsyncTask<Void, Void, WeiboUser> {
         private long mUserId;
         private String mUserName;
+        private String mUserDomain;
+        private String mToken;
 
-        public LoadUserTask(long userId) {
+        private void setUserId(long userId) {
             mUserId = userId;
         }
 
-        public LoadUserTask(String userName) {
+        private void setUserName(String userName) {
             mUserName = userName;
+        }
+
+        private void setUserDomain(String userDomain) {
+            mUserDomain = userDomain;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mToken = GlobalContext.getCurrentAccount().token;
         }
 
         @Override
         protected WeiboUser doInBackground(Void... v) {
-            UserShowDao dao = new UserShowDao();
-            dao.setToken(GlobalContext.getCurrentAccount().token);
-            if (mUserId != 0) {
-                dao.setUid(mUserId);
+            BaseHttpDao<WeiboUser> dao;
+            if (TextUtils.isEmpty(mUserDomain)) {
+                UserShowDao userShowDao = new UserShowDao();
+                userShowDao.setToken(mToken);
+                userShowDao.setUid(mUserId);
+                userShowDao.setScreenName(mUserName);
+                dao = userShowDao;
             } else {
-                dao.setScreenName(mUserName);
+                UserDomainShowDao userDomainShowDao = new UserDomainShowDao();
+                userDomainShowDao.setToken(mToken);
+                userDomainShowDao.setDomain(mUserDomain);
+                dao = userDomainShowDao;
             }
             try {
                 return dao.execute();

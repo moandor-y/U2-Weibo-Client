@@ -58,6 +58,13 @@ public class ActivityUtils {
         return intent;
     }
 
+    public static Intent userActivityFromDomain(String domain) {
+        Intent intent = new Intent();
+        intent.setClass(GlobalContext.getInstance(), UserActivity.class);
+        intent.putExtra(UserActivity.USER_DOMAIN, domain);
+        return intent;
+    }
+
     public static Intent atUserActivity() {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), AtUserActivity.class);

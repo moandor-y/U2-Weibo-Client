@@ -22,6 +22,7 @@ public class UrlHelper {
     public static final String ACCOUNT_GET_UID = "https://api.weibo.com/2/account/get_uid.json";
 
     public static final String USERS_SHOW = "https://api.weibo.com/2/users/show.json";
+    public static final String USERS_DOMAIN_SHOW = "https://api.weibo.com/2/users/domain_show.json";
 
     public static final String COMMENTS_TO_ME = "https://api.weibo.com/2/comments/to_me.json";
     public static final String COMMENTS_BY_ME = "https://api.weibo.com/2/comments/by_me.json";
@@ -61,4 +62,5 @@ public class UrlHelper {
     static final String WWW_WEIBO_COM = "http://www.weibo.com";
     static final String WWW_WEIBO_CN = "http://www.weibo.cn";
     static final String E_WEIBO_COM = "http://e.weibo.com";
+    static final String WEIBO_USER_ID_PREFIX = WEIBO_COM + "/u/";
 }

@@ -21,7 +21,15 @@ public class IncomingUrlActivity extends AbsActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String url = getIntent().getData().toString();
-        if (Utilities.isWeiboMidUrl(url)) {
+        if (Utilities.isWeiboAccountDomainLink(url)) {
+            String domain = Utilities.getDomainFromWeiboAccountLink(url);
+            startActivity(ActivityUtils.userActivityFromDomain(domain));
+            finish();
+        } else if (Utilities.isWeiboAccountIdLink(url)) {
+            long id = Utilities.getIdFromWeiboAccountLink(url);
+            startActivity(ActivityUtils.userActivity(id));
+            finish();
+        } else if (Utilities.isWeiboMidUrl(url)) {
             String mid = Utilities.getMidFromUrl(url);
             new RedirectToWeiboActivityTask(mid).execute();
         } else {

@@ -4,21 +4,21 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.JsonUtils;
-import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public class UserShowDao extends BaseHttpDao<WeiboUser> {
+/**
+ * Created by Moandor on 7/4/2014.
+ */
+public class UserDomainShowDao extends BaseHttpDao<WeiboUser> {
     private String mToken;
-    private String mScreenName;
-    private long mUid;
+    private String mDomain;
 
     @Override
     public WeiboUser execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.put("access_token", mToken);
-        params.put("uid", mUid);
-        params.put("screen_name", mScreenName);
+        params.put("domain", mDomain);
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getWeiboUserFromJson(response);
@@ -26,18 +26,14 @@ public class UserShowDao extends BaseHttpDao<WeiboUser> {
 
     @Override
     protected String getUrl() {
-        return UrlHelper.USERS_SHOW;
+        return UrlHelper.USERS_DOMAIN_SHOW;
     }
 
     public void setToken(String token) {
         mToken = token;
     }
 
-    public void setScreenName(String screenName) {
-        mScreenName = screenName;
-    }
-
-    public void setUid(long uid) {
-        mUid = uid;
+    public void setDomain(String domain) {
+        mDomain = domain;
     }
 }

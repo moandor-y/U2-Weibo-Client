@@ -415,7 +415,7 @@ public class Utilities {
             url = url.substring(UrlHelper.E_WEIBO_COM.length() + 1, url.length());
         }
         String[] result = url.split("/");
-        return result != null && result.length == 2;
+        return result.length == 2;
     }
 
     public static String getMidFromUrl(String url) {
@@ -433,6 +433,52 @@ public class Utilities {
             url = url.substring(UrlHelper.E_WEIBO_COM.length() + 1, end);
         }
         return url.split("/")[1];
+    }
+
+    public static boolean isWeiboAccountDomainLink(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return false;
+        }
+        url = convertWeiboCnToCom(url);
+        if (!(url.startsWith(UrlHelper.WEIBO_COM + "/"))
+                && !(url.startsWith(UrlHelper.E_WEIBO_COM + "/"))) {
+            return false;
+        }
+        if (url.contains("?")) {
+            return false;
+        }
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.lastIndexOf("/"));
+        }
+        int count = 0;
+        char[] value = url.toCharArray();
+        for (char c : value) {
+            if ("/".equalsIgnoreCase(String.valueOf(c))) {
+                count++;
+            }
+        }
+        return count == 3 && !url.equalsIgnoreCase("http://weibo.com/pub");
+    }
+
+    public static String getDomainFromWeiboAccountLink(String url) {
+        url = convertWeiboCnToCom(url);
+        String domain = null;
+        if (url.startsWith(UrlHelper.WEIBO_COM)) {
+            domain = url.substring(UrlHelper.WEIBO_COM.length() + 1);
+        } else if (url.startsWith(UrlHelper.E_WEIBO_COM)) {
+            domain = url.substring(UrlHelper.E_WEIBO_COM.length() + 1);
+        }
+        return domain == null ? null : domain.replace("/", "");
+    }
+
+    public static boolean isWeiboAccountIdLink(String url) {
+        return !TextUtils.isEmpty(url) && url.startsWith(UrlHelper.WEIBO_USER_ID_PREFIX);
+    }
+
+    public static long getIdFromWeiboAccountLink(String url) {
+        url = convertWeiboCnToCom(url);
+        String idStr = url.substring(UrlHelper.WEIBO_USER_ID_PREFIX.length());
+        return Long.valueOf(idStr);
     }
 
     public static String getVersionName() {
