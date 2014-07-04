@@ -41,8 +41,10 @@ import gov.moandor.androidweibo.bean.AbsItemBean;
 import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
+import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.AccountIdDao;
 import gov.moandor.androidweibo.dao.UserShowDao;
+import gov.moandor.androidweibo.util.filter.UserWeiboFilter;
 
 public class Utilities {
     public static void closeSilently(Closeable closeable) {
@@ -443,6 +445,17 @@ public class Utilities {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static void ignoreUser(final WeiboUser user) {
+        MyAsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                UserWeiboFilter filter = new UserWeiboFilter();
+                filter.setUser(user);
+                DatabaseUtils.insertOrUpdateWeiboFilter(filter);
+            }
+        });
     }
 
     private static String convertWeiboCnToCom(String url) {

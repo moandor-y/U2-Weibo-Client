@@ -6,12 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayout;
 import android.text.Html;
-import android.text.Layout;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,15 +25,16 @@ import gov.moandor.androidweibo.dao.MapImageDao;
 import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.util.LongClickableLinkMovementMethod;
+import gov.moandor.androidweibo.util.OnWeiboTextTouchListener;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
-import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 import gov.moandor.androidweibo.widget.WeiboDetailPicView;
 
-public class WeiboFragment extends Fragment {
+public class WeiboFragment extends Fragment implements UserDialogFragment.OnUserChangedListener {
+    private static final String TAG_USER_DIALOG = "user_dialog";
+
     private WeiboStatus mWeiboStatus;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
     private ImageDownloader.ImageType mPictureType = Utilities.getDetailPictureType();
@@ -56,69 +52,8 @@ public class WeiboFragment extends Fragment {
     private TextView mRetweetText;
     private TextView mCoordinate;
     private float mFontSize = Utilities.getFontSize();
-    ;
     private float mSmallFontSize = mFontSize - 3;
-    private View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            TextView textView = (TextView) v;
-            Layout layout = textView.getLayout();
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            int offset = 0;
-            if (layout != null) {
-                int line = layout.getLineForVertical(y);
-                offset = layout.getOffsetForHorizontal(line, x);
-            }
-            SpannableString text = SpannableString.valueOf(textView.getText());
-            LongClickableLinkMovementMethod.getInstance().onTouchEvent(textView, text, event);
-            switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN:
-                    WeiboTextUrlSpan[] spans = text.getSpans(0, text.length(), WeiboTextUrlSpan.class);
-                    boolean found = false;
-                    int foundStart = 0;
-                    int foundEnd = 0;
-                    for (WeiboTextUrlSpan span : spans) {
-                        int start = text.getSpanStart(span);
-                        int end = text.getSpanEnd(span);
-                        if (offset >= start && offset <= end) {
-                            found = true;
-                            foundStart = start;
-                            foundEnd = end;
-                            break;
-                        }
-                    }
-                    boolean consumeEvent = false;
-                    if (found) {
-                        consumeEvent = true;
-                    }
-                    if (found && !consumeEvent) {
-                        clearBackgroundColorSpans(text, textView);
-                    }
-                    if (consumeEvent) {
-                        BackgroundColorSpan span =
-                                new BackgroundColorSpan(Utilities.getColor(R.attr.link_pressed_background_color));
-                        text.setSpan(span, foundStart, foundEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        textView.setText(text);
-                    }
-                    return consumeEvent;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    LongClickableLinkMovementMethod.getInstance().removeLongClickCallback();
-                    clearBackgroundColorSpans(text, textView);
-                    break;
-            }
-            return false;
-        }
-
-        private void clearBackgroundColorSpans(SpannableString text, TextView textView) {
-            BackgroundColorSpan[] spans = text.getSpans(0, text.length(), BackgroundColorSpan.class);
-            for (BackgroundColorSpan span : spans) {
-                text.removeSpan(span);
-                textView.setText(text);
-            }
-        }
-    };
+    private OnWeiboTextTouchListener mTextOnTouchListener = new OnWeiboTextTouchListener();
     private View.OnClickListener mTextOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -157,6 +92,12 @@ public class WeiboFragment extends Fragment {
         buildLayout();
     }
 
+    @Override
+    public void onUserChanged(WeiboUser user) {
+        mWeiboStatus.weiboUser = user;
+        buildLayout();
+    }
+
     private void initLayout() {
         mUserName.setTextSize(mFontSize);
         mTime.setTextSize(mSmallFontSize);
@@ -174,6 +115,7 @@ public class WeiboFragment extends Fragment {
         if (user != null) {
             mUserName.setText(user.name);
             mAvatar.setOnClickListener(new OnAvatarClickListener(user));
+            mAvatar.setOnLongClickListener(new OnAvatarLongClickListener());
         }
         String time = TimeUtils.getListTime(mWeiboStatus);
         mTime.setText(time);
@@ -397,6 +339,19 @@ public class WeiboFragment extends Fragment {
         @Override
         public void onClick(View v) {
             getActivity().startActivity(ActivityUtils.userActivity(mUser));
+        }
+    }
+
+    private class OnAvatarLongClickListener implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick(View v) {
+            UserDialogFragment dialog = new UserDialogFragment();
+            dialog.setOnUserChangedListener(WeiboFragment.this);
+            Bundle args = new Bundle();
+            args.putParcelable(UserDialogFragment.USER, mWeiboStatus.weiboUser);
+            dialog.setArguments(args);
+            dialog.show(getFragmentManager(), TAG_USER_DIALOG);
+            return true;
         }
     }
 }

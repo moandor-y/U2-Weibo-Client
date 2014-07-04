@@ -35,7 +35,7 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
-        extends Fragment {
+        extends Fragment implements UserDialogFragment.OnUserChangedListener {
     private static final String USER_DIALOG = "user_dialog";
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     TimelineListAdapter mAdapter;
@@ -82,8 +82,11 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mListView.setOnItemClickListener(new OnListItemClickListener());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(getOnRefreshListener());
-        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
-                R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.swipe_refresh_color1,
+                R.color.swipe_refresh_color2,
+                R.color.swipe_refresh_color3,
+                R.color.swipe_refresh_color4);
     }
 
     @Override
@@ -99,6 +102,12 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         if (mActionMode != null) {
             mActionMode.finish();
         }
+    }
+
+    @Override
+    public void onUserChanged(WeiboUser user) {
+        mAdapter.onUserStateChanged(user);
+        mAdapter.notifyDataSetChanged();
     }
 
     protected boolean isRefreshTaskRunning() {
@@ -194,11 +203,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
 
     abstract RefreshTask createRefreshTask();
 
-    ;
-
     abstract void onItemClick(AdapterView<?> parent, View view, int position, long id);
-
-    ;
 
     abstract ActionMode.Callback getActionModeCallback();
 
@@ -249,6 +254,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         @Override
         public void onAvatarLongClick(int position) {
             UserDialogFragment dialog = new UserDialogFragment();
+            dialog.setOnUserChangedListener(AbsTimelineFragment.this);
             Bundle args = new Bundle();
             WeiboUser user = mAdapter.getItem(position).weiboUser;
             args.putParcelable(UserDialogFragment.USER, user);

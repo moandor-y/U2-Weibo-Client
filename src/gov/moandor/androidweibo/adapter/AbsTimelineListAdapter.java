@@ -1,11 +1,6 @@
 package gov.moandor.androidweibo.adapter;
 
-import android.text.Layout;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,16 +16,16 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
 import gov.moandor.androidweibo.util.ConfigManager;
-import gov.moandor.androidweibo.util.LongClickableLinkMovementMethod;
+import gov.moandor.androidweibo.util.OnWeiboTextTouchListener;
 import gov.moandor.androidweibo.util.TextUtils;
 import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
-import gov.moandor.androidweibo.util.WeiboTextUrlSpan;
 
 public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsBaseAdapter
         implements ISelectableAdapter<T> {
     private static final int MAX_COUNT = 500;
 
+    protected OnWeiboTextTouchListener mTextOnTouchListener = new OnWeiboTextTouchListener();
     List<T> mBeans = new ArrayList<T>();
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
@@ -80,6 +75,15 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
 
     public void setFragment(AbsTimelineFragment<T, ?> fragment) {
         mFragment = fragment;
+        mTextOnTouchListener.setFragment(mFragment);
+    }
+
+    public void onUserStateChanged(WeiboUser user) {
+        for (T bean : mBeans) {
+            if (bean.weiboUser.id == user.id) {
+                bean.weiboUser = user;
+            }
+        }
     }
 
     void buildTime(ViewHolder holder, T bean, int position) {
@@ -234,70 +238,6 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     abstract View inflateLayout(LayoutInflater inflater, ViewGroup parent);
 
     abstract ViewHolder initViewHolder(View view);
-
-    View.OnTouchListener mTextOnTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            TextView textView = (TextView) v;
-            Layout layout = textView.getLayout();
-            int x = (int) event.getX();
-            int y = (int) event.getY();
-            int offset = 0;
-            if (layout != null) {
-                int line = layout.getLineForVertical(y);
-                offset = layout.getOffsetForHorizontal(line, x);
-            }
-            SpannableString text = SpannableString.valueOf(textView.getText());
-            LongClickableLinkMovementMethod.getInstance().onTouchEvent(textView, text, event);
-            switch (event.getActionMasked()) {
-                case MotionEvent.ACTION_DOWN:
-                    WeiboTextUrlSpan[] spans = text.getSpans(
-                            0, text.length(), WeiboTextUrlSpan.class);
-                    boolean found = false;
-                    int foundStart = 0;
-                    int foundEnd = 0;
-                    for (WeiboTextUrlSpan span : spans) {
-                        int start = text.getSpanStart(span);
-                        int end = text.getSpanEnd(span);
-                        if (start <= offset && offset <= end) {
-                            found = true;
-                            foundStart = start;
-                            foundEnd = end;
-                            break;
-                        }
-                    }
-                    boolean consumeEvent = false;
-                    if (found && !mFragment.hasActionMode()) {
-                        consumeEvent = true;
-                    }
-                    if (found && !consumeEvent) {
-                        clearBackgroundColorSpans(text, textView);
-                    }
-                    if (consumeEvent) {
-                        BackgroundColorSpan span = new BackgroundColorSpan(
-                                Utilities.getColor(R.attr.link_pressed_background_color));
-                        text.setSpan(span, foundStart, foundEnd, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        textView.setText(text);
-                    }
-                    return consumeEvent;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-                    LongClickableLinkMovementMethod.getInstance().removeLongClickCallback();
-                    clearBackgroundColorSpans(text, textView);
-                    break;
-            }
-            return false;
-        }
-
-        private void clearBackgroundColorSpans(SpannableString text, TextView textView) {
-            BackgroundColorSpan[] spans = text.getSpans(
-                    0, text.length(), BackgroundColorSpan.class);
-            for (BackgroundColorSpan span : spans) {
-                text.removeSpan(span);
-                textView.setText(text);
-            }
-        }
-    };
 
     public static interface OnAvatarClickListener {
         public void onAvatarClick(int position);

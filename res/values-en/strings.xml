@@ -89,6 +89,16 @@
         <item>Source</item>
     </string-array>
 
+    <string-array name="user_long_click">
+        <item>Follow</item>
+        <item>Ignore</item>
+    </string-array>
+
+    <string-array name="user_long_click_followed">
+        <item>Unfollow</item>
+        <item>Ignore</item>
+    </string-array>
+
     <string name="weibo">Weibo</string>
     <string name="loading">Loading…</string>
     <string name="avatar">Avatar</string>
@@ -132,7 +142,9 @@
     <string name="copied_successfully">Copied successfully</string>
     <string name="view_weibo">View weibo</string>
     <string name="view_pictures">View pictures</string>
+    <string name="followed_successfully">Follow successfully</string>
     <string name="follow_failed_reason">Follow failed : %s</string>
+    <string name="unfollowed_successfully">Unfollow successfully</string>
     <string name="unfollow_failed_reason">Unfollow failed : %s</string>
     <string name="view_user">View user</string>
     <string name="find_user">Find user</string>
@@ -143,6 +155,7 @@
     <string name="direct_messages">Direct messages</string>
     <string name="username">Username</string>
     <string name="user">User</string>
+    <string name="ignored_successfully">You won\'t see him/her any more</string>
 
     <!-- Time -->
     <string name="just_now">Just now</string>

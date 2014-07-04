@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeiboUser mUser;
     private float mFontSize = Utilities.getFontSize();
-    ;
+
     private float mSmallFontSize = mFontSize - 3;
     private float mUserNameFontSize = mFontSize + 5;
 
@@ -94,7 +94,8 @@ public class ProfileFragment extends Fragment {
         mFollowerCountLayout = view.findViewById(R.id.follower_count_layout);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setOnRefreshListener(new OnListRefreshListener());
-        mSwipeRefreshLayout.setColorScheme(R.color.swipe_refresh_color1, R.color.swipe_refresh_color2,
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.swipe_refresh_color1,
+                R.color.swipe_refresh_color2,
                 R.color.swipe_refresh_color3, R.color.swipe_refresh_color4);
         initFontSize();
         buildLayout();
@@ -150,15 +151,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private boolean isThisCurrentFragment() {
-        if (getActivity() instanceof MainActivity) {
-            MainActivity activity = (MainActivity) getActivity();
-            if (activity != null) {
-                return activity.isCurrentFragment(this);
-            }
-            return false;
-        } else {
-            return true;
-        }
+        return !(getActivity() instanceof  MainActivity)
+                || ((MainActivity) getActivity()).isCurrentFragment(this);
     }
 
     public void refresh() {
