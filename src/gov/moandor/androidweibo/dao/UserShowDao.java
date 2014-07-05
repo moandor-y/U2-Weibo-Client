@@ -17,8 +17,13 @@ public class UserShowDao extends BaseHttpDao<WeiboUser> {
     public WeiboUser execute() throws WeiboException {
         HttpParams params = new HttpParams();
         params.put("access_token", mToken);
-        params.put("uid", mUid);
-        params.put("screen_name", mScreenName);
+        if (mUid >= 1) {
+            params.put("uid", mUid);
+        } else if (!TextUtils.isEmpty(mScreenName)) {
+            params.put("screen_name", mScreenName);
+        } else {
+            throw new IllegalArgumentException("Invalid uid and screen name");
+        }
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         return JsonUtils.getWeiboUserFromJson(response);
