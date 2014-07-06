@@ -156,6 +156,7 @@
     <string name="username">Username</string>
     <string name="user">User</string>
     <string name="ignored_successfully">You won\'t see him/her any more</string>
+    <string name="invalid_url">Invalid URL</string>
 
     <!-- Time -->
     <string name="just_now">Just now</string>

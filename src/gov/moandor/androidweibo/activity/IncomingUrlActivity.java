@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.WeiboStatus;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.WeiboMidToIdDao;
@@ -27,7 +28,11 @@ public class IncomingUrlActivity extends AbsActivity {
             finish();
         } else if (Utilities.isWeiboAccountIdLink(url)) {
             long id = Utilities.getIdFromWeiboAccountLink(url);
-            startActivity(ActivityUtils.userActivity(id));
+            if (id != 0) {
+                startActivity(ActivityUtils.userActivity(id));
+            } else {
+                Utilities.notice(R.string.invalid_url);
+            }
             finish();
         } else if (Utilities.isWeiboMidUrl(url)) {
             String mid = Utilities.getMidFromUrl(url);

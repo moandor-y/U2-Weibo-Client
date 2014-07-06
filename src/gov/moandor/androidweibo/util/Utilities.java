@@ -481,7 +481,12 @@ public class Utilities {
             url = url.substring(0, url.indexOf("?"));
         }
         String idStr = url.substring(UrlHelper.WEIBO_USER_ID_PREFIX.length());
-        return Long.valueOf(idStr);
+        try {
+            return Long.valueOf(idStr);
+        } catch (NumberFormatException e) {
+            Logger.logException(e);
+            return 0;
+        }
     }
 
     public static String getVersionName() {

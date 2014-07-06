@@ -157,6 +157,7 @@
     <string name="username">用户名</string>
     <string name="user">用户</string>
     <string name="ignored_successfully">你不会再见到这家伙了</string>
+    <string name="invalid_url">无效的URL</string>
 
     <!-- Time -->
     <string name="just_now">刚刚</string>
