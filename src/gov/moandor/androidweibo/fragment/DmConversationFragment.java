@@ -191,7 +191,9 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         Intent data = new Intent();
         data.putExtra(RESULT_USER, mUser);
         data.putExtra(RESULT_LATEST_MESSAGE, mAdapter.getItem(0));
-        getActivity().setResult(RESULT_CODE, data);
+        if (getActivity() != null) {
+            getActivity().setResult(RESULT_CODE, data);
+        }
     }
 
     private class LoadFromDatabaseTask extends MyAsyncTask<Void, Void, List<DirectMessage>> {
