@@ -178,10 +178,11 @@ public abstract class AbsMainTimelineFragment<DataBean extends AbsItemBean, Time
             if (result.size() > 0) {
                 mAdapter.updateDataSet(result);
                 mAdapter.notifyDataSetChanged();
-                restoreListPosition();
                 if (mIsFromUnread) {
                     mIsFromUnread = false;
                     refresh();
+                } else {
+                    restoreListPosition();
                 }
             } else {
                 refresh();
