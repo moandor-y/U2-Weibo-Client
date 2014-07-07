@@ -270,6 +270,9 @@ public class WeiboFragment extends Fragment implements UserDialogFragment.OnUser
     }
 
     private void displayMap(Bitmap map) {
+        if (!isAdded()) {
+            return;
+        }
         mMap.setVisibility(View.VISIBLE);
         mMap.setImageBitmap(map);
         mCoordinate.setVisibility(View.VISIBLE);

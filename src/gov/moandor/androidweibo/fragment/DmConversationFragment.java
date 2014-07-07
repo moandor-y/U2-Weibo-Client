@@ -191,7 +191,7 @@ public class DmConversationFragment extends AbsTimelineFragment<DirectMessage, D
         Intent data = new Intent();
         data.putExtra(RESULT_USER, mUser);
         data.putExtra(RESULT_LATEST_MESSAGE, mAdapter.getItem(0));
-        if (getActivity() != null) {
+        if (isAdded()) {
             getActivity().setResult(RESULT_CODE, data);
         }
     }
