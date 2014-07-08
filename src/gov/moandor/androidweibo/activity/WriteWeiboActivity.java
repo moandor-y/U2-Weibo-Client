@@ -1,6 +1,11 @@
 package gov.moandor.androidweibo.activity;
 
+import android.app.AlarmManager;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +17,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.CursorLoader;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +27,9 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.GpsLocation;
@@ -31,6 +41,7 @@ import gov.moandor.androidweibo.util.CheatSheet;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.ImageUtils;
 import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.TimeUtils;
 import gov.moandor.androidweibo.util.Utilities;
 
 public class WriteWeiboActivity extends AbsWriteActivity {
@@ -42,6 +53,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     public static final String STATE_COMMENT_ORI_WHEN_REPOST = "state_comment_ori_when_repost";
     public static final int CAMERA_REQUEST_CODE = 0;
     public static final int GALLERY_REQUEST_CODE = 1;
+    private static final String TAG_SEND_LATER_DIALOG = "send_later_dialog";
 
     private boolean mCommentWhenRepost;
     private boolean mCommentOriWhenRepost;
@@ -60,16 +72,13 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
 
         @Override
-        public void onProviderEnabled(String provider) {
-        }
+        public void onProviderEnabled(String provider) {}
 
         @Override
-        public void onProviderDisabled(String provider) {
-        }
+        public void onProviderDisabled(String provider) {}
     };
 
     @Override
@@ -168,23 +177,26 @@ public class WriteWeiboActivity extends AbsWriteActivity {
                     item.setChecked(true);
                     mCommentOriWhenRepost = true;
                 }
+                return true;
+            case R.id.send_later:
+                String content = mEditText.getText().toString();
+                if (checkSend(content)) {
+                    sendLater(content);
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
-    void onSend(String content) {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), SendWeiboService.class);
-        intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
-        intent.putExtra(SendWeiboService.WEIBO_DRAFT, onCreateDraft(content));
-        startService(intent);
+    protected void onSend(String content) {
+        WeiboDraft draft = onCreateDraft(content);
+        startService(sendServiceIntent(draft));
         finish();
     }
 
     @Override
-    void onCreateBottomMenu(ViewGroup container) {
+    protected void onCreateBottomMenu(ViewGroup container) {
         if (mRetweetWeiboStatus == null) {
             getLayoutInflater().inflate(R.layout.bottom_menu_write_weibo, container);
             mAddPicButton = (ImageButton) container.findViewById(R.id.add_picture);
@@ -198,7 +210,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     }
 
     @Override
-    void onBottomMenuItemSelected(View view) {
+    protected void onBottomMenuItemSelected(View view) {
         switch (view.getId()) {
             case R.id.add_picture:
                 addPicture();
@@ -216,7 +228,7 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     }
 
     @Override
-    WeiboDraft onCreateDraft(String content) {
+    protected WeiboDraft onCreateDraft(String content) {
         WeiboDraft draft = new WeiboDraft();
         draft.content = content;
         draft.accountId = GlobalContext.getCurrentAccount().user.id;
@@ -237,11 +249,8 @@ public class WriteWeiboActivity extends AbsWriteActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState == null) {
-            return;
-        }
         mPicPath = savedInstanceState.getString(STATE_PIC_PATH);
         loadPicPreview();
     }
@@ -262,6 +271,15 @@ public class WriteWeiboActivity extends AbsWriteActivity {
             }
         }
         return true;
+    }
+
+    private void sendLater(String content) {
+        WeiboDraft draft = onCreateDraft(content);
+        SendLaterDialogFragment dialog = new SendLaterDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(SendLaterDialogFragment.DRAFT, draft);
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), TAG_SEND_LATER_DIALOG);
     }
 
     private void addPicture() {
@@ -319,6 +337,14 @@ public class WriteWeiboActivity extends AbsWriteActivity {
         }
     }
 
+    private static Intent sendServiceIntent(WeiboDraft draft) {
+        Intent intent = new Intent();
+        intent.setClass(GlobalContext.getInstance(), SendWeiboService.class);
+        intent.putExtra(SendWeiboService.TOKEN, GlobalContext.getCurrentAccount().token);
+        intent.putExtra(SendWeiboService.WEIBO_DRAFT, draft);
+        return intent;
+    }
+
     private class OnAddPicDialogClickListener implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -346,6 +372,45 @@ public class WriteWeiboActivity extends AbsWriteActivity {
                     startActivityForResult(intent, GALLERY_REQUEST_CODE);
                     break;
             }
+        }
+    }
+
+    public static class SendLaterDialogFragment extends DialogFragment implements
+            TimePickerDialog.OnTimeSetListener {
+        private static final int REQUEST_CODE = 0;
+        private static final String DRAFT = "draft";
+
+        private WeiboDraft mDraft;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            mDraft = getArguments().getParcelable(DRAFT);
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            Calendar calendar = Calendar.getInstance();
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            int minute = calendar.get(Calendar.MINUTE);
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    TimeUtils.is24HourFormat());
+        }
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calendar.set(Calendar.MINUTE, minute);
+            long millis = calendar.getTimeInMillis();
+            AlarmManager manager = (AlarmManager) GlobalContext.getInstance().getSystemService
+                    (Context.ALARM_SERVICE);
+            PendingIntent intent = PendingIntent.getService(GlobalContext.getInstance(),
+                    REQUEST_CODE, sendServiceIntent(mDraft), PendingIntent.FLAG_CANCEL_CURRENT);
+            manager.set(AlarmManager.RTC_WAKEUP, millis, intent);
+            Utilities.notice(R.string.scheduled_successfully);
+            getActivity().finish();
         }
     }
 }

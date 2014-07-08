@@ -26,7 +26,7 @@ public class TimeUtils {
             return getListTime(timeMillis);
         } catch (ParseException e) {
             Logger.logException(e);
-            return "";
+            return null;
         }
     }
 
@@ -46,7 +46,7 @@ public class TimeUtils {
         Calendar msgCalendar = Calendar.getInstance();
         msgCalendar.setTimeInMillis(msg);
         if (hrs < 24 && nowCalendar.get(Calendar.DAY_OF_YEAR) == msgCalendar.get(Calendar.DAY_OF_YEAR)) {
-            if (android.text.format.DateFormat.is24HourFormat(GlobalContext.getInstance())) {
+            if (is24HourFormat()) {
                 return res.getString(R.string.today) + " " + sDayFormat24.format(msg);
             } else {
                 return res.getString(R.string.today) + " " + sDayFormat12.format(msg);
@@ -54,20 +54,20 @@ public class TimeUtils {
         }
         long days = hrs / 24;
         if (days < 30 && nowCalendar.get(Calendar.DAY_OF_YEAR) - msgCalendar.get(Calendar.DAY_OF_YEAR) == 1) {
-            if (android.text.format.DateFormat.is24HourFormat(GlobalContext.getInstance())) {
+            if (is24HourFormat()) {
                 return res.getString(R.string.yesterday) + " " + sDayFormat24.format(msg);
             } else {
                 return res.getString(R.string.yesterday) + " " + sDayFormat12.format(msg);
             }
         }
         if (nowCalendar.get(Calendar.YEAR) == msgCalendar.get(Calendar.YEAR)) {
-            if (android.text.format.DateFormat.is24HourFormat(GlobalContext.getInstance())) {
+            if (is24HourFormat()) {
                 return sDateFormat24.format(msg);
             } else {
                 return sDateFormat12.format(msg);
             }
         }
-        if (android.text.format.DateFormat.is24HourFormat(GlobalContext.getInstance())) {
+        if (is24HourFormat()) {
             return sYearFormat24.format(msg);
         } else {
             return sYearFormat12.format(msg);
@@ -76,5 +76,9 @@ public class TimeUtils {
 
     public static long parseSinaTime(AbsItemBean bean) throws ParseException {
         return sSinaFormat.parse(bean.createdAt).getTime();
+    }
+
+    public static boolean is24HourFormat() {
+        return android.text.format.DateFormat.is24HourFormat(GlobalContext.getInstance());
     }
 }

@@ -132,7 +132,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
         }, SMILEY_PICKER_DELAY);
     }
 
-    void toggleEmotionPanel() {
+    protected void toggleEmotionPanel() {
         if (mSmileyPicker.getVisibility() == View.VISIBLE) {
             hideSmileyPicker();
         } else {
@@ -160,7 +160,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
         mSaveDraftTask.execute();
     }
 
-    void insertTopic() {
+    protected void insertTopic() {
         int index = mEditText.getSelectionStart();
         StringBuilder stringBuilder = new StringBuilder(mEditText.getText());
         stringBuilder.insert(index, "##");
@@ -168,17 +168,28 @@ public abstract class AbsWriteActivity extends AbsActivity {
         mEditText.setSelection(index + 1);
     }
 
-    void atUser() {
+    protected void atUser() {
         startActivityForResult(ActivityUtils.atUserActivity(), REQUEST_AT_USER);
     }
 
-    abstract void onSend(String content);
+    protected boolean checkSend(String content) {
+        if (TextUtils.isEmpty(content)) {
+            mEditText.setError(getString(R.string.cannot_be_empty));
+            return false;
+        } else if (Utilities.sendLength(content) >= MAX_LENGTH) {
+            mEditText.setError(getString(R.string.too_many_words));
+            return false;
+        }
+        return true;
+    }
 
-    abstract void onCreateBottomMenu(ViewGroup container);
+    protected abstract void onSend(String content);
 
-    abstract void onBottomMenuItemSelected(View view);
+    protected abstract void onCreateBottomMenu(ViewGroup container);
 
-    abstract AbsDraftBean onCreateDraft(String content);
+    protected abstract void onBottomMenuItemSelected(View view);
+
+    protected abstract AbsDraftBean onCreateDraft(String content);
 
     public static class SaveDraftDialogFragment extends DialogFragment {
         @Override
@@ -218,11 +229,7 @@ public abstract class AbsWriteActivity extends AbsActivity {
         @Override
         public void onClick(View v) {
             String content = mEditText.getText().toString();
-            if (TextUtils.isEmpty(content)) {
-                mEditText.setError(getString(R.string.cannot_be_empty));
-                return;
-            } else if (Utilities.sendLength(content) >= MAX_LENGTH) {
-                mEditText.setError(getString(R.string.too_many_words));
+            if (!checkSend(content)) {
                 return;
             }
             onSend(content);

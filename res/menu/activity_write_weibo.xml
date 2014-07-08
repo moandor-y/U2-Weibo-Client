@@ -27,4 +27,9 @@
         android:checked="false"
         android:title="@string/comment_ori_when_repost"/>
 
+    <item
+        android:id="@+id/send_later"
+        android:title="@string/send_later"
+        androidweibo:showAsAction="never"/>
+
 </menu>

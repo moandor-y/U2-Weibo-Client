@@ -90,7 +90,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     }
 
     @Override
-    void onSend(String content) {
+    protected void onSend(String content) {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), SendCommentService.class);
         intent.putExtra(SendCommentService.TOKEN, GlobalContext.getCurrentAccount().token);
@@ -100,7 +100,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     }
 
     @Override
-    void onCreateBottomMenu(ViewGroup container) {
+    protected void onCreateBottomMenu(ViewGroup container) {
         getLayoutInflater().inflate(R.layout.bottom_menu_write_no_pic, container);
         CheatSheet.setup(container.findViewById(R.id.insert_topic), R.string.insert_topic);
         CheatSheet.setup(container.findViewById(R.id.at), R.string.mention);
@@ -108,7 +108,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     }
 
     @Override
-    void onBottomMenuItemSelected(View view) {
+    protected void onBottomMenuItemSelected(View view) {
         switch (view.getId()) {
             case R.id.insert_topic:
                 insertTopic();
@@ -123,7 +123,7 @@ public class WriteCommentActivity extends AbsWriteActivity {
     }
 
     @Override
-    CommentDraft onCreateDraft(String content) {
+    protected CommentDraft onCreateDraft(String content) {
         CommentDraft draft = new CommentDraft();
         draft.content = content;
         draft.accountId = GlobalContext.getCurrentAccount().user.id;
