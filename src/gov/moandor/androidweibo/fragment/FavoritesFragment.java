@@ -130,17 +130,15 @@ public class FavoritesFragment extends AbsTimelineFragment<WeiboStatus, WeiboLis
     private class FavoritesLoadMoreTask extends LoadMoreTask {
         @Override
         protected void onPreExecute() {
+            mPage++;
             super.onPreExecute();
-            mPage += 1;
         }
 
         @Override
         protected void onPostExecute(List<WeiboStatus> result) {
             super.onPostExecute(result);
-            if (result != null) {
-                if (result.size() == 0) {
-                    mNoMore = true;
-                }
+            if (result != null && result.size() == 0) {
+                mNoMore = true;
             }
         }
     }
