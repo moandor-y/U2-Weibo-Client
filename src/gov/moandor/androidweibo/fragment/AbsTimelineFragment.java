@@ -35,7 +35,9 @@ import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
-        extends Fragment implements UserDialogFragment.OnUserChangedListener {
+        extends Fragment implements UserDialogFragment.OnUserChangedListener,
+        AbsTimelineListAdapter.OnLastItemVisibleListener, WeiboListAdapter.OnAvatarClickListener,
+        WeiboListAdapter.OnAvatarLongClickListener {
     private static final String USER_DIALOG = "user_dialog";
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     TimelineListAdapter mAdapter;
@@ -76,8 +78,9 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mAdapter = createListAdapter();
         }
         mAdapter.setFragment(this);
-        mAdapter.setOnAvatarClickListener(new OnAvatarClickListener());
-        mAdapter.setOnAvatarLongClickListener(new OnAvatarLongClickListener());
+        mAdapter.setOnAvatarClickListener(this);
+        mAdapter.setOnAvatarLongClickListener(this);
+        mAdapter.setOnLastItemVisibleListener(this);
         mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(new OnListItemClickListener());
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
@@ -182,10 +185,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mAdapter.notifyDataSetChanged();
     }
 
-    private boolean isLastItemVisible() {
-        return mListView.getFirstVisiblePosition() + mListView.getChildCount() >= mAdapter.getCount() - 1;
-    }
-
     public void onActionModeFinished() {
         mActionMode = null;
     }
@@ -195,6 +194,28 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         if (!ConfigManager.isListHwAccelEnabled()) {
             mListView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
+    }
+
+    @Override
+    public void onLastItemVisible() {
+        loadMore();
+    }
+
+    @Override
+    public void onAvatarClick(int position) {
+        WeiboUser user = mAdapter.getItem(position).weiboUser;
+        getActivity().startActivity(ActivityUtils.userActivity(user));
+    }
+
+    @Override
+    public void onAvatarLongClick(int position) {
+        UserDialogFragment dialog = new UserDialogFragment();
+        dialog.setOnUserChangedListener(AbsTimelineFragment.this);
+        Bundle args = new Bundle();
+        WeiboUser user = mAdapter.getItem(position).weiboUser;
+        args.putParcelable(UserDialogFragment.USER, user);
+        dialog.setArguments(args);
+        dialog.show(getFragmentManager(), USER_DIALOG);
     }
 
     abstract TimelineListAdapter createListAdapter();
@@ -217,9 +238,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                 case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                     mAdapter.notifyDataSetChanged();
                     ImageDownloader.setPauseImageReadTask(false);
-                    if (isLastItemVisible()) {
-                        loadMore();
-                    }
                     break;
                 case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
                     ImageDownloader.setPauseImageReadTask(true);
@@ -228,8 +246,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         }
 
         @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        }
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {}
     }
 
     private class OnListItemClickListener implements AdapterView.OnItemClickListener {
@@ -239,27 +256,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                 return;
             }
             AbsTimelineFragment.this.onItemClick(parent, view, position, id);
-        }
-    }
-
-    private class OnAvatarClickListener implements WeiboListAdapter.OnAvatarClickListener {
-        @Override
-        public void onAvatarClick(int position) {
-            WeiboUser user = mAdapter.getItem(position).weiboUser;
-            getActivity().startActivity(ActivityUtils.userActivity(user));
-        }
-    }
-
-    private class OnAvatarLongClickListener implements WeiboListAdapter.OnAvatarLongClickListener {
-        @Override
-        public void onAvatarLongClick(int position) {
-            UserDialogFragment dialog = new UserDialogFragment();
-            dialog.setOnUserChangedListener(AbsTimelineFragment.this);
-            Bundle args = new Bundle();
-            WeiboUser user = mAdapter.getItem(position).weiboUser;
-            args.putParcelable(UserDialogFragment.USER, user);
-            dialog.setArguments(args);
-            dialog.show(getFragmentManager(), USER_DIALOG);
         }
     }
 
