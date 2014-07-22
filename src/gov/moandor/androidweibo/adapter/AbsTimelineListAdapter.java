@@ -30,11 +30,10 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     float mTimeFontSize = mFontSize - 3;
-    private int mSelectedPosition = -1;
     private OnAvatarClickListener mOnAvatarClickListener;
     private OnAvatarLongClickListener mOnAvatarLongClickListener;
     private ImageDownloader.ImageType mAvatarType = Utilities.getAvatarType();
-    private OnLastItemVisibleListener mOnLastItemVisibleListener;
+    private int mSelectedPosition = -1;
 
     @Override
     public int getCount() {
@@ -70,9 +69,6 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
             convertView.setBackgroundResource(R.color.ics_blue_semi);
         } else {
             convertView.setBackgroundResource(0);
-        }
-        if (position == getCount() - 1 && mOnLastItemVisibleListener != null) {
-            mOnLastItemVisibleListener.onLastItemVisible();
         }
         return convertView;
     }
@@ -239,10 +235,6 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
         return mSelectedPosition;
     }
 
-    public void setOnLastItemVisibleListener(OnLastItemVisibleListener l) {
-        mOnLastItemVisibleListener = l;
-    }
-
     abstract View inflateLayout(LayoutInflater inflater, ViewGroup parent);
 
     abstract ViewHolder initViewHolder(View view);
@@ -253,10 +245,6 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
 
     public static interface OnAvatarLongClickListener {
         public void onAvatarLongClick(int position);
-    }
-
-    public static interface OnLastItemVisibleListener {
-        public void onLastItemVisible();
     }
 
     static class ViewHolder {
