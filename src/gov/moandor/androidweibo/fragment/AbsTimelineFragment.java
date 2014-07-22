@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,6 +48,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     private View mFooter;
     private View mFooterIcon;
     private TextView mFooterText;
+    private LinearLayout mFooterLayout;
     private ActionMode.Callback mActionModeCallback;
     private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
 
@@ -125,19 +127,21 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     }
 
     private void buildLoadingFooter() {
+        mFooterLayout = new LinearLayout(getActivity());
         mFooter =
                 GlobalContext.getActivity().getLayoutInflater()
-                        .inflate(R.layout.timeline_list_footer, mListView, false);
+                        .inflate(R.layout.timeline_list_footer, mFooterLayout, false);
         mFooterIcon = mFooter.findViewById(R.id.image);
         mFooterText = (TextView) mFooter.findViewById(R.id.text);
+        mListView.addFooterView(mFooterLayout);
     }
 
     protected void showLoadingFooter() {
         if (mFooter == null) {
             return;
         }
-        if (mListView.getFooterViewsCount() == 0) {
-            mListView.addFooterView(mFooter);
+        if (mFooterLayout.getChildCount() == 0) {
+            mFooterLayout.addView(mFooter);
             mFooterIcon.startAnimation(mFooterAnimation);
         }
     }
@@ -146,7 +150,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         if (mFooter == null) {
             return;
         }
-        mListView.removeFooterView(mFooter);
+        mFooterLayout.removeAllViews();
     }
 
     public boolean isListViewFling() {
@@ -295,7 +299,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             mDao.setCount(Utilities.getLoadWeiboCount());
             mDao.setSinceMessage(latestMessage);
         }
-
 
         @Override
         protected void onPostExecute(List<DataBean> result) {
