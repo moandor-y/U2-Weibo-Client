@@ -28,7 +28,6 @@ import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 
 public class GlobalContext extends Application {
-    private static final int MIN_CACHE_SIZE = 1024 * 1024 * 8;
     private static final Map<String, Bitmap> sEmotionMap = new LinkedHashMap<String, Bitmap>();
     private static final Map<String, String> sWeiboEmotionNameMap = new LinkedHashMap<String, String>();
 
@@ -271,7 +270,7 @@ public class GlobalContext extends Application {
 
     private void buildCache() {
         int memoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
-        int cacheSize = Math.max(MIN_CACHE_SIZE, 1024 * 1024 * memoryClass / 5);
+        int cacheSize = 1024 * 1024 * memoryClass / 5;
         sBitmapCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
