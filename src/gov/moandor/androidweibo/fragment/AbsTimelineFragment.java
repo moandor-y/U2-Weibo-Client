@@ -135,7 +135,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mFooterText = (TextView) mFooter.findViewById(R.id.text);
     }
 
-    private void showLoadingFooter() {
+    protected void showLoadingFooter() {
         if (mFooter == null) {
             return;
         }
@@ -297,6 +297,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         protected void onPostExecute(List<DataBean> result) {
             mRefreshTask = null;
             mSwipeRefreshLayout.setRefreshing(false);
+            hideLoadingFooter();
             mNoEarlierMessage = false;
             mFooterText.setText(R.string.loading);
             mFooterIcon.setVisibility(View.VISIBLE);
@@ -321,6 +322,7 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
             if (mAdapter.getCount() >= 1) {
                 maxId = mAdapter.getItemId(mAdapter.getCount() - 1) - 1;
             }
+            showLoadingFooter();
             mDao = onCreateDao();
             mDao.setToken(GlobalContext.getCurrentAccount().token);
             mDao.setCount(Utilities.getLoadWeiboCount());
@@ -347,6 +349,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
                 mFooterText.setText(R.string.no_earlier_message);
                 mFooterIcon.clearAnimation();
                 mFooterIcon.setVisibility(View.GONE);
+            } else {
+                hideLoadingFooter();
             }
             if (result != null) {
                 mAdapter.addAll(result);
