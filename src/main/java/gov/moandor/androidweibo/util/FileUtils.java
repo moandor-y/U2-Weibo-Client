@@ -76,7 +76,7 @@ public class FileUtils {
         String sourcePath = getImagePathFromUrl(url, type);
         File sourceFile = new File(sourcePath);
         String sourceName = sourceFile.getName();
-        String extension = sourceName.substring(sourceName.lastIndexOf("."));
+        String extension = sourceName.substring(sourceName.lastIndexOf(""));
         if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".gif")
                 && !extension.equalsIgnoreCase(".jpg")) {
             extension = ".jpg";

@@ -395,7 +395,7 @@ public class Utilities {
 
     public static String buildIntentExtraName(String name) {
         String packageName = GlobalContext.getInstance().getPackageName();
-        return packageName + "." + name;
+        return packageName + "" + name;
     }
 
     public static boolean isWeiboMidUrl(String url) {
