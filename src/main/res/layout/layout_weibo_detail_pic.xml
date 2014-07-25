@@ -3,19 +3,12 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/weibo_pic"
-        android:visibility="gone"/>
-
-    <gov.moandor.androidweibo.widget.ImageWebView
-        android:id="@+id/image_web"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:visibility="gone"/>
 
     <ProgressBar

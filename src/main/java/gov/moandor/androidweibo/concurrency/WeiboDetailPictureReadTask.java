@@ -2,22 +2,20 @@ package gov.moandor.androidweibo.concurrency;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
-import gov.moandor.androidweibo.util.Logger;
-import gov.moandor.androidweibo.widget.ImageWebView;
 import gov.moandor.androidweibo.widget.WeiboDetailPicView;
+import pl.droidsonroids.gif.GifImageView;
 
 public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boolean> {
     private String mUrl;
     private String mPath;
     private ImageDownloader.ImageType mType;
     private WeiboDetailPicView mView;
-    private ImageView mImageView;
-    private ImageWebView mImageWebView;
+    private GifImageView mImageView;
+    //private ImageWebView mImageWebView;
     private Button mRetryButton;
     private ProgressBar mProgressBar;
     private HttpUtils.DownloadListener mDownloadListener = new HttpUtils.DownloadListener() {
@@ -40,7 +38,7 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mType = type;
         mView = view;
         mImageView = view.getImageView();
-        mImageWebView = view.getImageWebView();
+        //mImageWebView = view.getImageWebView();
         mRetryButton = view.getRetryButton();
         mProgressBar = view.getProgressBar();
     }
@@ -54,7 +52,7 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     @Override
     protected void onPreExecute() {
         mImageView.setVisibility(View.GONE);
-        mImageWebView.setVisibility(View.GONE);
+        //mImageWebView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(true);
         mRetryButton.setVisibility(View.GONE);

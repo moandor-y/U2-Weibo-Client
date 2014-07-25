@@ -36,16 +36,14 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         }
 
         @Override
-        public void onComplete() {
-        }
+        public void onComplete() {}
 
         @Override
-        public void onCancelled() {
-        }
+        public void onCancelled() {}
     };
 
-    public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type, WebView webView, PhotoView photoView,
-                                      ProgressBar progressBar, Button retryButton) {
+    public ImageViewerPictureReadTask(String url, ImageDownloader.ImageType type,
+            WebView webView, PhotoView photoView, ProgressBar progressBar, Button retryButton) {
         mUrl = url;
         mType = type;
         mWebView = webView;
