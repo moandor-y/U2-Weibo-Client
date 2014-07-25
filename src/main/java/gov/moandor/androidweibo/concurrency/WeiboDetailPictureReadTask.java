@@ -7,6 +7,7 @@ import android.widget.ProgressBar;
 
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.HttpUtils;
+import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.widget.ImageWebView;
 import gov.moandor.androidweibo.widget.WeiboDetailPicView;
 
@@ -55,6 +56,7 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mImageView.setVisibility(View.GONE);
         mImageWebView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setIndeterminate(true);
         mRetryButton.setVisibility(View.GONE);
     }
 
@@ -76,6 +78,9 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
 
     @Override
     protected void onProgressUpdate(Integer... values) {
+        if (mProgressBar.isIndeterminate()) {
+            mProgressBar.setIndeterminate(false);
+        }
         mProgressBar.setProgress(values[0]);
         mProgressBar.setMax(values[1]);
     }

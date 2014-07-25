@@ -7,8 +7,6 @@ import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.ImageUtils;
 
 public class ImageDownloadTask extends MyAsyncTask<Void, Integer, Boolean> {
-    private int mProgressTotal;
-    private int mProgressCurrent;
     private String mUrl;
     private ImageDownloader.ImageType mType;
     private CopyOnWriteArrayList<HttpUtils.DownloadListener> mListeners =
@@ -32,12 +30,10 @@ public class ImageDownloadTask extends MyAsyncTask<Void, Integer, Boolean> {
             }
 
             @Override
-            public void onComplete() {
-            }
+            public void onComplete() {}
 
             @Override
-            public void onCancelled() {
-            }
+            public void onCancelled() {}
         });
         ImageDownloadTaskCache.removeImageDownloadTask(mUrl, this);
         return result;
@@ -45,15 +41,12 @@ public class ImageDownloadTask extends MyAsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-        mProgressCurrent = values[0];
-        mProgressTotal = values[1];
         for (HttpUtils.DownloadListener l : mListeners) {
-            l.onPushProgress(mProgressCurrent, mProgressTotal);
+            l.onPushProgress(values[0], values[1]);
         }
     }
 
     public void addDownloadListener(HttpUtils.DownloadListener l) {
         mListeners.addIfAbsent(l);
-        l.onPushProgress(mProgressCurrent, mProgressTotal);
     }
 }

@@ -69,6 +69,7 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     @Override
     protected void onPreExecute() {
         mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setIndeterminate(true);
         mWebView.setVisibility(View.GONE);
         mPhotoView.setVisibility(View.GONE);
         mRetryButton.setVisibility(View.GONE);
@@ -102,6 +103,9 @@ public class ImageViewerPictureReadTask extends MyAsyncTask<Void, Integer, Boole
 
     @Override
     protected void onProgressUpdate(Integer... values) {
+        if (mProgressBar.isIndeterminate()) {
+            mProgressBar.setIndeterminate(false);
+        }
         mProgressBar.setProgress(values[0]);
         mProgressBar.setMax(values[1]);
     }
