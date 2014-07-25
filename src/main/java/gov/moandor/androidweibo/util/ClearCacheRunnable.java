@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.dao.FollowingDao;
 
 public class ClearCacheRunnable implements Runnable {
-    private static final long LAST_TIME = 1000 * 60 * 60 * 24 * 3;
+    private static final long DURATION = 1000 * 60 * 60 * 24 * 3;
 
     private List<String> mSkipPaths;
 
@@ -82,9 +82,10 @@ public class ClearCacheRunnable implements Runnable {
             if (file.isDirectory()) {
                 clear(file);
             } else {
-                if (System.currentTimeMillis() - file.lastModified() > LAST_TIME) {
+                if (System.currentTimeMillis() - file.lastModified() > DURATION) {
                     String path = file.getAbsolutePath();
                     if (mSkipPaths == null || !mSkipPaths.contains(path)) {
+                        //noinspection ResultOfMethodCallIgnored
                         file.delete();
                     }
                 }
