@@ -24,6 +24,14 @@ android {
     dexOptions {
         preDexLibraries = false
     }
+    signingConfigs {
+        debug {
+            storeFile file(System.getenv('ANDROID_KEYSOTRE_DEBUG'))
+            storePassword System.getenv('ANDROID_KEYSOTRE_PASSWORD_DEBUG')
+            keyAlias System.getenv('ANDROID_KEY_ALIAS_DEBUG')
+            keyPassword System.getenv('ANDROID_KEY_PASSWORD_DEBUG')
+        }
+    }
 }
 
 dependencies {
