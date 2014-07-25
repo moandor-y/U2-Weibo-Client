@@ -23,8 +23,8 @@ public class HackLoginActivity extends AbsActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hack_login);
         final Spinner spinner = (Spinner) findViewById(R.id.type);
-        ArrayAdapter<CharSequence> adapter =
-                ArrayAdapter.createFromResource(this, R.array.hack_login_types, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.hack_login_types, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         final EditText username = (EditText) findViewById(R.id.user_name);
@@ -46,10 +46,10 @@ public class HackLoginActivity extends AbsActivity {
                         Oauth2AcessTokenDao dao = new Oauth2AcessTokenDao();
                         dao.setUsername(username.getText().toString());
                         dao.setPassword(password.getText().toString());
-                        dao.setClientId(getResources().getStringArray(R.array.hack_login_keys)[spinner
-                                .getSelectedItemPosition()]);
-                        dao.setClientSecret(getResources().getStringArray(R.array.hack_login_secrets)[spinner
-                                .getSelectedItemPosition()]);
+                        dao.setClientId(getResources().getStringArray(R.array.hack_login_keys)
+                                [spinner.getSelectedItemPosition()]);
+                        dao.setClientSecret(getResources().getStringArray(R.array
+                                 .hack_login_secrets)[spinner.getSelectedItemPosition()]);
                         dao.setGrantType("password");
                         try {
                             String token = dao.execute();
@@ -57,7 +57,8 @@ public class HackLoginActivity extends AbsActivity {
                             Utilities.notice(R.string.auth_success);
                             Intent intent = new Intent();
                             intent.setClass(GlobalContext.getInstance(), MainActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent
+                                    .FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();
                         } catch (WeiboException e) {

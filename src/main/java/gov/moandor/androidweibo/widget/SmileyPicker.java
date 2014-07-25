@@ -81,7 +81,7 @@ public class SmileyPicker extends GridView {
             if (convertView != null) {
                 view = (ImageView) convertView;
             } else {
-                view = (ImageView) mInflater.inflate(R.layout.smiley_picker_item, null);
+                view = (ImageView) mInflater.inflate(R.layout.smiley_picker_item, parent, false);
             }
             view.setImageBitmap(sBitmaps.get(position));
             return view;

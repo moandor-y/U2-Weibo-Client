@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="action_button" parent="android:Widget.ActionButton">
+        <item name="android:minWidth">@dimen/action_button_min_width</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">12dip</item>
+        <item name="android:paddingRight">12dip</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+</resources>

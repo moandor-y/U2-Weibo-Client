@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -275,6 +276,7 @@ public class SettingsActivityOldApi extends AbsActivity {
         }
 
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return mBuilder.create();
         }

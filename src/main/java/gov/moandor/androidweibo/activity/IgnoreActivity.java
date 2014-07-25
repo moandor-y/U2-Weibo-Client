@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -274,6 +275,7 @@ public class IgnoreActivity extends AbsActivity {
 
     public static class FilterTypeDialogFragment extends DialogFragment {
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setItems(R.array.filter_types, new DialogInterface.OnClickListener() {
@@ -339,7 +341,10 @@ public class IgnoreActivity extends AbsActivity {
                     view.setTag(filter.getId());
                 }
             }
-        }        @Override
+        }
+
+        @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             final Type type = (Type) getArguments().getSerializable(TYPE);
@@ -440,9 +445,5 @@ public class IgnoreActivity extends AbsActivity {
         private static enum Type {
             KEYWORD, USER, SOURCE
         }
-
-
-
-
     }
 }

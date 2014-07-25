@@ -69,7 +69,7 @@ public class IncomingUrlActivity extends AbsActivity {
             dao.setToken(mToken);
             dao.setMid(mMid);
             try {
-                long id = dao.execute().longValue();
+                long id = dao.execute();
                 WeiboStatusDao statusDao = new WeiboStatusDao();
                 statusDao.setToken(mToken);
                 statusDao.setId(id);

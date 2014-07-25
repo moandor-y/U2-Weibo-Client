@@ -409,13 +409,6 @@ public class Utilities {
         if (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
-        /*
-        if (url.contains(UrlHelper.WEIBO_COM + "/")) {
-            url = url.substring(UrlHelper.WEIBO_COM.length() + 1, url.length());
-        } else if (url.contains(UrlHelper.E_WEIBO_COM + "/")) {
-            url = url.substring(UrlHelper.E_WEIBO_COM.length() + 1, url.length());
-        }
-        */
         String[] result = url.split("/");
         return result.length == 5 && !url.contains("weibo.com/p");
     }

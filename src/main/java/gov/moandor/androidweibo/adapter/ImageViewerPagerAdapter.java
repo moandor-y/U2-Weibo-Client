@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -93,7 +92,7 @@ public class ImageViewerPagerAdapter extends PagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         if (object instanceof ViewGroup) {
-            ((ViewPager) container).removeView((View) object);
+            container.removeView((View) object);
         }
     }
 

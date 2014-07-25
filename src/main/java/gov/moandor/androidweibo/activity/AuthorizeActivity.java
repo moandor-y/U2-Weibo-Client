@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -148,6 +149,7 @@ public class AuthorizeActivity extends AbsActivity {
 
     public static class HackLoginDialogFragment extends DialogFragment {
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(R.string.hack_login);
@@ -185,7 +187,8 @@ public class AuthorizeActivity extends AbsActivity {
         }
 
         @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        public void onReceivedSslError(WebView view, @NonNull SslErrorHandler handler,
+                SslError error) {
             handler.proceed();
         }
     }

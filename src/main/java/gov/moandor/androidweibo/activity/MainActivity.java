@@ -24,6 +24,7 @@ import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.MainPagerAdapter;
@@ -86,6 +87,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private static final String DIALOG_FIND_USER = "dialog_find_user";
     private static final int PROFILE = 3;
     private static boolean sRunning;
+    private final Object mGroupsLoadLock = new Object();
     private int mUnreadPage = -1;
     private int mUnreadGroup = -1;
     private ViewPager mViewPager;
@@ -102,7 +104,6 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
     private PagerSlidingTabStrip mTabStrip;
     private MainPagerAdapter mPagerAdapter;
     private WeiboGroup[] mGroups;
-    private Object mGroupsLoadLock = new Object();
     private MyAsyncTask<Void, Void, WeiboGroup[]> mLoadWeiboGroupsTask;
 
     public static boolean isRunning() {
@@ -554,7 +555,8 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
                 GroupsDao dao = new GroupsDao();
                 dao.setToken(mToken);
                 try {
-                    return dao.execute().toArray(new WeiboGroup[0]);
+                    List<WeiboGroup> result = dao.execute();
+                    return result.toArray(new WeiboGroup[result.size()]);
                 } catch (WeiboException e) {
                     Logger.logException(e);
                 }
@@ -603,7 +605,8 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
             GroupsDao dao = new GroupsDao();
             dao.setToken(mToken);
             try {
-                return dao.execute().toArray(new WeiboGroup[0]);
+                List<WeiboGroup> result = dao.execute();
+                return result.toArray(new WeiboGroup[result.size()]);
             } catch (WeiboException e) {
                 Logger.logException(e);
                 Utilities.notice(e.getMessage());
