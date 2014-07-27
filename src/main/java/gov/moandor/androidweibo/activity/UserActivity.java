@@ -60,6 +60,10 @@ public class UserActivity extends AbsActivity {
         if (mUser == null) {
             return false;
         }
+        if (mUser.id == GlobalContext.getCurrentAccount().user.id) {
+            menu.clear();
+            return true;
+        }
         if (mUser.following) {
             menu.findItem(R.id.follow).setVisible(false);
             if (mUser.followMe) {
