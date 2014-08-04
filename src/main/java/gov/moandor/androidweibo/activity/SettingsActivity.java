@@ -435,13 +435,12 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         }
     }
 
-    public static class AboutFragment extends PreferenceFragment {
+    public static class AboutFragment extends PreferenceFragment implements SharedPreferences
+            .OnSharedPreferenceChangeListener {
         private static final String KEY_MEMORY = "memory";
         private static final String KEY_OFFICIAL_ACCOUNT = "official_account";
         private static final String KEY_DEVELOPER_1 = "developer_1";
         private static final String KEY_DEVELOPER_2 = "developer_2";
-        private static final String KEY_DIR_PIC = "dir_pic";
-        private static final String KEY_DIR_AVATAR = "dir_avatar";
         private static final String KEY_DIR_LOGS = "dir_logs";
         private static final String KEY_VERSION = "version";
         private static final long OFFICIAL_ACCOUNT = 3941216030L;
@@ -511,8 +510,10 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         }
 
         private void buildDirectories() {
-            findPreference(KEY_DIR_PIC).setSummary(FileUtils.WEIBO_PICTURE_CACHE);
-            findPreference(KEY_DIR_AVATAR).setSummary(FileUtils.WEIBO_AVATAR_CACHE);
+            findPreference(ConfigManager.PICTURE_CACHE_DIR).setSummary(ConfigManager
+                    .getPictureCacheDir());
+            findPreference(ConfigManager.AVATAR_CACHE_DIR).setSummary(ConfigManager
+                    .getAvatarCacheDir());
             findPreference(KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
         }
 
@@ -525,6 +526,23 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             buildDevelopers();
             buildDirectories();
             buildVersion();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            buildDirectories();
         }
     }
 

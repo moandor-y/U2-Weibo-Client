@@ -1,5 +1,6 @@
 package gov.moandor.androidweibo.concurrency;
 
+import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import gov.moandor.androidweibo.util.FileUtils;
@@ -23,6 +24,12 @@ public class ImageDownloadTask extends MyAsyncTask<Void, Integer, Boolean> {
             return false;
         }
         String path = FileUtils.getImagePathFromUrl(mUrl, mType);
+        File image = new File(path);
+        String nomediaPath = image.getParent() + File.separator + ".nomedia";
+        File nomedia = new File(nomediaPath);
+        if (!nomedia.exists()) {
+            FileUtils.createFile(nomediaPath);
+        }
         boolean result = ImageUtils.getBitmapFromNetwork(mUrl, path, new HttpUtils.DownloadListener() {
             @Override
             public void onPushProgress(int progress, int max) {

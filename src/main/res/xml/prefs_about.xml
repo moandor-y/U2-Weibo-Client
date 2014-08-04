@@ -39,14 +39,12 @@
 
     <PreferenceCategory android:title="@string/directories">
 
-        <Preference
-            android:key="dir_pic"
-            android:persistent="false"
+        <EditTextPreference
+            android:key="picture_cache_dir"
             android:title="@string/dir_pic"/>
 
-        <Preference
-            android:key="dir_avatar"
-            android:persistent="false"
+        <EditTextPreference
+            android:key="avatar_cache_dir"
             android:title="@string/dir_avatar"/>
 
         <Preference

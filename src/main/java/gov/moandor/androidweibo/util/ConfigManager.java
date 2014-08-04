@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +70,15 @@ public class ConfigManager {
     public static final String SCREEN_ORIENTATION = "screen_orientation";
     public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowing_enabled";
     public static final String BM_ENABLED = "bm_enabled";
+    public static final String PICTURE_CACHE_DIR = "picture_cache_dir";
+    public static final String AVATAR_CACHE_DIR = "avatar_cache_dir";
     private static final int PREFERENCE_VERSION = 5;
+    private static final String DEFAULT_CACHE_SD = GlobalContext.getSdCacheDir() + File.separator
+            + "weibo";
+    private static final String DEFAULT_PICTURE_CACHE_DIR = DEFAULT_CACHE_SD + File.separator +
+            "weibo_pictures";
+    private static final String DEFAULT_AVATAR_CACHE_DIR = DEFAULT_CACHE_SD + File.separator +
+            "weibo_avatars";
 
     static {
         SharedPreferences sharedPreferences = getPreferences();
@@ -77,10 +86,20 @@ public class ConfigManager {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.putInt(PREFERENCE_VERSION_KEY, PREFERENCE_VERSION);
-            apply(editor);
+            editor.commit();
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs, true);
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_notifications, true);
             PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_bm, true);
+        }
+        if (sharedPreferences.getString(PICTURE_CACHE_DIR, null) == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(PICTURE_CACHE_DIR, DEFAULT_PICTURE_CACHE_DIR);
+            editor.commit();
+        }
+        if (sharedPreferences.getString(AVATAR_CACHE_DIR, null) == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(AVATAR_CACHE_DIR, DEFAULT_AVATAR_CACHE_DIR);
+            editor.commit();
         }
     }
 
@@ -386,6 +405,14 @@ public class ConfigManager {
         SharedPreferences.Editor editor = getPreferences().edit();
         editor.putBoolean(BM_ENABLED, value);
         apply(editor);
+    }
+
+    public static String getPictureCacheDir() {
+        return getPreferences().getString(PICTURE_CACHE_DIR, DEFAULT_PICTURE_CACHE_DIR);
+    }
+
+    public static String getAvatarCacheDir() {
+        return getPreferences().getString(AVATAR_CACHE_DIR, DEFAULT_AVATAR_CACHE_DIR);
     }
 
     public static SharedPreferences getPreferences() {

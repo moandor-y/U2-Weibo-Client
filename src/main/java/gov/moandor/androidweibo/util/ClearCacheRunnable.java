@@ -66,11 +66,11 @@ public class ClearCacheRunnable implements Runnable {
     @Override
     public void run() {
         mSkipPaths = getSkipPaths();
-        File file = new File(FileUtils.WEIBO_PICTURE_CACHE);
+        File file = new File(ConfigManager.getPictureCacheDir());
         if (file.exists()) {
             clear(file);
         }
-        file = new File(FileUtils.WEIBO_AVATAR_CACHE);
+        file = new File(ConfigManager.getAvatarCacheDir());
         if (file.exists()) {
             clear(file);
         }

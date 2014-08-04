@@ -15,12 +15,10 @@ import gov.moandor.androidweibo.concurrency.ImageDownloader;
 
 public class FileUtils {
     public static final String CACHE_SD = GlobalContext.getSdCacheDir();
-    private static final String WEIBO_CACHE_SD = CACHE_SD + File.separator + "weibo";
-    public static final String WEIBO_PICTURE_CACHE = WEIBO_CACHE_SD + File.separator + "weibo_pictures";
-    public static final String WEIBO_AVATAR_CACHE = WEIBO_CACHE_SD + File.separator + "weibo_avatars";
     public static final String LOGS = CACHE_SD + File.separator + "logs";
     private static final String ACCOUNT_AVATARS = CACHE_SD + File.separator + "account_avatars";
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static File createFile(String path) {
         File file = new File(path);
         if (file.exists()) {
@@ -50,12 +48,12 @@ public class FileUtils {
         switch (type) {
             case AVATAR_SMALL:
             case AVATAR_LARGE:
-                path = WEIBO_AVATAR_CACHE;
+                path = ConfigManager.getAvatarCacheDir();
                 break;
             case PICTURE_SMALL:
             case PICTURE_MEDIUM:
             case PICTURE_LARGE:
-                path = WEIBO_PICTURE_CACHE;
+                path = ConfigManager.getPictureCacheDir();
                 break;
             default:
                 throw new IllegalStateException("Wrong image type");
