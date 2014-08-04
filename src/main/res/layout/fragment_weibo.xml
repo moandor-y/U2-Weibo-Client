@@ -72,7 +72,8 @@
                 android:layout_marginTop="@dimen/margin_vertical"
                 android:clickable="true"
                 android:contentDescription="@string/weibo_pic"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                androidweibo:retweet="false"/>
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/pic_multi"
@@ -155,7 +156,8 @@
                 android:layout_marginTop="@dimen/margin_horizontal"
                 android:clickable="true"
                 android:contentDescription="@string/weibo_pic"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                androidweibo:retweet="true"/>
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/retweet_pic_multi"

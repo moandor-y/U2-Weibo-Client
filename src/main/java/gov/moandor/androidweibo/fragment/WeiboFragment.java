@@ -282,14 +282,6 @@ public class WeiboFragment extends Fragment implements UserDialogFragment.OnUser
         mMap.setImageBitmap(map);
         mCoordinate.setVisibility(View.VISIBLE);
         mCoordinate.setText(getCoordinate(mWeiboStatus.weiboGeo));
-        int margin = getResources().getDimensionPixelSize(R.dimen.margin_vertical);
-        if (mPicture.getVisibility() == View.VISIBLE) {
-            margin += mPicture.getHeight();
-            ((ViewGroup.MarginLayoutParams) mCoordinate.getLayoutParams()).topMargin += margin;
-        } else if (mPictureMulti.getVisibility() == View.VISIBLE) {
-            margin += mPictureMulti.getHeight();
-            ((ViewGroup.MarginLayoutParams) mCoordinate.getLayoutParams()).topMargin += margin;
-        }
     }
 
     private String getCoordinate(WeiboGeo geo) {

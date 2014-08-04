@@ -1,6 +1,7 @@
 package gov.moandor.androidweibo.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -24,6 +25,7 @@ import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
 public class WeiboDetailPicView extends FrameLayout {
+    private boolean mRetweet;
     private GifImageView mGifView;
     private ProgressBar mProgressBar;
     private Button mRetryButton;
@@ -35,19 +37,38 @@ public class WeiboDetailPicView extends FrameLayout {
 
     public WeiboDetailPicView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        handleAttributes(context, attrs);
         initLayout(context);
     }
 
     public WeiboDetailPicView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        handleAttributes(context, attrs);
         initLayout(context);
     }
 
-    private static ViewGroup.LayoutParams resizeView(View view, String path) {
+    private void handleAttributes(Context context, AttributeSet attrs) {
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.WeiboDetailPic, 0, 0);
+        try {
+            mRetweet = typedArray.getBoolean(R.styleable.WeiboDetailPic_retweet, false);
+        } finally {
+            typedArray.recycle();
+        }
+    }
+
+    private ViewGroup.LayoutParams resizeView(View view, String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
-        int margin = GlobalContext.getInstance().getResources().getDimensionPixelSize(R.dimen.margin_horizontal) * 2;
+        int margin;
+        if (mRetweet) {
+            margin = GlobalContext.getInstance().getResources().getDimensionPixelSize(R.dimen
+                    .margin_horizontal) * 2;
+        } else {
+            margin = GlobalContext.getInstance().getResources().getDimensionPixelSize(R.dimen
+                    .margin_horizontal);
+        }
         int width = Math.max(Utilities.dpToPx(200), options.outWidth);
         int maxWidth = Utilities.getScreenWidth() - margin * 2;
         width = Math.min(width, maxWidth);

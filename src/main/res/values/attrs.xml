@@ -18,5 +18,9 @@
     <attr name="item_background" format="reference"/>
     <attr name="icon_refresh" format="reference"/>
     <attr name="bottom_background" format="reference"/>
+    
+    <declare-styleable name="WeiboDetailPic">
+        <attr name="retweet" format="boolean"/>
+    </declare-styleable>
 
 </resources>
