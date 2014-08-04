@@ -56,67 +56,73 @@
             android:lineSpacingMultiplier="1.2"
             android:textSize="15sp"/>
 
-        <gov.moandor.androidweibo.widget.WeiboDetailPicView
-            android:id="@+id/pic"
+        <LinearLayout
+            android:id="@+id/pic_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/text"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/margin_horizontal"
-            android:clickable="true"
-            android:contentDescription="@string/weibo_pic"
-            android:visibility="gone"/>
+            android:orientation="vertical"
+            android:visibility="gone">
 
-        <android.support.v7.widget.GridLayout
-            android:id="@+id/pic_multi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text"
-            android:layout_marginTop="@dimen/margin_horizontal"
-            android:clickable="false"
-            android:visibility="gone"
-            androidweibo:columnCount="3"
-            androidweibo:orientation="horizontal"
-            androidweibo:rowCount="3"
-            androidweibo:useDefaultMargins="false">
+            <gov.moandor.androidweibo.widget.WeiboDetailPicView
+                android:id="@+id/pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_vertical"
+                android:clickable="true"
+                android:contentDescription="@string/weibo_pic"
+                android:visibility="gone"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+            <android.support.v7.widget.GridLayout
+                android:id="@+id/pic_multi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_vertical"
+                android:clickable="false"
+                android:visibility="gone"
+                androidweibo:columnCount="3"
+                androidweibo:orientation="horizontal"
+                androidweibo:rowCount="3"
+                androidweibo:useDefaultMargins="false">
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-            <ImageView style="@style/list_multi_image_view"/>
+                <ImageView style="@style/list_multi_image_view"/>
 
-        </android.support.v7.widget.GridLayout>
+                <ImageView style="@style/list_multi_image_view"/>
 
-        <TextView
-            android:id="@+id/coordinate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/text"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:visibility="gone"/>
+            </android.support.v7.widget.GridLayout>
 
-        <ImageView
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_below="@+id/coordinate"
-            android:layout_marginTop="@dimen/margin_vertical"
-            android:contentDescription="@string/map"
-            android:scaleType="centerCrop"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/coordinate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_vertical"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="@dimen/margin_vertical"
+                android:contentDescription="@string/map"
+                android:scaleType="centerCrop"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/retweet"

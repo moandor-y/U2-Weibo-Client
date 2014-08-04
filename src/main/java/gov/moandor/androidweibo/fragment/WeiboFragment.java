@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -45,6 +46,7 @@ public class WeiboFragment extends Fragment implements UserDialogFragment.OnUser
     private GridLayout mPictureMulti;
     private GridLayout mRetweetPictureMulti;
     private RelativeLayout mRetweetLayout;
+    private LinearLayout mPicLayout;
     private TextView mUserName;
     private TextView mTime;
     private TextView mSource;
@@ -82,6 +84,7 @@ public class WeiboFragment extends Fragment implements UserDialogFragment.OnUser
         mPictureMulti = (GridLayout) view.findViewById(R.id.pic_multi);
         mRetweetPictureMulti = (GridLayout) view.findViewById(R.id.retweet_pic_multi);
         mRetweetLayout = (RelativeLayout) view.findViewById(R.id.retweet);
+        mPicLayout = (LinearLayout) view.findViewById(R.id.pic_layout);
     }
 
     @Override
@@ -128,6 +131,7 @@ public class WeiboFragment extends Fragment implements UserDialogFragment.OnUser
         mText.setText(mWeiboStatus.textSpannable);
         ImageDownloader.downloadAvatar(mAvatar, mWeiboStatus.weiboUser, false, mAvatarType);
         if (mWeiboStatus.thumbnailPic != null && mWeiboStatus.picCount > 0) {
+            mPicLayout.setVisibility(View.VISIBLE);
             if (mWeiboStatus.picCount == 1) {
                 mPicture.setVisibility(View.VISIBLE);
                 buildPicture(mPicture, mWeiboStatus);
@@ -161,6 +165,7 @@ public class WeiboFragment extends Fragment implements UserDialogFragment.OnUser
             }
         }
         if (mWeiboStatus.weiboGeo != null && GlobalContext.isInWifi()) {
+            mPicLayout.setVisibility(View.VISIBLE);
             buildCoordinate();
         }
     }

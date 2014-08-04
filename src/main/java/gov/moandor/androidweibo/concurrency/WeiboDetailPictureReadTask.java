@@ -15,7 +15,6 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     private ImageDownloader.ImageType mType;
     private WeiboDetailPicView mView;
     private GifImageView mImageView;
-    //private ImageWebView mImageWebView;
     private Button mRetryButton;
     private ProgressBar mProgressBar;
     private HttpUtils.DownloadListener mDownloadListener = new HttpUtils.DownloadListener() {
@@ -38,7 +37,6 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
         mType = type;
         mView = view;
         mImageView = view.getImageView();
-        //mImageWebView = view.getImageWebView();
         mRetryButton = view.getRetryButton();
         mProgressBar = view.getProgressBar();
     }
@@ -52,7 +50,6 @@ public class WeiboDetailPictureReadTask extends MyAsyncTask<Void, Integer, Boole
     @Override
     protected void onPreExecute() {
         mImageView.setVisibility(View.GONE);
-        //mImageWebView.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.setIndeterminate(true);
         mRetryButton.setVisibility(View.GONE);
