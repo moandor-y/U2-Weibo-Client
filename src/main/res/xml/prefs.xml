@@ -3,11 +3,10 @@
 
     <PreferenceCategory android:title="@string/general">
 
-        <Preference android:title="@string/notifications">
-            <intent
-                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$NotificationsActivity"
-                android:targetPackage="gov.moandor.androidweibo"/>
-        </Preference>
+        <Preference
+            android:key="notifications"
+            android:persistent="false"
+            android:title="@string/notifications"/>
 
         <ListPreference
             android:defaultValue="0"
@@ -33,11 +32,10 @@
             android:key="swipe_back_enabled"
             android:title="@string/swipe_back"/>
 
-        <Preference android:title="@string/ignore">
-            <intent
-                android:targetClass="gov.moandor.androidweibo.activity.IgnoreActivity"
-                android:targetPackage="gov.moandor.androidweibo"/>
-        </Preference>
+        <Preference
+            android:key="ignore"
+            android:persistent="false"
+            android:title="@string/ignore"/>
 
     </PreferenceCategory>
 
@@ -114,17 +112,12 @@
         <Preference
             android:key="black_magic"
             android:persistent="false"
-            android:title="@string/black_magic">
-            <intent
-                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$BlackMagicActivity"
-                android:targetPackage="gov.moandor.androidweibo"/>
-        </Preference>
+            android:title="@string/black_magic"/>
 
-        <Preference android:title="@string/about">
-            <intent
-                android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$AboutActivity"
-                android:targetPackage="gov.moandor.androidweibo"/>
-        </Preference>
+        <Preference
+            android:key="about"
+            android:persistent="false"
+            android:title="@string/about"/>
 
     </PreferenceCategory>
 

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference android:title="@string/open_source_licenses">
-        <intent
-            android:targetClass="gov.moandor.androidweibo.activity.SettingsActivity$LicensesActivity"
-            android:targetPackage="gov.moandor.androidweibo"/>
-    </Preference>
+    <Preference
+        android:key="licenses"
+        android:title="@string/open_source_licenses"/>
 
     <Preference
         android:key="version"

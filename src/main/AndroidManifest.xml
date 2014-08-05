@@ -111,7 +111,9 @@
         <activity android:name=".activity.SettingsActivity$AboutActivity"/>
         <activity android:name=".activity.SettingsActivity$LicensesActivity"/>
         <activity android:name=".activity.SettingsActivityOldApi"/>
-        <activity android:name=".activity.NotificationSettingsActivity"/>
+        <activity android:name=".activity.SettingsActivityOldApi$NotificationsActivity"/>
+        <activity android:name=".activity.SettingsActivityOldApi$BlackMagicActivity"/>
+        <activity android:name=".activity.SettingsActivityOldApi$AboutActivity"/>
         <activity android:name=".activity.ImageViewerActivity"/>
         <activity android:name=".activity.UserListActivity"/>
         <activity android:name=".activity.UserWeiboListActivity"/>

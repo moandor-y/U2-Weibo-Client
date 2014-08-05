@@ -1,525 +1,411 @@
 package gov.moandor.androidweibo.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.app.ActivityManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
+import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
+import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.CheckedTextView;
-import android.widget.TextView;
+
+import java.util.Locale;
 
 import gov.moandor.androidweibo.R;
+import gov.moandor.androidweibo.notification.ConnectivityChangeReceiver;
+import gov.moandor.androidweibo.util.ActivityUtils;
 import gov.moandor.androidweibo.util.ConfigManager;
+import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
+import gov.moandor.androidweibo.util.TextUtils;
+import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
 
-public class SettingsActivityOldApi extends AbsActivity {
-    private static final String THEME_DIALOG = "theme_dialog";
-    private static final String AVATAR_MODE_DIALOG = "avatar_mode_dialog";
-    private static final String PICTURE_MODE_DIALOG = "picture_mode_dialog";
-    private static final String PICTURE_WIFI_MODE_DIALOG = "picture_wifi_mode_dialog";
-    private static final String FONT_SIZE_DIALOG = "font_size_dialog";
-    private static final String LOAD_WEIBO_COUNT_DIALOG = "load_weibo_count_dialog";
-    private static final String COMMENT_REPOST_LIST_AVATAR_MODE_DIALOG = "comment_repost_list_avatar_mode_dialog";
+/**
+ * SettingsActivityOldApi
+ * Created by Moandor on 8/5/2014.
+ */
+@SuppressWarnings("deprecation")
+public class SettingsActivityOldApi extends PreferenceActivity implements SharedPreferences
+        .OnSharedPreferenceChangeListener {
+    private static final String STATE_NEED_RESTART = "state_need_restart";
+    private static final String NEED_RESTART = Utilities.buildIntentExtraName("NEED_RESTART");
 
-    private static boolean sNeedRestart;
-
-    private TextView mThemeStatus;
-    private TextView mFontSizeStatus;
-    private TextView mLoadWeiboCountStatus;
-    private TextView mAvatarModeStatus;
-    private TextView mPictureModeStatus;
-    private TextView mPictureWifiModeStatus;
-    private TextView mCommentRepostListAvatarStatus;
-    private TextView mAvatarModeLabel;
-    private TextView mPictureModeLabel;
-    private TextView mPictureWifiModeLabel;
-    private TextView mCommentRepostListAvatarLabel;
-    private CheckedTextView mFastScroll;
-    private CheckedTextView mNoPictureMode;
-    private CheckedTextView mWifiAutoDownloadPic;
-    private CheckedTextView mListHwAccel;
-    private CheckedTextView mPicHwAccel;
-    private View mAvatarModeLayout;
-    private View mPictureModeLayout;
-    private View mPictureWifiModeLayout;
-    private View mCommentRepostListAvatarLayout;
-    private String[] mThemes;
-    private String[] mAvatarModes;
-    private String[] mPictureModes;
-    private String[] mFontSizes;
-    private String[] mCommentRepostListAvatarModes;
-    private String[] mLoadWeiboCounts;
-
-    static AlertDialog.Builder buildListDialog(int titleResId, String[] items, int checkedItem,
-                                               DialogInterface.OnClickListener listener, Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setSingleChoiceItems(items, checkedItem, listener);
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.setTitle(titleResId);
-        return builder;
-    }
-
-    private static void requestRestart() {
-        if (!sNeedRestart) {
-            sNeedRestart = true;
-        }
-    }
+    private boolean mNeedRestart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        Resources res = getResources();
-        mThemes = res.getStringArray(R.array.themes);
-        mAvatarModes = res.getStringArray(R.array.avatar_modes);
-        mPictureModes = res.getStringArray(R.array.picture_modes);
-        mFontSizes = res.getStringArray(R.array.font_sizes);
-        mCommentRepostListAvatarModes = res.getStringArray(R.array.comment_repost_list_avatar_modes);
-        mLoadWeiboCounts = res.getStringArray(R.array.load_weibo_counts);
-        mThemeStatus = (TextView) findViewById(R.id.theme_status);
-        mFontSizeStatus = (TextView) findViewById(R.id.font_size_status);
-        mFastScroll = (CheckedTextView) findViewById(R.id.fast_scroll);
-        mLoadWeiboCountStatus = (TextView) findViewById(R.id.load_weibo_count_status);
-        mNoPictureMode = (CheckedTextView) findViewById(R.id.no_picture_mode);
-        mAvatarModeStatus = (TextView) findViewById(R.id.avatar_mode_status);
-        mPictureModeStatus = (TextView) findViewById(R.id.picture_mode_status);
-        mPictureWifiModeStatus = (TextView) findViewById(R.id.picture_wifi_mode_status);
-        mCommentRepostListAvatarStatus = (TextView) findViewById(R.id.comment_repost_list_avatar_mode_status);
-        mAvatarModeLabel = (TextView) findViewById(R.id.avatar_mode_label);
-        mPictureModeLabel = (TextView) findViewById(R.id.picture_mode_label);
-        mPictureWifiModeLabel = (TextView) findViewById(R.id.picture_wifi_mode_label);
-        mCommentRepostListAvatarLabel = (TextView) findViewById(R.id.comment_repost_list_avatar_mode_label);
-        mWifiAutoDownloadPic = (CheckedTextView) findViewById(R.id.wifi_auto_download_pic);
-        mListHwAccel = (CheckedTextView) findViewById(R.id.list_hw_accel);
-        mPicHwAccel = (CheckedTextView) findViewById(R.id.pic_hw_accel);
-        mAvatarModeLayout = findViewById(R.id.avatar_mode);
-        mPictureModeLayout = findViewById(R.id.picture_mode);
-        mPictureWifiModeLayout = findViewById(R.id.picture_wifi_mode);
-        mCommentRepostListAvatarLayout = findViewById(R.id.comment_repost_list_avatar_mode);
-        mFastScroll.setOnClickListener(new OnFastScrollClickListener());
-        mNoPictureMode.setOnClickListener(new OnNoPictureModeClickListener());
-        mAvatarModeLayout.setOnClickListener(new OnAvatarModeClickListener());
-        mPictureModeLayout.setOnClickListener(new OnPictureModeClickListener());
-        mPictureWifiModeLayout.setOnClickListener(new OnPictureWifiModeClickListener());
-        mCommentRepostListAvatarLayout.setOnClickListener(new OnCommentRepostListAvatarModeClickListener());
-        mWifiAutoDownloadPic.setOnClickListener(new OnWifiAutoDownloadPicClickListener());
-        mListHwAccel.setOnClickListener(new OnListHwAccelClickListener());
-        mPicHwAccel.setOnClickListener(new OnPicHwAccelClickListener());
-        findViewById(R.id.notification).setOnClickListener(new OnNotificationClickListener());
-        findViewById(R.id.theme).setOnClickListener(new OnThemeClickListener());
-        findViewById(R.id.font_size).setOnClickListener(new OnFontSizeClickListener());
-        findViewById(R.id.load_weibo_count).setOnClickListener(new OnLoadWeiboCountClickListener());
-        setupTheme();
-        setupFontSize();
-        setupFastScroll();
-        setupLoadWeiboCount();
-        setupNoPictureMode();
-        setupAvatarMode();
-        setupPictureMode();
-        setupPictureWifiMode();
-        setupCommentRepostListAvatarMode();
-        setupWifiAutoDownloadPic();
-        setupListHwAccel();
-        setupPicHwAccel();
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.settings);
+        addPreferencesFromResource(R.xml.prefs);
+        mNeedRestart = getIntent().getBooleanExtra(NEED_RESTART, false);
+        if (savedInstanceState != null) {
+            mNeedRestart = savedInstanceState.getBoolean(STATE_NEED_RESTART);
+        }
+        ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
+        buildSummaries();
+        bindClickPreference(this, SettingsActivity.KEY_NOTIFICATIONS, NotificationsActivity.class);
+        bindClickPreference(this, SettingsActivity.KEY_IGNORE, IgnoreActivity.class);
+        bindClickPreference(this, SettingsActivity.KEY_BLACK_MAGIC, BlackMagicActivity.class);
+        bindClickPreference(this, SettingsActivity.KEY_ABOUT, AboutActivity.class);
+        if (!ConfigManager.isBmEnabled()) {
+            PreferenceCategory advanced = (PreferenceCategory) findPreference(SettingsActivity
+                    .KEY_ADVANCED);
+            Preference preference = findPreference(SettingsActivity.KEY_BLACK_MAGIC);
+            advanced.removePreference(preference);
+        }
+        CheckBoxPreference listHwAccel = (CheckBoxPreference) findPreference(ConfigManager
+                .LIST_HW_ACCEL_ENABLED);
+        listHwAccel.setChecked(false);
+        listHwAccel.setEnabled(false);
+        CheckBoxPreference picHwAccel = (CheckBoxPreference) findPreference(ConfigManager
+                .PIC_HW_ACCEL_ENABLED);
+        picHwAccel.setChecked(false);
+        picHwAccel.setEnabled(false);
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, @NonNull KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            if (sNeedRestart) {
-                sNeedRestart = false;
-                Intent intent = new Intent();
-                intent.setClass(GlobalContext.getInstance(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-            }
-            finish();
+            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (sNeedRestart) {
-                    sNeedRestart = false;
-                    Intent intent = new Intent();
-                    intent.setClass(GlobalContext.getInstance(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_NEED_RESTART, mNeedRestart);
     }
 
-    private void setupTheme() {
-        mThemeStatus.setText(mThemes[ConfigManager.getAppTheme()]);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    private void setupFontSize() {
-        mFontSizeStatus.setText(mFontSizes[ConfigManager.getFontSizeMode()]);
-    }
-
-    private void setupFastScroll() {
-        mFastScroll.setChecked(ConfigManager.isFastScrollEnabled());
-    }
-
-    private void setupLoadWeiboCount() {
-        int count = ConfigManager.getLoadWeiboCountMode();
-        if (count != 0) {
-            mLoadWeiboCountStatus.setText(String.valueOf(Utilities.getLoadWeiboCount()));
-        } else {
-            mLoadWeiboCountStatus.setText(R.string.auto);
-        }
-    }
-
-    private void setupNoPictureMode() {
-        mNoPictureMode.setChecked(ConfigManager.isNoPictureMode());
-    }
-
-    private void setupAvatarMode() {
-        if (ConfigManager.isNoPictureMode()) {
-            mAvatarModeLayout.setEnabled(false);
-            mAvatarModeLabel.setEnabled(false);
-            mAvatarModeStatus.setEnabled(false);
-        } else {
-            mAvatarModeLayout.setEnabled(true);
-            mAvatarModeLabel.setEnabled(true);
-            mAvatarModeStatus.setEnabled(true);
-        }
-        mAvatarModeStatus.setText(mAvatarModes[ConfigManager.getAvatarQuality()]);
-    }
-
-    private void setupPictureMode() {
-        if (ConfigManager.isNoPictureMode()) {
-            mPictureModeLayout.setEnabled(false);
-            mPictureModeLabel.setEnabled(false);
-            mPictureModeStatus.setEnabled(false);
-        } else {
-            mPictureModeLayout.setEnabled(true);
-            mPictureModeLabel.setEnabled(true);
-            mPictureModeStatus.setEnabled(true);
-        }
-        mPictureModeStatus.setText(mPictureModes[ConfigManager.getPictureQuality()]);
-    }
-
-    private void setupPictureWifiMode() {
-        if (ConfigManager.isNoPictureMode()) {
-            mPictureWifiModeLayout.setEnabled(false);
-            mPictureWifiModeLabel.setEnabled(false);
-            mPictureWifiModeStatus.setEnabled(false);
-        } else {
-            mPictureWifiModeLayout.setEnabled(true);
-            mPictureWifiModeLabel.setEnabled(true);
-            mPictureWifiModeStatus.setEnabled(true);
-        }
-        mPictureWifiModeStatus.setText(mPictureModes[ConfigManager.getPictureWifiQuality()]);
-    }
-
-    private void setupCommentRepostListAvatarMode() {
-        if (ConfigManager.isNoPictureMode()) {
-            mCommentRepostListAvatarLayout.setEnabled(false);
-            mCommentRepostListAvatarLabel.setEnabled(false);
-            mCommentRepostListAvatarStatus.setEnabled(false);
-        } else {
-            mCommentRepostListAvatarLayout.setEnabled(true);
-            mCommentRepostListAvatarLabel.setEnabled(true);
-            mCommentRepostListAvatarStatus.setEnabled(true);
-        }
-        mCommentRepostListAvatarStatus.setText(mCommentRepostListAvatarModes[ConfigManager
-                .getCommentRepostListAvatarMode()]);
-    }
-
-    private void setupWifiAutoDownloadPic() {
-        mWifiAutoDownloadPic.setChecked(ConfigManager.isWifiAutoDownloadPicEnabled());
-        mWifiAutoDownloadPic.setEnabled(!ConfigManager.isNoPictureMode());
-    }
-
-    private void setupListHwAccel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mListHwAccel.setChecked(ConfigManager.isListHwAccelEnabled());
-        } else {
-            mListHwAccel.setEnabled(false);
-        }
-    }
-
-    private void setupPicHwAccel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            mPicHwAccel.setChecked(ConfigManager.isPicHwAccelEnabled());
-        } else {
-            mPicHwAccel.setEnabled(false);
-        }
-    }
-
-    public static class SettingsDialogFragment extends DialogFragment {
-        private AlertDialog.Builder mBuilder;
-
-        public void setBuilder(AlertDialog.Builder builder) {
-            mBuilder = builder;
-        }
-
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            return mBuilder.create();
-        }
-    }
-
-    private class OnNotificationClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(GlobalContext.getInstance(), NotificationSettingsActivity.class);
-            startActivity(intent);
-        }
-    }
-
-    private class OnThemeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.theme, mThemes, ConfigManager.getAppTheme(),
-                            new OnThemeSelectedListener(), SettingsActivityOldApi.this);
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), THEME_DIALOG);
-        }
-    }
-
-    private class OnFontSizeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.font_size, mFontSizes, ConfigManager.getFontSizeMode(),
-                            new OnFontSizeSelectedListener(), SettingsActivityOldApi.this);
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), FONT_SIZE_DIALOG);
-        }
-    }
-
-    private class OnFastScrollClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mFastScroll.toggle();
-            ConfigManager.setFastScrollEnabled(mFastScroll.isChecked());
-            requestRestart();
-        }
-    }
-
-    private class OnLoadWeiboCountClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.load_weibo_count, mLoadWeiboCounts, ConfigManager.getLoadWeiboCountMode(),
-                            new OnLoadWeiboCountSelectedListener(), SettingsActivityOldApi.this);
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), LOAD_WEIBO_COUNT_DIALOG);
-        }
-    }
-
-    private class OnNoPictureModeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mNoPictureMode.toggle();
-            ConfigManager.setNoPictureMode(mNoPictureMode.isChecked());
-            requestRestart();
-            setupAvatarMode();
-            setupPictureMode();
-            setupPictureWifiMode();
-            setupCommentRepostListAvatarMode();
-            setupWifiAutoDownloadPic();
-        }
-    }
-
-    private class OnAvatarModeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.avatar, mAvatarModes, ConfigManager.getAvatarQuality(),
-                            new OnAvatarModeSelectedListener(), SettingsActivityOldApi.this);
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), AVATAR_MODE_DIALOG);
-        }
-    }
-
-    private class OnPictureModeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.picture, mPictureModes, ConfigManager.getPictureQuality(),
-                            new OnPictureModeSelectedListener(), SettingsActivityOldApi.this);
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), PICTURE_MODE_DIALOG);
-        }
-    }
-
-    private class OnPictureWifiModeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.picture_wifi, mPictureModes, ConfigManager.getPictureWifiQuality(),
-                            new OnPictureWifiModeSelectedListener(), SettingsActivityOldApi.this);
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), PICTURE_WIFI_MODE_DIALOG);
-        }
-    }
-
-    private class OnWifiAutoDownloadPicClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mWifiAutoDownloadPic.toggle();
-            ConfigManager.setWifiAutoDownloadPicEnabled(mWifiAutoDownloadPic.isChecked());
-            requestRestart();
-        }
-    }
-
-    private class OnListHwAccelClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mListHwAccel.toggle();
-            ConfigManager.setListHwAccelEnabled(mListHwAccel.isChecked());
-            requestRestart();
-        }
-    }
-
-    private class OnPicHwAccelClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mPicHwAccel.toggle();
-            ConfigManager.setPicHwAccelEnabled(mPicHwAccel.isChecked());
-            requestRestart();
-        }
-    }
-
-    private class OnCommentRepostListAvatarModeClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            AlertDialog.Builder builder =
-                    buildListDialog(R.string.comment_repost_list_avatar, mCommentRepostListAvatarModes, ConfigManager
-                                    .getCommentRepostListAvatarMode(), new OnCommentRepostListAvatarModeSelectedListener(),
-                            SettingsActivityOldApi.this
-                    );
-            SettingsDialogFragment dialog = new SettingsDialogFragment();
-            dialog.setBuilder(builder);
-            dialog.show(getSupportFragmentManager(), COMMENT_REPOST_LIST_AVATAR_MODE_DIALOG);
-        }
-    }
-
-    private class OnThemeSelectedListener implements DialogInterface.OnClickListener {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getAppTheme()) {
-                return;
-            }
-            ConfigManager.setAppTheme(which);
-            requestRestart();
-            dialog.dismiss();
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        requestRestart();
+        if (key.equals(ConfigManager.THEME)) {
             Intent intent = new Intent();
             intent.setClass(GlobalContext.getInstance(), SettingsActivityOldApi.class);
             finish();
             overridePendingTransition(0, 0);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(NEED_RESTART, true);
             startActivity(intent);
             overridePendingTransition(R.anim.stay, R.anim.activity_fade_out);
+        } else {
+            buildSummaries();
         }
     }
 
-    private class OnFontSizeSelectedListener implements DialogInterface.OnClickListener {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getFontSizeMode()) {
-                return;
-            }
-            ConfigManager.setFontSizeMode(which);
-            requestRestart();
-            dialog.dismiss();
-            setupFontSize();
+    private void exit() {
+        if (mNeedRestart) {
+            exitAndRestartMainActivity();
+        } else {
+            finish();
         }
     }
 
-    private class OnLoadWeiboCountSelectedListener implements DialogInterface.OnClickListener {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getLoadWeiboCountMode()) {
-                return;
-            }
-            ConfigManager.setLoadWeiboCountMode(which);
-            requestRestart();
-            dialog.dismiss();
-            setupLoadWeiboCount();
+    private void exitAndRestartMainActivity() {
+        Intent intent = new Intent();
+        intent.setClass(GlobalContext.getInstance(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    private void requestRestart() {
+        if (!mNeedRestart) {
+            mNeedRestart = true;
         }
     }
 
-    private class OnAvatarModeSelectedListener implements DialogInterface.OnClickListener {
+    private void buildSummaries() {
+        buildThemeSummary();
+        buildFontSizeSummary();
+        buildLoadCountSummary();
+        buildAvatarSummary();
+        buildPictureSummary();
+        buildWifiPictureSummary();
+        buildComRepAvatarSummary();
+    }
+
+    private void buildThemeSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager.THEME);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private void buildFontSizeSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager.FONT_SIZE_MODE);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private void buildLoadCountSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager
+                .LOAD_WEIBO_COUNT_MODE);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private void buildAvatarSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager.AVATAR_QUALITY);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private void buildPictureSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager.PICTURE_QUALITY);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private void buildWifiPictureSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager
+                .PICTURE_WIFI_QUALITY);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private void buildComRepAvatarSummary() {
+        ListPreference preference = (ListPreference) findPreference(ConfigManager
+                .COMMENT_REPOST_LIST_AVATAR_MODE);
+        preference.setSummary(preference.getEntry());
+    }
+
+    private static void bindClickPreference(PreferenceActivity activity, String key,
+            Class<?> activityClass) {
+        Intent intent = new Intent();
+        intent.setClass(GlobalContext.getInstance(), activityClass);
+        activity.findPreference(key).setIntent(intent);
+    }
+
+    public static class NotificationsActivity extends PreferenceActivity implements
+            SharedPreferences.OnSharedPreferenceChangeListener {
+        private static final int REQUEST_RINGTONE = 0;
+
+        private Uri mRingtoneUri;
+
         @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getAvatarQuality()) {
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_notifications);
+            buildSummaries();
+            findPreference(ConfigManager.NOTIFICATION_RINGTONE).setOnPreferenceClickListener(
+                    new OnRingtoneClickListener());
+            String ringtone = ConfigManager.getNotificationRingtone();
+            if (!TextUtils.isEmpty(ringtone)) {
+                mRingtoneUri = Uri.parse(ringtone);
+            }
+            if (!ConfigManager.isBmEnabled()) {
+                PreferenceCategory unread = (PreferenceCategory) findPreference(SettingsActivity
+                        .KEY_UNREAD_MESSAGES);
+                unread.removePreference(findPreference(ConfigManager.NOTIFICATION_DM_ENABLED));
+            }
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            ConfigManager.getPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            ConfigManager.getPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+            ConnectivityChangeReceiver.judgeAlarm(GlobalContext.getInstance());
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode != RESULT_OK) {
                 return;
             }
-            ConfigManager.setAvatarQuality(which);
-            requestRestart();
-            dialog.dismiss();
-            setupAvatarMode();
+            switch (requestCode) {
+                case REQUEST_RINGTONE:
+                    mRingtoneUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                    if (mRingtoneUri != null) {
+                        ConfigManager.setNotificationRingtone(mRingtoneUri.toString());
+                    } else {
+                        ConfigManager.setNotificationRingtone(null);
+                    }
+                    buildRingtoneSummary();
+            }
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            buildSummaries();
+        }
+
+        private void buildSummaries() {
+            buildIntervalSummary();
+            buildWifiIntervalSummary();
+            buildRingtoneSummary();
+        }
+
+        private void buildIntervalSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY);
+            preference.setSummary(preference.getEntry());
+        }
+
+        private void buildWifiIntervalSummary() {
+            ListPreference preference = (ListPreference) findPreference(ConfigManager.NOTIFICATION_FREQUENCY_WIFI);
+            preference.setSummary(preference.getEntry());
+        }
+
+        private void buildRingtoneSummary() {
+            Preference preference = findPreference(ConfigManager.NOTIFICATION_RINGTONE);
+            String ringtone = ConfigManager.getNotificationRingtone();
+            if (!TextUtils.isEmpty(ringtone)) {
+                Uri ringtoneUri = Uri.parse(ringtone);
+                preference.setSummary(RingtoneManager.getRingtone(this,
+                        ringtoneUri).getTitle(this));
+            } else {
+                preference.setSummary(R.string.mute);
+            }
+        }
+
+        private class OnRingtoneClickListener implements Preference.OnPreferenceClickListener {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent();
+                intent.setAction(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, getString(R.string.ringtone));
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mRingtoneUri);
+                startActivityForResult(intent, REQUEST_RINGTONE);
+                return true;
+            }
         }
     }
 
-    private class OnPictureModeSelectedListener implements DialogInterface.OnClickListener {
+    public static class BlackMagicActivity extends PreferenceActivity {
         @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getPictureQuality()) {
-                return;
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_bm);
+            findPreference(SettingsActivity.KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new
+                    OnUpdateFollowingClickListener());
+        }
+
+        private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                UpdateFollowingIdsTask task = new UpdateFollowingIdsTask();
+                task.setOnUpdateFinishedListener(new OnUpdateFollowingFinishedListener());
+                task.execute();
+                Utilities.notice(R.string.updating);
+                return true;
             }
-            ConfigManager.setPictureQuality(which);
-            requestRestart();
-            dialog.dismiss();
-            setupPictureMode();
+        }
+
+        private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
+            @Override
+            public void onUpdateFinidhed() {
+                Utilities.notice(R.string.update_finished);
+            }
         }
     }
 
-    private class OnPictureWifiModeSelectedListener implements DialogInterface.OnClickListener {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getPictureWifiQuality()) {
-                return;
-            }
-            ConfigManager.setPictureWifiQuality(which);
-            requestRestart();
-            dialog.dismiss();
-            setupPictureWifiMode();
-        }
-    }
+    public static class AboutActivity extends PreferenceActivity {
+        private int mBmClickCount;
 
-    private class OnCommentRepostListAvatarModeSelectedListener implements DialogInterface.OnClickListener {
         @Override
-        public void onClick(DialogInterface dialog, int which) {
-            if (which == ConfigManager.getCommentRepostListAvatarMode()) {
-                return;
-            }
-            ConfigManager.setCommentRepostListAvatarMode(which);
-            dialog.dismiss();
-            setupCommentRepostListAvatarMode();
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.prefs_about);
+            buildMemoryInfo(findPreference(SettingsActivity.KEY_MEMORY));
+            buildOfficialAccount(findPreference(SettingsActivity.KEY_OFFICIAL_ACCOUNT));
+            buildDevelopers();
+            buildDirectories();
+            buildVersion();
+            bindClickPreference(this, SettingsActivity.KEY_LICENSES,
+                    SettingsActivity.LicensesActivity.class);
+        }
+
+        private static void buildMemoryInfo(Preference preference) {
+            Runtime runtime = Runtime.getRuntime();
+            long vmAlloc = runtime.totalMemory() - runtime.freeMemory();
+            long nativeAlloc = Debug.getNativeHeapAllocatedSize();
+            Context context = GlobalContext.getInstance();
+            ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            int memoryClass = manager.getMemoryClass();
+            String summary =
+                    context.getString(R.string.vm_alloc_mem, formatMemoryText(vmAlloc) + " / " + memoryClass + " MB")
+                            + "\n" + context.getString(R.string.native_alloc_mem, formatMemoryText(nativeAlloc));
+            preference.setSummary(summary);
+        }
+
+        private void buildVersion() {
+            Preference preference = findPreference(SettingsActivity.KEY_VERSION);
+            preference.setSummary(Utilities.getVersionName());
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    mBmClickCount++;
+                    if (mBmClickCount >= 7) {
+                        ConfigManager.setBmEnabled(true);
+                    }
+                    return false;
+                }
+            });
+        }
+
+        private void buildOfficialAccount(Preference preference) {
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(ActivityUtils.userActivity(SettingsActivity.OFFICIAL_ACCOUNT));
+                    return true;
+                }
+            });
+        }
+
+        private void buildDevelopers() {
+            findPreference(SettingsActivity.KEY_DEVELOPER_1).setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(ActivityUtils.userActivity(SettingsActivity.DEVELOPER_1));
+                    return true;
+                }
+            });
+            findPreference(SettingsActivity.KEY_DEVELOPER_2).setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(ActivityUtils.userActivity(SettingsActivity.DEVELOPER_2));
+                    return true;
+                }
+            });
+        }
+
+        private void buildDirectories() {
+            findPreference(ConfigManager.PICTURE_CACHE_DIR).setSummary(ConfigManager
+                    .getPictureCacheDir());
+            findPreference(ConfigManager.AVATAR_CACHE_DIR).setSummary(ConfigManager
+                    .getAvatarCacheDir());
+            findPreference(SettingsActivity.KEY_DIR_LOGS).setSummary(FileUtils.LOGS);
+        }
+
+        private static String formatMemoryText(long memory) {
+            float memoryInMB = (float) memory / (1024 * 1024);
+            return String.format(Locale.ENGLISH, "%.1f MB", memoryInMB);
         }
     }
 }
