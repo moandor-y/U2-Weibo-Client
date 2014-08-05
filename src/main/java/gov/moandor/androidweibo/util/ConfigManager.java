@@ -107,12 +107,6 @@ public class ConfigManager {
         return Integer.parseInt(getPreferences().getString(THEME, String.valueOf(THEME_LIGHT)));
     }
 
-    public static void setAppTheme(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(THEME, String.valueOf(value));
-        apply(editor);
-    }
-
     public static int getCurrentAccountIndex() {
         return getPreferences().getInt(CURRENT_ACCOUNT_INDEX, 0);
     }
@@ -160,20 +154,8 @@ public class ConfigManager {
         return Integer.parseInt(getPreferences().getString(PICTURE_QUALITY, String.valueOf(PICTURE_SMALL)));
     }
 
-    public static void setPictureQuality(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(PICTURE_QUALITY, String.valueOf(value));
-        apply(editor);
-    }
-
     public static int getPictureWifiQuality() {
         return Integer.parseInt(getPreferences().getString(PICTURE_WIFI_QUALITY, String.valueOf(PICTURE_LARGE)));
-    }
-
-    public static void setPictureWifiQuality(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(PICTURE_WIFI_QUALITY, String.valueOf(value));
-        apply(editor);
     }
 
     public static int getAtmeFilter() {
@@ -200,12 +182,6 @@ public class ConfigManager {
         return getPreferences().getBoolean(FAST_SCROLL_ENABLED, true);
     }
 
-    public static void setFastScrollEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(FAST_SCROLL_ENABLED, value);
-        apply(editor);
-    }
-
     public static boolean isSwipeBackEnabled() {
         return getPreferences().getBoolean(SWIPE_BACK_ENABLED, true);
     }
@@ -214,40 +190,16 @@ public class ConfigManager {
         return Integer.parseInt(getPreferences().getString(FONT_SIZE_MODE, String.valueOf(FONT_SIZE_MODE_MEDIUM)));
     }
 
-    public static void setFontSizeMode(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(FONT_SIZE_MODE, String.valueOf(value));
-        apply(editor);
-    }
-
     public static int getAvatarQuality() {
         return Integer.parseInt(getPreferences().getString(AVATAR_QUALITY, String.valueOf(AVATAR_AUTO)));
-    }
-
-    public static void setAvatarQuality(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(AVATAR_QUALITY, String.valueOf(value));
-        apply(editor);
     }
 
     public static boolean isNoPictureMode() {
         return getPreferences().getBoolean(NO_PICTURE_MODE, false);
     }
 
-    public static void setNoPictureMode(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NO_PICTURE_MODE, value);
-        apply(editor);
-    }
-
     public static int getLoadWeiboCountMode() {
         return Integer.parseInt(getPreferences().getString(LOAD_WEIBO_COUNT_MODE, "0"));
-    }
-
-    public static void setLoadWeiboCountMode(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(LOAD_WEIBO_COUNT_MODE, String.valueOf(value));
-        apply(editor);
     }
 
     public static int getCommentRepostListAvatarMode() {
@@ -255,30 +207,12 @@ public class ConfigManager {
                 String.valueOf(COMMENT_REPOST_LIST_AVATAR_AUTO)));
     }
 
-    public static void setCommentRepostListAvatarMode(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(COMMENT_REPOST_LIST_AVATAR_MODE, String.valueOf(value));
-        apply(editor);
-    }
-
     public static boolean isNotificationEnabled() {
         return getPreferences().getBoolean(NOTIFICATION_ENABLED, false);
     }
 
-    public static void setNotificationEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NOTIFICATION_ENABLED, value);
-        apply(editor);
-    }
-
     public static int getNotificationFrequency() {
         return Integer.parseInt(getPreferences().getString(NOTIFICATION_FREQUENCY, String.valueOf(FIFTEEN_MINUTES)));
-    }
-
-    public static void setNotificationFrequency(int value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putString(NOTIFICATION_FREQUENCY, String.valueOf(value));
-        apply(editor);
     }
 
     public static int getNotificationWifiFrequency() {
@@ -289,30 +223,12 @@ public class ConfigManager {
         return getPreferences().getBoolean(NOTIFICATION_MENTION_WEIBO_ENABLED, true);
     }
 
-    public static void setNotificationMentionWeiboEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NOTIFICATION_MENTION_WEIBO_ENABLED, value);
-        apply(editor);
-    }
-
     public static boolean isNotificationCommentEnabled() {
         return getPreferences().getBoolean(NOTIFICATION_COMMENT_ENABLED, true);
     }
 
-    public static void setNotificationCommentEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NOTIFICATION_COMMENT_ENABLED, value);
-        apply(editor);
-    }
-
     public static boolean isNotificationMentionCommentEnabled() {
         return getPreferences().getBoolean(NOTIFICATION_MENTION_COMMENT_ENABLED, true);
-    }
-
-    public static void setNotificationMentionCommentEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NOTIFICATION_MENTION_COMMENT_ENABLED, value);
-        apply(editor);
     }
 
     public static boolean isNotificationDmEnabled() {
@@ -323,20 +239,8 @@ public class ConfigManager {
         return getPreferences().getBoolean(NOTIFICATION_VIBRATE_ENABLED, true);
     }
 
-    public static void setNotificationVibrateEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NOTIFICATION_VIBRATE_ENABLED, value);
-        apply(editor);
-    }
-
     public static boolean isNotificationLedEnabled() {
         return getPreferences().getBoolean(NOTIFICATION_LED_ENABLED, true);
-    }
-
-    public static void setNotificationLedEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(NOTIFICATION_LED_ENABLED, value);
-        apply(editor);
     }
 
     public static String getNotificationRingtone() {
@@ -353,30 +257,12 @@ public class ConfigManager {
         return getPreferences().getBoolean(WIFI_AUTO_DOWNLOAD_PIC_ENABLED, true);
     }
 
-    public static void setWifiAutoDownloadPicEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(WIFI_AUTO_DOWNLOAD_PIC_ENABLED, value);
-        apply(editor);
-    }
-
     public static boolean isListHwAccelEnabled() {
         return getPreferences().getBoolean(LIST_HW_ACCEL_ENABLED, true);
     }
 
-    public static void setListHwAccelEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(LIST_HW_ACCEL_ENABLED, value);
-        apply(editor);
-    }
-
     public static boolean isPicHwAccelEnabled() {
         return getPreferences().getBoolean(PIC_HW_ACCEL_ENABLED, true);
-    }
-
-    public static void setPicHwAccelEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(PIC_HW_ACCEL_ENABLED, value);
-        apply(editor);
     }
 
     public static int getScreenOrientation() {
