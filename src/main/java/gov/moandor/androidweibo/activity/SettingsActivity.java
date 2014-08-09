@@ -143,14 +143,14 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
             addPreferencesFromResource(R.xml.prefs);
             buildSummaries();
             Preference preference = findPreference(KEY_BLACK_MAGIC);
-            if (!ConfigManager.isBmEnabled()) {
-                PreferenceCategory advanced = (PreferenceCategory) findPreference(KEY_ADVANCED);
-                advanced.removePreference(preference);
-            }
             bindClickPreference(this, KEY_NOTIFICATIONS, NotificationsActivity.class);
             bindClickPreference(this, KEY_IGNORE, IgnoreActivity.class);
             bindClickPreference(this, KEY_BLACK_MAGIC, BlackMagicActivity.class);
             bindClickPreference(this, KEY_ABOUT, AboutActivity.class);
+            if (!ConfigManager.isBmEnabled()) {
+                PreferenceCategory advanced = (PreferenceCategory) findPreference(KEY_ADVANCED);
+                advanced.removePreference(preference);
+            }
         }
 
         @Override
