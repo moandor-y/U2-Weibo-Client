@@ -16,8 +16,8 @@ public class ImageDownloadTaskCache {
     private static ConcurrentHashMap<String, ImageDownloadTask> mTasks =
             new ConcurrentHashMap<String, ImageDownloadTask>();
 
-    public static boolean waitForPictureDownload(String url, HttpUtils.DownloadListener downloadListener,
-                                                 ImageDownloader.ImageType type) {
+    public static boolean waitForPictureDownload(String url, HttpUtils.DownloadListener
+            downloadListener, ImageDownloader.ImageType type) {
         while (true) {
             ImageDownloadTask task = mTasks.get(url);
             boolean fileExists = new File(FileUtils.getImagePathFromUrl(url, type)).exists();

@@ -199,12 +199,6 @@ import gov.moandor.androidweibo.util.Logger;
  * </p>
  */
 public abstract class MyAsyncTask<Params, Progress, Result> {
-    private static final int CORE_POOL_SIZE = 128;
-    private static final int MAXIMUM_POOL_SIZE = 128;
-    private static final int DOWNLOAD_CORE_POOL_SIZE = 20;
-    private static final int DOWNLOAD_MAXIMUM_POOL_SIZE = 20;
-    private static final int KEEP_ALIVE = 1;
-
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
@@ -224,12 +218,13 @@ public abstract class MyAsyncTask<Params, Progress, Result> {
     };
 
     private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue<Runnable>(128);
-    public static final Executor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory, new ThreadPoolExecutor.DiscardOldestPolicy());
+    public static final Executor THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(128, 128, 1,
+            TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory,
+            new ThreadPoolExecutor.DiscardOldestPolicy());
     private static volatile Executor sDefaultExecutor = THREAD_POOL_EXECUTOR;
     private static final BlockingQueue<Runnable> sDownloadPoolWorkQueue = new LinkedBlockingQueue<Runnable>(50);
-    public static final Executor DOWNLOAD_THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(DOWNLOAD_CORE_POOL_SIZE,
-            DOWNLOAD_MAXIMUM_POOL_SIZE, KEEP_ALIVE, TimeUnit.SECONDS, sDownloadPoolWorkQueue, sDownloadThreadFactory,
+    public static final Executor DOWNLOAD_THREAD_POOL_EXECUTOR = new ThreadPoolExecutor(20, 20,
+            1, TimeUnit.SECONDS, sDownloadPoolWorkQueue, sDownloadThreadFactory,
             new ThreadPoolExecutor.DiscardOldestPolicy());
     private static final int MESSAGE_POST_RESULT = 0x1;
     private static final int MESSAGE_POST_PROGRESS = 0x2;

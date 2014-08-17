@@ -20,8 +20,8 @@ public class ImageDownloader {
     static volatile boolean sPauseImageReadTask;
     private static WeakReference<Drawable> mImagePlaceHolder;
 
-    public static void downloadMultiPicture(ImageView view, WeiboStatus status, boolean isFling, ImageType type,
-                                            int picIndex) {
+    public static void downloadMultiPicture(ImageView view, WeiboStatus status, boolean isFling,
+            ImageType type, int picIndex) {
         String url;
         switch (type) {
             case PICTURE_SMALL:
@@ -39,8 +39,8 @@ public class ImageDownloader {
         displayImage(view, url, type, isFling, true);
     }
 
-    public static void downloadTimelinePicture(TimelinePicImageView view, WeiboStatus status, boolean isFling,
-                                               ImageType type) {
+    public static void downloadTimelinePicture(TimelinePicImageView view, WeiboStatus status,
+            boolean isFling, ImageType type) {
         String url;
         switch (type) {
             case PICTURE_SMALL:
@@ -59,7 +59,8 @@ public class ImageDownloader {
         displayImage(view, url, type, isFling, false);
     }
 
-    public static void downloadAvatar(ImageView view, WeiboUser user, boolean isFling, ImageType type) {
+    public static void downloadAvatar(ImageView view, WeiboUser user, boolean isFling,
+            ImageType type) {
         if (user == null) {
             view.setImageBitmap(null);
             return;
@@ -78,8 +79,8 @@ public class ImageDownloader {
         displayImage(view, url, type, isFling, false);
     }
 
-    private static void displayImage(final ImageView view, String url, ImageType type, boolean isFling,
-                                     boolean isMultiPictures) {
+    private static void displayImage(final ImageView view, String url, ImageType type,
+            boolean isFling, boolean isMultiPictures) {
         view.clearAnimation();
         if (!shouldReloadPicture(view, url)) {
             return;
@@ -117,9 +118,9 @@ public class ImageDownloader {
     }
 
     private static boolean shouldReloadPicture(ImageView view, String url) {
-        if (url.equals(view.getTag()) && view.getDrawable() != null && view.getDrawable() instanceof BitmapDrawable
-                && (BitmapDrawable) view.getDrawable() != null
-                && ((BitmapDrawable) view.getDrawable()).getBitmap() != null) {
+        if (url.equals(view.getTag()) && view.getDrawable() != null && view.getDrawable()
+                instanceof BitmapDrawable && ((BitmapDrawable) view.getDrawable()).getBitmap() !=
+                null) {
             return false;
         } else {
             view.setTag(null);
