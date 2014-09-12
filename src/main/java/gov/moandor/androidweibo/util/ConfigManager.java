@@ -69,7 +69,7 @@ public class ConfigManager {
     public static final String PIC_HW_ACCEL_ENABLED = "pic_hw_accel_enabled";
     public static final String SCREEN_ORIENTATION = "screen_orientation";
     public static final String IGNORING_UNFOLLOWED_ENABLED = "ignoring_unfollowing_enabled";
-    public static final String BM_ENABLED = "bm_enabled";
+    //public static final String BM_ENABLED = "bm_enabled";
     public static final String PICTURE_CACHE_DIR = "picture_cache_dir";
     public static final String AVATAR_CACHE_DIR = "avatar_cache_dir";
     private static final int PREFERENCE_VERSION = 5;
@@ -284,13 +284,15 @@ public class ConfigManager {
     }
 
     public static boolean isBmEnabled() {
-        return getPreferences().getBoolean(BM_ENABLED, false);
+        return true;
     }
 
     public static void setBmEnabled(boolean value) {
-        SharedPreferences.Editor editor = getPreferences().edit();
-        editor.putBoolean(BM_ENABLED, value);
-        apply(editor);
+        // do nothing
+
+        //SharedPreferences.Editor editor = getPreferences().edit();
+        //editor.putBoolean(BM_ENABLED, value);
+        //apply(editor);
     }
 
     public static String getPictureCacheDir() {
