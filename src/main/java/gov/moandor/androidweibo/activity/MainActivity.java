@@ -20,7 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
+import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,15 +120,15 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         }
         setContentView(R.layout.activity_main);
         mWeiboListSpinnerAdapter =
-                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
-                        new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.weibo_list_spinner))));
+                new ArrayAdapter<>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
+                        new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.weibo_list_spinner))));
         mWeiboListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         mAtmeListSpinnerAdapter =
-                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
+                new ArrayAdapter<>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
                         getResources().getStringArray(R.array.atme_list_spinner));
         mAtmeListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         mCommentListSpinnerAdapter =
-                new ArrayAdapter<String>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
+                new ArrayAdapter<>(GlobalContext.getInstance(), R.layout.main_spinner, android.R.id.text1,
                         getResources().getStringArray(R.array.comment_list_spinner));
         mCommentListSpinnerAdapter.setDropDownViewResource(R.layout.main_navigation_spinner_item);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

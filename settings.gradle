@@ -1,4 +1,3 @@
 include ':libs:SwipeBackLayout'
 include ':libs:PhotoView'
-include ':libs:PagerSlidingTabStrip'
 include ':'

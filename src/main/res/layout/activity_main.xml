@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.astuetz.viewpager.extensions.PagerSlidingTabStrip
+        <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/action_height"/>
