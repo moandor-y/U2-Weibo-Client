@@ -53,6 +53,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
         mTabStrip.setOnPageChangeListener(this);
         mTabStrip.setIndicatorColorResource(R.color.holo_blue_light);
         mTabStrip.setTabPaddingLeftRight(getResources().getDimensionPixelSize(R.dimen.tab_padding));
+        mTabStrip.notifyDataSetChanged();
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.weibo);
@@ -114,8 +115,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     }
 
     @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
     @Override
     public void onPageSelected(int position) {

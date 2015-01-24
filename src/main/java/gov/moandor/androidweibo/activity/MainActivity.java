@@ -215,6 +215,7 @@ public class MainActivity extends AbsActivity implements ViewPager.OnPageChangeL
         mTabStrip.setOnPageChangeListener(this);
         mTabStrip.setIndicatorColorResource(R.color.holo_blue_light);
         mTabStrip.setTabPaddingLeftRight(getResources().getDimensionPixelSize(R.dimen.tab_padding));
+        mTabStrip.notifyDataSetChanged();
         Utilities.registerReceiver(mUnreadUpdateReciever, new IntentFilter(ACTION_UNREAD_UPDATED));
         Utilities.registerReceiver(mOnAccountChangedReciever, new IntentFilter(ACTION_ACCOUNT_CHANGED));
         sRunning = true;
