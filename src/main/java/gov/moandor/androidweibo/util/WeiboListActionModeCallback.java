@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.adapter.AbsTimelineListAdapter;
 import gov.moandor.androidweibo.bean.WeiboStatus;
+import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.fragment.AbsTimelineFragment;
 import gov.moandor.androidweibo.fragment.ConfirmDeleteDialogFragment;
 
@@ -19,8 +20,13 @@ public class WeiboListActionModeCallback implements ActionMode.Callback {
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         mFragment.setPullToRefreshEnabled(false);
+        WeiboUser user = mAdapter.getSelectedItem().weiboUser;
+        if (user == null) {
+            onDestroyActionMode(mode);
+            return false;
+        }
         mode.getMenuInflater().inflate(R.menu.long_click_weibo, menu);
-        if (mAdapter.getSelectedItem().weiboUser.id != GlobalContext.getCurrentAccount().user.id) {
+        if (user.id != GlobalContext.getCurrentAccount().user.id) {
             menu.removeItem(R.id.delete);
         }
         MenuItem shareItem = menu.findItem(R.id.share);

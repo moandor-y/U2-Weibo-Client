@@ -131,8 +131,7 @@ public class WeiboActivity extends AbsSwipeBackActivity implements ViewPager.OnP
     }
 
     @Override
-    public void onPageScrollStateChanged(int state) {
-    }
+    public void onPageScrollStateChanged(int state) {}
 
     private void refresh() {
         switch (mViewPager.getCurrentItem()) {

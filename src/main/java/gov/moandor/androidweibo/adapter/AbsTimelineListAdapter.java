@@ -102,6 +102,8 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
 
     void buildUserLayout(ViewHolder holder, WeiboUser user, int position) {
         if (user == null) {
+            holder.userName.setText(null);
+            holder.avatar.setImageBitmap(null);
             return;
         }
         if (!TextUtils.isEmpty(user.remark)) {
