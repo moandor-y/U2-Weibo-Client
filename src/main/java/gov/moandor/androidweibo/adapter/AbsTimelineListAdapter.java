@@ -26,7 +26,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     private static final int MAX_COUNT = 500;
 
     protected OnWeiboTextTouchListener mTextOnTouchListener = new OnWeiboTextTouchListener();
-    List<T> mBeans = new ArrayList<T>();
+    List<T> mBeans = new ArrayList<>();
     AbsTimelineFragment<T, ?> mFragment;
     boolean mNoPictureModeEnabled = ConfigManager.isNoPictureMode();
     float mTimeFontSize = mFontSize - 3;
@@ -159,7 +159,7 @@ public abstract class AbsTimelineListAdapter<T extends AbsItemBean> extends AbsB
     }
 
     public List<T> getItems() {
-        return new ArrayList<T>(mBeans);
+        return new ArrayList<>(mBeans);
     }
 
     public void add(T bean) {
