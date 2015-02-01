@@ -120,7 +120,7 @@ public class AuthorizeActivity extends AbsActivity {
     }
 
     private String getWeiboOAuthUrl() {
-        Map<String, String> params = new HashMap<String, String>();
+        Map<String, String> params = new HashMap<>();
         params.put("client_id", UrlHelper.APPKEY);
         params.put("response_type", "token");
         params.put("redirect_uri", UrlHelper.AUTH_REDIRECT);

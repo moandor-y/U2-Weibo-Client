@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.util.LruCache;
@@ -28,8 +29,8 @@ import gov.moandor.androidweibo.bean.Account;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 
 public class GlobalContext extends Application {
-    private static final Map<String, Bitmap> sEmotionMap = new LinkedHashMap<String, Bitmap>();
-    private static final Map<String, String> sWeiboEmotionNameMap = new LinkedHashMap<String, String>();
+    private static final Map<String, Bitmap> sEmotionMap = new LinkedHashMap<>();
+    private static final Map<String, String> sWeiboEmotionNameMap = new LinkedHashMap<>();
 
     static {
         sWeiboEmotionNameMap.put("[爱你]", "e1.png");
@@ -147,7 +148,7 @@ public class GlobalContext extends Application {
     }
 
     public static synchronized Account[] getAccounts() {
-        return sAccounts.toArray(new Account[0]);
+        return sAccounts.toArray(new Account[sAccounts.size()]);
     }
 
     public static synchronized void addOrUpdateAccount(final Account account) {
@@ -194,7 +195,13 @@ public class GlobalContext extends Application {
 
     public static String getSdCacheDir() {
         File file = sInstance.getExternalCacheDir();
-        return file.getAbsolutePath();
+        if (file != null) {
+            return file.getAbsolutePath();
+        } else {
+            return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +
+                    "Android" + File.separator + sInstance.getPackageName() + File.separator +
+                    "cache";
+        }
     }
 
     public static LruCache<String, Bitmap> getBitmapCache() {
@@ -202,7 +209,7 @@ public class GlobalContext extends Application {
     }
 
     private static void buildEmotionMap() {
-        List<String> indexes = new ArrayList<String>();
+        List<String> indexes = new ArrayList<>();
         indexes.addAll(sWeiboEmotionNameMap.keySet());
         int emotionSize = (int) sInstance.getResources().getDimension(R.dimen.emotion_size);
         for (String index : indexes) {
@@ -253,8 +260,10 @@ public class GlobalContext extends Application {
                 setTheme(R.style.Theme_Weibo_Dark);
                 break;
         }
-        sAccounts = new CopyOnWriteArrayList<Account>(DatabaseUtils.getAccounts());
-        HttpUtils.trustAllHosts();
+        sAccounts = new CopyOnWriteArrayList<>(DatabaseUtils.getAccounts());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            HttpUtils.trustAllHosts();
+        }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             System.setProperty("http.keepAlive", "false");
         }

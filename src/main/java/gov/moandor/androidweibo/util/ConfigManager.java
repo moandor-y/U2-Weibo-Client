@@ -1,5 +1,6 @@
 package gov.moandor.androidweibo.util;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -133,6 +134,7 @@ public class ConfigManager {
         return 0;
     }
 
+    @SuppressLint("UseSparseArrays") // use map because of serialization
     public static void setWeiboGroup(int value, long accountId) {
         String json = getPreferences().getString(WEIBO_GROUP, null);
         Map<Long, Integer> map;
@@ -142,7 +144,7 @@ public class ConfigManager {
             }.getType());
             map.put(accountId, value);
         } else {
-            map = new HashMap<Long, Integer>();
+            map = new HashMap<>();
             map.put(accountId, value);
         }
         SharedPreferences.Editor editor = getPreferences().edit();
@@ -285,14 +287,6 @@ public class ConfigManager {
 
     public static boolean isBmEnabled() {
         return true;
-    }
-
-    public static void setBmEnabled(boolean value) {
-        // do nothing
-
-        //SharedPreferences.Editor editor = getPreferences().edit();
-        //editor.putBoolean(BM_ENABLED, value);
-        //apply(editor);
     }
 
     public static String getPictureCacheDir() {

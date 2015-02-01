@@ -454,8 +454,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
 
     public static class AboutFragment extends PreferenceFragment implements SharedPreferences
             .OnSharedPreferenceChangeListener {
-        private int mBmClickCount;
-
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -501,16 +499,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         private void buildVersion() {
             Preference preference = findPreference(KEY_VERSION);
             preference.setSummary(Utilities.getVersionName());
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    mBmClickCount++;
-                    if (mBmClickCount >= 7) {
-                        ConfigManager.setBmEnabled(true);
-                    }
-                    return false;
-                }
-            });
         }
 
         private void buildOfficialAccount(Preference preference) {
