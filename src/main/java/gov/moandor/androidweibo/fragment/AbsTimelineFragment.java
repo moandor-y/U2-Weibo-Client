@@ -34,7 +34,8 @@ import gov.moandor.androidweibo.util.Logger;
 import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 
-public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
+public abstract class AbsTimelineFragment<DataBean extends AbsItemBean,
+        TimelineListAdapter extends AbsTimelineListAdapter<DataBean>>
         extends Fragment implements UserDialogFragment.OnUserChangedListener {
     private static final String USER_DIALOG = "user_dialog";
     protected SwipeRefreshLayout mSwipeRefreshLayout;
@@ -48,7 +49,8 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
     private View mFooterIcon;
     private TextView mFooterText;
     private ActionMode.Callback mActionModeCallback;
-    private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance(), R.anim.refresh);
+    private Animation mFooterAnimation = AnimationUtils.loadAnimation(GlobalContext.getInstance()
+            , R.anim.refresh);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +73,6 @@ public abstract class AbsTimelineFragment<DataBean extends AbsItemBean, Timeline
         mListView.setOnScrollListener(new OnListScrollListener());
         mListView.setOnItemLongClickListener(new OnListItemLongClickListener());
         buildLoadingFooter();
-        showLoadingFooter();
         if (mAdapter == null) {
             mAdapter = createListAdapter();
         }
