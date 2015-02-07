@@ -272,13 +272,11 @@ public class GlobalContext extends Application {
         Thread thread = new Thread(new ClearCacheRunnable(), "ClearCacheTask");
         thread.setPriority(Thread.MIN_PRIORITY);
         thread.start();
-        if (ConfigManager.isBmEnabled() && GlobalContext.isInWifi()) {
-            new UpdateFollowingIdsTask().execute();
-        }
     }
 
     private void buildCache() {
-        int memoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
+        int memoryClass = ((ActivityManager) getSystemService(Context.ACTIVITY_SERVICE))
+                .getMemoryClass();
         int cacheSize = 1024 * 1024 * memoryClass / 5;
         sBitmapCache = new LruCache<String, Bitmap>(cacheSize) {
             @Override

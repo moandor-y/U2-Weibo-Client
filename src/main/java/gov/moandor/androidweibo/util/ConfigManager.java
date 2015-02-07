@@ -73,6 +73,7 @@ public class ConfigManager {
     //public static final String BM_ENABLED = "bm_enabled";
     public static final String PICTURE_CACHE_DIR = "picture_cache_dir";
     public static final String AVATAR_CACHE_DIR = "avatar_cache_dir";
+    public static final String IGNORE_SINA_AD = "ignore_sina_ad";
     private static final int PREFERENCE_VERSION = 5;
     private static final String DEFAULT_CACHE_SD = GlobalContext.getSdCacheDir() + File.separator
             + "weibo";
@@ -83,14 +84,12 @@ public class ConfigManager {
 
     static {
         SharedPreferences sharedPreferences = getPreferences();
-        if (sharedPreferences.getInt(PREFERENCE_VERSION_KEY, 0) < PREFERENCE_VERSION) {
+        int version = sharedPreferences.getInt(PREFERENCE_VERSION_KEY, 0);
+        if (version < PREFERENCE_VERSION) {
+            onUpgrade(version, PREFERENCE_VERSION, sharedPreferences);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
             editor.putInt(PREFERENCE_VERSION_KEY, PREFERENCE_VERSION);
             editor.commit();
-            PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs, true);
-            PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_notifications, true);
-            PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_bm, true);
         }
         if (sharedPreferences.getString(PICTURE_CACHE_DIR, null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -102,6 +101,23 @@ public class ConfigManager {
             editor.putString(AVATAR_CACHE_DIR, DEFAULT_AVATAR_CACHE_DIR);
             editor.commit();
         }
+    }
+
+    private static void onUpgrade(int oldVersion, int newVersion, SharedPreferences preferences) {
+        if (oldVersion == 5 && newVersion == 6) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean(IGNORE_SINA_AD, preferences.getBoolean(IGNORING_UNFOLLOWED_ENABLED,
+                    true));
+            editor.commit();
+            return;
+        }
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.commit();
+        PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs, true);
+        PreferenceManager.setDefaultValues(GlobalContext.getInstance(),
+                R.xml.prefs_notifications, true);
+        PreferenceManager.setDefaultValues(GlobalContext.getInstance(), R.xml.prefs_bm, true);
     }
 
     public static int getAppTheme() {

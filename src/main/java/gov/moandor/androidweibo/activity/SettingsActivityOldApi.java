@@ -25,7 +25,6 @@ import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
-import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
 
 /**
@@ -299,26 +298,6 @@ public class SettingsActivityOldApi extends PreferenceActivity implements Shared
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_bm);
-            findPreference(SettingsActivity.KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new
-                    OnUpdateFollowingClickListener());
-        }
-
-        private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                UpdateFollowingIdsTask task = new UpdateFollowingIdsTask();
-                task.setOnUpdateFinishedListener(new OnUpdateFollowingFinishedListener());
-                task.execute();
-                Utilities.notice(R.string.updating);
-                return true;
-            }
-        }
-
-        private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
-            @Override
-            public void onUpdateFinidhed() {
-                Utilities.notice(R.string.update_finished);
-            }
         }
     }
 

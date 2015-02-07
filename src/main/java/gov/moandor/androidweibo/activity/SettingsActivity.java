@@ -30,7 +30,6 @@ import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.FileUtils;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.TextUtils;
-import gov.moandor.androidweibo.util.UpdateFollowingIdsTask;
 import gov.moandor.androidweibo.util.Utilities;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -41,7 +40,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
     public static final String KEY_BLACK_MAGIC = "black_magic";
     public static final String KEY_ADVANCED = "advanced";
     public static final String KEY_UNREAD_MESSAGES = "unread_messages";
-    public static final String KEY_UPDATE_FOLLOWING = "update_following";
     public static final String KEY_MEMORY = "memory";
     public static final String KEY_OFFICIAL_ACCOUNT = "official_account";
     public static final String KEY_DEVELOPER_1 = "developer_1";
@@ -400,26 +398,6 @@ public class SettingsActivity extends AbsActivity implements SharedPreferences.O
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.prefs_bm);
-            findPreference(KEY_UPDATE_FOLLOWING).setOnPreferenceClickListener(new
-                    OnUpdateFollowingClickListener());
-        }
-
-        private class OnUpdateFollowingClickListener implements Preference.OnPreferenceClickListener {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                UpdateFollowingIdsTask task = new UpdateFollowingIdsTask();
-                task.setOnUpdateFinishedListener(new OnUpdateFollowingFinishedListener());
-                task.execute();
-                Utilities.notice(R.string.updating);
-                return true;
-            }
-        }
-
-        private class OnUpdateFollowingFinishedListener implements UpdateFollowingIdsTask.OnUpdateFinishedListener {
-            @Override
-            public void onUpdateFinidhed() {
-                Utilities.notice(R.string.update_finished);
-            }
         }
     }
 

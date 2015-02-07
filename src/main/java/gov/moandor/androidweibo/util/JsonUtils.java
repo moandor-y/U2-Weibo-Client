@@ -25,7 +25,7 @@ public class JsonUtils {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray statuses = jsonStatuses.getJSONArray("statuses");
             int len = statuses.length();
-            List<WeiboStatus> result = new ArrayList<WeiboStatus>();
+            List<WeiboStatus> result = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 result.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
             }
@@ -41,7 +41,7 @@ public class JsonUtils {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray statuses = jsonStatuses.getJSONArray("reposts");
             int len = statuses.length();
-            List<WeiboStatus> result = new ArrayList<WeiboStatus>();
+            List<WeiboStatus> result = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 result.add(getWeiboStatusFromJson(statuses.getJSONObject(i)));
             }
@@ -57,7 +57,7 @@ public class JsonUtils {
             JSONObject json = new JSONObject(jsonStr);
             JSONArray favorites = json.getJSONArray("favorites");
             int len = favorites.length();
-            List<WeiboStatus> result = new ArrayList<WeiboStatus>();
+            List<WeiboStatus> result = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 result.add(getWeiboStatusFromJson(favorites.getJSONObject(i).getJSONObject("status")));
             }
@@ -121,7 +121,7 @@ public class JsonUtils {
         try {
             JSONArray users = json.getJSONArray("users");
             int len = users.length();
-            List<WeiboUser> weiboUsers = new ArrayList<WeiboUser>();
+            List<WeiboUser> weiboUsers = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 weiboUsers.add(getWeiboUserFromJson(users.getJSONObject(i)));
             }
@@ -189,7 +189,7 @@ public class JsonUtils {
     }
 
     public static List<DirectMessagesUser> getDmUsersFromJson(JSONObject json) throws WeiboException {
-        List<DirectMessagesUser> result = new ArrayList<DirectMessagesUser>();
+        List<DirectMessagesUser> result = new ArrayList<>();
         try {
             JSONArray userList = json.getJSONArray("user_list");
             int len = userList.length();
@@ -238,7 +238,7 @@ public class JsonUtils {
             JSONObject jsonStatuses = new JSONObject(jsonStr);
             JSONArray comments = jsonStatuses.getJSONArray("comments");
             int len = comments.length();
-            List<WeiboComment> weiboComments = new ArrayList<WeiboComment>();
+            List<WeiboComment> weiboComments = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 weiboComments.add(getWeiboCommentFromJson(comments.getJSONObject(i)));
             }
@@ -291,7 +291,7 @@ public class JsonUtils {
         try {
             JSONArray json = new JSONArray(jsonStr);
             int len = json.length();
-            List<UserSuggestion> result = new ArrayList<UserSuggestion>();
+            List<UserSuggestion> result = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 UserSuggestion suggestion = new UserSuggestion();
                 JSONObject jsonSuggestion = json.getJSONObject(i);
@@ -311,7 +311,7 @@ public class JsonUtils {
         try {
             JSONObject json = new JSONObject(jsonStr);
             UserIds result = new UserIds();
-            result.ids = new ArrayList<Long>();
+            result.ids = new ArrayList<>();
             JSONArray ids = json.getJSONArray("ids");
             for (int i = 0; i < ids.length(); i++) {
                 result.ids.add(ids.getLong(i));
@@ -330,7 +330,7 @@ public class JsonUtils {
         try {
             JSONObject json = new JSONObject(jsonStr);
             JSONArray array = json.getJSONArray("direct_messages");
-            List<DirectMessage> result = new ArrayList<DirectMessage>();
+            List<DirectMessage> result = new ArrayList<>();
             for (int i = 0; i < array.length(); i++) {
                 result.add(getDmFromJson(array.getJSONObject(i)));
             }
@@ -345,7 +345,7 @@ public class JsonUtils {
         try {
             JSONObject json = new JSONObject(jsonStr);
             JSONArray array = json.getJSONArray("lists");
-            List<WeiboGroup> result = new ArrayList<WeiboGroup>();
+            List<WeiboGroup> result = new ArrayList<>();
             for (int i = 0; i < array.length(); i++) {
                 result.add(getGroupFromJson(array.getJSONObject(i)));
             }

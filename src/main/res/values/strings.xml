@@ -225,10 +225,7 @@
     <string name="enabled">启用</string>
     <string name="notification_enabled_after_exit">退出后保留提醒</string>
     <string name="black_magic">黑魔法</string>
-    <string name="ignore_unfollowing">屏蔽未关注人微博</string>
-    <string name="update_following">更新关注人</string>
-    <string name="updating">正在更新…</string>
-    <string name="update_finished">更新完成</string>
+    <string name="ignore_sina_ad">屏蔽新浪广告</string>
     <string name="about">关于</string>
     <string name="memory">内存</string>
     <string name="vm_alloc_mem">VM内存占用 : %s</string>

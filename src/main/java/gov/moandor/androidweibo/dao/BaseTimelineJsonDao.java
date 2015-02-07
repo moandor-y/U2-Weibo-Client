@@ -1,9 +1,17 @@
 package gov.moandor.androidweibo.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import gov.moandor.androidweibo.R;
 import gov.moandor.androidweibo.bean.AbsItemBean;
+import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.HttpParams;
 import gov.moandor.androidweibo.util.HttpUtils;
 import gov.moandor.androidweibo.util.WeiboException;
@@ -23,7 +31,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHtt
         addParams(params);
         HttpUtils.Method method = HttpUtils.Method.GET;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
-        List<T> result = new ArrayList<T>(parceJson(response));
+        List<T> result = new ArrayList<>(parceJson(response));
         if (mSinceMessage != null && result.size() >= 1) {
             T earliestMessage = result.get(result.size() - 1);
             if (mSinceMessage.id == earliestMessage.id) {
@@ -56,9 +64,7 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHtt
     }
 
     public boolean noEnoughNewMessages() {
-        if (!mDataFetched) {
-            throw new IllegalStateException("You must call execute() before call noEnoughNewMessages().");
-        }
+        checkDataFetched();
         return mNoEnoughNewMessages;
     }
 
@@ -71,6 +77,13 @@ public abstract class BaseTimelineJsonDao<T extends AbsItemBean> extends BaseHtt
         }
         params.put("max_id", mMaxId);
         params.put("count", mCount);
+    }
+
+    protected void checkDataFetched() {
+        if (!mDataFetched) {
+            throw new IllegalStateException("You must call execute() before call " +
+                    "noEnoughNewMessages().");
+        }
     }
 
     protected abstract List<T> parceJson(String json) throws WeiboException;

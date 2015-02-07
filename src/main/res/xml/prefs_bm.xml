@@ -3,13 +3,7 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="ignoring_unfollowing_enabled"
-        android:title="@string/ignore_unfollowing"/>
-
-    <Preference
-        android:dependency="ignoring_unfollowing_enabled"
-        android:key="update_following"
-        android:persistent="false"
-        android:title="@string/update_following"/>
+        android:key="ignore_sina_ad"
+        android:title="@string/ignore_sina_ad"/>
 
 </PreferenceScreen>

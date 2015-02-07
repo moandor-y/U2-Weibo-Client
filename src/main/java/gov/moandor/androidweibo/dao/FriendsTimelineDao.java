@@ -2,26 +2,16 @@ package gov.moandor.androidweibo.dao;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import gov.moandor.androidweibo.bean.WeiboStatus;
-import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.DatabaseUtils;
-import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.UrlHelper;
-import gov.moandor.androidweibo.util.Utilities;
 import gov.moandor.androidweibo.util.WeiboException;
 import gov.moandor.androidweibo.util.filter.WeiboFilter;
 
 public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
-    private static boolean contains(long[] array, long value) {
-        for (long element : array) {
-            if (value == element) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     protected String getUrl() {
@@ -32,15 +22,12 @@ public class FriendsTimelineDao extends BaseWeiboStatusTimelineDao {
     public List<WeiboStatus> execute() throws WeiboException {
         List<WeiboStatus> result = super.execute();
         if (ConfigManager.isBmEnabled() && ConfigManager.isIgnoringUnfollowedEnabled()) {
-            long[] followingIds = DatabaseUtils.getFollowingIds(GlobalContext.getCurrentAccount().user.id);
-            if (followingIds != null) {
-                Iterator<WeiboStatus> iterator = result.iterator();
-                while (iterator.hasNext()) {
-                    WeiboStatus status = iterator.next();
-                    WeiboUser user = status.weiboUser;
-                    if (user != null && !contains(followingIds, user.id)) {
-                        iterator.remove();
-                    }
+            Set<Long> adIds = getAdIds();
+            Iterator<WeiboStatus> iterator = result.iterator();
+            while (iterator.hasNext()) {
+                WeiboStatus status = iterator.next();
+                if (adIds.contains(Long.valueOf(status.id))) {
+                    iterator.remove();
                 }
             }
         }

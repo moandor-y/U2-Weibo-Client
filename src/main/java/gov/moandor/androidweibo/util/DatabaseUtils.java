@@ -29,7 +29,7 @@ import gov.moandor.androidweibo.util.filter.WeiboFilter;
 
 public class DatabaseUtils extends SQLiteOpenHelper {
     private static final String NAME = "weibo.db";
-    private static final int VERSION = 19;
+    private static final int VERSION = 20;
 
     private static final DatabaseUtils sInstance = new DatabaseUtils();
     private static final Gson sGson = new Gson();
@@ -105,7 +105,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized List<Account> getAccounts() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.Account.TABLE_NAME, null);
-        List<Account> result = new ArrayList<Account>();
+        List<Account> result = new ArrayList<>();
         while (cursor.moveToNext()) {
             Account account = new Account();
             account.token = cursor.getString(cursor.getColumnIndex(Table.Account.TOKEN));
@@ -186,7 +186,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         String tableName = String.format(Locale.ENGLISH, Table.WeiboStatus.TABLE_NAME, accountId, group);
         database.execSQL(String.format(CREATE_WEIBO_STATUS_TABLE, tableName));
         Cursor cursor = database.rawQuery("select * from " + tableName, null);
-        SparseArray<WeiboStatus> statuses = new SparseArray<WeiboStatus>();
+        SparseArray<WeiboStatus> statuses = new SparseArray<>();
         while (cursor.moveToNext()) {
             String contentData = cursor.getString(cursor.getColumnIndex(Table.WeiboStatus.CONTENT_DATA));
             int position = cursor.getInt(cursor.getColumnIndex(Table.WeiboStatus.POSITION));
@@ -194,7 +194,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         cursor.close();
         database.close();
-        List<WeiboStatus> result = new ArrayList<WeiboStatus>();
+        List<WeiboStatus> result = new ArrayList<>();
         int count = statuses.size();
         for (int i = 0; i < count; i++) {
             result.add(statuses.get(i));
@@ -263,7 +263,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         String tableName = String.format(Locale.ENGLISH, Table.AtmeStatus.TABLE_NAME, accountId, filter);
         database.execSQL(String.format(CREATE_ATME_STATUS_TABLE, tableName));
         Cursor cursor = database.rawQuery("select * from " + tableName, null);
-        SparseArray<WeiboStatus> statuses = new SparseArray<WeiboStatus>();
+        SparseArray<WeiboStatus> statuses = new SparseArray<>();
         while (cursor.moveToNext()) {
             String contentData = cursor.getString(cursor.getColumnIndex(Table.AtmeStatus.CONTENT_DATA));
             int position = cursor.getInt(cursor.getColumnIndex(Table.AtmeStatus.POSITION));
@@ -271,7 +271,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         cursor.close();
         database.close();
-        List<WeiboStatus> result = new ArrayList<WeiboStatus>();
+        List<WeiboStatus> result = new ArrayList<>();
         int count = statuses.size();
         for (int i = 0; i < count; i++) {
             result.add(statuses.get(i));
@@ -329,7 +329,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         String tableName = String.format(Locale.ENGLISH, Table.Comment.TABLE_NAME, accountId, filter);
         database.execSQL(String.format(CREATE_COMMENT_TABLE, tableName));
         Cursor cursor = database.rawQuery("select * from " + tableName, null);
-        SparseArray<WeiboComment> comments = new SparseArray<WeiboComment>();
+        SparseArray<WeiboComment> comments = new SparseArray<>();
         while (cursor.moveToNext()) {
             String contentData = cursor.getString(cursor.getColumnIndex(Table.Comment.CONTENT_DATA));
             int position = cursor.getInt(cursor.getColumnIndex(Table.Comment.POSITION));
@@ -337,7 +337,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         cursor.close();
         database.close();
-        List<WeiboComment> result = new ArrayList<WeiboComment>();
+        List<WeiboComment> result = new ArrayList<>();
         int count = comments.size();
         for (int i = 0; i < count; i++) {
             result.add(comments.get(i));
@@ -441,11 +441,11 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         Cursor cursor =
                 database.rawQuery("select * from " + Table.Draft.TABLE_NAME + " where " + Table.Draft.ACCOUNT_ID + "="
                         + accountId + " order by " + Table.Draft.ID + " desc", null);
-        List<AbsDraftBean> result = new ArrayList<AbsDraftBean>();
+        List<AbsDraftBean> result = new ArrayList<>();
         while (cursor.moveToNext()) {
             String contentData = cursor.getString(cursor.getColumnIndex(Table.Draft.CONTENT_DATA));
             int type = cursor.getInt(cursor.getColumnIndex(Table.Draft.TYPE));
-            AbsDraftBean bean = null;
+            AbsDraftBean bean;
             switch (type) {
                 case Table.Draft.TYPE_WEIBO:
                     bean = sGson.fromJson(contentData, WeiboDraft.class);
@@ -453,6 +453,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
                 case Table.Draft.TYPE_COMMENT:
                     bean = sGson.fromJson(contentData, CommentDraft.class);
                     break;
+                default:
+                    throw new RuntimeException("Error : incorrect draft type");
             }
             bean.id = cursor.getInt(cursor.getColumnIndex(Table.Draft.ID));
             result.add(bean);
@@ -527,34 +529,6 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         return null;
     }
 
-    public static synchronized void updateFollowingIds(long[] ids, long accountId) {
-        SQLiteDatabase database = sInstance.getWritableDatabase();
-        database.delete(Table.FollowingId.TABLE_NAME, Table.FollowingId.ACCOUNT_ID + "=" + accountId, null);
-        ContentValues values = new ContentValues();
-        values.put(Table.FollowingId.ACCOUNT_ID, accountId);
-        values.put(Table.FollowingId.CONTENT_DATA, sGson.toJson(ids));
-        database.insert(Table.FollowingId.TABLE_NAME, null, values);
-        database.close();
-    }
-
-    public static synchronized long[] getFollowingIds(long accountId) {
-        SQLiteDatabase database = sInstance.getReadableDatabase();
-        String sql =
-                "select * from " + Table.FollowingId.TABLE_NAME + " where " + Table.FollowingId.ACCOUNT_ID + "="
-                        + accountId;
-        Cursor cursor = database.rawQuery(sql, null);
-        try {
-            if (cursor.moveToNext()) {
-                String json = cursor.getString(cursor.getColumnIndex(Table.FollowingId.CONTENT_DATA));
-                return sGson.fromJson(json, long[].class);
-            }
-        } finally {
-            cursor.close();
-            database.close();
-        }
-        return null;
-    }
-
     public static synchronized void updateDmConversation(long accountId, long userId, DirectMessage[] messages) {
         SQLiteDatabase database = sInstance.getWritableDatabase();
         database.delete(Table.DmConversation.TABLE_NAME, Table.DmConversation.ACCOUNT_ID + "=" + accountId + " and "
@@ -612,7 +586,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
     public static synchronized WeiboFilter[] getWeiboFilters() {
         SQLiteDatabase database = sInstance.getReadableDatabase();
         Cursor cursor = database.rawQuery("select * from " + Table.WeiboFilter.TABLE_NAME, null);
-        List<WeiboFilter> result = new ArrayList<WeiboFilter>();
+        List<WeiboFilter> result = new ArrayList<>();
         while (cursor.moveToNext()) {
             String className = cursor.getString(cursor.getColumnIndex(Table.WeiboFilter.CLASS_NAME));
             String json = cursor.getString(cursor.getColumnIndex(Table.WeiboFilter.CONTENT_DATA));
@@ -626,7 +600,7 @@ public class DatabaseUtils extends SQLiteOpenHelper {
         }
         cursor.close();
         database.close();
-        return result.toArray(new WeiboFilter[0]);
+        return result.toArray(new WeiboFilter[result.size()]);
     }
 
     @Override
@@ -666,6 +640,8 @@ public class DatabaseUtils extends SQLiteOpenHelper {
                 db.execSQL(CREATE_WEIBO_GROUP_TABLE);
             case 18:
                 db.execSQL(CREATE_WEIBO_FILTER_TABLE);
+            case 19:
+                db.execSQL("drop table if exists " + Table.FollowingId.TABLE_NAME);
         }
     }
 
