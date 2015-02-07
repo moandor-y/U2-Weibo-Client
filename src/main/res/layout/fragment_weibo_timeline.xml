@@ -22,8 +22,7 @@
     <RelativeLayout
         android:id="@+id/quick_post_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/action_height">
+        android:layout_height="wrap_content">
 
         <View
             android:id="@+id/divider"
@@ -36,17 +35,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/divider"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/button_send"
+            android:layout_marginLeft="3dp"
+            android:layout_below="@+id/divider"
+            android:layout_alignBottom="@id/button_send"
+            android:layout_marginTop="3dp"
             android:inputType="textCapSentences|textMultiLine"/>
 
         <ImageButton
             android:id="@+id/button_send"
             style="@style/action_button"
             android:layout_width="@dimen/action_width"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/action_height"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/divider"
             android:layout_gravity="center_vertical"
