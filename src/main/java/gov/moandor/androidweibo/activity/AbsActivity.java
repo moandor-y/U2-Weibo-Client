@@ -2,7 +2,7 @@ package gov.moandor.androidweibo.activity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ViewConfiguration;
 
 import java.lang.reflect.Field;
@@ -12,7 +12,7 @@ import gov.moandor.androidweibo.util.ConfigManager;
 import gov.moandor.androidweibo.util.GlobalContext;
 import gov.moandor.androidweibo.util.Logger;
 
-public abstract class AbsActivity extends ActionBarActivity {
+public abstract class AbsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         switch (ConfigManager.getAppTheme()) {

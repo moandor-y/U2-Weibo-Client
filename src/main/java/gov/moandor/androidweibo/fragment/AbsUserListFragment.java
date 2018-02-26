@@ -3,7 +3,7 @@ package gov.moandor.androidweibo.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -262,7 +262,7 @@ public abstract class AbsUserListFragment<Adapter extends BaseAdapter, DataBean>
             if (mActionModeCallback == null) {
                 mActionModeCallback = getActionModeCallback();
             }
-            mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(mActionModeCallback);
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             return true;
         }
     }

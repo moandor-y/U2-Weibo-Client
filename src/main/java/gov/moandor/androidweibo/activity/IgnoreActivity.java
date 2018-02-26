@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -145,7 +145,7 @@ public class IgnoreActivity extends AbsActivity {
             }
             mAdapter.setSelectedPosition(position);
             mAdapter.notifyDataSetChanged();
-            mActionMode = ((ActionBarActivity) getActivity()).startSupportActionMode(new ActionModeCallback());
+            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(new ActionModeCallback());
             return true;
         }
 
