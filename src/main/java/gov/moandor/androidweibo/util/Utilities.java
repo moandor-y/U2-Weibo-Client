@@ -43,6 +43,7 @@ import gov.moandor.androidweibo.bean.WeiboUser;
 import gov.moandor.androidweibo.concurrency.ImageDownloader;
 import gov.moandor.androidweibo.concurrency.MyAsyncTask;
 import gov.moandor.androidweibo.dao.AccountIdDao;
+import gov.moandor.androidweibo.dao.Oauth2AcessTokenDao;
 import gov.moandor.androidweibo.dao.UserShowDao;
 import gov.moandor.androidweibo.util.filter.UserWeiboFilter;
 
@@ -347,7 +348,10 @@ public class Utilities {
         }
     }
 
-    public static void fetchAndSaveAccountInfo(String token) throws WeiboException {
+    public static void fetchAndSaveAccountInfo(String code) throws WeiboException {
+        Oauth2AcessTokenDao tokenDao = new Oauth2AcessTokenDao();
+        tokenDao.setCode(code);
+        String token = tokenDao.execute();
         AccountIdDao getAccountIdDao = new AccountIdDao();
         getAccountIdDao.setToken(token);
         long id = getAccountIdDao.execute();

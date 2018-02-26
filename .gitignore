@@ -1,7 +1,6 @@
 bin/
 gen/
 build/
-gradle/
 .gradle
 .idea
 *.iml
@@ -21,3 +20,4 @@ proguard-project.txt
 project.properties
 pom.xml
 git_commit_count.bat
+gradle.properties

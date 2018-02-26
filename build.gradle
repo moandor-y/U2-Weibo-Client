@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
     repositories {
         jcenter()
@@ -16,8 +16,8 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '21.1.2'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.1'
     lintOptions {
         abortOnError false
     }

@@ -104,7 +104,6 @@
             android:uiOptions="splitActionBarWhenNarrow"/>
 
         <activity android:name=".activity.AuthorizeActivity"/>
-        <activity android:name=".activity.HackLoginActivity"/>
         <activity android:name=".activity.SettingsActivity"/>
         <activity android:name=".activity.SettingsActivity$NotificationsActivity"/>
         <activity android:name=".activity.SettingsActivity$BlackMagicActivity"/>

@@ -43,13 +43,7 @@ public class AuthorizeActivity extends AbsActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.login);
-        if (ConfigManager.isBmEnabled()) {
-            HackLoginDialogFragment dialog = new HackLoginDialogFragment();
-            dialog.setCancelable(false);
-            dialog.show(getSupportFragmentManager(), HACK_LOGIN_DIALOG);
-        } else {
-            buildLayout();
-        }
+        buildLayout();
     }
 
     @Override
@@ -97,11 +91,6 @@ public class AuthorizeActivity extends AbsActivity {
         }
     }
 
-    private void onHackLoginConfirmed() {
-        startActivity(ActivityUtils.hackLoginActivity());
-        finish();
-    }
-
     @SuppressWarnings("deprecation")
     @SuppressLint("SetJavaScriptEnabled")
     private void buildLayout() {
@@ -122,9 +111,8 @@ public class AuthorizeActivity extends AbsActivity {
     private String getWeiboOAuthUrl() {
         Map<String, String> params = new HashMap<>();
         params.put("client_id", UrlHelper.APPKEY);
-        params.put("response_type", "token");
+        params.put("response_type", "code");
         params.put("redirect_uri", UrlHelper.AUTH_REDIRECT);
-        params.put("display", "mobile");
         return UrlHelper.OAUTH2_AUTHORIZE + "?" + Utilities.encodeUrl(params)
                 + "&scope=friendships_groups_read,friendships_groups_write";
     }
@@ -134,8 +122,8 @@ public class AuthorizeActivity extends AbsActivity {
         String error = values.get("error");
         String errorCode = values.get("error_code");
         if (error == null && errorCode == null) {
-            String token = values.get("access_token");
-            MyAsyncTask.execute(new GetAccountInfoRunnable(token));
+            String code = values.get("code");
+            MyAsyncTask.execute(new GetAccountInfoRunnable(code));
         } else {
             int code = 0;
             try {
@@ -144,28 +132,6 @@ public class AuthorizeActivity extends AbsActivity {
                 Logger.logException(e);
             }
             Utilities.notice(WeiboException.getError(code, error));
-        }
-    }
-
-    public static class HackLoginDialogFragment extends DialogFragment {
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(R.string.hack_login);
-            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ((AuthorizeActivity) getActivity()).onHackLoginConfirmed();
-                }
-            });
-            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ((AuthorizeActivity) getActivity()).buildLayout();
-                }
-            });
-            return builder.create();
         }
     }
 
@@ -194,16 +160,16 @@ public class AuthorizeActivity extends AbsActivity {
     }
 
     private class GetAccountInfoRunnable implements Runnable {
-        private String mToken;
+        private String mCode;
 
-        public GetAccountInfoRunnable(String token) {
-            mToken = token;
+        public GetAccountInfoRunnable(String code) {
+            mCode = code;
         }
 
         @Override
         public void run() {
             try {
-                Utilities.fetchAndSaveAccountInfo(mToken);
+                Utilities.fetchAndSaveAccountInfo(mCode);
                 Utilities.notice(R.string.auth_success);
                 Intent intent = new Intent();
                 intent.setClass(GlobalContext.getInstance(), MainActivity.class);

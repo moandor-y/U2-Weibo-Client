@@ -12,20 +12,16 @@ import gov.moandor.androidweibo.util.UrlHelper;
 import gov.moandor.androidweibo.util.WeiboException;
 
 public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
-    private String mUsername;
-    private String mPassword;
-    private String mClientId;
-    private String mClientSecret;
-    private String mGrantType;
+    private String mCode;
 
     @Override
     public String execute() throws WeiboException {
         HttpParams params = new HttpParams();
-        params.put("username", mUsername);
-        params.put("password", mPassword);
-        params.put("client_id", mClientId);
-        params.put("client_secret", mClientSecret);
-        params.put("grant_type", mGrantType);
+        params.put("client_id", UrlHelper.APPKEY);
+        params.put("client_secret", UrlHelper.APPSECRET);
+        params.put("grant_type", "authorization_code");
+        params.put("redirect_uri", UrlHelper.AUTH_REDIRECT);
+        params.put("code", mCode);
         HttpUtils.Method method = HttpUtils.Method.POST;
         String response = HttpUtils.executeNormalTask(method, mUrl, params);
         JSONObject json;
@@ -43,23 +39,7 @@ public class Oauth2AcessTokenDao extends BaseHttpDao<String> {
         return UrlHelper.OAUTH2_ACCESS_TOKEN;
     }
 
-    public void setUsername(String username) {
-        mUsername = username;
-    }
-
-    public void setPassword(String password) {
-        mPassword = password;
-    }
-
-    public void setClientId(String clientId) {
-        mClientId = clientId;
-    }
-
-    public void setClientSecret(String clientSecret) {
-        mClientSecret = clientSecret;
-    }
-
-    public void setGrantType(String grantType) {
-        mGrantType = grantType;
+    public void setCode(String code) {
+        mCode = code;
     }
 }

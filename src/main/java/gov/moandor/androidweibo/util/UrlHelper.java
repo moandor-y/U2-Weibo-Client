@@ -2,6 +2,7 @@ package gov.moandor.androidweibo.util;
 
 public class UrlHelper {
     public static final String APPKEY = "1578201915";
+    public static final String APPSECRET = "d8cec055a6f3798959b3cfd56af401f8";
 
     public static final String AUTH_REDIRECT = "https://api.weibo.com/oauth2/default.html";
     public static final String OAUTH2_AUTHORIZE = "https://api.weibo.com/oauth2/authorize";

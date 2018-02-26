@@ -7,7 +7,6 @@ import gov.moandor.androidweibo.activity.AuthorizeActivity;
 import gov.moandor.androidweibo.activity.DmActivity;
 import gov.moandor.androidweibo.activity.DraftBoxActivity;
 import gov.moandor.androidweibo.activity.FavoritesActivity;
-import gov.moandor.androidweibo.activity.HackLoginActivity;
 import gov.moandor.androidweibo.activity.ImageViewerActivity;
 import gov.moandor.androidweibo.activity.UserActivity;
 import gov.moandor.androidweibo.activity.UserListActivity;
@@ -99,12 +98,6 @@ public class ActivityUtils {
     public static Intent favoritesActivity() {
         Intent intent = new Intent();
         intent.setClass(GlobalContext.getInstance(), FavoritesActivity.class);
-        return intent;
-    }
-
-    public static Intent hackLoginActivity() {
-        Intent intent = new Intent();
-        intent.setClass(GlobalContext.getInstance(), HackLoginActivity.class);
         return intent;
     }
 
