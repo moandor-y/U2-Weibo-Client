@@ -1,8 +1,14 @@
-U二
-=========
-新浪微博安卓客户端
+# U二
+Weibo Android client
 
-<a href="https://play.google.com/store/apps/details?id=gov.moandor.androidweibo" target="_blank">
-  <img alt="Android app on Google Play"
-      src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
-</a>
+## Building
+```bash
+git clone https://github.com/Moandor-y/U2-Weibo-Client.git
+cd U2-Weibo-Client
+./gradlew assembleRelease
+```
+Then expect the unsigned apk to be created in `build/outputs/apk/release`.
+
+## Screenshots
+![](../gh-pages/images/screenshot_0.webp)
+![](../gh-pages/images/screenshot_1.webp)
